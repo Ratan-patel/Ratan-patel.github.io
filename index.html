@@ -17,6 +17,7 @@
     <ul class="nav-links">
       <li><a href="#home">Home</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
@@ -65,7 +66,7 @@
       <div class="about-card">
         <i class="fa fa-user-shield about-icon"></i>
         <h3>Professional Profile</h3>
-        <p>Dynamic Cyber Security Trainer &amp; Ethical Hacking Expert with 6+ years of hands-on industry experience. Specialised in delivering practical, industry-focused training on Ethical Hacking, Network Security, VAPT, Penetration Testing, and Cyber Threat Intelligence.</p>
+        <p>Dynamic Cyber Security Trainer &amp; Ethical Hacking Expert with 6+ years of hands-on industry experience. Specialised in delivering practical, industry-focused training on Ethical Hacking, Penetration Testing, and Network Security.</p>
         <p>Successfully trained <strong>500+ students and professionals</strong> across academic and corporate environments. Consistently rated as a top trainer for practical, real-world approach.</p>
       </div>
       <div class="about-card">
@@ -91,6 +92,103 @@
           <li><i class="fa fa-check-circle"></i> Top trainer feedback scores</li>
           <li><i class="fa fa-check-circle"></i> Available for immediate joining</li>
         </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section bg-light" id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Moments &amp; Achievements</span>
+      <h2>Portfolio Gallery</h2>
+    </div>
+    
+    <div class="gallery-filter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="training">Training</button>
+      <button class="filter-btn" data-filter="events">Events</button>
+      <button class="filter-btn" data-filter="team">Team</button>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" data-category="training">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop" alt="Training Session">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Ethical Hacking Workshop</h4>
+          <p>Hands-on CEH training with 50+ participants</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="training">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=400&fit=crop" alt="Lab Session">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Penetration Testing Lab</h4>
+          <p>Practical VAPT exercises for professionals</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="events">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop" alt="Corporate Event">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Corporate Security Summit</h4>
+          <p>Speaking on cybersecurity trends 2025</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="team">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop" alt="Team Photo">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Security Team</h4>
+          <p>With Equator Cyber Solutions team</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="training">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=400&fit=crop" alt="Classroom">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Network Security Class</h4>
+          <p>Interactive classroom training session</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="events">
+        <div class="gallery-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop" alt="Conference">
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Tech Conference 2024</h4>
+          <p>Keynote speaker on Red Team exercises</p>
+        </div>
       </div>
     </div>
   </div>
@@ -385,6 +483,57 @@ const obs = new IntersectionObserver(entries => {
   });
 },{threshold:0.3});
 bars.forEach(b => { const w = b.style.width; b.style.width='0'; obs.observe(b); setTimeout(()=>b.style.width=w,200); });
+
+// Gallery Filter
+const filterBtns = document.querySelectorAll('.filter-btn');
+const galleryItems = document.querySelectorAll('.gallery-item');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.getAttribute('data-filter');
+    galleryItems.forEach(item => {
+      if(filter === 'all' || item.getAttribute('data-category') === filter) {
+        item.style.display = 'block';
+        setTimeout(() => item.classList.add('show'), 10);
+      } else {
+        item.classList.remove('show');
+        setTimeout(() => item.style.display = 'none', 300);
+      }
+    });
+  });
+});
+
+// Scroll animations for elements
+const scrollElements = document.querySelectorAll('.about-card, .skill-card, .gallery-item, .edu-card, .cert-card');
+const elementInView = (el, dividend = 1) => {
+  const elementTop = el.getBoundingClientRect().top;
+  return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
+};
+
+const elementOutofView = (el) => {
+  const elementTop = el.getBoundingClientRect().top;
+  return elementTop > (window.innerHeight || document.documentElement.clientHeight);
+};
+
+const displayScrollElement = (element) => {
+  element.classList.add('animate-in');
+};
+
+const hideScrollElement = (element) => {
+  element.classList.remove('animate-in');
+};
+
+window.addEventListener('scroll', () => {
+  scrollElements.forEach((element) => {
+    if (elementInView(element, 1.25)) {
+      displayScrollElement(element);
+    } else if (elementOutofView(element)) {
+      hideScrollElement(element);
+    }
+  });
+});
 </script>
 </body>
 </html>
