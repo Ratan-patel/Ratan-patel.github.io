@@ -8,19 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Inline styles for certificate thumbnails extracted from the CV image -->
+<!-- Inline styles for certificate thumbnails extracted from the CV image and lightbox -->
 <style>
-  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 240%; background-repeat:no-repeat; border-radius:8px; }
+  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 240%; background-repeat:no-repeat; border-radius:8px; cursor:pointer; }
   /* tuned background-position values to focus certificate areas inside the CV image */
   .cert-ceh { background-position: 30% 18%; }
   .cert-masters { background-position: 62% 38%; }
   .cert-pg { background-position: 50% 70%; }
   /* ensure gallery image wrappers have consistent square sizing */
-  .gallery-image-wrapper { width: 240px; height: 240px; max-width: 100%; overflow: hidden; border-radius:8px; }
+  .gallery-image-wrapper { width: 240px; height: 240px; max-width: 100%; overflow: hidden; border-radius:8px; position:relative; }
   @media (max-width: 768px) {
     .gallery-image-wrapper { width: 140px; height: 140px; }
     .hero-image-box img { width:200px; height:200px; }
   }
+
+  /* Lightbox / Modal */
+  .lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); z-index: 9999; }
+  .lightbox.show { display:flex; }
+  .lightbox-content { position: relative; max-width: 95%; max-height: 95%; }
+  .lightbox-img { display:block; max-width:100%; max-height:100%; transition: transform 0.3s ease, transform-origin 0 0; background:#fff; }
+  .lightbox-close { position:absolute; top:-12px; right:-12px; background:#fff; color:#111; border-radius:50%; padding:8px 10px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  .lightbox-controls { position: absolute; left: 12px; bottom: -46px; display:flex; gap:8px; }
+  .btn-small { background:#fff; padding:8px 10px; border-radius:6px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
 </style>
 </head>
 <body>
@@ -181,7 +190,7 @@
       <!-- CEH Certificate: extracted area from CV image -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-ceh" role="img" aria-label="CEH certificate thumbnail"></div>
+          <div class="cert-thumb cert-ceh" role="img" aria-label="CEH certificate thumbnail" onclick="openCertModal(30,18,2)"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -195,7 +204,7 @@
       <!-- Master's Degree: extracted area from CV image -->
       <div class="gallery-item" data-category="education">
         <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-masters" role="img" aria-label="Master's degree thumbnail"></div>
+          <div class="cert-thumb cert-masters" role="img" aria-label="Master's degree thumbnail" onclick="openCertModal(62,38,2)"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -209,7 +218,7 @@
       <!-- PG Marksheet: extracted area from CV image -->
       <div class="gallery-item" data-category="education">
         <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-pg" role="img" aria-label="PG marksheet thumbnail"></div>
+          <div class="cert-thumb cert-pg" role="img" aria-label="PG marksheet thumbnail" onclick="openCertModal(50,70,2)"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -222,6 +231,18 @@
     </div>
   </div>
 </section>
+
+<!-- Lightbox Modal (for full-size CV + focus/zoom) -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-content" onclick="event.stopPropagation();">
+    <button class="lightbox-close" onclick="closeLightbox(event)"><i class="fa fa-times"></i></button>
+    <img id="lightbox-img" class="lightbox-img" src="/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png" alt="Full CV image">
+    <div class="lightbox-controls">
+      <button class="btn-small" id="zoom-btn" onclick="toggleZoom()">Zoom to certificate</button>
+      <button class="btn-small" onclick="resetZoom()">Reset</button>
+    </div>
+  </div>
+</div>
 
 <!-- SKILLS -->
 <section class="section bg-dark" id="skills">
@@ -533,6 +554,49 @@ filterBtns.forEach(btn => {
     });
   });
 });
+
+// Lightbox and certificate focus/zoom logic
+let currentFocus = null;
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+let zoomed = false;
+let focusX = 50, focusY = 50, zoomScale = 2;
+
+function openCertModal(xPercent, yPercent, scale = 2) {
+  focusX = xPercent;
+  focusY = yPercent;
+  zoomScale = scale;
+  zoomed = false;
+  // reset transform
+  lightboxImg.style.transform = 'scale(1)';
+  lightboxImg.style.transformOrigin = `${focusX}% ${focusY}%`;
+  lightbox.classList.add('show');
+  // ensure full image is visible and centered
+}
+
+function toggleZoom() {
+  if(!lightbox.classList.contains('show')) return;
+  if(!zoomed) {
+    lightboxImg.style.transformOrigin = `${focusX}% ${focusY}%`;
+    lightboxImg.style.transform = `scale(${zoomScale})`;
+    zoomed = true;
+    document.getElementById('zoom-btn').textContent = 'Unzoom';
+  } else {
+    resetZoom();
+  }
+}
+
+function resetZoom() {
+  lightboxImg.style.transform = 'scale(1)';
+  zoomed = false;
+  document.getElementById('zoom-btn').textContent = 'Zoom to certificate';
+}
+
+function closeLightbox(e) {
+  e && e.stopPropagation();
+  lightbox.classList.remove('show');
+  resetZoom();
+}
 
 // Scroll animations for elements
 const scrollElements = document.querySelectorAll('.about-card, .skill-card, .gallery-item, .edu-card, .cert-card');
