@@ -7,6 +7,21 @@
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Inline styles for certificate thumbnails extracted from the CV image -->
+<style>
+  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 240%; background-repeat:no-repeat; border-radius:8px; }
+  /* tuned background-position values to focus certificate areas inside the CV image */
+  .cert-ceh { background-position: 30% 18%; }
+  .cert-masters { background-position: 62% 38%; }
+  .cert-pg { background-position: 50% 70%; }
+  /* ensure gallery image wrappers have consistent square sizing */
+  .gallery-image-wrapper { width: 240px; height: 240px; max-width: 100%; overflow: hidden; border-radius:8px; }
+  @media (max-width: 768px) {
+    .gallery-image-wrapper { width: 140px; height: 140px; }
+    .hero-image-box img { width:200px; height:200px; }
+  }
+</style>
 </head>
 <body>
 
@@ -163,10 +178,10 @@
         </div>
       </div>
 
-      <!-- CEH Certificate -->
+      <!-- CEH Certificate: extracted area from CV image -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop" alt="CEH Certificate">
+          <div class="cert-thumb cert-ceh" role="img" aria-label="CEH certificate thumbnail"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -177,10 +192,10 @@
         </div>
       </div>
 
-      <!-- Master's Degree -->
+      <!-- Master's Degree: extracted area from CV image -->
       <div class="gallery-item" data-category="education">
         <div class="gallery-image-wrapper">
-          <img src="https://images.unsplash.com/photo-1457694716868-13eff15d0f11?w=400&h=400&fit=crop" alt="Master's Degree">
+          <div class="cert-thumb cert-masters" role="img" aria-label="Master's degree thumbnail"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -191,10 +206,10 @@
         </div>
       </div>
 
-      <!-- PG Marksheet -->
+      <!-- PG Marksheet: extracted area from CV image -->
       <div class="gallery-item" data-category="education">
         <div class="gallery-image-wrapper">
-          <img src="https://images.unsplash.com/photo-1516534175702-f61144ecd8ae?w=400&h=400&fit=crop" alt="PG Marksheet">
+          <div class="cert-thumb cert-pg" role="img" aria-label="PG marksheet thumbnail"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
