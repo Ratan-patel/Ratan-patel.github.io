@@ -10,15 +10,20 @@
 
 <!-- Inline styles for certificate thumbnails extracted from the CV image and lightbox -->
 <style>
-  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 240%; background-repeat:no-repeat; border-radius:8px; cursor:pointer; }
-  /* tuned background-position values to focus certificate areas inside the CV image */
-  .cert-ceh { background-position: 30% 18%; }
-  .cert-masters { background-position: 62% 38%; }
-  .cert-pg { background-position: 50% 70%; }
-  /* ensure gallery image wrappers have consistent square sizing */
+  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 320%; background-repeat:no-repeat; border-radius:6px; cursor:pointer; }
+  /* tuned background-position values to focus certificate areas inside the CV image (left-to-right: passport, CEH, PG, Master's) */
+  .cert-passport { background-position: 8% 78%; }
+  .cert-ceh { background-position: 34% 78%; }
+  .cert-pg { background-position: 58% 78%; }
+  .cert-masters { background-position: 82% 78%; }
+
+  /* ensure certificate gallery items are smaller than other gallery images */
   .gallery-image-wrapper { width: 240px; height: 240px; max-width: 100%; overflow: hidden; border-radius:8px; position:relative; }
+  .gallery-item[data-category="certificates"] .gallery-image-wrapper { width:160px; height:120px; border-radius:6px; }
+
   @media (max-width: 768px) {
     .gallery-image-wrapper { width: 140px; height: 140px; }
+    .gallery-item[data-category="certificates"] .gallery-image-wrapper { width:120px; height:90px; }
     .hero-image-box img { width:200px; height:200px; }
   }
 
@@ -187,47 +192,62 @@
         </div>
       </div>
 
+      <!-- Passport: extracted area from CV image -->
+      <div class="gallery-item" data-category="certificates">
+        <div class="gallery-image-wrapper">
+          <div class="cert-thumb cert-passport" role="img" aria-label="Indian passport thumbnail" onclick="openCertModal(8,78,2)"></div>
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Indian Passport</h4>
+          <p>Republic of India — Valid till 2029</p>
+        </div>
+      </div>
+
       <!-- CEH Certificate: extracted area from CV image -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-ceh" role="img" aria-label="CEH certificate thumbnail" onclick="openCertModal(30,18,2)"></div>
+          <div class="cert-thumb cert-ceh" role="img" aria-label="CEH certificate thumbnail" onclick="openCertModal(34,78,2)"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
         </div>
         <div class="gallery-info">
           <h4>CEH Certification</h4>
-          <p>Certified Ethical Hacker (ECC8025614379) - Valid till July 2027</p>
-        </div>
-      </div>
-
-      <!-- Master's Degree: extracted area from CV image -->
-      <div class="gallery-item" data-category="education">
-        <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-masters" role="img" aria-label="Master's degree thumbnail" onclick="openCertModal(62,38,2)"></div>
-          <div class="gallery-overlay">
-            <i class="fa fa-search-plus"></i>
-          </div>
-        </div>
-        <div class="gallery-info">
-          <h4>Master of Science</h4>
-          <p>Western Governors University - Cybersecurity &amp; Information Assurance 2023</p>
+          <p>Certified Ethical Hacker (ECC8025614379)</p>
         </div>
       </div>
 
       <!-- PG Marksheet: extracted area from CV image -->
-      <div class="gallery-item" data-category="education">
+      <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <div class="cert-thumb cert-pg" role="img" aria-label="PG marksheet thumbnail" onclick="openCertModal(50,70,2)"></div>
+          <div class="cert-thumb cert-pg" role="img" aria-label="PG marksheet thumbnail" onclick="openCertModal(58,78,2)"></div>
           <div class="gallery-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
         </div>
         <div class="gallery-info">
-          <h4>PG Marksheet - First Division</h4>
-          <p>Board of Technical Education U.P. Lucknow 2013 - Mass Communication</p>
+          <h4>PG Marksheet</h4>
+          <p>BTEUP Lucknow — First Division</p>
         </div>
       </div>
+
+      <!-- Master's Degree: extracted area from CV image -->
+      <div class="gallery-item" data-category="certificates">
+        <div class="gallery-image-wrapper">
+          <div class="cert-thumb cert-masters" role="img" aria-label="Master's degree thumbnail" onclick="openCertModal(82,78,2)"></div>
+          <div class="gallery-overlay">
+            <i class="fa fa-search-plus"></i>
+          </div>
+        </div>
+        <div class="gallery-info">
+          <h4>Master's Degree</h4>
+          <p>Western Governors University — M.S. Cybersecurity 2023</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
