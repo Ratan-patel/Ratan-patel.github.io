@@ -8,22 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Inline styles for certificate thumbnails extracted from the CV image and lightbox -->
+<!-- Inline styles for certificate thumbnails -->
 <style>
-  /* Certificate thumbnails use the single CV image as background and crop via background-position/size */
-  .cert-thumb { width:100%; height:100%; background-image: url('/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png'); background-size: 370%; background-repeat:no-repeat; border-radius:6px; cursor:pointer; }
-  /* tuned background-position values to focus certificate areas inside the CV image (left-to-right: passport, CEH, PG, Master's) */
-  .cert-passport { background-position: 8% 78%; }
-  .cert-ceh { background-position: 34% 70%; }
-  .cert-pg { background-position: 58% 78%; }
-  .cert-masters { background-position: 82% 78%; }
-
-  /* ensure certificate gallery items are smaller than other gallery images */
+  /* Dummy gallery images */
   .gallery { display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
   .gallery-item { display:flex; flex-direction:column; gap:8px; align-items:center; }
-  .gallery-image-wrapper { width:240px; height:160px; max-width: 100%; overflow: hidden; border-radius:8px; position:relative; }
+  .gallery-image-wrapper { width:240px; height:160px; max-width: 100%; overflow: hidden; border-radius:8px; position:relative; background:#f0f0f0; display:flex; align-items:center; justify-content:center; }
   .gallery-item[data-category="certificates"] .gallery-image-wrapper { width:160px; height:120px; border-radius:6px; }
   .gallery-caption { font-size:14px; color:#333; }
+  .dummy-cert { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:48px; font-weight:bold; border-radius:8px; color:#fff; cursor:pointer; transition:transform 0.3s; }
+  .dummy-cert:hover { transform:scale(1.05); }
 
   @media (max-width: 768px) {
     .gallery-image-wrapper { width: 140px; height: 100px; }
@@ -35,18 +29,41 @@
   .lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); z-index: 9999; }
   .lightbox.show { display:flex; }
   .lightbox-content { position: relative; max-width: 95%; max-height: 95%; }
-  .lightbox-img { display:block; max-width:100%; max-height:100%; transition: transform 0.3s ease; background:#fff; border-radius:6px; }
+  .lightbox-img { display:block; max-width:100%; max-height:100%; transition: transform 0.3s ease; background:#fff; border-radius:6px; padding:20px; }
   .lightbox-close { position:absolute; top:-12px; right:-12px; background:#fff; color:#111; border-radius:50%; padding:8px 10px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-  .lightbox-controls { position: absolute; left: 12px; bottom: -46px; display:flex; gap:8px; }
-  .btn-small { background:#fff; padding:8px 10px; border-radius:6px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+  .lightbox-text { text-align:center; color:#fff; font-size:24px; font-weight:bold; padding:40px; }
   
   /* Contact grid styling */
-  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-  .contact-card { background: #f5f5f5; padding: 20px; border-radius: 8px; text-align: center; }
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
+  .contact-card { background: #f5f5f5; padding: 20px; border-radius: 8px; text-align: center; transition: transform 0.3s; }
+  .contact-card:hover { transform: translateY(-5px); }
   .contact-card i { font-size: 24px; color: #00ff00; margin-bottom: 10px; }
-  .contact-card h4 { margin: 10px 0; font-size: 16px; }
+  .contact-card h4 { margin: 10px 0; font-size: 16px; color: #0D2137; }
   .contact-card a, .contact-card p { color: #333; text-decoration: none; font-size: 14px; }
   .contact-card a:hover { color: #00ff00; }
+  
+  /* Skills grid */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .skill-category { background: #f9f9f9; padding: 20px; border-radius: 8px; }
+  .skill-category h3 { color: #0D2137; margin-bottom: 12px; font-size: 16px; }
+  .skill-category ul { list-style: none; }
+  .skill-category li { color: #555; font-size: 14px; margin: 6px 0; padding-left: 20px; position: relative; }
+  .skill-category li:before { content: "▸"; position: absolute; left: 0; color: #C8941A; }
+
+  /* Experience styling */
+  .experience-item { background: #f9f9f9; padding: 24px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #C8941A; }
+  .exp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .exp-header h3 { color: #0D2137; margin: 0; font-size: 18px; }
+  .exp-date { background: #EBF4FC; color: #1565C0; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .exp-company { color: #1565C0; font-weight: 600; margin: 8px 0; }
+  .exp-highlights { list-style: none; margin: 12px 0; }
+  .exp-highlights li { color: #555; font-size: 14px; margin: 8px 0; padding-left: 20px; position: relative; }
+  .exp-highlights li:before { content: "✓"; position: absolute; left: 0; color: #C8941A; font-weight: bold; }
+
+  /* Education styling */
+  .education-item { background: #fff; border: 1px solid #e8eef8; padding: 20px; border-radius: 8px; margin-bottom: 16px; }
+  .education-item h3 { color: #0D2137; margin-bottom: 6px; font-size: 16px; }
+  .education-school { color: #1565C0; font-weight: 600; margin: 0; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -89,14 +106,13 @@
       </div>
     </div>
     <div class="hero-image-box">
-      <!-- Using CV image from repository as profile photo (kept as requested) -->
       <img src="/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png" alt="Ratan Kumar Patel portrait" style="width:320px;height:320px;object-fit:cover;border-radius:50%;box-shadow:0 8px 20px rgba(0,0,0,0.15);">
     </div>
   </div>
   <div class="scroll-down"><i class="fa fa-chevron-down"></i></div>
 </section>
 
-<!-- ABOUT -->
+<!-- ABOUT (SHORT VERSION) -->
 <section class="section" id="about">
   <div class="container">
     <div class="section-header">
@@ -107,9 +123,8 @@
       <div class="about-card">
         <i class="fa fa-user-shield about-icon"></i>
         <h3>Professional Profile</h3>
-        <p><strong>Ethical Hacking Trainer & Cyber Security Expert</strong> with <strong>6+ years of hands-on industry experience</strong> in delivering practical, industry-focused training on Ethical Hacking, Penetration Testing, VAPT, and Cyber Threat Intelligence.</p>
-        <p>I have successfully trained <strong>500+ students and professionals</strong> across academic and corporate environments in real-world attack simulations, CTF challenges, and hands-on labs. I specialize in designing <strong>industry-grade curriculum</strong> and delivering corporate ethical hacking workshops and bootcamps.</p>
-        <p>My training approach is highly practical with real-world attack simulations, live penetration testing demonstrations, and hands-on lab exercises. I am a <strong>top-rated trainer</strong> with excellent feedback scores, known for making complex security concepts accessible and engaging.</p>
+        <p>Cyber Security Trainer & Ethical Hacking Expert with 6+ years of industry experience. Specialized in practical training on Penetration Testing, Ethical Hacking, VAPT, and Cyber Threat Intelligence.</p>
+        <p>Trained 500+ students with hands-on labs, real-world attack simulations, and CTF challenges. Known for making complex security concepts accessible and engaging.</p>
       </div>
       <div class="about-card">
         <i class="fa fa-location-dot about-icon"></i>
@@ -117,23 +132,22 @@
         <div class="detail-list">
           <div class="detail-item"><i class="fa fa-envelope"></i><span><strong>Email:</strong> patelratan460@gmail.com</span></div>
           <div class="detail-item"><i class="fa fa-phone"></i><span><strong>Phone:</strong> +91-8700913645 / 9650053559</span></div>
-          <div class="detail-item"><i class="fa fa-location-dot"></i><span><strong>Location:</strong> South Extension, New Delhi</span></div>
+          <div class="detail-item"><i class="fa fa-map-marker-alt"></i><span><strong>Location:</strong> South Extension, New Delhi</span></div>
           <div class="detail-item"><i class="fa fa-passport"></i><span><strong>Passport:</strong> Indian (Valid 2029)</span></div>
-          <div class="detail-item"><i class="fa fa-language"></i><span><strong>Languages:</strong> Hindi & English (Fluent)</span></div>
-          <div class="detail-item"><i class="fa fa-handshake"></i><span><strong>Status:</strong> UN Volunteer Member | Immediate Joiner</span></div>
+          <div class="detail-item"><i class="fa fa-language"></i><span><strong>Languages:</strong> Hindi & English</span></div>
+          <div class="detail-item"><i class="fa fa-handshake"></i><span><strong>Status:</strong> Immediate Joiner</span></div>
         </div>
       </div>
       <div class="about-card">
         <i class="fa fa-trophy about-icon"></i>
         <h3>Key Highlights</h3>
         <ul class="highlight-list">
-          <li><i class="fa fa-check-circle"></i> Trained 500+ students & professionals in ethical hacking</li>
-          <li><i class="fa fa-check-circle"></i> Designed industry-standard CEH curriculum & training materials</li>
-          <li><i class="fa fa-check-circle"></i> Delivered corporate ethical hacking workshops & bootcamps</li>
-          <li><i class="fa fa-check-circle"></i> Led Red Team exercises & created custom CTF challenges</li>
-          <li><i class="fa fa-check-circle"></i> Mentored in bug bounty hunting & exploit development</li>
-          <li><i class="fa fa-check-circle"></i> Top trainer feedback scores & student satisfaction ratings</li>
-          <li><i class="fa fa-check-circle"></i> CEH Certified & MS Cybersecurity Degree Holder</li>
+          <li><i class="fa fa-check-circle"></i> 500+ Students Trained</li>
+          <li><i class="fa fa-check-circle"></i> CEH Certified Professional</li>
+          <li><i class="fa fa-check-circle"></i> Corporate Training Expertise</li>
+          <li><i class="fa fa-check-circle"></i> Red Team Exercise Leader</li>
+          <li><i class="fa fa-check-circle"></i> MS Cybersecurity Graduate</li>
+          <li><i class="fa fa-check-circle"></i> Available for Immediate Joining</li>
         </ul>
       </div>
     </div>
@@ -141,7 +155,7 @@
 </section>
 
 <!-- SKILLS SECTION -->
-<section class="section" id="skills">
+<section class="section bg-light" id="skills">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">What I Know</span>
@@ -149,34 +163,34 @@
     </div>
     <div class="skills-grid">
       <div class="skill-category">
-        <h3>Security Expertise</h3>
+        <h3>🔐 Security Expertise</h3>
         <ul>
           <li>Ethical Hacking & Penetration Testing</li>
-          <li>Vulnerability Assessment & VAPT</li>
-          <li>Cyber Threat Intelligence</li>
+          <li>Vulnerability Assessment (VAPT)</li>
           <li>Network & Firewall Security</li>
-          <li>Web Application Security (OWASP Top 10)</li>
-          <li>Incident Response & Threat Analysis</li>
+          <li>Web Application Security (OWASP)</li>
+          <li>Incident Response</li>
+          <li>Threat Intelligence</li>
         </ul>
       </div>
       <div class="skill-category">
-        <h3>Tools & Technologies</h3>
+        <h3>🛠️ Tools & Technologies</h3>
         <ul>
-          <li>Metasploit, Burp Suite, Nmap, Wireshark</li>
+          <li>Metasploit & Burp Suite</li>
+          <li>Nmap, Wireshark, Aircrack-ng</li>
           <li>Kali Linux, Parrot OS</li>
-          <li>OWASP ZAP, Nessus, OpenVAS</li>
-          <li>Hashcat, Aircrack-ng, Masscan</li>
-          <li>CTF Design & Challenge Development</li>
+          <li>Nessus, OpenVAS, OWASP ZAP</li>
+          <li>CTF Design & Red Team Exercises</li>
         </ul>
       </div>
       <div class="skill-category">
-        <h3>Training & Development</h3>
+        <h3>📚 Training & Development</h3>
         <ul>
-          <li>Curriculum Design & Course Development</li>
-          <li>Corporate Training & Workshops</li>
-          <li>Hands-on Lab Design</li>
-          <li>Red Team Exercise Leadership</li>
-          <li>Public Speaking & Technical Training</li>
+          <li>Curriculum Design & Development</li>
+          <li>Corporate Workshops & Bootcamps</li>
+          <li>Hands-on Lab Creation</li>
+          <li>Red Team Leadership</li>
+          <li>Technical Training & Mentoring</li>
         </ul>
       </div>
     </div>
@@ -198,12 +212,11 @@
       </div>
       <p class="exp-company"><strong>Equator Cyber Solutions</strong> | South Extension, New Delhi</p>
       <ul class="exp-highlights">
-        <li>Trained 500+ students in ethical hacking, pen testing, network security, and VAPT</li>
-        <li>Designed modular OWASP Top 10, Metasploit, Burp Suite, and CTF design curriculum</li>
-        <li>Delivered corporate ethical hacking workshops and bootcamps</li>
-        <li>Led red team / blue team exercises and penetration testing challenges</li>
-        <li>Mentored in bug bounty hunting, exploit development & real-world pentesting</li>
-        <li>Achieved top trainer feedback scores and student satisfaction ratings</li>
+        <li>Trained 500+ students in ethical hacking, penetration testing & network security</li>
+        <li>Designed OWASP, Metasploit, Burp Suite & CTF curriculum</li>
+        <li>Delivered corporate ethical hacking workshops & bootcamps</li>
+        <li>Led red team exercises & penetration testing challenges</li>
+        <li>Mentored in bug bounty hunting & exploit development</li>
       </ul>
     </div>
 
@@ -214,58 +227,53 @@
       </div>
       <p class="exp-company"><strong>Silent Front & Software Solutions</strong></p>
       <ul class="exp-highlights">
-        <li>Conducted VAPT and ethical hacking on client networks & web applications</li>
-        <li>Monitored network security and implemented mitigation strategies</li>
-        <li>Prepared security reports and training documentation</li>
-        <li>Supported junior analysts in vulnerability assessment and remediation</li>
+        <li>Conducted VAPT on networks & web applications</li>
+        <li>Monitored network security & implemented mitigation strategies</li>
+        <li>Prepared security reports & documentation</li>
+        <li>Supported vulnerability assessment & remediation</li>
       </ul>
     </div>
   </div>
 </section>
 
 <!-- EDUCATION -->
-<section class="section" id="education">
+<section class="section bg-light" id="education">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">Academic Background</span>
       <h2>Education & Certifications</h2>
     </div>
     
-    <div class="education-grid">
+    <div>
       <div class="education-item">
-        <h3>Master of Science (M.Sc) in Cybersecurity & Information Assurance</h3>
-        <p class="education-school"><strong>Western Governors University</strong> | 2023</p>
-        <p>Specialized in advanced cybersecurity concepts, threat analysis, and security architecture.</p>
+        <h3>Master of Science in Cybersecurity & Information Assurance</h3>
+        <p class="education-school">Western Governors University | 2023</p>
       </div>
 
       <div class="education-item">
         <h3>Certified Ethical Hacker (CEH) - EC-Council</h3>
-        <p class="education-school"><strong>EC-Council</strong> | Issued: 25 Jul 2024 | Valid: 24 Jul 2027</p>
-        <p>Globally recognized certification in ethical hacking and penetration testing methodologies.</p>
+        <p class="education-school">Issued: 25 Jul 2024 | Valid: 24 Jul 2027</p>
       </div>
 
       <div class="education-item">
         <h3>Post Graduate Diploma in Mass Communication</h3>
-        <p class="education-school"><strong>Board of Technical Education, U.P Lucknow</strong> | 2013</p>
-        <p>First Division distinction in mass communication and professional development.</p>
+        <p class="education-school">Board of Technical Education, U.P Lucknow | 2013 (First Division)</p>
       </div>
 
       <div class="education-item">
         <h3>MS Cybersecurity Certification</h3>
-        <p class="education-school"><strong>WGU</strong></p>
-        <p>Advanced cybersecurity framework and incident response certification.</p>
+        <p class="education-school">Western Governors University</p>
       </div>
 
       <div class="education-item">
         <h3>Executive Cybersecurity Certification</h3>
-        <p class="education-school"><strong>Professional Development</strong></p>
-        <p>Executive-level security leadership and strategic security management.</p>
+        <p class="education-school">Professional Cybersecurity Development</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY (including certificate thumbnails cropped from CV) -->
+<!-- GALLERY WITH DUMMY IMAGES -->
 <section class="section" id="gallery">
   <div class="container">
     <div class="section-header">
@@ -274,69 +282,107 @@
     </div>
 
     <div class="gallery">
-      <!-- Certificate thumbnails (cropped from the CV image using CSS background-position) -->
+      <!-- Certificate 1 -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <a class="cert-thumb cert-passport" data-cert-area="passport" href="#" title="Indian Passport (Valid 2029)"></a>
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showCertificate('Indian Passport')">
+            <i class="fa fa-passport"></i>
+          </div>
         </div>
         <div class="gallery-caption">Indian Passport</div>
       </div>
 
+      <!-- Certificate 2 -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <a class="cert-thumb cert-ceh" data-cert-area="ceh" href="#" title="CEH - EC-Council Certified"></a>
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="showCertificate('CEH Certificate')">
+            <i class="fa fa-certificate"></i>
+          </div>
         </div>
         <div class="gallery-caption">CEH Certificate</div>
       </div>
 
+      <!-- Certificate 3 -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <a class="cert-thumb cert-pg" data-cert-area="pg" href="#" title="PG Diploma - Mass Communication"></a>
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="showCertificate('PG Diploma')">
+            <i class="fa fa-graduation-cap"></i>
+          </div>
         </div>
         <div class="gallery-caption">PG Diploma</div>
       </div>
 
+      <!-- Certificate 4 -->
       <div class="gallery-item" data-category="certificates">
         <div class="gallery-image-wrapper">
-          <a class="cert-thumb cert-masters" data-cert-area="masters" href="#" title="Master's Degree - WGU"></a>
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="showCertificate('Master's Degree')">
+            <i class="fa fa-book"></i>
+          </div>
         </div>
         <div class="gallery-caption">Master's Degree</div>
       </div>
 
-      <!-- Example other gallery image (kept small) -->
+      <!-- Extra Gallery Image 1 -->
       <div class="gallery-item">
         <div class="gallery-image-wrapper">
-          <img src="/professor.jpg" alt="Lecture" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="showCertificate('Training Session')">
+            <i class="fa fa-person-chalkboard"></i>
+          </div>
         </div>
         <div class="gallery-caption">Training Session</div>
+      </div>
+
+      <!-- Extra Gallery Image 2 -->
+      <div class="gallery-item">
+        <div class="gallery-image-wrapper">
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" onclick="showCertificate('Workshop')">
+            <i class="fa fa-users"></i>
+          </div>
+        </div>
+        <div class="gallery-caption">Corporate Workshop</div>
+      </div>
+
+      <!-- Extra Gallery Image 3 -->
+      <div class="gallery-item">
+        <div class="gallery-image-wrapper">
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);" onclick="showCertificate('Lab Exercise')">
+            <i class="fa fa-laptop"></i>
+          </div>
+        </div>
+        <div class="gallery-caption">Lab Exercise</div>
+      </div>
+
+      <!-- Extra Gallery Image 4 -->
+      <div class="gallery-item">
+        <div class="gallery-image-wrapper">
+          <div class="dummy-cert" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showCertificate('Security Assessment')">
+            <i class="fa fa-shield"></i>
+          </div>
+        </div>
+        <div class="gallery-caption">Security Assessment</div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- Lightbox that shows the full CV and can zoom to certificate areas -->
+<!-- Lightbox for certificate preview -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-content">
     <button class="lightbox-close" id="lightboxClose">✕</button>
-    <img id="lightboxImg" class="lightbox-img" src="/bbac7825-ae27-4a0e-adc8-d11e667eb80c.png" alt="Full CV / Certificates">
-    <div class="lightbox-controls">
-      <button class="btn-small" id="zoomIn">Zoom In</button>
-      <button class="btn-small" id="zoomOut">Zoom Out</button>
-      <button class="btn-small" id="fitView">Fit View</button>
-    </div>
+    <div class="lightbox-text" id="certTitle"></div>
   </div>
 </div>
 
 <!-- CONTACT SECTION -->
-<section class="section" id="contact">
+<section class="section bg-light" id="contact">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">Get in touch</span>
       <h2>Contact & Connect</h2>
     </div>
-    <p style="text-align: center; font-size: 16px; margin-bottom: 20px;">
-      Feel free to reach out for training opportunities, security consulting, or just a quick hello!
+    <p style="text-align: center; font-size: 16px; margin-bottom: 20px; color: #555;">
+      Feel free to reach out for training opportunities, security consulting, or collaboration!
     </p>
     
     <div class="contact-grid">
@@ -349,26 +395,25 @@
       <div class="contact-card">
         <i class="fa fa-phone"></i>
         <h4>Phone</h4>
-        <a href="tel:+918700913645">+91-8700913645</a><br>
-        <a href="tel:+919650053559">+91-9650053559</a>
+        <a href="tel:+918700913645">+91-8700913645</a>
       </div>
 
       <div class="contact-card">
         <i class="fab fa-whatsapp"></i>
         <h4>WhatsApp</h4>
-        <a href="https://wa.me/918700913645" target="_blank">+91-8700913645</a>
+        <a href="https://wa.me/918700913645" target="_blank">Message on WhatsApp</a>
       </div>
 
       <div class="contact-card">
-        <i class="fa fa-location-dot"></i>
+        <i class="fa fa-map-marker-alt"></i>
         <h4>Location</h4>
-        <p>South Extension, New Delhi, India</p>
+        <p>South Extension, New Delhi</p>
       </div>
 
       <div class="contact-card">
         <i class="fab fa-linkedin"></i>
         <h4>LinkedIn</h4>
-        <a href="https://linkedin.com/in/ratan-patel-0bb322128" target="_blank">LinkedIn Profile</a>
+        <a href="https://linkedin.com/in/ratan-patel-0bb322128" target="_blank">Connect Here</a>
       </div>
 
       <div class="contact-card">
@@ -384,66 +429,48 @@
       </div>
 
       <div class="contact-card">
-        <i class="fa fa-briefcase"></i>
+        <i class="fa fa-handshake"></i>
         <h4>Availability</h4>
-        <p>Available for Immediate Joining</p>
+        <p>Immediate Joiner</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Minimal JS to open lightbox and optionally zoom to certificate crop area -->
 <script>
+  // Lightbox functionality for certificates
   const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
   const closeBtn = document.getElementById('lightboxClose');
-  const zoomInBtn = document.getElementById('zoomIn');
-  const zoomOutBtn = document.getElementById('zoomOut');
-  const fitViewBtn = document.getElementById('fitView');
-  let scale = 1;
+  const certTitle = document.getElementById('certTitle');
 
-  document.querySelectorAll('.cert-thumb').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      const area = el.getAttribute('data-cert-area');
-      // Reset transform and scale
-      scale = 1;
-      lightboxImg.style.transform = '';
-      // Show lightbox
-      lightbox.classList.add('show');
-      // optionally pan the image to the approximate certificate area using transform-origin
-      switch(area) {
-        case 'passport':
-          // set transform-origin so that zoom centers near left area
-          lightboxImg.style.transformOrigin = '10% 80%';
-          break;
-        case 'ceh':
-          lightboxImg.style.transformOrigin = '34% 80%';
-          break;
-        case 'pg':
-          lightboxImg.style.transformOrigin = '58% 80%';
-          break;
-        case 'masters':
-          lightboxImg.style.transformOrigin = '82% 80%';
-          break;
-        default:
-          lightboxImg.style.transformOrigin = '50% 50%';
-      }
-      // small initial zoom to focus area
-      scale = 1.6;
-      lightboxImg.style.transform = `scale(${scale})`;
-    });
+  function showCertificate(title) {
+    certTitle.textContent = title;
+    lightbox.classList.add('show');
+  }
+
+  closeBtn.addEventListener('click', () => { 
+    lightbox.classList.remove('show'); 
   });
 
-  closeBtn.addEventListener('click', () => { lightbox.classList.remove('show'); lightboxImg.style.transform=''; });
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) { lightbox.classList.remove('show'); lightboxImg.style.transform=''; } });
-  zoomInBtn.addEventListener('click', () => { scale = Math.min(4, scale + 0.4); lightboxImg.style.transform = `scale(${scale})`; });
-  zoomOutBtn.addEventListener('click', () => { scale = Math.max(1, scale - 0.4); lightboxImg.style.transform = `scale(${scale})`; });
-  fitViewBtn.addEventListener('click', () => { scale = 1; lightboxImg.style.transform = `scale(${scale})`; lightboxImg.style.transformOrigin = '50% 50%'; });
+  lightbox.addEventListener('click', (e) => { 
+    if (e.target === lightbox) { 
+      lightbox.classList.remove('show'); 
+    } 
+  });
 
-  // simple hamburger toggle for mobile
+  // Hamburger menu toggle
   document.getElementById('hamburger').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('open');
+  });
+
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
   });
 </script>
 
