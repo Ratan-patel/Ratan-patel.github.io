@@ -62,7 +62,7 @@ body{font-family:'Inter',sans-serif;color:#1a1a2e;background:#fff;overflow-x:hid
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
-.about-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;padding:36px;transition:transform 0.3s,box-shadow 0.3s;opacity:0;transform:translateY(30px);}
+.about-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;padding:36px;transition:transform 0.3s,box-shadow 0.3s;}
 .about-card.animate-in{animation:fadeInUp 0.6s ease forwards;}
 .about-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(21,101,192,0.12);}
 .about-icon{font-size:36px;color:#1565C0;margin-bottom:20px;display:block;}
@@ -97,7 +97,7 @@ body{font-family:'Inter',sans-serif;color:#1a1a2e;background:#fff;overflow-x:hid
 
 /* SKILLS */
 .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:60px;}
-.skill-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:28px;transition:all 0.3s;opacity:0;transform:translateY(30px);}
+.skill-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:28px;transition:all 0.3s;}
 .skill-card.animate-in{animation:fadeInUp 0.6s ease forwards;}
 .skill-card:hover{background:rgba(255,255,255,0.08);border-color:rgba(200,148,26,0.5);transform:translateY(-4px);}
 .skill-icon{font-size:28px;color:#C8941A;margin-bottom:14px;}
@@ -129,7 +129,7 @@ body{font-family:'Inter',sans-serif;color:#1a1a2e;background:#fff;overflow-x:hid
 
 /* EDUCATION */
 .edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;}
-.edu-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;padding:36px;text-align:center;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;opacity:0;transform:translateY(30px);}
+.edu-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;padding:36px;text-align:center;transition:transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
 .edu-card.animate-in{animation:fadeInUp 0.6s ease forwards;}
 .edu-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(21,101,192,0.12);}
 .edu-year{position:absolute;top:20px;right:20px;background:#EBF4FC;color:#1565C0;font-size:13px;font-weight:700;padding:4px 12px;border-radius:100px;}
@@ -144,7 +144,7 @@ body{font-family:'Inter',sans-serif;color:#1a1a2e;background:#fff;overflow-x:hid
 
 /* CERTIFICATES */
 .cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;}
-.cert-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;opacity:0;transform:translateY(30px);}
+.cert-card{background:#fff;border:1px solid #e8eef8;border-radius:16px;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;}
 .cert-card.animate-in{animation:fadeInUp 0.6s ease forwards;}
 .cert-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(21,101,192,0.12);}
 .cert-placeholder{height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:48px;}
@@ -204,12 +204,11 @@ body{font-family:'Inter',sans-serif;color:#1a1a2e;background:#fff;overflow-x:hid
   .stat-div{width:80%;height:1px;}
   .contact-grid{grid-template-columns:1fr;}
   .hamburger{display:block;}
-  .nav-links{display:none;position:absolute;top:70px;left:0;width:100%;background:#0D2137;flex-direction:column;padding:20px;gap:16px;}
+  .nav-links{display:none;position:absolute;top:100%;left:0;width:100%;background:#0D2137;flex-direction:column;text-align:center;padding:20px 0;gap:20px;box-shadow:0 10px 20px rgba(0,0,0,0.2);}
   .nav-links.open{display:flex;}
-  .timeline{padding-left:28px;}
-  .section-header h2{font-size:32px;}
-  .footer-content{flex-direction:column;text-align:center;}
-  .hero-photo{width:200px;height:250px;}
-  .gallery-filter{flex-direction:column;align-items:center;}
-  .filter-btn{width:100%;}
+  .about-grid{grid-template-columns:1fr;}
+  .skills-grid{grid-template-columns:1fr;}
+  .timeline{padding-left:30px;}
+  .timeline-header{flex-direction:column;gap:8px;}
+  .timeline-date{align-self:flex-start;}
 }
