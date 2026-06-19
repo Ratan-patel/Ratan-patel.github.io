@@ -1,0 +1,48 @@
+/* Custom animations and styling overrides */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom glow borders for cybersecurity aesthetic */
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.animate-tilt {
+  animation: tilt 10s infinite linear;
+}
+
+/* Caret Blinker in Terminal */
+#terminal-input {
+  caret-color: #10b981;
+}
+
+/* Card glassmorphism grids */
+.bg-slate-900\\/30 {
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* Scrollbar styling for code windows */
+#terminal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#terminal-body::-webkit-scrollbar-track {
+  background: rgba(2, 6, 23, 0.5);
+}
+
+#terminal-body::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.3);
+  border-radius: 3px;
+}
+
+#terminal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.6);
+}
