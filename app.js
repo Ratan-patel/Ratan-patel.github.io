@@ -74,7 +74,7 @@ function runTerminalCommand(cmd) {
         <span class="text-white font-bold">Verifiable Academic Records:</span><br>
         [✓] <span class="text-emerald-400">Certified Ethical Hacker (CEH) v12</span> - EC-Council (Issued: Jul 2024, ID: ECC92840)<br>
         [✓] <span class="text-emerald-400">MS in Cybersecurity & Information Assurance</span> - Western Governors University (2023)<br>
-        [✓] <span class="text-cyan-400">PG Diploma in Mass Communication</span> - Board of Technical Education, U.P (2013)
+        [✓] <span class="text-cyan-400">PG Diploma in Computer Application</span> - Board of Technical Education, U.P (2013)
       `;
       break;
 
