@@ -1,141 +1,130 @@
-/* Custom Cybersecurity Terminal Animations & Effects */
-
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+    line-height: 1.6;
 }
 
-@keyframes pulse-glow-green {
-  0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.2), inset 0 0 4px rgba(16, 185, 129, 0.1); }
-  50% { box-shadow: 0 0 18px rgba(16, 185, 129, 0.5), inset 0 0 8px rgba(16, 185, 129, 0.2); }
+header {
+    background-color: #0f0f1a;
+    color: #e0e0e0;
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 2px solid #007bff;
 }
 
-@keyframes pulse-glow-red {
-  0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.2), inset 0 0 4px rgba(239, 68, 68, 0.1); }
-  50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.5), inset 0 0 8px rgba(239, 68, 68, 0.2); }
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
 }
 
-@keyframes pulse-glow-cyan {
-  0%, 100% { box-shadow: 0 0 8px rgba(6, 182, 212, 0.2), inset 0 0 4px rgba(6, 182, 212, 0.1); }
-  50% { box-shadow: 0 0 18px rgba(6, 182, 212, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.2); }
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #0f0f1a;
 }
 
-@keyframes pulse-glow-amber {
-  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.2), inset 0 0 4px rgba(245, 158, 11, 0.1); }
-  50% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.5), inset 0 0 8px rgba(245, 158, 11, 0.2); }
+nav ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    display: block;
+    transition: background-color 0.3s ease;
 }
 
-@keyframes blink {
-  50% { opacity: 0; }
+nav ul li a:hover {
+    background-color: #007bff;
+    color: #ffffff;
 }
 
-.glow-green {
-  animation: pulse-glow-green 2.5s infinite;
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #16213e;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
 }
 
-.glow-red {
-  animation: pulse-glow-red 2.5s infinite;
+.lab-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #0f3460;
+    border-left: 5px solid #007bff;
+    border-radius: 5px;
 }
 
-.glow-cyan {
-  animation: pulse-glow-cyan 2.5s infinite;
+.lab-section h2 {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-top: 0;
 }
 
-.glow-amber {
-  animation: pulse-glow-amber 2.5s infinite;
+.tool-example {
+    background-color: #0a1931;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    border: 1px solid #007bff;
 }
 
-.terminal-scanline {
-  position: relative;
-  overflow: hidden;
+.tool-example h3 {
+    color: #e94560;
+    margin-top: 0;
 }
 
-.terminal-scanline::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.15) 50%
-  );
-  background-size: 100% 4px;
-  pointer-events: none;
-  z-index: 10;
+pre {
+    background-color: #0f0f1a;
+    color: #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
 }
 
-.scanline-animation::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: rgba(16, 185, 129, 0.12);
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  z-index: 15;
+code {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
 }
 
-.scanline-animation-red::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: rgba(239, 68, 68, 0.12);
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  z-index: 15;
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.cursor-blink::after {
-  content: '▋';
-  animation: blink 1.2s step-start infinite;
-  color: inherit;
-  margin-left: 2px;
+button:hover {
+    background-color: #0056b3;
 }
 
-/* Custom terminal scrollbars */
-.terminal-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.terminal-scrollbar::-webkit-scrollbar-track {
-  background: rgba(17, 24, 39, 0.9);
-}
-.terminal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(75, 85, 99, 0.6);
-  border-radius: 3px;
-}
-.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 0.8);
+.output-console {
+    background-color: #0f0f1a;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    margin-top: 15px;
+    min-height: 50px;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 4px;
+    white-space: pre-wrap;
 }
 
-/* Cyber grid backgrounds */
-.bg-grid {
-  background-size: 20px 20px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-}
-.dark .bg-grid {
-  background-image: 
-    linear-gradient(to right, rgba(0, 242, 254, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 242, 254, 0.015) 1px, transparent 1px);
-}
-
-/* Custom glassmorphic blur */
-.glass-panel {
-  background: rgba(17, 24, 39, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-.dark .glass-panel {
-  background: rgba(10, 15, 30, 0.8);
-  border: 1px solid rgba(0, 242, 254, 0.08);
+footer {
+    text-align: center;
+    padding: 1.5rem 0;
+    background-color: #0f0f1a;
+    color: #e0e0e0;
+    margin-top: 30px;
+    border-top: 2px solid #007bff;
 }
