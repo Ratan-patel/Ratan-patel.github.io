@@ -1,0 +1,141 @@
+/* Custom Cybersecurity Terminal Animations & Effects */
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes pulse-glow-green {
+  0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.2), inset 0 0 4px rgba(16, 185, 129, 0.1); }
+  50% { box-shadow: 0 0 18px rgba(16, 185, 129, 0.5), inset 0 0 8px rgba(16, 185, 129, 0.2); }
+}
+
+@keyframes pulse-glow-red {
+  0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.2), inset 0 0 4px rgba(239, 68, 68, 0.1); }
+  50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.5), inset 0 0 8px rgba(239, 68, 68, 0.2); }
+}
+
+@keyframes pulse-glow-cyan {
+  0%, 100% { box-shadow: 0 0 8px rgba(6, 182, 212, 0.2), inset 0 0 4px rgba(6, 182, 212, 0.1); }
+  50% { box-shadow: 0 0 18px rgba(6, 182, 212, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.2); }
+}
+
+@keyframes pulse-glow-amber {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.2), inset 0 0 4px rgba(245, 158, 11, 0.1); }
+  50% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.5), inset 0 0 8px rgba(245, 158, 11, 0.2); }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.glow-green {
+  animation: pulse-glow-green 2.5s infinite;
+}
+
+.glow-red {
+  animation: pulse-glow-red 2.5s infinite;
+}
+
+.glow-cyan {
+  animation: pulse-glow-cyan 2.5s infinite;
+}
+
+.glow-amber {
+  animation: pulse-glow-amber 2.5s infinite;
+}
+
+.terminal-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.15) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.scanline-animation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(16, 185, 129, 0.12);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.scanline-animation-red::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(239, 68, 68, 0.12);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.cursor-blink::after {
+  content: '▋';
+  animation: blink 1.2s step-start infinite;
+  color: inherit;
+  margin-left: 2px;
+}
+
+/* Custom terminal scrollbars */
+.terminal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.9);
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.6);
+  border-radius: 3px;
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.8);
+}
+
+/* Cyber grid backgrounds */
+.bg-grid {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+.dark .bg-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 242, 254, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 254, 0.015) 1px, transparent 1px);
+}
+
+/* Custom glassmorphic blur */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.dark .glass-panel {
+  background: rgba(10, 15, 30, 0.8);
+  border: 1px solid rgba(0, 242, 254, 0.08);
+}
