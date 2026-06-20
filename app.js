@@ -36,6 +36,9 @@ function runTerminalCommand(cmd) {
         - <span class="text-cyan-400">certs</span>    : List cybersecurity academic records & certifications<br>
         - <span class="text-cyan-400">contact</span>  : Display secure messenger links & hotlines<br>
         - <span class="text-cyan-400">nmap</span>     : Simulate an offensive port vulnerability scan<br>
+        - <span class="text-cyan-400">matrix</span>   : Stream falling green matrix digital rain<br>
+        - <span class="text-cyan-400">crack</span>    : Simulate brute-forcing an encrypted vault<br>
+        - <span class="text-cyan-400">socials</span>  : Show direct links to social network channels<br>
         - <span class="text-cyan-400">clear</span>    : Clear terminal console screen
       `;
       break;
@@ -85,6 +88,98 @@ function runTerminalCommand(cmd) {
         - Phone : +91-8700913645 / 9650053559<br>
         - WhatsApp : <a class="text-emerald-400 hover:underline" href="https://wa.me/918700913645" target="_blank">Start Secure Chat</a><br>
         - LinkedIn : <a class="text-cyan-400 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">LinkedIn Profile</a>
+      `;
+      break;
+
+    case 'matrix':
+      response.innerHTML = `<span class="text-emerald-400 animate-pulse">[SYS] Establishing neural interface... Streaming digital rain.</span>`;
+      history.appendChild(response);
+      scrollTerminal();
+
+      let linesCount = 0;
+      const matrixInterval = setInterval(() => {
+        if (linesCount >= 15) {
+          clearInterval(matrixInterval);
+          let doneLine = document.createElement('div');
+          doneLine.className = "text-emerald-400 font-bold pl-4 py-1 border-l border-slate-800";
+          doneLine.innerHTML = "[+] Signal stream terminated successfully.";
+          history.appendChild(doneLine);
+          scrollTerminal();
+          return;
+        }
+        let rainLine = document.createElement('div');
+        rainLine.className = "text-emerald-500 font-mono text-xs pl-4 py-0.5 border-l border-slate-800 tracking-widest";
+
+        // Generate random binary & hacker code strings
+        let chars = "010101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$*&%+=?/";
+        let str = "";
+        for (let i = 0; i < 35; i++) {
+          str += chars[Math.floor(Math.random() * chars.length)];
+        }
+        rainLine.textContent = str;
+        history.appendChild(rainLine);
+        scrollTerminal();
+        linesCount++;
+      }, 150);
+      return;
+
+    case 'crack':
+    case 'hack':
+      response.innerHTML = `<span class="text-cyan-400 animate-pulse">[SYS] Targeting local encrypted node... Initiating decryption...</span>`;
+      history.appendChild(response);
+      scrollTerminal();
+
+      setTimeout(() => {
+        let targetLog = document.createElement('div');
+        targetLog.className = "text-slate-400 pl-4 py-1 border-l border-slate-800";
+        targetLog.innerHTML = `
+          [+] Node Target: secure-vault.local (10.0.8.21)<br>
+          [+] Attack Vector: SSH Dictionary Probe<br>
+          [+] Active Wordlist: rockyou.txt (14,344,392 hashes)
+        `;
+        history.appendChild(targetLog);
+        scrollTerminal();
+      }, 600);
+
+      let pct = 0;
+      let crackLine = document.createElement('div');
+      crackLine.className = "text-amber-500 font-bold pl-4 py-1 border-l border-slate-800";
+
+      setTimeout(() => {
+        crackLine.innerHTML = `[>] Cracking credential hash: 0%`;
+        history.appendChild(crackLine);
+        scrollTerminal();
+      }, 1300);
+
+      const crackInterval = setInterval(() => {
+        pct += Math.floor(Math.random() * 16) + 4;
+        if (pct >= 100) {
+          pct = 100;
+          clearInterval(crackInterval);
+          crackLine.innerHTML = `[>] Cracking credential hash: ${pct}% [COMPLETE]`;
+
+          let successLog = document.createElement('div');
+          successLog.className = "text-emerald-400 font-bold pl-4 py-1 border-l border-slate-800";
+          successLog.innerHTML = `
+            [SUCCESS] Match found: "rpatel_sec_admin_pass"<br>
+            [SUCCESS] Decrypting node partition... Mounting root file system...<br>
+            Welcome, RATAN_PATEL. Access granted. Shell fully established.
+          `;
+          history.appendChild(successLog);
+          scrollTerminal();
+        } else {
+          crackLine.innerHTML = `[>] Cracking credential hash: ${pct}%...`;
+          scrollTerminal();
+        }
+      }, 350);
+      return;
+
+    case 'socials':
+      response.innerHTML = `
+        <span class="text-white font-bold">Ratan Kumar Patel - Professional Networks:</span><br>
+        - <span class="text-cyan-400">LinkedIn</span>: <a class="text-emerald-400 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">linkedin.com/in/ratan-kumar-patel-032a43367/</a><br>
+        - <span class="text-cyan-400">GitHub</span>: <a class="text-emerald-400 hover:underline" href="https://github.com/ratan-patel" target="_blank">github.com/ratan-patel</a><br>
+        - <span class="text-cyan-400">WhatsApp</span>: <a class="text-emerald-400 hover:underline" href="https://wa.me/918700913645" target="_blank">Start WhatsApp Chat</a>
       `;
       break;
 
@@ -156,13 +251,14 @@ document.getElementById('terminal-input').addEventListener('keydown', (e) => {
 });
 
 // Certificate Scanner Modal handler
-function scanCertificate(certName, bgGradient, fontAwesomeIcon) {
+function scanCertificate(certName, bgGradient, fontAwesomeIcon, docUrl) {
   const modal = document.getElementById('scanner-modal');
   const title = document.getElementById('modal-cert-title');
   const status = document.getElementById('modal-cert-status');
   const progressBar = document.getElementById('modal-cert-progress');
   const iconContainer = document.getElementById('modal-cert-icon-container');
   const iconElement = document.getElementById('modal-cert-icon');
+  const viewBtn = document.getElementById('modal-cert-view-btn');
 
   // Logs
   const log1 = document.getElementById('modal-cert-log-1');
@@ -178,6 +274,12 @@ function scanCertificate(certName, bgGradient, fontAwesomeIcon) {
   progressBar.style.width = '0%';
   iconContainer.style.background = bgGradient;
   iconElement.className = `fa ${fontAwesomeIcon} text-4xl text-white`;
+
+  // Hide the view credentials button by default
+  if (viewBtn) {
+    viewBtn.classList.add('hidden');
+    viewBtn.href = '#';
+  }
 
   // Clear previous log visibility
   log1.classList.add('hidden');
@@ -205,28 +307,114 @@ function scanCertificate(certName, bgGradient, fontAwesomeIcon) {
     status.className = 'text-emerald-400 font-bold uppercase animate-bounce';
     log3.classList.remove('hidden');
     log4.classList.remove('hidden');
+
+    // Reveal direct download/view link button upon success
+    if (docUrl && viewBtn) {
+      viewBtn.href = docUrl;
+      viewBtn.classList.remove('hidden');
+    }
   }, 2200);
 }
 
 function closeModal() {
   const modal = document.getElementById('scanner-modal');
-  modal.classList.add('hidden');
+  if (modal) modal.classList.add('hidden');
+
+  const viewBtn = document.getElementById('modal-cert-view-btn');
+  if (viewBtn) {
+    viewBtn.classList.add('hidden');
+    viewBtn.href = '#';
+  }
 }
 
-// Contact form secure dispatch simulator
+// Contact form secure dispatch simulator with custom high-tech on-page Toast
 function handleFormDispatch(e) {
   e.preventDefault();
-  const name = document.getElementById('contact-name').value;
-  const email = document.getElementById('contact-email').value;
-  const subject = document.getElementById('contact-subject').value;
-  const message = document.getElementById('contact-message').value;
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const subject = document.getElementById('contact-subject').value.trim();
+  const message = document.getElementById('contact-message').value.trim();
 
-  // Simple alert simulation
-  alert(`[SECURE GATEWAY DISPATCH]\n\nMessage encrypted and sent successfully!\nFrom: ${name}\nSubject: ${subject}\n\nThank you, Ratan will contact you on secure channels shortly.`);
+  if (!name || !email || !message) return;
 
-  // Clear form
-  document.getElementById('contact-name').value = '';
-  document.getElementById('contact-email').value = '';
-  document.getElementById('contact-subject').value = '';
-  document.getElementById('contact-message').value = '';
+  const toast = document.getElementById('secure-toast');
+  const progress = document.getElementById('toast-progress');
+  const logs = document.getElementById('toast-log-container');
+
+  if (!toast || !progress || !logs) {
+    // Fallback if elements not found
+    alert(`[SECURE DISPATCH]\n\nThank you, ${name}! Your message was successfully encrypted and transmitted.`);
+    return;
+  }
+
+  // Show toast
+  toast.classList.remove('hidden');
+  setTimeout(() => {
+    toast.classList.remove('translate-y-10', 'opacity-0');
+  }, 50);
+
+  // Reset progress and log
+  progress.style.width = '0%';
+  logs.innerHTML = `
+    <div class="flex items-center gap-1.5 text-slate-500">
+      <span>[INFO]</span> <span>Establishing secure handshake protocol...</span>
+    </div>
+  `;
+
+  // Animate progress and show multi-step log feedback
+  setTimeout(() => {
+    progress.style.width = '35%';
+    logs.innerHTML += `
+      <div class="flex items-center gap-1.5 text-cyan-400">
+        <span>[SYS]</span> <span>Encrypting dispatch (AES-256-GCM)...</span>
+      </div>
+    `;
+  }, 700);
+
+  setTimeout(() => {
+    progress.style.width = '70%';
+    logs.innerHTML += `
+      <div class="flex items-center gap-1.5 text-amber-400">
+        <span>[NET]</span> <span>Routing packet through secure proxy...</span>
+      </div>
+    `;
+  }, 1600);
+
+  setTimeout(() => {
+    progress.style.width = '100%';
+    logs.innerHTML += `
+      <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
+        <span>[OK]</span> <span>DISPATCH RECEIVED. Secure channels open.</span>
+      </div>
+    `;
+
+    // Clear form
+    document.getElementById('contact-name').value = '';
+    document.getElementById('contact-email').value = '';
+    document.getElementById('contact-subject').value = '';
+    document.getElementById('contact-message').value = '';
+  }, 2600);
+
+  // Auto-hide toast after 6 seconds
+  setTimeout(() => {
+    toast.classList.add('translate-y-10', 'opacity-0');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 500);
+  }, 6500);
+}
+
+// Collapsible Mobile Menu Toggle
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const btnIcon = document.querySelector('#mobile-menu-btn i');
+  if (menu.classList.contains('hidden')) {
+    menu.classList.remove('hidden');
+    btnIcon.classList.remove('fa-bars');
+    btnIcon.classList.add('fa-xmark');
+  } else {
+    menu.classList.add('hidden');
+    btnIcon.classList.remove('fa-xmark');
+    btnIcon.classList.add('fa-bars');
+  }
 }

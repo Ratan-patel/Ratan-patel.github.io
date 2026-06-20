@@ -52,10 +52,27 @@
         <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
           <i class="fa fa-bolt mr-1 text-[10px] animate-bounce"></i> Immediate Joiner
         </span>
-        <a href="#contact" class="px-3 py-1.5 rounded border border-emerald-500/30 text-emerald-400 text-xs font-mono bg-emerald-950/20 hover:bg-emerald-500/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all">
+        <a href="#contact" class="hidden sm:inline-block px-3 py-1.5 rounded border border-emerald-500/30 text-emerald-400 text-xs font-mono bg-emerald-950/20 hover:bg-emerald-500/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all">
           CONNECT_HOTLINE
         </a>
+
+        <!-- Mobile Menu Toggle Button (Visible only on mobile/tablet) -->
+        <button id="mobile-menu-btn" class="md:hidden text-slate-400 hover:text-emerald-400 transition-colors p-2 focus:outline-none flex items-center gap-1 font-mono text-xs">
+          <span class="text-[9px] text-slate-500 tracking-tighter">// MENU</span>
+          <i class="fa-solid fa-bars text-sm"></i>
+        </button>
       </div>
+    </div>
+
+    <!-- Collapsible Mobile Menu Drawer Overlay -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 right-0 bg-slate-950/95 border-b border-emerald-500/20 backdrop-blur-md z-40 transition-all duration-300 shadow-[0_10px_30px_rgba(2,44,34,0.3)]">
+      <nav class="flex flex-col px-6 py-5 gap-3 font-mono text-xs">
+        <a href="#about" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// WHO_AM_I</a>
+        <a href="#skills" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// COMPETENCIES</a>
+        <a href="#experience" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// JOURNEY</a>
+        <a href="#credentials" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// CREDENTIALS</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 transition-colors">// SECURE_LINE</a>
+      </nav>
     </div>
   </header>
 
@@ -527,7 +544,7 @@
         </div>
 
         <!-- Gallery Item 2 -->
-        <div onclick="scanCertificate('CEH Certificate', 'linear-gradient(135deg, #4c0519 0%, #450a0a 100%)', 'fa-certificate')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
+        <div onclick="scanCertificate('CEH Certificate', 'linear-gradient(135deg, #4c0519 0%, #450a0a 100%)', 'fa-certificate', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
           <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #4c0519 0%, #450a0a 100%);">
             <i class="fa fa-certificate text-3xl text-amber-400 group-hover:scale-110 transition-transform"></i>
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -538,7 +555,7 @@
         </div>
 
         <!-- Gallery Item 3 -->
-        <div onclick="scanCertificate('PG Diploma', 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', 'fa-graduation-cap')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
+        <div onclick="scanCertificate('PG Diploma', 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', 'fa-graduation-cap', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
           <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
             <i class="fa fa-graduation-cap text-3xl text-blue-400 group-hover:scale-110 transition-transform"></i>
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -549,7 +566,7 @@
         </div>
 
         <!-- Gallery Item 4 -->
-        <div onclick="scanCertificate('Master's Degree', 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', 'fa-book')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
+        <div onclick="scanCertificate('Master\'s Degree', 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', 'fa-book', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
           <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);">
             <i class="fa fa-book text-3xl text-emerald-400 group-hover:scale-110 transition-transform"></i>
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -740,8 +757,11 @@
       </div>
 
       <!-- Modal Footer -->
-      <div class="bg-slate-900 border-t border-slate-800 px-4 py-3 flex justify-end">
-        <button onclick="closeModal()" class="px-4 py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 rounded transition-all">Close Console</button>
+      <div class="bg-slate-900 border-t border-slate-800 px-4 py-3 flex justify-between items-center">
+        <a id="modal-cert-view-btn" href="#" target="_blank" class="hidden px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 rounded font-bold text-[11px] tracking-wide transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-mono">
+          <i class="fa fa-eye text-[10px]"></i> VIEW_DOCUMENT
+        </a>
+        <button onclick="closeModal()" class="ml-auto px-4 py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 rounded text-xs font-mono transition-all">Close Console</button>
       </div>
     </div>
   </div>
@@ -753,6 +773,27 @@
       <p class="text-[10px] text-emerald-500/50">// HAND-CRAFTED EXCLUSIVELY FOR OFFENSIVE SECURITY MENTORSHIP</p>
     </div>
   </footer>
+
+  
+  <!-- Custom High-Tech Hacking-Themed Toast Notification -->
+  <div id="secure-toast" class="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-950 border border-emerald-500/30 rounded-xl shadow-[0_0_35px_rgba(16,185,129,0.2)] overflow-hidden font-mono text-xs hidden transform translate-y-10 opacity-0 transition-all duration-500">
+    <!-- Toast Header -->
+    <div class="bg-emerald-950/20 border-b border-emerald-500/10 px-4 py-3 flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
+      <span class="font-bold text-emerald-400 tracking-wider">SECURE DISPATCH HANDSHAKE</span>
+    </div>
+    <!-- Toast Body -->
+    <div class="p-4 space-y-3">
+      <div id="toast-log-container" class="space-y-1.5 text-slate-300">
+        <div class="flex items-center gap-1.5 text-slate-500">
+          <span>[INFO]</span> <span>Awaiting envelope initialization...</span>
+        </div>
+      </div>
+      <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+        <div id="toast-progress" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
