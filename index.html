@@ -1,837 +1,659 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ratan Kumar Patel | Cybersecurity Expert & Ethical Hacking Trainer</title>
-
-  <!-- FontAwesome CDN for cyber security icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Tailwind CSS -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.0/dist/index.global.js"
-    integrity="sha384-nWTzRTCY/9V4Bo352ehygr1c4cnst4XN6lMR3fipakEQrhVpc0hEM5Dii3Amz0sT"
-    crossorigin="anonymous"
-  ></script>
-
-  <style type="text/tailwindcss">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ratan Kumar Patel | Cybersecurity Expert &amp; Ethical Hacking Trainer</title>
+<!-- FontAwesome CDN for cyber security icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script crossorigin="anonymous" integrity="sha384-nWTzRTCY/9V4Bo352ehygr1c4cnst4XN6lMR3fipakEQrhVpc0hEM5Dii3Amz0sT" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.0/dist/index.global.js"></script>
+<style type="text/tailwindcss">
     @custom-variant dark (&:where(.dark, .dark *));
   </style>
-  <script>
+<script>
     // Force dark mode for hacking aesthetic
     document.documentElement.classList.add('dark');
   </script>
-  <link rel="stylesheet" href="styles.css">
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen text-sm antialiased font-sans relative overflow-x-hidden selection:bg-emerald-500 selection:text-black">
-
-  <!-- Cyber Background Grid Overlay -->
-  <div class="fixed inset-0 bg-[linear-gradient(to_right,#022c220f_1px,transparent_1px),linear-gradient(to_bottom,#022c220f_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0"></div>
-  <div class="fixed inset-0 bg-[radial-gradient(circle_800px_at_100%_200px,#022c220a,transparent)] pointer-events-none z-0"></div>
-
-  <!-- Header Section -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-emerald-500/10 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
-        <a href="#home" class="font-mono text-lg font-bold tracking-wider text-emerald-400 hover:text-emerald-300">
+<!-- Cyber Background Grid Overlay -->
+<div class="fixed inset-0 bg-[linear-gradient(to_right,#022c220f_1px,transparent_1px),linear-gradient(to_bottom,#022c220f_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0"></div>
+<div class="fixed inset-0 bg-[radial-gradient(circle_800px_at_100%_200px,#022c220a,transparent)] pointer-events-none z-0"></div>
+<!-- Header Section -->
+<header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-emerald-500/10 transition-all duration-300">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
+<a class="font-mono text-lg font-bold tracking-wider text-emerald-400 hover:text-emerald-300" href="#home">
           RATAN_PATEL<span class="text-xs text-cyan-400">.sec</span>
-        </a>
-      </div>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-6 font-mono text-xs">
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="#about">// WHO_AM_I</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="#skills">// COMPETENCIES</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="#experience">// JOURNEY</a>
 
-      <nav class="hidden md:flex items-center gap-6 font-mono text-xs">
-        <a href="#about" class="text-slate-400 hover:text-emerald-400 transition-colors">// WHO_AM_I</a>
-        <a href="#skills" class="text-slate-400 hover:text-emerald-400 transition-colors">// COMPETENCIES</a>
-        <a href="#experience" class="text-slate-400 hover:text-emerald-400 transition-colors">// JOURNEY</a>
-        <a href="#credentials" class="text-slate-400 hover:text-emerald-400 transition-colors">// CREDENTIALS</a>
-        <a href="cmu_msis_syllabus.html" class="text-slate-400 hover:text-emerald-400 transition-colors">// CMU_MSIS_SYLLABUS</a>
-        <a href="cmu_msis_parameters.html" class="text-slate-400 hover:text-emerald-400 transition-colors">// CMU_MSIS_PARAMETERS</a>
-        <a href="#contact" class="text-slate-400 hover:text-emerald-400 transition-colors">// SECURE_LINE</a>
-        <a href="lab/" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-bold transition-colors animate-pulse">// INTERACTIVE_LAB</a>
-      </nav>
-
-      <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-          <i class="fa fa-bolt mr-1 text-[10px] animate-bounce"></i> Immediate Joiner
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="cmu_msis_syllabus.html">// CMU_MSIS_SYLLABUS</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="cmu_msis_parameters.html">// CMU_MSIS_PARAMETERS</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors" href="#contact">// SECURE_LINE</a>
+<a class="text-cyan-400 hover:text-cyan-300 font-bold transition-colors animate-pulse" href="lab/" target="_blank">// INTERACTIVE_LAB</a>
+</nav>
+<div class="flex items-center gap-3">
+<span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<i class="fa fa-bolt mr-1 text-[10px] animate-bounce"></i> Immediate Joiner
         </span>
-        <a href="#contact" class="hidden sm:inline-block px-3 py-1.5 rounded border border-emerald-500/30 text-emerald-400 text-xs font-mono bg-emerald-950/20 hover:bg-emerald-500/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all">
+<a class="hidden sm:inline-block px-3 py-1.5 rounded border border-emerald-500/30 text-emerald-400 text-xs font-mono bg-emerald-950/20 hover:bg-emerald-500/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all" href="#contact">
           CONNECT_HOTLINE
         </a>
+<!-- Mobile Menu Toggle Button (Visible only on mobile/tablet) -->
+<button class="md:hidden text-slate-400 hover:text-emerald-400 transition-colors p-2 focus:outline-none flex items-center gap-1 font-mono text-xs" id="mobile-menu-btn">
+<span class="text-[9px] text-slate-500 tracking-tighter">// MENU</span>
+<i class="fa-solid fa-bars text-sm"></i>
+</button>
+</div>
+</div>
+<!-- Collapsible Mobile Menu Drawer Overlay -->
+<div class="hidden md:hidden absolute top-16 left-0 right-0 bg-slate-950/95 border-b border-emerald-500/20 backdrop-blur-md z-40 transition-all duration-300 shadow-[0_10px_30px_rgba(2,44,34,0.3)]" id="mobile-menu">
+<nav class="flex flex-col px-6 py-5 gap-3 font-mono text-xs">
+<a class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors" href="#about" onclick="toggleMobileMenu()">// WHO_AM_I</a>
+<a class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors" href="#skills" onclick="toggleMobileMenu()">// COMPETENCIES</a>
+<a class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors" href="#experience" onclick="toggleMobileMenu()">// JOURNEY</a>
 
-        <!-- Mobile Menu Toggle Button (Visible only on mobile/tablet) -->
-        <button id="mobile-menu-btn" class="md:hidden text-slate-400 hover:text-emerald-400 transition-colors p-2 focus:outline-none flex items-center gap-1 font-mono text-xs">
-          <span class="text-[9px] text-slate-500 tracking-tighter">// MENU</span>
-          <i class="fa-solid fa-bars text-sm"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Collapsible Mobile Menu Drawer Overlay -->
-    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 right-0 bg-slate-950/95 border-b border-emerald-500/20 backdrop-blur-md z-40 transition-all duration-300 shadow-[0_10px_30px_rgba(2,44,34,0.3)]">
-      <nav class="flex flex-col px-6 py-5 gap-3 font-mono text-xs">
-        <a href="#about" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// WHO_AM_I</a>
-        <a href="#skills" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// COMPETENCIES</a>
-        <a href="#experience" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// JOURNEY</a>
-        <a href="#credentials" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// CREDENTIALS</a>
-        <a href="cmu_msis_syllabus.html" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// CMU_MSIS_SYLLABUS</a>
-        <a href="cmu_msis_parameters.html" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors">// CMU_MSIS_PARAMETERS</a>
-        <a href="#contact" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-emerald-400 py-2 transition-colors">// SECURE_LINE</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-6">
-
-    <!-- Hero Section -->
-    <section id="home" class="py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-slate-900">
-
-      <!-- Photo / Cyber Status Card -->
-      <div class="lg:col-span-5 flex flex-col items-center justify-center">
-        <div class="relative group">
-          <!-- Animated Neon Ring -->
-          <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-75 blur-md group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-
-          <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-slate-950 border-2 border-emerald-500/40 p-1 overflow-hidden">
-            <!-- Ratan Profile Image -->
-            <img 
-              src="assets/ratan_enhanced_photo.png" 
-              alt="Ratan Kumar Patel portrait" 
-              class="w-full h-full object-cover rounded-full filter brightness-95 contrast-105"
-              onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=400'"
-            >
+<a class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors" href="cmu_msis_syllabus.html" onclick="toggleMobileMenu()">// CMU_MSIS_SYLLABUS</a>
+<a class="text-slate-400 hover:text-emerald-400 py-2 border-b border-slate-900/50 transition-colors" href="cmu_msis_parameters.html" onclick="toggleMobileMenu()">// CMU_MSIS_PARAMETERS</a>
+<a class="text-slate-400 hover:text-emerald-400 py-2 transition-colors" href="#contact" onclick="toggleMobileMenu()">// SECURE_LINE</a>
+</nav>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-6">
+<!-- Hero Section -->
+<section class="py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-slate-900" id="home">
+<!-- Photo / Cyber Status Card -->
+<div class="lg:col-span-5 flex flex-col items-center justify-center">
+<div class="relative group">
+<!-- Animated Neon Ring -->
+<div class="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-75 blur-md group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+<div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-slate-950 border-2 border-emerald-500/40 p-1 overflow-hidden">
+<!-- Ratan Profile Image -->
+<img alt="Ratan Kumar Patel portrait" class="w-full h-full object-cover rounded-full filter brightness-95 contrast-105" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&amp;fit=crop&amp;q=80&amp;w=400'" src="assets/ratan_enhanced_photo.png"/>
+</div>
+<!-- Hacking Overlay Icon -->
+<div class="absolute bottom-2 right-6 bg-slate-950 border border-emerald-500/40 text-emerald-400 text-xs font-mono px-3 py-1 rounded-md flex items-center gap-1 shadow-lg shadow-black">
+<i class="fa fa-shield-halved text-cyan-400"></i> SECURED_AGENT
           </div>
-
-          <!-- Hacking Overlay Icon -->
-          <div class="absolute bottom-2 right-6 bg-slate-950 border border-emerald-500/40 text-emerald-400 text-xs font-mono px-3 py-1 rounded-md flex items-center gap-1 shadow-lg shadow-black">
-            <i class="fa fa-shield-halved text-cyan-400"></i> SECURED_AGENT
-          </div>
-        </div>
-
-        <!-- Live Status Indicators -->
-        <div class="mt-6 w-full max-w-sm bg-slate-900/60 backdrop-blur border border-slate-800 rounded-lg p-4 font-mono text-xs">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-slate-400">System Status:</span>
-            <span class="text-emerald-400 flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE
+</div>
+<!-- Live Status Indicators -->
+<div class="mt-6 w-full max-w-sm bg-slate-900/60 backdrop-blur border border-slate-800 rounded-lg p-4 font-mono text-xs">
+<div class="flex justify-between items-center mb-2">
+<span class="text-slate-400">System Status:</span>
+<span class="text-emerald-400 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE
             </span>
-          </div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-slate-400">Threat Monitoring:</span>
-            <span class="text-cyan-400 flex items-center gap-1">
-              <i class="fa-solid fa-circle-check"></i> NO THREATS
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-slate-400">Threat Monitoring:</span>
+<span class="text-cyan-400 flex items-center gap-1">
+<i class="fa-solid fa-circle-check"></i> NO THREATS
             </span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-slate-400">Verification Hash:</span>
-            <span class="text-slate-400 select-all hover:text-emerald-300">CEH_v12_VERIFIED_7a2e8</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hero Intro text -->
-      <div class="lg:col-span-7 space-y-6">
-        <div class="space-y-2">
-          <span class="font-mono text-emerald-400 tracking-widest uppercase text-xs block">// CERTIFIED ETHICAL HACKING TRAINER</span>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white">
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-400">Verification Hash:</span>
+<span class="text-slate-400 select-all hover:text-emerald-300">CEH_v12_VERIFIED_7a2e8</span>
+</div>
+</div>
+</div>
+<!-- Hero Intro text -->
+<div class="lg:col-span-7 space-y-6">
+<div class="space-y-2">
+<span class="font-mono text-emerald-400 tracking-widest uppercase text-xs block">// CERTIFIED ETHICAL HACKING TRAINER</span>
+<h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white">
             Ratan Kumar Patel
           </h1>
-          <h2 class="text-xl sm:text-2xl text-slate-300 font-light flex items-center gap-2">
-            Cyber Security Expert & Trainer
+<h2 class="text-xl sm:text-2xl text-slate-300 font-light flex items-center gap-2">
+            Cyber Security Expert &amp; Trainer
           </h2>
-        </div>
-
-        <p class="text-slate-300 text-base max-w-2xl leading-relaxed">
+</div>
+<p class="text-slate-300 text-base max-w-2xl leading-relaxed">
           I am a professional <span class="text-emerald-400 font-semibold">CEH Certified</span> ethical hacker with <span class="text-emerald-400 font-semibold">6+ years</span> of real-world industry experience. I specialize in delivering immersive, practical workshops on VAPT, Web Penetration Testing, OWASP Top 10, and Red Team challenges.
         </p>
-
-        <!-- Stats Counter Panel -->
-        <div class="grid grid-cols-3 gap-4 py-4 border-y border-slate-900 max-w-xl">
-          <div class="text-center md:text-left">
-            <div class="text-2xl md:text-3xl font-mono font-bold text-emerald-400" id="stat-students">500+</div>
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Students Trained</div>
-          </div>
-          <div class="text-center md:text-left border-x border-slate-900 px-2">
-            <div class="text-2xl md:text-3xl font-mono font-bold text-cyan-400" id="stat-experience">6+ Years</div>
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Industry Exp.</div>
-          </div>
-          <div class="text-center md:text-left">
-            <div class="text-2xl md:text-3xl font-mono font-bold text-amber-400">CEH v12</div>
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Certified</div>
-          </div>
-        </div>
-
-        <!-- Call to Action Buttons -->
-        <div class="flex flex-wrap gap-4 pt-2">
-          <a href="#contact" class="px-5 py-3 rounded bg-emerald-500 text-black hover:bg-emerald-400 font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transition-all">
-            <i class="fa fa-paper-plane"></i> Get in Touch
+<!-- Stats Counter Panel -->
+<div class="grid grid-cols-3 gap-4 py-4 border-y border-slate-900 max-w-xl">
+<div class="text-center md:text-left">
+<div class="text-2xl md:text-3xl font-mono font-bold text-emerald-400" id="stat-students">500+</div>
+<div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Students Trained</div>
+</div>
+<div class="text-center md:text-left border-x border-slate-900 px-2">
+<div class="text-2xl md:text-3xl font-mono font-bold text-cyan-400" id="stat-experience">6+ Years</div>
+<div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Industry Exp.</div>
+</div>
+<div class="text-center md:text-left">
+<div class="text-2xl md:text-3xl font-mono font-bold text-amber-400">CEH v12</div>
+<div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Certified</div>
+</div>
+</div>
+<!-- Call to Action Buttons -->
+<div class="flex flex-wrap gap-4 pt-2">
+<a class="px-5 py-3 rounded bg-emerald-500 text-black hover:bg-emerald-400 font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transition-all" href="#contact">
+<i class="fa fa-paper-plane"></i> Get in Touch
           </a>
-          <a href="lab/" target="_blank" class="px-5 py-3 rounded bg-cyan-950 border border-cyan-800/40 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500 font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.25)] hover:shadow-[0_0_25px_rgba(6,182,212,0.45)] transition-all">
-            <i class="fa-solid fa-terminal text-cyan-400 animate-pulse"></i> Enter Red-Team Lab (Interactive)
+<a class="px-5 py-3 rounded bg-cyan-950 border border-cyan-800/40 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500 font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.25)] hover:shadow-[0_0_25px_rgba(6,182,212,0.45)] transition-all" href="lab/" target="_blank">
+<i class="fa-solid fa-terminal text-cyan-400 animate-pulse"></i> Enter Red-Team Lab (Interactive)
           </a>
-          <a href="ratan_patel_combined.pdf" target="_blank" class="px-5 py-3 rounded bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 font-semibold flex items-center gap-2 transition-all">
-            <i class="fa fa-file-pdf text-red-500"></i> Download CV (PDF)
+<a class="px-5 py-3 rounded bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 font-semibold flex items-center gap-2 transition-all" href="ratan_patel_combined.pdf" target="_blank">
+<i class="fa fa-file-pdf text-red-500"></i> Download CV (PDF)
           </a>
-          <a href="ratan_patel_cv.png" target="_blank" class="px-5 py-3 rounded bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 font-semibold flex items-center gap-2 transition-all">
-            <i class="fa fa-image text-blue-400"></i> Download CV (PNG)
+<a class="px-5 py-3 rounded bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 font-semibold flex items-center gap-2 transition-all" href="ratan_patel_cv.png" target="_blank">
+<i class="fa fa-image text-blue-400"></i> Download CV (PNG)
           </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interactive Terminal Widget -->
-    <section class="py-12 border-b border-slate-900">
-      <div class="section-header mb-8 text-center md:text-left">
-        <span class="font-mono text-cyan-400 tracking-widest text-xs uppercase block">// INTERACTIVE TERMINAL</span>
-        <h2 class="text-2xl md:text-3xl font-bold text-white">Interact With the Security Console</h2>
-        <p class="text-slate-400 max-w-xl mt-1">Type custom commands or click buttons below to run simulated cybersecurity scans and fetch information directly.</p>
-      </div>
-
-      <div class="bg-slate-950 border border-slate-800 rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto flex flex-col h-96 font-mono text-sm">
-        <!-- Terminal Header -->
-        <div class="bg-slate-900/90 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-            <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-            <span class="text-xs text-slate-400 ml-2">ratan-patel@security-hotline: ~</span>
-          </div>
-          <div class="text-xs text-emerald-400/70 animate-pulse">● SECURE SHELL v2.4</div>
-        </div>
-
-        <!-- Terminal Output -->
-        <div id="terminal-body" class="flex-1 p-4 overflow-y-auto space-y-2 bg-slate-950 text-slate-300">
-          <div class="text-slate-500">// Welcome to Ratan's Security Terminal. Type 'help' to view commands.</div>
-          <div class="text-emerald-400 font-bold font-mono">
-            ========================================================================<br>
-            * RATAN KUMAR PATEL - ETHICAL HACKING & PENETRATION TESTING SHELL *<br>
+</div>
+</div>
+</section>
+<!-- Interactive Terminal Widget -->
+<section class="py-12 border-b border-slate-900">
+<div class="section-header mb-8 text-center md:text-left">
+<span class="font-mono text-cyan-400 tracking-widest text-xs uppercase block">// INTERACTIVE TERMINAL</span>
+<h2 class="text-2xl md:text-3xl font-bold text-white">Interact With the Security Console</h2>
+<p class="text-slate-400 max-w-xl mt-1">Type custom commands or click buttons below to run simulated cybersecurity scans and fetch information directly.</p>
+</div>
+<div class="bg-slate-950 border border-slate-800 rounded-lg overflow-hidden shadow-2xl max-w-4xl mx-auto flex flex-col h-96 font-mono text-sm">
+<!-- Terminal Header -->
+<div class="bg-slate-900/90 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+<span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+<span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+<span class="text-xs text-slate-400 ml-2">ratan-patel@security-hotline: ~</span>
+</div>
+<div class="text-xs text-emerald-400/70 animate-pulse">● SECURE SHELL v2.4</div>
+</div>
+<!-- Terminal Output -->
+<div class="flex-1 p-4 overflow-y-auto space-y-2 bg-slate-950 text-slate-300" id="terminal-body">
+<div class="text-slate-500">// Welcome to Ratan's Security Terminal. Type 'help' to view commands.</div>
+<div class="text-emerald-400 font-bold font-mono">
+            ========================================================================<br/>
+            * RATAN KUMAR PATEL - ETHICAL HACKING &amp; PENETRATION TESTING SHELL *<br/>
             ========================================================================
           </div>
-          <div class="text-slate-400">Current Session: Established securely from New Delhi, India.</div>
-          <div id="terminal-history"></div>
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400">ratan@security-hotline:~$</span>
-            <input 
-              type="text" 
-              id="terminal-input" 
-              class="flex-1 bg-transparent border-none outline-none focus:ring-0 text-slate-100 font-mono text-sm caret-emerald-500"
-              autocomplete="off"
-              autofocus
-            >
-          </div>
-        </div>
-
-        <!-- Quick Commands panel -->
-        <div class="bg-slate-900/50 border-t border-slate-800 p-3 flex flex-wrap gap-2 justify-center sm:justify-start">
-          <span class="text-xs text-slate-400 self-center font-semibold font-mono pr-2">Quick Commands:</span>
-          <button onclick="runTerminalCommand('whoami')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all">whoami</button>
-          <button onclick="runTerminalCommand('skills')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all">skills</button>
-          <button onclick="runTerminalCommand('certs')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all">certs</button>
-          <button onclick="runTerminalCommand('exp')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all">experience</button>
-          <button onclick="runTerminalCommand('nmap')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 rounded transition-all"><i class="fa fa-network-wired mr-1"></i> nmap scan</button>
-          <button onclick="runTerminalCommand('clear')" class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-slate-700 text-slate-400 hover:bg-slate-800 rounded transition-all">clear</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-16 border-b border-slate-900">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-        <div class="md:col-span-4 space-y-4">
-          <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase block">// PROFILE_OVERVIEW</span>
-          <h2 class="text-3xl font-bold text-white">Who is Ratan Kumar Patel?</h2>
-          <p class="text-slate-400">An accomplished ethical hacker, corporate cyber security mentor, and threat intelligence professional committed to securing modern digital infrastructure.</p>
-          <div class="border-l-2 border-emerald-500 pl-4 py-2 italic text-slate-300">
+<div class="text-slate-400">Current Session: Established securely from New Delhi, India.</div>
+<div id="terminal-history"></div>
+<div class="flex items-center gap-2">
+<span class="text-emerald-400">ratan@security-hotline:~$</span>
+<input autocomplete="off" autofocus="" class="flex-1 bg-transparent border-none outline-none focus:ring-0 text-slate-100 font-mono text-sm caret-emerald-500" id="terminal-input" type="text"/>
+</div>
+</div>
+<!-- Quick Commands panel -->
+<div class="bg-slate-900/50 border-t border-slate-800 p-3 flex flex-wrap gap-2 justify-center sm:justify-start">
+<span class="text-xs text-slate-400 self-center font-semibold font-mono pr-2">Quick Commands:</span>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all" onclick="runTerminalCommand('whoami')">whoami</button>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all" onclick="runTerminalCommand('skills')">skills</button>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all" onclick="runTerminalCommand('certs')">certs</button>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 rounded transition-all" onclick="runTerminalCommand('exp')">experience</button>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 rounded transition-all" onclick="runTerminalCommand('nmap')"><i class="fa fa-network-wired mr-1"></i> nmap scan</button>
+<button class="px-2.5 py-1 text-xs font-mono bg-slate-950 border border-slate-700 text-slate-400 hover:bg-slate-800 rounded transition-all" onclick="runTerminalCommand('clear')">clear</button>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-16 border-b border-slate-900" id="about">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4 space-y-4">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase block">// PROFILE_OVERVIEW</span>
+<h2 class="text-3xl font-bold text-white">Who is Ratan Kumar Patel?</h2>
+<p class="text-slate-400">An accomplished ethical hacker, corporate cyber security mentor, and threat intelligence professional committed to securing modern digital infrastructure.</p>
+<div class="border-l-2 border-emerald-500 pl-4 py-2 italic text-slate-300">
             "Security is not a product, but a continuous process of proactive training, assessments, and rapid mitigation."
           </div>
-        </div>
-
-        <div class="md:col-span-8 bg-slate-900/30 border border-slate-800/80 rounded-xl p-6 md:p-8 space-y-6">
-          <h3 class="font-mono text-lg font-bold text-emerald-400 tracking-wide border-b border-slate-800 pb-3">// Technical & Professional Highlights</h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="flex gap-3">
-              <div class="p-3 rounded bg-emerald-500/10 text-emerald-400 h-fit border border-emerald-500/20">
-                <i class="fa fa-user-shield text-base"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white">Red Teaming & Leadership</h4>
-                <p class="text-slate-400 text-xs mt-1">Skilled in leading simulation attack exercises (Red Team) to find real vulnerabilities before attackers do.</p>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div class="p-3 rounded bg-cyan-500/10 text-cyan-400 h-fit border border-cyan-500/20">
-                <i class="fa fa-terminal text-base"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white">VAPT & OWASP Web Security</h4>
-                <p class="text-slate-400 text-xs mt-1">Deep mastery in Vulnerability Assessment and Penetration Testing on networks, firewalls, and OWASP Top 10 vulnerabilities.</p>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div class="p-3 rounded bg-amber-500/10 text-amber-400 h-fit border border-amber-500/20">
-                <i class="fa fa-graduation-cap text-base"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white">Corporate Cybersecurity Trainer</h4>
-                <p class="text-slate-400 text-xs mt-1">Trained and mentored over 500 corporate employees, security analysts, and university students in practical security labs.</p>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div class="p-3 rounded bg-red-500/10 text-red-400 h-fit border border-red-500/20">
-                <i class="fa fa-bug text-base"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white">Bug Bounty hunter</h4>
-                <p class="text-slate-400 text-xs mt-1">Active participant on platforms like Synack, Bugcrowd, and HackerOne, helping leading organizations secure their tech stacks.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="border-t border-slate-800 pt-4 flex flex-wrap gap-y-4 justify-between text-xs font-mono text-slate-400">
-            <div><strong>Location:</strong> South Extension, New Delhi</div>
-            <div><strong>Passport:</strong> Indian (Valid to 2029)</div>
-            <div><strong>Status:</strong> Immediate Joiner</div>
-            <div><strong>Languages:</strong> English, Hindi</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Core Competencies Section -->
-    <section id="skills" class="py-16 border-b border-slate-900">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// WHAT_I_KNOW</span>
-        <h2 class="text-3xl font-bold text-white">Core Security Competencies</h2>
-        <p class="text-slate-400 mt-2">Fully equipped with specialized tools, offensive technologies, and modern training modules.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Security Expertise -->
-        <div class="bg-slate-900/20 border border-slate-800 hover:border-emerald-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.05)] transition-all duration-300">
-          <div class="p-3 rounded bg-emerald-500/10 text-emerald-400 h-fit w-fit border border-emerald-500/20 mb-4">
-            <i class="fa fa-shield-halved text-xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white font-mono mb-3">// Security Expertise</h3>
-          <ul class="space-y-2 text-slate-400 text-xs">
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Ethical Hacking & Pentesting</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Vulnerability Assessment (VAPT)</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Network & Firewall Hardening</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Web Application Security (OWASP)</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Incident Response & Mitigation</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Cyber Threat Intelligence</li>
-          </ul>
-        </div>
-
-        <!-- Tools & Technologies -->
-        <div class="bg-slate-900/20 border border-slate-800 hover:border-cyan-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.05)] transition-all duration-300">
-          <div class="p-3 rounded bg-cyan-500/10 text-cyan-400 h-fit w-fit border border-cyan-500/20 mb-4">
-            <i class="fa fa-gears text-xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white font-mono mb-3">// Tools & Technologies</h3>
-          <ul class="space-y-2 text-slate-400 text-xs">
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Metasploit & Burp Suite Professional</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Nmap, Wireshark, Aircrack-ng</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Kali Linux & Parrot Security OS</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Nessus & OpenVAS (Vuln Scanning)</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> OWASP ZAP & Web Suite</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Red Team Simulated Exercises</li>
-          </ul>
-        </div>
-
-        <!-- Training & Mentorship -->
-        <div class="bg-slate-900/20 border border-slate-800 hover:border-amber-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(245,158,11,0.05)] transition-all duration-300">
-          <div class="p-3 rounded bg-amber-500/10 text-amber-400 h-fit w-fit border border-amber-500/20 mb-4">
-            <i class="fa fa-chalkboard-user text-xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white font-mono mb-3">// Training & Pedagogy</h3>
-          <ul class="space-y-2 text-slate-400 text-xs">
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Custom Security Curriculum Design</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Corporate Workshops & Bootcamps</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Custom Interactive Lab Design</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> CTF Design & Platform Setup</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Exploit & Exploded Lab Mentorship</li>
-            <li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Bug Bounty & Career Guidance</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience Timeline -->
-    <section id="experience" class="py-16 border-b border-slate-900">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// PROFESSIONAL_JOURNEY</span>
-        <h2 class="text-3xl font-bold text-white">Work Experience</h2>
-        <p class="text-slate-400 mt-2">A timeline detailing hands-on technical and training milestones in the cyber security landscape.</p>
-      </div>
-
-      <div class="relative max-w-4xl mx-auto border-l-2 border-slate-800 pl-6 sm:pl-8 space-y-12">
-        <!-- Dot Indicator Timeline -->
-        <div class="absolute w-4 h-4 bg-slate-950 rounded-full -left-[9px] border-2 border-emerald-400 shadow-[0_0_8px_#10b981] top-1"></div>
-        <div class="absolute w-4 h-4 bg-slate-950 rounded-full -left-[9px] border-2 border-cyan-400 shadow-[0_0_8px_#06b6d4] top-[180px] sm:top-[160px]"></div>
-
-        <!-- Experience Item 1 -->
-        <div class="relative group">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-            <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-              Ethical Hacker Trainer & Technical Security Manager
+</div>
+<div class="md:col-span-8 bg-slate-900/30 border border-slate-800/80 rounded-xl p-6 md:p-8 space-y-6">
+<h3 class="font-mono text-lg font-bold text-emerald-400 tracking-wide border-b border-slate-800 pb-3">// Technical &amp; Professional Highlights</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="flex gap-3">
+<div class="p-3 rounded bg-emerald-500/10 text-emerald-400 h-fit border border-emerald-500/20">
+<i class="fa fa-user-shield text-base"></i>
+</div>
+<div>
+<h4 class="font-bold text-white">Red Teaming &amp; Leadership</h4>
+<p class="text-slate-400 text-xs mt-1">Skilled in leading simulation attack exercises (Red Team) to find real vulnerabilities before attackers do.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="p-3 rounded bg-cyan-500/10 text-cyan-400 h-fit border border-cyan-500/20">
+<i class="fa fa-terminal text-base"></i>
+</div>
+<div>
+<h4 class="font-bold text-white">VAPT &amp; OWASP Web Security</h4>
+<p class="text-slate-400 text-xs mt-1">Deep mastery in Vulnerability Assessment and Penetration Testing on networks, firewalls, and OWASP Top 10 vulnerabilities.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="p-3 rounded bg-amber-500/10 text-amber-400 h-fit border border-amber-500/20">
+<i class="fa fa-graduation-cap text-base"></i>
+</div>
+<div>
+<h4 class="font-bold text-white">Corporate Cybersecurity Trainer</h4>
+<p class="text-slate-400 text-xs mt-1">Trained and mentored over 500 corporate employees, security analysts, and university students in practical security labs.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="p-3 rounded bg-red-500/10 text-red-400 h-fit border border-red-500/20">
+<i class="fa fa-bug text-base"></i>
+</div>
+<div>
+<h4 class="font-bold text-white">Bug Bounty hunter</h4>
+<p class="text-slate-400 text-xs mt-1">Active participant on platforms like Synack, Bugcrowd, and HackerOne, helping leading organizations secure their tech stacks.</p>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-800 pt-4 flex flex-wrap gap-y-4 justify-between text-xs font-mono text-slate-400">
+<div><strong>Location:</strong> South Extension, New Delhi</div>
+<div><strong>Passport:</strong> Indian (Valid to 2029)</div>
+<div><strong>Status:</strong> Immediate Joiner</div>
+<div><strong>Languages:</strong> English, Hindi</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Core Competencies Section -->
+<section class="py-16 border-b border-slate-900" id="skills">
+<div class="section-header text-center max-w-xl mx-auto mb-12">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// WHAT_I_KNOW</span>
+<h2 class="text-3xl font-bold text-white">Core Security Competencies</h2>
+<p class="text-slate-400 mt-2">Fully equipped with specialized tools, offensive technologies, and modern training modules.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Security Expertise -->
+<div class="bg-slate-900/20 border border-slate-800 hover:border-emerald-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.05)] transition-all duration-300">
+<div class="p-3 rounded bg-emerald-500/10 text-emerald-400 h-fit w-fit border border-emerald-500/20 mb-4">
+<i class="fa fa-shield-halved text-xl"></i>
+</div>
+<h3 class="text-lg font-bold text-white font-mono mb-3">// Security Expertise</h3>
+<ul class="space-y-2 text-slate-400 text-xs">
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Ethical Hacking &amp; Pentesting</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Vulnerability Assessment (VAPT)</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Network &amp; Firewall Hardening</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Web Application Security (OWASP)</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Incident Response &amp; Mitigation</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-emerald-400"></i> Cyber Threat Intelligence</li>
+</ul>
+</div>
+<!-- Tools & Technologies -->
+<div class="bg-slate-900/20 border border-slate-800 hover:border-cyan-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.05)] transition-all duration-300">
+<div class="p-3 rounded bg-cyan-500/10 text-cyan-400 h-fit w-fit border border-cyan-500/20 mb-4">
+<i class="fa fa-gears text-xl"></i>
+</div>
+<h3 class="text-lg font-bold text-white font-mono mb-3">// Tools &amp; Technologies</h3>
+<ul class="space-y-2 text-slate-400 text-xs">
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Metasploit &amp; Burp Suite Professional</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Nmap, Wireshark, Aircrack-ng</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Kali Linux &amp; Parrot Security OS</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Nessus &amp; OpenVAS (Vuln Scanning)</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> OWASP ZAP &amp; Web Suite</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-cyan-400"></i> Red Team Simulated Exercises</li>
+</ul>
+</div>
+<!-- Training & Mentorship -->
+<div class="bg-slate-900/20 border border-slate-800 hover:border-amber-500/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(245,158,11,0.05)] transition-all duration-300">
+<div class="p-3 rounded bg-amber-500/10 text-amber-400 h-fit w-fit border border-amber-500/20 mb-4">
+<i class="fa fa-chalkboard-user text-xl"></i>
+</div>
+<h3 class="text-lg font-bold text-white font-mono mb-3">// Training &amp; Pedagogy</h3>
+<ul class="space-y-2 text-slate-400 text-xs">
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Custom Security Curriculum Design</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Corporate Workshops &amp; Bootcamps</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Custom Interactive Lab Design</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> CTF Design &amp; Platform Setup</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Exploit &amp; Exploded Lab Mentorship</li>
+<li class="flex items-center gap-2"><i class="fa fa-chevron-right text-[10px] text-amber-400"></i> Bug Bounty &amp; Career Guidance</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Experience Timeline -->
+<section class="py-16 border-b border-slate-900" id="experience">
+<div class="section-header text-center max-w-xl mx-auto mb-12">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// PROFESSIONAL_JOURNEY</span>
+<h2 class="text-3xl font-bold text-white">Work Experience</h2>
+<p class="text-slate-400 mt-2">A timeline detailing hands-on technical and training milestones in the cyber security landscape.</p>
+</div>
+<div class="relative max-w-4xl mx-auto border-l-2 border-slate-800 pl-6 sm:pl-8 space-y-12">
+<!-- Dot Indicator Timeline -->
+<div class="absolute w-4 h-4 bg-slate-950 rounded-full -left-[9px] border-2 border-emerald-400 shadow-[0_0_8px_#10b981] top-1"></div>
+<div class="absolute w-4 h-4 bg-slate-950 rounded-full -left-[9px] border-2 border-cyan-400 shadow-[0_0_8px_#06b6d4] top-[180px] sm:top-[160px]"></div>
+<!-- Experience Item 1 -->
+<div class="relative group">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+<h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+              Ethical Hacker Trainer &amp; Technical Security Manager
             </h3>
-            <span class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">
+<span class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">
               2020 - PRESENT
             </span>
+</div>
+<div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
+<i class="fa-solid fa-building"></i> Equator Cyber Solutions | <i class="fa-solid fa-location-dot"></i> South Extension, New Delhi
           </div>
-          <div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
-            <i class="fa-solid fa-building"></i> Equator Cyber Solutions | <i class="fa-solid fa-location-dot"></i> South Extension, New Delhi
-          </div>
-          <ul class="list-none space-y-2 text-slate-400 text-xs">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
-              <span>Trained <strong>500+ students</strong> and professionals in offensive security, vulnerability discovery, and secure server deployments.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
-              <span>Successfully designed OWASP Web Application Security, Metasploit, Burp Suite, and CTF training modules.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
-              <span>Delivered high-value corporate ethical hacking workshops, lab setups, and vulnerability assessments.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
-              <span>Led red team challenges and custom attack simulation scenarios to train internal security departments.</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Experience Item 2 -->
-        <div class="relative group">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-            <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
+<ul class="list-none space-y-2 text-slate-400 text-xs">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
+<span>Trained <strong>500+ students</strong> and professionals in offensive security, vulnerability discovery, and secure server deployments.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
+<span>Successfully designed OWASP Web Application Security, Metasploit, Burp Suite, and CTF training modules.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
+<span>Delivered high-value corporate ethical hacking workshops, lab setups, and vulnerability assessments.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-emerald-400 mt-1"></i>
+<span>Led red team challenges and custom attack simulation scenarios to train internal security departments.</span>
+</li>
+</ul>
+</div>
+<!-- Experience Item 2 -->
+<div class="relative group">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+<h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
               Technical Security Executive
             </h3>
-            <span class="text-xs font-mono px-2.5 py-1 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 w-fit">
+<span class="text-xs font-mono px-2.5 py-1 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 w-fit">
               2018 - 2020
             </span>
+</div>
+<div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
+<i class="fa-solid fa-building"></i> Silent Front &amp; Software Solutions
           </div>
-          <div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
-            <i class="fa-solid fa-building"></i> Silent Front & Software Solutions
-          </div>
-          <ul class="list-none space-y-2 text-slate-400 text-xs">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
-              <span>Conducted manual and automated Vulnerability Assessment & Penetration Testing (VAPT) on network firewalls and enterprise apps.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
-              <span>Monitored threat patterns, implemented immediate threat remediation guidelines, and managed firewall controls.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
-              <span>Generated comprehensive, actionable security assessment reports for clients and corporate partners.</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Experience Item 3 -->
-        <div class="relative group">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-            <h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+<ul class="list-none space-y-2 text-slate-400 text-xs">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
+<span>Conducted manual and automated Vulnerability Assessment &amp; Penetration Testing (VAPT) on network firewalls and enterprise apps.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
+<span>Monitored threat patterns, implemented immediate threat remediation guidelines, and managed firewall controls.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
+<span>Generated comprehensive, actionable security assessment reports for clients and corporate partners.</span>
+</li>
+</ul>
+</div>
+<!-- Experience Item 3 -->
+<div class="relative group">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+<h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
               Ethical Hacking Trainer
             </h3>
-            <span class="text-xs font-mono px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 w-fit">
+<span class="text-xs font-mono px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 w-fit">
               2014 - 2018
             </span>
+</div>
+<div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
+<i class="fa-solid fa-building"></i> Cyber Hunterz | <i class="fa-solid fa-location-dot"></i> Lucknow
           </div>
-          <div class="text-xs font-mono text-cyan-400 mb-3 flex items-center gap-1">
-            <i class="fa-solid fa-building"></i> Cyber Hunterz | <i class="fa-solid fa-location-dot"></i> Lucknow
-          </div>
-          <ul class="list-none space-y-2 text-slate-400 text-xs">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
-              <span>Conducted comprehensive training sessions on ethical hacking and cybersecurity fundamentals for students and professionals.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
-              <span>Developed practical lab environments and course materials for hands-on learning experiences.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
-              <span>Mentored aspiring security enthusiasts and provided career guidance in the cybersecurity domain.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Academic Background / Qualifications -->
-    <section id="education" class="py-16 border-b border-slate-900">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// ACADEMIC_RECORD</span>
-        <h2 class="text-3xl font-bold text-white">Education & Certifications</h2>
-        <p class="text-slate-400 mt-2">Formal educational background, advanced specializations, and professional certifications.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Master's Degree -->
-        <div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-emerald-500/20 transition-all">
-          <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 absolute top-4 right-4">GRADUATE</span>
-          <div class="text-xs font-mono text-slate-400 mb-2">2023</div>
-          <h3 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">Master of Science (MS)</h3>
-          <p class="text-xs text-slate-300 font-semibold mb-1">Cybersecurity & Information Assurance</p>
-          <p class="text-xs text-slate-400">Western Governors University, USA</p>
-          <div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
+<ul class="list-none space-y-2 text-slate-400 text-xs">
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
+<span>Conducted comprehensive training sessions on ethical hacking and cybersecurity fundamentals for students and professionals.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
+<span>Developed practical lab environments and course materials for hands-on learning experiences.</span>
+</li>
+<li class="flex items-start gap-2">
+<i class="fa-solid fa-caret-right text-amber-400 mt-1"></i>
+<span>Mentored aspiring security enthusiasts and provided career guidance in the cybersecurity domain.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Academic Background / Qualifications -->
+<section class="py-16 border-b border-slate-900" id="education">
+<div class="section-header text-center max-w-xl mx-auto mb-12">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// ACADEMIC_RECORD</span>
+<h2 class="text-3xl font-bold text-white">Education &amp; Certifications</h2>
+<p class="text-slate-400 mt-2">Formal educational background, advanced specializations, and professional certifications.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Master's Degree -->
+<div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-emerald-500/20 transition-all">
+<span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 absolute top-4 right-4">GRADUATE</span>
+<div class="text-xs font-mono text-slate-400 mb-2">2023</div>
+<h3 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">Master of Science (MS)</h3>
+<p class="text-xs text-slate-300 font-semibold mb-1">Cybersecurity &amp; Information Assurance</p>
+<p class="text-xs text-slate-400">Western Governors University, USA</p>
+<div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
             Specialized in threat modeling, advanced networks, cryptography, and information security policies.
           </div>
-        </div>
-
-        <!-- CEH Certification -->
-        <div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-amber-500/20 transition-all shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-          <span class="text-[10px] font-mono text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10 absolute top-4 right-4">CERTIFICATION</span>
-          <div class="text-xs font-mono text-slate-400 mb-2">Issued: Jul 2024</div>
-          <h3 class="text-base font-bold text-white group-hover:text-amber-400 transition-colors">Certified Ethical Hacker (CEH)</h3>
-          <p class="text-xs text-slate-300 font-semibold mb-1">EC-Council v12 Professional</p>
-          <p class="text-xs text-slate-400">ID: ECC92840 | Valid to Jul 2027</p>
-          <div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
+</div>
+<!-- CEH Certification -->
+<div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-amber-500/20 transition-all shadow-[0_0_20px_rgba(245,158,11,0.02)]">
+<span class="text-[10px] font-mono text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10 absolute top-4 right-4">CERTIFICATION</span>
+<div class="text-xs font-mono text-slate-400 mb-2">Issued: Jul 2024</div>
+<h3 class="text-base font-bold text-white group-hover:text-amber-400 transition-colors">Certified Ethical Hacker (CEH)</h3>
+<p class="text-xs text-slate-300 font-semibold mb-1">EC-Council v12 Professional</p>
+<p class="text-xs text-slate-400">ID: ECC92840 | Valid to Jul 2027</p>
+<div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
             Validated expert in sniffing, exploit crafting, firewall bypassing, wireless attacks, and advanced VAPT.
           </div>
-        </div>
-
-        <!-- PG Diploma -->
-        <div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-cyan-500/20 transition-all">
-          <span class="text-[10px] font-mono text-cyan-400 bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10 absolute top-4 right-4">DIPLOMA</span>
-          <div class="text-xs font-mono text-slate-400 mb-2">2013</div>
-          <h3 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">PG Diploma</h3>
-          <p class="text-xs text-slate-300 font-semibold mb-1">Computer Application</p>
-          <p class="text-xs text-slate-400">BTE, U.P Lucknow | First Division</p>
-          <div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
+</div>
+<!-- PG Diploma -->
+<div class="bg-slate-900/30 border border-slate-800/80 rounded-xl p-5 relative group hover:border-cyan-500/20 transition-all">
+<span class="text-[10px] font-mono text-cyan-400 bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10 absolute top-4 right-4">DIPLOMA</span>
+<div class="text-xs font-mono text-slate-400 mb-2">2013</div>
+<h3 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">PG Diploma</h3>
+<p class="text-xs text-slate-300 font-semibold mb-1">Computer Application</p>
+<p class="text-xs text-slate-400">BTE, U.P Lucknow | First Division</p>
+<div class="border-t border-slate-800/60 mt-4 pt-3 text-[11px] text-slate-400">
             Strengthened technical communication, corporate workshop management, and professional presentation skills.
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bug Bounty & Platforms Section -->
-    <section class="py-16 border-b border-slate-900">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// VULNERABILITY_DISCLOSURES</span>
-        <h2 class="text-2xl md:text-3xl font-bold text-white">Responsible Disclosure Platforms</h2>
-        <p class="text-slate-400 mt-2">Active security contributions, responsible testing, and bug-hunting footprints.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        <!-- Synack -->
-        <a href="https://www.synack.com/" target="_blank" class="bg-slate-900/10 border border-slate-800/80 hover:border-red-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300">
-          <div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-red-500/30 transition-colors mb-4">
-            <img src="assets/logos/synack.png" alt="Synack" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'">
-          </div>
-          <h4 class="font-bold text-white mb-1 group-hover:text-red-400 transition-colors">Synack</h4>
-          <p class="text-xs text-slate-400 font-mono mb-3">Red Team Testing</p>
-          <span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-red-500/20 group-hover:text-red-400">
+</div>
+</div>
+</section>
+<!-- Bug Bounty & Platforms Section -->
+<section class="py-16 border-b border-slate-900">
+<div class="section-header text-center max-w-xl mx-auto mb-12">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// VULNERABILITY_DISCLOSURES</span>
+<h2 class="text-2xl md:text-3xl font-bold text-white">Responsible Disclosure Platforms</h2>
+<p class="text-slate-400 mt-2">Active security contributions, responsible testing, and bug-hunting footprints.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+<!-- Synack -->
+<a class="bg-slate-900/10 border border-slate-800/80 hover:border-red-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300" href="https://www.synack.com/" target="_blank">
+<div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-red-500/30 transition-colors mb-4">
+<img alt="Synack" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'" src="assets/logos/synack.png"/>
+</div>
+<h4 class="font-bold text-white mb-1 group-hover:text-red-400 transition-colors">Synack</h4>
+<p class="text-xs text-slate-400 font-mono mb-3">Red Team Testing</p>
+<span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-red-500/20 group-hover:text-red-400">
             PLATFORM ACCESS <i class="fa fa-arrow-right"></i>
-          </span>
-        </a>
-
-        <!-- Bugcrowd -->
-        <a href="https://www.bugcrowd.com/" target="_blank" class="bg-slate-900/10 border border-slate-800/80 hover:border-orange-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300">
-          <div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-orange-500/30 transition-colors mb-4">
-            <img src="assets/logos/bugcrowd.png" alt="Bugcrowd" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'">
-          </div>
-          <h4 class="font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">Bugcrowd</h4>
-          <p class="text-xs text-slate-400 font-mono mb-3">Crowdsourced Security</p>
-          <span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-orange-500/20 group-hover:text-orange-400">
+</span>
+</a>
+<!-- Bugcrowd -->
+<a class="bg-slate-900/10 border border-slate-800/80 hover:border-orange-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300" href="https://www.bugcrowd.com/" target="_blank">
+<div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-orange-500/30 transition-colors mb-4">
+<img alt="Bugcrowd" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'" src="assets/logos/bugcrowd.png"/>
+</div>
+<h4 class="font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">Bugcrowd</h4>
+<p class="text-xs text-slate-400 font-mono mb-3">Crowdsourced Security</p>
+<span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-orange-500/20 group-hover:text-orange-400">
             PLATFORM ACCESS <i class="fa fa-arrow-right"></i>
-          </span>
-        </a>
-
-        <!-- HackerOne -->
-        <a href="https://www.hackerone.com/" target="_blank" class="bg-slate-900/10 border border-slate-800/80 hover:border-blue-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300">
-          <div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-blue-500/30 transition-colors mb-4">
-            <img src="assets/logos/hackerone.png" alt="HackerOne" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'">
-          </div>
-          <h4 class="font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">HackerOne</h4>
-          <p class="text-xs text-slate-400 font-mono mb-3">Hacker-Powered Vulnerabilities</p>
-          <span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-blue-500/20 group-hover:text-blue-400">
+</span>
+</a>
+<!-- HackerOne -->
+<a class="bg-slate-900/10 border border-slate-800/80 hover:border-blue-500/30 p-6 rounded-xl flex flex-col items-center text-center group transition-all duration-300" href="https://www.hackerone.com/" target="_blank">
+<div class="w-16 h-16 rounded-lg bg-slate-950 p-2 flex items-center justify-center border border-slate-800 group-hover:border-blue-500/30 transition-colors mb-4">
+<img alt="HackerOne" class="w-full h-auto object-contain filter grayscale group-hover:grayscale-0 transition-all" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2311/2311523.png'" src="assets/logos/hackerone.png"/>
+</div>
+<h4 class="font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">HackerOne</h4>
+<p class="text-xs text-slate-400 font-mono mb-3">Hacker-Powered Vulnerabilities</p>
+<span class="text-[10px] text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded flex items-center gap-1 font-mono group-hover:border-blue-500/20 group-hover:text-blue-400">
             PLATFORM ACCESS <i class="fa fa-arrow-right"></i>
-          </span>
-        </a>
-      </div>
-    </section>
+</span>
+</a>
+</div>
+</section>
+<!-- Credentials / Interactive Gallery -->
 
-    <!-- Credentials / Interactive Gallery -->
-    <section id="credentials" class="py-16 border-b border-slate-900">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// VERIFIABLE_CREDENTIALS</span>
-        <h2 class="text-3xl font-bold text-white">Credentials & Gallery</h2>
-        <p class="text-slate-400 mt-2">Click on any certificate or training asset below to trigger a simulated security clearance and hash verification scan.</p>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-        <!-- Gallery Item 1 -->
-        <div onclick="scanCertificate('Indian Passport', 'linear-gradient(135deg, #1e1b4b 0%, #311042 100%)', 'fa-passport')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);">
-            <i class="fa fa-passport text-3xl text-cyan-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Indian Passport</span>
-        </div>
-
-        <!-- Gallery Item 2 -->
-        <div onclick="scanCertificate('CEH Certificate', 'linear-gradient(135deg, #4c0519 0%, #450a0a 100%)', 'fa-certificate', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #4c0519 0%, #450a0a 100%);">
-            <i class="fa fa-certificate text-3xl text-amber-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">CEH Certificate</span>
-        </div>
-
-        <!-- Gallery Item 3 -->
-        <div onclick="scanCertificate('PG Diploma', 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', 'fa-graduation-cap', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-            <i class="fa fa-graduation-cap text-3xl text-blue-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">PG Diploma</span>
-        </div>
-
-        <!-- Gallery Item 4 -->
-        <div onclick="scanCertificate('Master\'s Degree', 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', 'fa-book', 'ratan_patel_combined.pdf')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);">
-            <i class="fa fa-book text-3xl text-emerald-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Master's Degree</span>
-        </div>
-
-        <!-- Gallery Item 5 -->
-        <div onclick="scanCertificate('Training Session', 'linear-gradient(135deg, #451a03 0%, #7c2d12 100%)', 'fa-person-chalkboard')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #451a03 0%, #7c2d12 100%);">
-            <i class="fa fa-person-chalkboard text-3xl text-orange-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Training Session</span>
-        </div>
-
-        <!-- Gallery Item 6 -->
-        <div onclick="scanCertificate('Corporate Workshop', 'linear-gradient(135deg, #311042 0%, #4a044e 100%)', 'fa-users')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #311042 0%, #4a044e 100%);">
-            <i class="fa fa-users text-3xl text-fuchsia-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Corporate Workshop</span>
-        </div>
-
-        <!-- Gallery Item 7 -->
-        <div onclick="scanCertificate('Lab Exercise', 'linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%)', 'fa-laptop')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);">
-            <i class="fa fa-laptop text-3xl text-sky-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Lab Exercise</span>
-        </div>
-
-        <!-- Gallery Item 8 -->
-        <div onclick="scanCertificate('Security Assessment', 'linear-gradient(135deg, #111827 0%, #1f2937 100%)', 'fa-shield')" class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all group">
-          <div class="w-full aspect-video rounded-lg flex items-center justify-center mb-3 relative overflow-hidden" style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%);">
-            <i class="fa fa-shield text-3xl text-emerald-400 group-hover:scale-110 transition-transform"></i>
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-              <span class="text-[10px] font-mono bg-emerald-500 text-black px-2 py-1 rounded font-bold"><i class="fa fa-scan"></i> SCAN HASH</span>
-            </div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-300 group-hover:text-emerald-400">Security Assessment</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Encrypted Contact Hotline Section -->
-    <section id="contact" class="py-16">
-      <div class="section-header text-center max-w-xl mx-auto mb-12">
-        <span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// ENCRYPTED_HOTLINE</span>
-        <h2 class="text-3xl font-bold text-white">Secure Connection Line</h2>
-        <p class="text-slate-400 mt-2">Reach out securely for training programs, consulting audits, or industry collaborations.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
-        <!-- Secure Contact Details Cards -->
-        <div class="md:col-span-5 space-y-4">
-          <!-- WhatsApp Card -->
-          <a href="https://wa.me/918700914564" target="_blank" class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all">
-            <div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <i class="fa-brands fa-whatsapp text-2xl"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-[10px] font-mono text-slate-400 uppercase">// WHATSAPP CHAT</div>
-              <div class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">+91 87009 14564</div>
-            </div>
-          </a>
-
-          <!-- Email Card -->
-          <a href="mailto:patelratan460@gmail.com" class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all">
-            <div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <i class="fa-solid fa-envelope text-2xl"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-[10px] font-mono text-slate-400 uppercase">// ENCRYPTED EMAIL</div>
-              <div class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors select-all">patelratan460@gmail.com</div>
-            </div>
-          </a>
-
-          <!-- LinkedIn Card -->
-          <a href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank" class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all">
-            <div class="p-3 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              <i class="fa-brands fa-linkedin-in text-2xl"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-[10px] font-mono text-slate-400 uppercase">// LINKEDIN CONNECTION</div>
-              <div class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Connect Here</div>
-            </div>
-          </a>
-
-          <!-- Call Hotline -->
-          <div class="bg-slate-900/30 border border-slate-800 p-4 rounded-xl flex items-center gap-4">
-            <div class="p-3 rounded-lg bg-slate-800 text-slate-400">
-              <i class="fa-solid fa-phone text-2xl"></i>
-            </div>
-            <div class="flex-1">
-              <div class="text-[10px] font-mono text-slate-400 uppercase">// SECURE HOTLINE</div>
-              <div class="text-xs text-slate-300">
-                <a href="tel:+918700914564" class="hover:text-emerald-400 font-bold transition-colors">+91-8700914564</a> / <a href="tel:+919650053559" class="hover:text-emerald-400 font-bold transition-colors">9650053559</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Secure message form -->
-        <div class="md:col-span-7 bg-slate-900/30 border border-slate-800 p-6 md:p-8 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-[10px] font-mono text-emerald-400/50 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">SSL_ENCRYPTED</div>
-
-          <h3 class="text-lg font-bold text-white font-mono mb-4">// Direct Dispatch Gateway</h3>
-
-          <form onsubmit="handleFormDispatch(event)" class="space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">CLIENT_NAME</label>
-                <input required type="text" id="contact-name" class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1">CLIENT_EMAIL</label>
-                <input required type="email" id="contact-email" class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none">
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs font-mono text-slate-400 mb-1">SUBJECT / THREAT_REPORT</label>
-              <input required type="text" id="contact-subject" class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-mono text-slate-400 mb-1">ENCRYPTED_MESSAGE_PAYLOAD</label>
-              <textarea required id="contact-message" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none resize-none"></textarea>
-            </div>
-
-            <button type="submit" class="w-full py-3 rounded bg-emerald-500 text-black font-bold text-xs font-mono uppercase tracking-widest hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-              <i class="fa fa-shuttle-space"></i> SECURE_DISPATCH_MESSAGE
+<!-- Encrypted Contact Hotline Section -->
+<section class="py-16" id="contact">
+<div class="section-header text-center max-w-xl mx-auto mb-12">
+<span class="font-mono text-emerald-400 tracking-widest text-xs uppercase">// ENCRYPTED_HOTLINE</span>
+<h2 class="text-3xl font-bold text-white">Secure Connection Line</h2>
+<p class="text-slate-400 mt-2">Reach out securely for training programs, consulting audits, or industry collaborations.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
+<!-- Secure Contact Details Cards -->
+<div class="md:col-span-5 space-y-4">
+<!-- WhatsApp Card -->
+<a class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all" href="https://wa.me/918700914564" target="_blank">
+<div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<i class="fa-brands fa-whatsapp text-2xl"></i>
+</div>
+<div class="flex-1">
+<div class="text-[10px] font-mono text-slate-400 uppercase">// WHATSAPP CHAT</div>
+<div class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">+91 87009 14564</div>
+</div>
+</a>
+<!-- Email Card -->
+<a class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all" href="mailto:patelratan460@gmail.com">
+<div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<i class="fa-solid fa-envelope text-2xl"></i>
+</div>
+<div class="flex-1">
+<div class="text-[10px] font-mono text-slate-400 uppercase">// ENCRYPTED EMAIL</div>
+<div class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors select-all">patelratan460@gmail.com</div>
+</div>
+</a>
+<!-- LinkedIn Card -->
+<a class="block bg-slate-900/30 border border-slate-800 hover:border-emerald-500/30 p-4 rounded-xl flex items-center gap-4 group transition-all" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">
+<div class="p-3 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+<i class="fa-brands fa-linkedin-in text-2xl"></i>
+</div>
+<div class="flex-1">
+<div class="text-[10px] font-mono text-slate-400 uppercase">// LINKEDIN CONNECTION</div>
+<div class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Connect Here</div>
+</div>
+</a>
+<!-- Call Hotline -->
+<div class="bg-slate-900/30 border border-slate-800 p-4 rounded-xl flex items-center gap-4">
+<div class="p-3 rounded-lg bg-slate-800 text-slate-400">
+<i class="fa-solid fa-phone text-2xl"></i>
+</div>
+<div class="flex-1">
+<div class="text-[10px] font-mono text-slate-400 uppercase">// SECURE HOTLINE</div>
+<div class="text-xs text-slate-300">
+<a class="hover:text-emerald-400 font-bold transition-colors" href="tel:+918700914564">+91-8700914564</a> / <a class="hover:text-emerald-400 font-bold transition-colors" href="tel:+919650053559">9650053559</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Secure message form -->
+<div class="md:col-span-7 bg-slate-900/30 border border-slate-800 p-6 md:p-8 rounded-2xl relative">
+<div class="absolute top-4 right-4 text-[10px] font-mono text-emerald-400/50 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">SSL_ENCRYPTED</div>
+<h3 class="text-lg font-bold text-white font-mono mb-4">// Direct Dispatch Gateway</h3>
+<form class="space-y-4" onsubmit="handleFormDispatch(event)">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-mono text-slate-400 mb-1">CLIENT_NAME</label>
+<input class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none" id="contact-name" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-mono text-slate-400 mb-1">CLIENT_EMAIL</label>
+<input class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none" id="contact-email" required="" type="email"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-mono text-slate-400 mb-1">SUBJECT / THREAT_REPORT</label>
+<input class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none" id="contact-subject" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-mono text-slate-400 mb-1">ENCRYPTED_MESSAGE_PAYLOAD</label>
+<textarea class="w-full bg-slate-950 border border-slate-800 rounded p-2.5 text-xs text-slate-100 font-mono focus:border-emerald-500/50 outline-none resize-none" id="contact-message" required="" rows="4"></textarea>
+</div>
+<button class="w-full py-3 rounded bg-emerald-500 text-black font-bold text-xs font-mono uppercase tracking-widest hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]" type="submit">
+<i class="fa fa-shuttle-space"></i> SECURE_DISPATCH_MESSAGE
             </button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Interactive Validation Modal -->
-  <div id="scanner-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm hidden">
-    <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden max-w-lg w-full font-mono text-xs shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col">
-      <!-- Modal Header -->
-      <div class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa fa-microchip text-emerald-400 animate-spin"></i>
-          <span class="font-bold text-white tracking-wider">CREDENTIAL SECURITY SCANNER</span>
-        </div>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white transition-colors text-base"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="p-6 flex flex-col items-center justify-center space-y-4">
-        <!-- Icon Loader -->
-        <div id="modal-cert-icon-container" class="w-24 h-24 rounded-full flex items-center justify-center border-2 border-slate-800 relative">
-          <div class="absolute inset-0 rounded-full border-t-2 border-emerald-400 animate-spin"></div>
-          <i id="modal-cert-icon" class="fa fa-certificate text-4xl text-emerald-400"></i>
-        </div>
-
-        <div class="text-center space-y-2 w-full">
-          <h3 id="modal-cert-title" class="text-sm font-bold text-white tracking-wide">Scanning Asset...</h3>
-          <p id="modal-cert-status" class="text-emerald-400 font-bold uppercase animate-pulse">VALIDATING CRYPTOGRAPHIC HASH...</p>
-        </div>
-
-        <!-- Progress Indicator -->
-        <div class="w-full bg-slate-900 h-2 rounded overflow-hidden border border-slate-800">
-          <div id="modal-cert-progress" class="bg-emerald-500 h-full w-0 transition-all duration-[2000ms]"></div>
-        </div>
-
-        <!-- Scan Output logs -->
-        <div class="w-full bg-slate-950/80 border border-slate-900 rounded p-3 text-[10px] text-slate-400 space-y-1 h-32 overflow-y-auto">
-          <div>[INFO] Initializing verification sequence...</div>
-          <div id="modal-cert-log-1" class="hidden">[INFO] Connecting validation database: eccouncil_vault.db...</div>
-          <div id="modal-cert-log-2" class="hidden">[SUCCESS] Valid hash matched: RATAN_VERIFIED_7a2e8c2d921a9</div>
-          <div id="modal-cert-log-3" class="hidden">[SUCCESS] Certificate status: GENUINE & ACTIVE (Expires 2027)</div>
-          <div id="modal-cert-log-4" class="hidden text-emerald-400 font-bold">[ACCESS GRANTED] Verified Ratan Kumar Patel as holder.</div>
-        </div>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="bg-slate-900 border-t border-slate-800 px-4 py-3 flex justify-between items-center">
-        <a id="modal-cert-view-btn" href="#" target="_blank" class="hidden px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 rounded font-bold text-[11px] tracking-wide transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-mono">
-          <i class="fa fa-eye text-[10px]"></i> VIEW_DOCUMENT
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Interactive Validation Modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm hidden" id="scanner-modal">
+<div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden max-w-lg w-full font-mono text-xs shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col">
+<!-- Modal Header -->
+<div class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<i class="fa fa-microchip text-emerald-400 animate-spin"></i>
+<span class="font-bold text-white tracking-wider">CREDENTIAL SECURITY SCANNER</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors text-base" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<!-- Modal Body -->
+<div class="p-6 flex flex-col items-center justify-center space-y-4">
+<!-- Icon Loader -->
+<div class="w-24 h-24 rounded-full flex items-center justify-center border-2 border-slate-800 relative" id="modal-cert-icon-container">
+<div class="absolute inset-0 rounded-full border-t-2 border-emerald-400 animate-spin"></div>
+<i class="fa fa-certificate text-4xl text-emerald-400" id="modal-cert-icon"></i>
+</div>
+<div class="text-center space-y-2 w-full">
+<h3 class="text-sm font-bold text-white tracking-wide" id="modal-cert-title">Scanning Asset...</h3>
+<p class="text-emerald-400 font-bold uppercase animate-pulse" id="modal-cert-status">VALIDATING CRYPTOGRAPHIC HASH...</p>
+</div>
+<!-- Progress Indicator -->
+<div class="w-full bg-slate-900 h-2 rounded overflow-hidden border border-slate-800">
+<div class="bg-emerald-500 h-full w-0 transition-all duration-[2000ms]" id="modal-cert-progress"></div>
+</div>
+<!-- Scan Output logs -->
+<div class="w-full bg-slate-950/80 border border-slate-900 rounded p-3 text-[10px] text-slate-400 space-y-1 h-32 overflow-y-auto">
+<div>[INFO] Initializing verification sequence...</div>
+<div class="hidden" id="modal-cert-log-1">[INFO] Connecting validation database: eccouncil_vault.db...</div>
+<div class="hidden" id="modal-cert-log-2">[SUCCESS] Valid hash matched: RATAN_VERIFIED_7a2e8c2d921a9</div>
+<div class="hidden" id="modal-cert-log-3">[SUCCESS] Certificate status: GENUINE &amp; ACTIVE (Expires 2027)</div>
+<div class="hidden text-emerald-400 font-bold" id="modal-cert-log-4">[ACCESS GRANTED] Verified Ratan Kumar Patel as holder.</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="bg-slate-900 border-t border-slate-800 px-4 py-3 flex justify-between items-center">
+<a class="hidden px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 rounded font-bold text-[11px] tracking-wide transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-mono" href="#" id="modal-cert-view-btn" target="_blank">
+<i class="fa fa-eye text-[10px]"></i> VIEW_DOCUMENT
         </a>
-        <button onclick="closeModal()" class="ml-auto px-4 py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 rounded text-xs font-mono transition-all">Close Console</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom Footer -->
-  <footer class="bg-slate-950 border-t border-slate-900 py-8 relative z-10 text-center font-mono text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 space-y-2">
-      <p>© <span id="current-year"></span> RATAN_PATEL.SEC. ALL RIGHTS SECURED.</p>
-      <p class="text-[10px] text-emerald-500/50">// HAND-CRAFTED EXCLUSIVELY FOR OFFENSIVE SECURITY MENTORSHIP</p>
-    </div>
-  </footer>
-
-  
-  <!-- Custom High-Tech Hacking-Themed Toast Notification -->
-  <div id="secure-toast" class="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-950 border border-emerald-500/30 rounded-xl shadow-[0_0_35px_rgba(16,185,129,0.2)] overflow-hidden font-mono text-xs hidden transform translate-y-10 opacity-0 transition-all duration-500">
-    <!-- Toast Header -->
-    <div class="bg-emerald-950/20 border-b border-emerald-500/10 px-4 py-3 flex items-center gap-2">
-      <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
-      <span class="font-bold text-emerald-400 tracking-wider">SECURE DISPATCH HANDSHAKE</span>
-    </div>
-    <!-- Toast Body -->
-    <div class="p-4 space-y-3">
-      <div id="toast-log-container" class="space-y-1.5 text-slate-300">
-        <div class="flex items-center gap-1.5 text-slate-500">
-          <span>[INFO]</span> <span>Awaiting envelope initialization...</span>
-        </div>
-      </div>
-      <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
-        <div id="toast-progress" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300" style="width: 0%"></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+<button class="ml-auto px-4 py-2 bg-slate-950 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 rounded text-xs font-mono transition-all" onclick="closeModal()">Close Console</button>
+</div>
+</div>
+</div>
+<!-- Bottom Footer -->
+<footer class="bg-slate-950 border-t border-slate-900 py-8 relative z-10 text-center font-mono text-xs text-slate-500">
+<div class="max-w-7xl mx-auto px-4 space-y-2">
+<p>© <span id="current-year"></span> RATAN_PATEL.SEC. ALL RIGHTS SECURED.</p>
+<p class="text-[10px] text-emerald-500/50">// HAND-CRAFTED EXCLUSIVELY FOR OFFENSIVE SECURITY MENTORSHIP</p>
+</div>
+</footer>
+<!-- Custom High-Tech Hacking-Themed Toast Notification -->
+<div class="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-950 border border-emerald-500/30 rounded-xl shadow-[0_0_35px_rgba(16,185,129,0.2)] overflow-hidden font-mono text-xs hidden transform translate-y-10 opacity-0 transition-all duration-500" id="secure-toast">
+<!-- Toast Header -->
+<div class="bg-emerald-950/20 border-b border-emerald-500/10 px-4 py-3 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
+<span class="font-bold text-emerald-400 tracking-wider">SECURE DISPATCH HANDSHAKE</span>
+</div>
+<!-- Toast Body -->
+<div class="p-4 space-y-3">
+<div class="space-y-1.5 text-slate-300" id="toast-log-container">
+<div class="flex items-center gap-1.5 text-slate-500">
+<span>[INFO]</span> <span>Awaiting envelope initialization...</span>
+</div>
+</div>
+<div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300" id="toast-progress" style="width: 0%"></div>
+</div>
+</div>
+</div>
+<script src="app.js"></script>
 </body>
 </html>
