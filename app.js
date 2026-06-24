@@ -64,7 +64,7 @@ function runTerminalCommand(cmd) {
     case 'exp':
       response.innerHTML = `
         <span class="text-white font-bold">Work Experience Summary:</span><br>
-        1. <span class="text-emerald-400">Equator Cyber Solutions (2020-Present)</span> : Technical Security Manager & Trainer<br>
+        1. <span class="text-emerald-400">Equator Cyber Solutions (2020-2026)</span> : Technical Security Manager & Trainer<br>
            - Designing OWASP curricula & custom practical labs<br>
            - Delivered corporate workshops & cyber security bootcamps<br>
         2. <span class="text-cyan-400">Silent Front & Software Solutions (2018-2020)</span> : Tech Security Executive<br>
