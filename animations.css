@@ -1,0 +1,474 @@
+/* ========================================
+   ADVANCED ANIMATIONS & 3D EFFECTS
+   ======================================== */
+
+/* 1. DANCING AVATAR ANIMATION */
+@keyframes danceSway {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-5px) rotate(-2deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(2deg);
+  }
+  75% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+}
+
+@keyframes danceJump {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-15px) scaleY(0.95);
+  }
+}
+
+@keyframes danceBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes dancePulseScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.avatar-dancing {
+  animation: danceSway 0.8s ease-in-out infinite, 
+             danceJump 1.2s ease-in-out infinite,
+             dancePulseScale 2s ease-in-out infinite !important;
+}
+
+/* 2. FLOATING PARTICLE SYSTEM */
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatLeft {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.particle.type1 { animation: float 15s linear infinite; }
+.particle.type2 { animation: floatLeft 18s linear infinite; }
+.particle.type3 { animation: float 20s linear infinite; }
+
+/* 3. 3D CARD FLIP EFFECT */
+@keyframes flipCard {
+  0% {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+  100% {
+    transform: rotateY(360deg) rotateX(360deg);
+  }
+}
+
+.card-3d-flip {
+  perspective: 1000px;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.card-3d-flip:hover {
+  animation: flipCard 1.2s ease-in-out;
+  box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+}
+
+/* 4. NEURAL NETWORK BACKGROUND */
+@keyframes nodeGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+  }
+}
+
+@keyframes lineFlow {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.neural-network {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.neural-node {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #10b981, #059669);
+  border-radius: 50%;
+  animation: nodeGlow 2s ease-in-out infinite;
+}
+
+.neural-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+  animation: lineFlow 3s linear infinite;
+}
+
+/* 5. GLITCH EFFECT */
+@keyframes glitch1 {
+  0%, 100% {
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+    transform: translate(0);
+  }
+  20% {
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+    transform: translate(2px, 2px);
+  }
+  80% {
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+    transform: translate(2px, -2px);
+  }
+}
+
+.glitch {
+  animation: glitch1 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  color: #10b981;
+}
+
+.glitch:hover {
+  animation-duration: 0.2s;
+}
+
+/* 6. 3D PERSPECTIVE TILT EFFECT */
+@keyframes tilt {
+  0%, 100% {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+  }
+}
+
+.tilt-effect {
+  perspective: 1200px;
+  animation: tilt 4s ease-in-out infinite;
+}
+
+.tilt-effect:hover {
+  animation-play-state: paused;
+}
+
+/* 7. SMOOTH SCROLL REVEAL */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) rotateX(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px) rotateY(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px) rotateY(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
+}
+
+.scroll-reveal {
+  animation: slideInUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.scroll-reveal.left {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.scroll-reveal.right {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+/* 8. TYPING ANIMATION */
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%, 49%, 100% {
+    border-color: transparent;
+  }
+  50%, 99% {
+    border-color: #10b981;
+  }
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid #10b981;
+  white-space: nowrap;
+  animation: typewriter 4s steps(40, end), blink 0.5s step-end infinite;
+}
+
+/* 9. MATRIX RAIN EFFECT */
+@keyframes matrixFall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.matrix-char {
+  position: fixed;
+  color: #10b981;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-shadow: 0 0 10px #10b981;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.matrix-char.falling {
+  animation: matrixFall linear infinite;
+}
+
+/* 10. ELECTRIC PULSE EFFECT */
+@keyframes electricPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px #10b981, inset 0 0 5px rgba(16, 185, 129, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px #10b981, inset 0 0 10px rgba(16, 185, 129, 0.3);
+  }
+}
+
+.electric-pulse {
+  animation: electricPulse 1.5s ease-in-out infinite;
+}
+
+/* 11. MORPHING BLOB */
+@keyframes morphBlob {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+  25% {
+    border-radius: 70% 30% 46% 54% / 30% 30% 35% 70%;
+  }
+  50% {
+    border-radius: 100% 60% 52% 48% / 48% 20% 80% 80%;
+  }
+  75% {
+    border-radius: 48% 52% 38% 62% / 58% 23% 77% 42%;
+  }
+}
+
+.morph-blob {
+  animation: morphBlob 8s ease-in-out infinite;
+  background: linear-gradient(45deg, #10b981, #06b6d4, #10b981);
+  background-size: 400% 400%;
+}
+
+/* 12. RAINBOW TEXT ANIMATION */
+@keyframes rainbowShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.rainbow-text {
+  background: linear-gradient(270deg, #10b981, #06b6d4, #8b5cf6, #10b981);
+  background-size: 200% 200%;
+  animation: rainbowShift 3s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 13. FLOATING TEXT */
+@keyframes floatText {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.float-text {
+  animation: floatText 3s ease-in-out infinite;
+}
+
+/* 14. ENHANCED GLOW EFFECT */
+@keyframes enhancedGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 40px rgba(6, 182, 212, 0.5));
+  }
+}
+
+.enhanced-glow {
+  animation: enhancedGlow 2s ease-in-out infinite;
+}
+
+/* 15. STAGGER ANIMATION */
+.stagger-item {
+  animation: slideInUp 0.8s ease-out forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(n+6) { animation-delay: 0.6s; }
+
+/* 16. CYBER PULSE */
+@keyframes cyberPulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cyber-pulse {
+  animation: cyberPulse 1s ease-in-out infinite;
+}
+
+/* 17. LIQUID SWIPE */
+@keyframes liquidSwipe {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(100%) skewX(-20deg);
+    opacity: 1;
+  }
+}
+
+.liquid-swipe {
+  animation: liquidSwipe 0.8s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  @keyframes danceSway {
+    0%, 100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    25% {
+      transform: translateX(-3px) rotate(-1deg);
+    }
+    50% {
+      transform: translateX(3px) rotate(1deg);
+    }
+    75% {
+      transform: translateX(-2px) rotate(-0.5deg);
+    }
+  }
+
+  @keyframes danceJump {
+    0%, 100% {
+      transform: translateY(0) scaleY(1);
+    }
+    50% {
+      transform: translateY(-8px) scaleY(0.97);
+    }
+  }
+}
