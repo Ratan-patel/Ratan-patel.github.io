@@ -423,3 +423,59 @@ window.animationController = {
   enableRainbowText,
   activateMatrixMode
 };
+
+/* ========================================
+   ENHANCED 3D TRACKING AND INTERACTIVE EFFECTS
+   ======================================== */
+
+// 21. ADVANCED 3D TILT EFFECT FOR CARDS
+function initAdvanced3DTilt() {
+  const tiltElements = document.querySelectorAll('.card-3d-float, .bg-slate-900\\/30');
+  
+  tiltElements.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
+      const rotateY = ((x - centerX) / centerX) * 10; // Max 10 degrees
+      
+      el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    });
+  });
+}
+
+// 22. FLOATING CYBER ASSETS
+function initFloatingCyberAssets() {
+  const container = document.body;
+  const icons = ['fa-shield-halved', 'fa-lock', 'fa-terminal', 'fa-code', 'fa-user-secret'];
+  
+  for (let i = 0; i < 10; i++) {
+    const icon = document.createElement('i');
+    icon.className = `fa-solid ${icons[Math.floor(Math.random() * icons.length)]} floating-bg-element`;
+    icon.style.position = 'fixed';
+    icon.style.left = Math.random() * 100 + 'vw';
+    icon.style.top = Math.random() * 100 + 'vh';
+    icon.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    icon.style.color = 'rgba(16, 185, 129, 0.05)';
+    icon.style.zIndex = '-1';
+    icon.style.pointerEvents = 'none';
+    icon.style.animationDelay = (Math.random() * 5) + 's';
+    
+    container.appendChild(icon);
+  }
+}
+
+// Update initialization
+document.addEventListener('DOMContentLoaded', function() {
+  initAdvanced3DTilt();
+  initFloatingCyberAssets();
+});

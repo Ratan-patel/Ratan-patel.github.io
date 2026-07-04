@@ -472,3 +472,90 @@
     }
   }
 }
+
+/* ========================================
+   NEW 3D AND ADVANCED ANIMATIONS
+   ======================================== */
+
+/* 18. 3D PERSPECTIVE CONTAINER */
+.perspective-container {
+  perspective: 1500px;
+}
+
+/* 19. 3D FLOATING CARD EFFECT */
+.card-3d-float {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+.card-3d-float:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.4);
+}
+
+/* 20. NEON BORDER ANIMATION */
+@keyframes neon-border {
+  0%, 100% { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 5px rgba(16, 185, 129, 0.2); }
+  50% { border-color: rgba(6, 182, 212, 0.8); box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); }
+}
+
+.neon-border-animate {
+  animation: neon-border 3s infinite;
+}
+
+/* 21. 3D TEXT SHADOW */
+.text-3d {
+  text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+}
+
+/* 22. SCANLINE EFFECT */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanline-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(16, 185, 129, 0.2);
+  opacity: 0.5;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+/* 23. 3D ROTATING ICON */
+@keyframes rotate3d {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.rotate-3d-icon {
+  animation: rotate3d 5s linear infinite;
+  transform-style: preserve-3d;
+}
+
+/* 24. FLOATING PARTICLES BACKGROUND */
+@keyframes floating-bg {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(10px, -15px); }
+  66% { transform: translate(-15px, 10px); }
+}
+
+.floating-bg-element {
+  animation: floating-bg 10s ease-in-out infinite;
+}
