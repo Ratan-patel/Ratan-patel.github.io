@@ -19,6 +19,145 @@
 <link href="styles.css" rel="stylesheet"/>
 <!-- ADVANCED ANIMATIONS CSS -->
 <link href="animations.css" rel="stylesheet"/>
+<!-- 3D Typing Animation Styles -->
+<style>
+  /* ===== 3D FLIP TYPING ANIMATION ===== */
+  .typing-3d-wrapper {
+    perspective: 1200px;
+    perspective-origin: 50% 50%;
+  }
+  
+  .typing-3d-container {
+    transform-style: preserve-3d;
+    position: relative;
+  }
+  
+  .typing-3d-char {
+    display: inline-block;
+    opacity: 0;
+    transform: rotateY(-90deg) translateZ(-50px);
+    animation: flip3dIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  }
+  
+  @keyframes flip3dIn {
+    0% {
+      opacity: 0;
+      transform: rotateY(-90deg) translateZ(-50px) rotateX(20deg);
+      text-shadow: 0 0 0 transparent;
+    }
+    60% {
+      opacity: 1;
+      transform: rotateY(10deg) translateZ(10px) rotateX(-5deg);
+      text-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 40px rgba(16, 185, 129, 0.3);
+    }
+    100% {
+      opacity: 1;
+      transform: rotateY(0deg) translateZ(0px) rotateX(0deg);
+      text-shadow: 0 0 0 transparent;
+    }
+  }
+  
+  /* Glow pulse after typing completes */
+  .typing-3d-glow {
+    animation: glowPulse 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glowPulse {
+    0% {
+      text-shadow: 0 0 5px rgba(16, 185, 129, 0.2), 0 0 10px rgba(16, 185, 129, 0.1);
+    }
+    100% {
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.2), 0 0 30px rgba(16, 185, 129, 0.1);
+    }
+  }
+  
+  /* Cursor blink */
+  .typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: #10b981;
+    margin-left: 4px;
+    animation: cursorBlink 0.8s step-end infinite;
+    vertical-align: text-bottom;
+    box-shadow: 0 0 8px #10b981;
+  }
+  
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  
+  /* Subtitle typing effect */
+  .subtitle-typing {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid #10b981;
+    animation: typingSubtitle 2s steps(30, end) 3s forwards, blinkCursor 0.8s step-end infinite 3s;
+    width: 0;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes typingSubtitle {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  @keyframes blinkCursor {
+    0%, 100% { border-color: #10b981; }
+    50% { border-color: transparent; }
+  }
+  
+  /* Remove border after typing completes */
+  .subtitle-typed {
+    border-right: none !important;
+    white-space: normal;
+  }
+  
+  /* 3D floating card effect for profile */
+  .profile-3d-card {
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .profile-3d-card:hover {
+    transform: rotateY(8deg) rotateX(5deg) scale(1.02);
+  }
+  
+  /* Mission statement 3D reveal */
+  .mission-3d {
+    transform-style: preserve-3d;
+    animation: missionSlideIn 1s cubic-bezier(0.23, 1, 0.32, 1) 5s both;
+  }
+  
+  @keyframes missionSlideIn {
+    0% {
+      opacity: 0;
+      transform: rotateX(45deg) translateY(30px) translateZ(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: rotateX(0deg) translateY(0px) translateZ(0px);
+    }
+  }
+  
+  /* Stats counter 3D flip */
+  .stat-3d-item {
+    transform-style: preserve-3d;
+    animation: statFlipIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) 6s both;
+  }
+  
+  @keyframes statFlipIn {
+    0% {
+      opacity: 0;
+      transform: rotateX(-90deg) translateZ(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: rotateX(0deg) translateZ(0px);
+    }
+  }
+</style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen text-sm antialiased font-sans relative overflow-x-hidden selection:bg-emerald-500 selection:text-black">
 <!-- Cyber Background Grid Overlay -->
@@ -78,7 +217,7 @@
 	<div class="relative group perspective-container">
 <!-- Animated Neon Ring -->
 <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-75 blur-md group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-<div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-slate-950 border-2 border-emerald-500/40 p-1 overflow-hidden cursor-pointer transition-transform hover:scale-105 card-3d-float" onclick="animationController.toggleAvatarDance()">
+<div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-slate-950 border-2 border-emerald-500/40 p-1 overflow-hidden cursor-pointer transition-transform hover:scale-105 card-3d-float profile-3d-card" onclick="animationController.toggleAvatarDance()">
 <!-- Ratan Profile Image - ACTUAL PROFESSIONAL PHOTO -->
 <img alt="Ratan Kumar Patel professional photo" class="w-full h-full object-cover rounded-full filter brightness-95 contrast-105 transition-all" src="assets/profile-photo.jpg"/>
 </div>
@@ -111,27 +250,41 @@
 <div class="lg:col-span-7 space-y-6">
 <div class="space-y-2">
 <span class="font-mono text-emerald-400 tracking-widest uppercase text-xs block animate-pulse">// CERTIFIED ETHICAL HACKING TRAINER</span>
-<h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white hover:text-emerald-400 transition-colors cursor-pointer text-3d">
-            Ratan Kumar Patel
-          </h1>
-<h2 class="text-xl sm:text-2xl text-slate-300 font-light flex items-center gap-2 float-text">
-            Cyber Security Expert &amp; Trainer
-          </h2>
+
+<!-- 3D Typing Animation for Name -->
+<div class="typing-3d-wrapper">
+  <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white hover:text-emerald-400 transition-colors cursor-pointer typing-3d-container" id="typing-name">
+  </h1>
 </div>
+
+<!-- Subtitle with typing animation -->
+<h2 class="text-xl sm:text-2xl text-slate-300 font-light flex items-center gap-2 float-text subtitle-typing" id="typing-subtitle" style="width: 0; overflow: hidden; white-space: nowrap; border-right: 2px solid #10b981;">
+  Ethical Hacker Trainer
+</h2>
+
+<!-- Mission Statement with 3D reveal -->
+<div class="mission-3d mt-4 p-4 bg-slate-900/40 border border-emerald-500/20 rounded-lg backdrop-blur-sm">
+  <p class="text-emerald-400 font-mono text-xs tracking-wider uppercase mb-1">// MY_MISSION</p>
+  <p class="text-slate-300 text-sm italic leading-relaxed">
+    "To empower the next generation of cybersecurity professionals through hands-on ethical hacking training, building a digital fortress of skilled defenders who stay two steps ahead of the threats."
+  </p>
+</div>
+</div>
+
 <p class="text-slate-300 text-base max-w-2xl leading-relaxed scroll-reveal">
           I am a professional <span class="text-emerald-400 font-semibold">CEH Certified</span> ethical hacker with <span class="text-emerald-400 font-semibold">6+ years</span> of real-world industry experience in cybersecurity, ethical hacking, and red team operations.
         </p>
 <!-- Stats Counter Panel -->
 <div class="grid grid-cols-3 gap-4 py-4 border-y border-slate-900 max-w-xl">
-<div class="text-center md:text-left stagger-item">
+<div class="text-center md:text-left stagger-item stat-3d-item">
 <div class="text-2xl md:text-3xl font-mono font-bold text-emerald-400" id="stat-students">500+</div>
 <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Students Trained</div>
 </div>
-<div class="text-center md:text-left border-x border-slate-900 px-2 stagger-item">
+<div class="text-center md:text-left border-x border-slate-900 px-2 stagger-item stat-3d-item">
 <div class="text-2xl md:text-3xl font-mono font-bold text-cyan-400" id="stat-experience">6+ Years</div>
 <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Industry Exp.</div>
 </div>
-<div class="text-center md:text-left stagger-item">
+<div class="text-center md:text-left stagger-item stat-3d-item">
 <div class="text-2xl md:text-3xl font-mono font-bold text-amber-400">CEH v12</div>
 <div class="text-[11px] text-slate-400 uppercase tracking-wider font-mono">Certified</div>
 </div>
@@ -151,6 +304,60 @@
 </div>
 </div>
 </section>
+
+<!-- 3D Typing Animation JavaScript -->
+<script>
+(function() {
+  // Configuration
+  const nameText = "Ratan Kumar Patel";
+  const nameContainer = document.getElementById('typing-name');
+  const subtitleEl = document.getElementById('typing-subtitle');
+  
+  // Create 3D flip characters for name
+  function create3DChars() {
+    nameContainer.innerHTML = '';
+    const chars = nameText.split('');
+    chars.forEach((char, index) => {
+      const span = document.createElement('span');
+      span.className = 'typing-3d-char';
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      span.style.animationDelay = (index * 0.08) + 's';
+      nameContainer.appendChild(span);
+    });
+    
+    // Add cursor after typing completes
+    setTimeout(() => {
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      nameContainer.appendChild(cursor);
+      
+      // Remove cursor after a moment and add glow
+      setTimeout(() => {
+        cursor.style.display = 'none';
+        nameContainer.classList.add('typing-3d-glow');
+      }, 2500);
+      
+      // Trigger subtitle typing after name completes
+      setTimeout(() => {
+        subtitleEl.style.animation = 'typingSubtitle 2s steps(30, end) forwards, blinkCursor 0.8s step-end infinite';
+        // Remove cursor from subtitle after typing
+        setTimeout(() => {
+          subtitleEl.classList.add('subtitle-typed');
+        }, 2500);
+      }, 500);
+      
+    }, nameText.length * 80 + 400);
+  }
+  
+  // Start animation when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', create3DChars);
+  } else {
+    create3DChars();
+  }
+})();
+</script>
+
 <!-- Interactive Terminal Widget -->
 <section class="py-12 border-b border-slate-900">
 <div class="section-header mb-8 text-center md:text-left scroll-reveal">
