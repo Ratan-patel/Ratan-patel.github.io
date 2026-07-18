@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Red-Team Lab · RATAN_PATEL.sec | Live Hacking Simulator</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080e;--panel:#0a0f18;--panel2:#0d1420;--neon:#00ff9c;--neon2:#00c8ff;--acc:#ff2b6d;
+  --amber:#ffb400;--purple:#b26bff;--txt:#c7d5e4;--mut:#5f7488;--line:rgba(0,255,156,.16);
+  --mono:'JetBrains Mono',monospace;--disp:'Orbitron',sans-serif;--ui:'Rajdhani',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);font-family:var(--mono);overflow:hidden;font-size:14px}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--neon);color:#000}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:#03060b}
+::-webkit-scrollbar-thumb{background:#1c2b3d;border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--neon)}
+
+/* boot screen */
+#boot{position:fixed;inset:0;z-index:1000;background:#03060b;padding:40px;overflow:hidden;
+  font-family:var(--mono);font-size:13px;color:var(--neon);white-space:pre-wrap;line-height:1.55}
+#boot .prog{margin-top:20px;color:var(--neon2)}
+#boot.hide{opacity:0;pointer-events:none;transition:.6s}
+
+/* desktop */
+#desk{position:fixed;inset:0;display:grid;grid-template-rows:44px 1fr 30px;
+  background:radial-gradient(1200px 700px at 70% -10%,#0b1626,#05080e 60%)}
+#desk::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,255,156,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,156,.03) 1px,transparent 1px);
+  background-size:40px 40px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;gap:16px;padding:0 16px;background:linear-gradient(90deg,#08101c,#060b14);
+  border-bottom:1px solid var(--line);z-index:5}
+.tb-logo{font-family:var(--disp);font-weight:900;color:var(--neon);font-size:.9rem;letter-spacing:1px}
+.tb-logo i{margin-right:6px}
+.tb-menu{display:flex;gap:4px;font-family:var(--ui);font-weight:600}
+.tb-menu button{background:none;border:none;color:var(--mut);font-family:var(--ui);font-size:.9rem;cursor:pointer;
+  padding:5px 12px;border-radius:6px;transition:.2s}
+.tb-menu button:hover{background:rgba(0,255,156,.08);color:var(--neon)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:16px;color:var(--mut);font-size:.78rem}
+.tb-right .st{display:flex;align-items:center;gap:6px}
+.tb-right .dot{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.home-link{color:var(--neon2);font-family:var(--ui);font-weight:600}
+
+/* main area */
+#main{position:relative;overflow:hidden}
+.pane{position:absolute;inset:0;display:grid;grid-template-columns:250px 1fr;gap:0}
+
+/* sidebar */
+.side{background:linear-gradient(180deg,#080e18,#060a12);border-right:1px solid var(--line);overflow-y:auto;padding:14px}
+.side h4{font-family:var(--disp);font-size:.68rem;color:var(--neon);letter-spacing:1px;margin:16px 0 10px;text-transform:uppercase}
+.side h4:first-child{margin-top:4px}
+.mission{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;
+  cursor:pointer;transition:.2s;position:relative}
+.mission:hover{border-color:var(--neon);transform:translateX(4px)}
+.mission.active{border-color:var(--neon);box-shadow:0 0 16px rgba(0,255,156,.15)}
+.mission.done{opacity:.6}
+.mission .mt{font-family:var(--ui);font-weight:700;font-size:.92rem;color:#eaf4ff;display:flex;align-items:center;gap:8px}
+.mission .md{font-size:.72rem;color:var(--mut);margin-top:5px;line-height:1.4}
+.mission .badge{position:absolute;top:10px;right:10px;font-size:.6rem;padding:2px 7px;border-radius:20px}
+.badge.easy{background:rgba(0,255,156,.15);color:var(--neon)}
+.badge.med{background:rgba(255,180,0,.15);color:var(--amber)}
+.badge.hard{background:rgba(255,43,109,.15);color:var(--acc)}
+.mission .chk{color:var(--neon)}
+.side .target{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;margin-bottom:7px;font-size:.76rem}
+.side .target b{color:var(--neon2)}
+.side .target .ip{color:var(--amber)}
+.tool-list button{width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mut);
+  font-family:var(--mono);font-size:.78rem;padding:7px 9px;border-radius:7px;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.tool-list button:hover{background:rgba(0,200,255,.06);color:var(--neon2);border-color:var(--line)}
+.tool-list button i{width:16px}
+
+/* terminal */
+.termzone{display:flex;flex-direction:column;background:#04070c;position:relative}
+.term-tabs{display:flex;background:#070d16;border-bottom:1px solid var(--line);align-items:center;padding:0 6px}
+.term-tabs .tab{padding:8px 16px;font-size:.78rem;color:var(--mut);border-right:1px solid rgba(255,255,255,.04);
+  cursor:pointer;display:flex;align-items:center;gap:8px}
+.term-tabs .tab.active{color:var(--neon);background:#04070c;border-bottom:2px solid var(--neon)}
+.term-tabs .tab i{font-size:.7rem}
+.term-tabs .spacer{flex:1}
+.term-out{flex:1;overflow-y:auto;padding:14px 16px;line-height:1.6;font-size:13.5px;white-space:pre-wrap;word-break:break-word}
+.term-out .g{color:var(--neon)}.term-out .b{color:var(--neon2)}.term-out .a{color:var(--amber)}
+.term-out .r{color:var(--acc)}.term-out .p{color:var(--purple)}.term-out .m{color:var(--mut)}.term-out .w{color:#eaf4ff}
+.term-in{display:flex;align-items:center;padding:10px 16px;border-top:1px solid var(--line);background:#05090f}
+.prompt{color:var(--neon);white-space:nowrap;margin-right:8px}
+.prompt .u{color:var(--neon)}.prompt .h{color:var(--neon2)}.prompt .d{color:var(--amber)}
+.term-in input{flex:1;background:none;border:none;outline:none;color:#dfeff5;font-family:var(--mono);font-size:13.5px;caret-color:var(--neon)}
+
+/* status bar */
+.statusbar{display:flex;align-items:center;gap:18px;padding:0 16px;background:#070d16;border-top:1px solid var(--line);
+  font-size:.72rem;color:var(--mut);z-index:5}
+.statusbar .si{display:flex;align-items:center;gap:6px}
+.statusbar .si i{color:var(--neon)}
+.statusbar .right{margin-left:auto;display:flex;gap:18px}
+.xp-bar{width:120px;height:6px;background:#0d1420;border-radius:4px;overflow:hidden}
+.xp-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--neon),var(--neon2));transition:.6s}
+
+/* toast */
+#toast{position:fixed;bottom:50px;right:20px;z-index:900;display:flex;flex-direction:column;gap:10px}
+.toast{background:linear-gradient(145deg,#0d1a2a,#081018);border:1px solid var(--neon);border-radius:12px;
+  padding:14px 18px;box-shadow:0 12px 40px rgba(0,255,156,.2);min-width:280px;animation:slidein .4s;font-family:var(--ui)}
+.toast .tt{font-family:var(--disp);color:var(--neon);font-size:.82rem;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.toast .tb{font-size:.85rem;color:var(--txt)}
+@keyframes slidein{from{transform:translateX(120%);opacity:0}to{transform:none;opacity:1}}
+
+/* modal help */
+#help{position:fixed;inset:0;z-index:800;background:rgba(3,6,11,.8);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:20px}
+#help.show{display:flex}
+.help-box{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:620px;width:100%;
+  max-height:80vh;overflow-y:auto;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.help-box h2{font-family:var(--disp);color:var(--neon);font-size:1.2rem;margin-bottom:6px}
+.help-box p{color:var(--mut);margin-bottom:16px;font-family:var(--ui);font-size:.95rem}
+.help-box table{width:100%;border-collapse:collapse;font-size:.82rem}
+.help-box td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
+.help-box td:first-child{color:var(--neon);white-space:nowrap;font-weight:500}
+.help-box td:last-child{color:var(--txt)}
+.help-box .close{float:right;cursor:pointer;color:var(--mut);font-size:1.3rem}
+.help-box .close:hover{color:var(--acc)}
+
+@media(max-width:820px){.pane{grid-template-columns:1fr}.side{display:none}.tb-menu{display:none}}
+</style>
+</head>
+<body>
+
+<!-- BOOT -->
+<div id="boot"></div>
+
+<!-- DESKTOP -->
+<div id="desk">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="tb-logo"><i class="fa-solid fa-skull-crossbones"></i>REDTEAM_OS</div>
+    <div class="tb-menu">
+      <button onclick="openHelp()"><i class="fa-solid fa-book"></i> Commands</button>
+      <button onclick="term.exec('missions')"><i class="fa-solid fa-flag"></i> Missions</button>
+      <button onclick="term.exec('nmap 10.10.14.20')"><i class="fa-solid fa-crosshairs"></i> Quick Scan</button>
+      <button onclick="term.exec('clear')"><i class="fa-solid fa-eraser"></i> Clear</button>
+    </div>
+    <div class="tb-right">
+      <span class="home-link"><a href="https://ratan-patel.github.io/"><i class="fa-solid fa-house"></i> Portfolio</a></span>
+      <span class="st"><span class="dot"></span> VPN: <b style="color:var(--neon)">CONNECTED</b></span>
+      <span id="clock">--:--:--</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+    <div class="pane">
+      <!-- SIDEBAR -->
+      <div class="side">
+        <h4><i class="fa-solid fa-flag"></i> Missions</h4>
+        <div id="missionList"></div>
+        <h4><i class="fa-solid fa-server"></i> Network Targets</h4>
+        <div class="target"><b>DC01</b> · <span class="ip">10.10.14.20</span><br><span style="color:var(--mut)">Windows Server 2019</span></div>
+        <div class="target"><b>WEB-SRV</b> · <span class="ip">10.10.14.35</span><br><span style="color:var(--mut)">Ubuntu · Apache</span></div>
+        <div class="target"><b>DB-NODE</b> · <span class="ip">10.10.14.50</span><br><span style="color:var(--mut)">Debian · MySQL</span></div>
+        <h4><i class="fa-solid fa-toolbox"></i> Tools</h4>
+        <div class="tool-list">
+          <button onclick="fill('nmap -sV 10.10.14.20')"><i class="fa-solid fa-radar"></i> nmap</button>
+          <button onclick="fill('nikto -h 10.10.14.35')"><i class="fa-solid fa-globe"></i> nikto</button>
+          <button onclick="fill('sqlmap -u http://10.10.14.35/login')"><i class="fa-solid fa-database"></i> sqlmap</button>
+          <button onclick="fill('hydra -l admin -P rockyou.txt 10.10.14.20 ssh')"><i class="fa-solid fa-key"></i> hydra</button>
+          <button onclick="fill('msfconsole')"><i class="fa-solid fa-bomb"></i> metasploit</button>
+          <button onclick="fill('mimikatz')"><i class="fa-solid fa-fingerprint"></i> mimikatz</button>
+          <button onclick="fill('whatweb 10.10.14.35')"><i class="fa-solid fa-fingerprint"></i> whatweb</button>
+          <button onclick="fill('john hash.txt')"><i class="fa-solid fa-unlock"></i> john</button>
+        </div>
+      </div>
+
+      <!-- TERMINAL -->
+      <div class="termzone">
+        <div class="term-tabs">
+          <div class="tab active"><i class="fa-solid fa-terminal"></i> root@redteam: ~</div>
+          <div class="spacer"></div>
+          <div class="tab" onclick="openHelp()" style="color:var(--mut)"><i class="fa-solid fa-circle-question"></i> help</div>
+        </div>
+        <div class="term-out" id="out"></div>
+        <div class="term-in">
+          <span class="prompt" id="prompt"><span class="u">root</span>@<span class="h">redteam</span>:<span class="d">~</span># </span>
+          <input id="cmd" autocomplete="off" autofocus spellcheck="false">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <span class="si"><i class="fa-solid fa-microchip"></i> CPU 14%</span>
+    <span class="si"><i class="fa-solid fa-memory"></i> RAM 2.1G</span>
+    <span class="si"><i class="fa-solid fa-network-wired"></i> eth0 10.10.14.9</span>
+    <span class="si"><i class="fa-solid fa-user-secret"></i> Operator: RATAN</span>
+    <div class="right">
+      <span class="si">LEVEL <b id="lvl" style="color:var(--neon)">1</b></span>
+      <span class="si">XP <span class="xp-bar"><i id="xpfill"></i></span> <b id="xptxt" style="color:var(--neon2)">0/100</b></span>
+      <span class="si"><i class="fa-solid fa-flag-checkered"></i> <b id="flagcount" style="color:var(--amber)">0</b>/5 flags</span>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- HELP MODAL -->
+<div id="help">
+  <div class="help-box">
+    <span class="close" onclick="closeHelp()">&times;</span>
+    <h2>// COMMAND REFERENCE</h2>
+    <p>This is a fully simulated Red-Team environment. All commands are safe and offline. Type any command below in the terminal.</p>
+    <table>
+      <tr><td>help</td><td>Show this reference</td></tr>
+      <tr><td>missions</td><td>List all mission objectives</td></tr>
+      <tr><td>nmap [-sV] &lt;ip&gt;</td><td>Port &amp; service scan of a target</td></tr>
+      <tr><td>nikto -h &lt;ip&gt;</td><td>Web server vulnerability scan</td></tr>
+      <tr><td>whatweb &lt;ip&gt;</td><td>Web technology fingerprint</td></tr>
+      <tr><td>sqlmap -u &lt;url&gt;</td><td>SQL injection testing</td></tr>
+      <tr><td>hydra -l user -P list ip ssh</td><td>Brute-force login</td></tr>
+      <tr><td>msfconsole</td><td>Launch Metasploit framework</td></tr>
+      <tr><td>mimikatz</td><td>Dump Windows credentials</td></tr>
+      <tr><td>john &lt;file&gt;</td><td>Crack password hashes</td></tr>
+      <tr><td>ssh user@ip</td><td>Connect to a shell</td></tr>
+      <tr><td>ls / cd / cat / pwd</td><td>Navigate the file system</td></tr>
+      <tr><td>whoami / ifconfig / clear</td><td>System commands</td></tr>
+      <tr><td>submit &lt;flag&gt;</td><td>Submit a captured flag</td></tr>
+    </table>
+  </div>
+</div>
+<script>
+/* ============ HELPERS ============ */
+const $=s=>document.querySelector(s);
+const out=$('#out'), cmd=$('#cmd');
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function print(html){out.innerHTML+=html+'\n';out.scrollTop=out.scrollHeight;}
+async function typeLine(html,delay=14){ // print char-ish by chunks for tool feel
+  const div=document.createElement('div');out.appendChild(div);
+  div.innerHTML=html;out.scrollTop=out.scrollHeight;await sleep(delay);
+}
+function toast(title,body,icon='fa-trophy'){
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<div class="tt"><i class="fa-solid ${icon}"></i>${title}</div><div class="tb">${body}</div>`;
+  $('#toast').appendChild(t);setTimeout(()=>{t.style.transition='.4s';t.style.opacity=0;t.style.transform='translateX(120%)';setTimeout(()=>t.remove(),400);},4200);
+}
+
+/* ============ STATE ============ */
+const state={xp:0,lvl:1,flags:new Set(),cwd:'/root',done:new Set()};
+const XP_PER_LVL=100;
+function addXP(n){state.xp+=n;while(state.xp>=XP_PER_LVL){state.xp-=XP_PER_LVL;state.lvl++;toast('LEVEL UP!','You reached Level '+state.lvl,'fa-arrow-up');}updateHUD();}
+function updateHUD(){$('#lvl').textContent=state.lvl;$('#xptxt').textContent=state.xp+'/'+XP_PER_LVL;
+  $('#xpfill').style.width=(state.xp/XP_PER_LVL*100)+'%';$('#flagcount').textContent=state.flags.size;}
+
+/* ============ MISSIONS ============ */
+const missions=[
+ {id:'m1',t:'Recon the Domain Controller',d:'Run an nmap service scan on 10.10.14.20',lvl:'easy',check:c=>/nmap.*10\.10\.14\.20/.test(c),xp:25},
+ {id:'m2',t:'Web Vuln Discovery',d:'Scan the web server with nikto on 10.10.14.35',lvl:'easy',check:c=>/nikto.*10\.10\.14\.35/.test(c),xp:25},
+ {id:'m3',t:'Break the Login',d:'Brute-force SSH on the DC with hydra',lvl:'med',check:c=>/hydra.*10\.10\.14\.20/.test(c),xp:35},
+ {id:'m4',t:'SQL Injection',d:'Exploit the login page with sqlmap',lvl:'med',check:c=>/sqlmap.*10\.10\.14\.35/.test(c),xp:35},
+ {id:'m5',t:'Dump the Hashes',d:'Use mimikatz after gaining a shell to loot credentials',lvl:'hard',check:c=>/mimikatz/.test(c),xp:50},
+];
+let activeMission=null;
+function renderMissions(){
+  const el=$('#missionList');el.innerHTML='';
+  missions.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='mission'+(state.done.has(m.id)?' done':'')+(activeMission===m.id?' active':'');
+    d.innerHTML=`<span class="badge ${m.lvl}">${m.lvl.toUpperCase()}</span>
+      <div class="mt">${state.done.has(m.id)?'<i class="fa-solid fa-circle-check chk"></i>':'<i class="fa-regular fa-circle"></i>'} ${m.t}</div>
+      <div class="md">${m.d}</div>`;
+    d.onclick=()=>{activeMission=m.id;renderMissions();cmd.focus();};
+    el.appendChild(d);
+  });
+}
+function checkMissions(c){
+  missions.forEach(m=>{
+    if(!state.done.has(m.id)&&m.check(c)){
+      state.done.add(m.id);addXP(m.xp);
+      toast('MISSION COMPLETE',m.t+' (+'+m.xp+' XP)','fa-circle-check');
+      renderMissions();
+    }
+  });
+}
+
+/* ============ FILE SYSTEM ============ */
+const FS={
+ '/root':{type:'dir',children:['loot','notes.txt','.bash_history','rockyou.txt','hash.txt']},
+ '/root/loot':{type:'dir',children:['creds.txt','flag_final.txt']},
+ '/root/notes.txt':{type:'file',content:'ENGAGEMENT NOTES\n----------------\nScope: 10.10.14.0/24\nGoal: Domain Admin + 5 flags\nStart with recon -> exploit -> loot.\nType "missions" to see objectives.'},
+ '/root/.bash_history':{type:'file',content:'nmap -sV 10.10.14.20\nhydra -l admin ...\nmsfconsole'},
+ '/root/rockyou.txt':{type:'file',content:'123456\npassword\nadmin123\nP@ssw0rd\nqwerty\n... (14,341,564 more)'},
+ '/root/hash.txt':{type:'file',content:'admin:$1$xyz$8sJh2...hashvalue'},
+ '/root/loot/creds.txt':{type:'file',content:'DC01\\Administrator : Summer2026!\nWEB-SRV\\www-data : (no pass)\nDB-NODE\\dbuser : sql_r00t_99'},
+ '/root/loot/flag_final.txt':{type:'file',content:'FLAG{d0main_4dmin_pwn3d_by_RATAN}'},
+};
+
+/* ============ TOOL SIMULATIONS ============ */
+async function scanNmap(args){
+  const ip=(args.match(/(\d+\.\d+\.\d+\.\d+)/)||[])[1]||'10.10.14.20';
+  print(`<span class="m">Starting Nmap 7.94 ( https://nmap.org ) at ${new Date().toLocaleString()}</span>`);
+  await sleep(400);print(`<span class="m">Nmap scan report for ${ip}</span>`);
+  print(`<span class="m">Host is up (0.00042s latency).</span>`);await sleep(300);
+  const tables={
+    '10.10.14.20':[['22/tcp','open','ssh','OpenSSH 8.2p1'],['135/tcp','open','msrpc','Microsoft Windows RPC'],['139/tcp','open','netbios-ssn'],['445/tcp','open','microsoft-ds','Windows Server 2019'],['3389/tcp','open','ms-wbt-server','Microsoft Terminal Services'],['88/tcp','open','kerberos-sec']],
+    '10.10.14.35':[['22/tcp','open','ssh','OpenSSH 8.9'],['80/tcp','open','http','Apache httpd 2.4.52'],['443/tcp','open','ssl/http','Apache httpd 2.4.52'],['3306/tcp','filtered','mysql']],
+    '10.10.14.50':[['22/tcp','open','ssh','OpenSSH 8.4'],['3306/tcp','open','mysql','MySQL 8.0.32']],
+  };
+  const rows=tables[ip]||tables['10.10.14.20'];
+  print(`<span class="w">PORT      STATE    SERVICE        VERSION</span>`);
+  for(const r of rows){await sleep(180);
+    print(`<span class="g">${r[0].padEnd(9)}</span> <span class="b">${r[1].padEnd(8)}</span> ${(r[2]||'').padEnd(14)} <span class="m">${r[3]||''}</span>`);}
+  await sleep(300);
+  print(`<span class="a">\nService detection performed. Nmap done: 1 IP address (1 host up) scanned in 4.21 seconds</span>`);
+  if(ip==='10.10.14.20')print(`<span class="g">[+] Hint: SMB (445) &amp; RDP (3389) exposed. Try hydra or metasploit.</span>`);
+}
+async function scanNikto(args){
+  const ip=(args.match(/(\d+\.\d+\.\d+\.\d+)/)||[])[1]||'10.10.14.35';
+  print(`<span class="m">- Nikto v2.5.0</span>`);await sleep(300);
+  const lines=[
+   `+ Target IP:          ${ip}`,`+ Target Port:        80`,`+ Server: Apache/2.4.52 (Ubuntu)`,
+   `<span class="a">+ /admin/: Admin login page found.</span>`,
+   `<span class="a">+ /login.php: Possible SQL injection point (parameter 'user').</span>`,
+   `<span class="r">+ OSVDB-3268: /config/: Directory indexing found.</span>`,
+   `<span class="r">+ /backup.sql: Database backup exposed!</span>`,
+   `<span class="a">+ X-Frame-Options header not present (clickjacking).</span>`,
+   `+ 7 host(s) tested`];
+  for(const l of lines){await sleep(260);print(l);}
+  print(`<span class="g">[+] Hint: /login.php looks injectable. Try: sqlmap -u http://${ip}/login.php</span>`);
+}
+async function scanWhatweb(args){
+  const ip=(args.match(/(\d+\.\d+\.\d+\.\d+)/)||[])[1]||'10.10.14.35';
+  await sleep(400);
+  print(`<span class="b">http://${ip}</span> [200 OK] Apache[2.4.52], Country[RESERVED], HTTPServer[Ubuntu Linux], PHP[8.1.2], JQuery[3.6.0], Bootstrap, PasswordField[password], HTML5`);
+}
+async function runSqlmap(args){
+  const url=(args.match(/-u\s+(\S+)/)||[])[1]||'http://10.10.14.35/login.php';
+  print(`<span class="m">        ___\n       __H__\n ___ ___[.]_____ ___ ___  sqlmap 1.7.11</span>`);await sleep(400);
+  const steps=[
+   `[*] testing connection to the target URL`,
+   `[*] testing if the target URL content is stable`,
+   `<span class="a">[*] testing for SQL injection on GET parameter 'user'</span>`,
+   `<span class="g">[+] GET parameter 'user' is 'MySQL >= 5.6 boolean-based blind' injectable</span>`,
+   `<span class="g">[+] GET parameter 'user' is 'MySQL UNION query' injectable</span>`,
+   `[*] fetching database names`,
+   `available databases [3]:\n[*] information_schema\n[*] webapp\n[*] users_db`,
+   `[*] dumping table 'users' from database 'webapp'`,
+  ];
+  for(const s of steps){await sleep(400);print(s);}
+  await sleep(400);
+  print(`<span class="w">+----+----------+------------------+\n| id | username | password         |\n+----+----------+------------------+\n| 1  | admin    | Summer2026!      |\n| 2  | ratan    | h4ckerm4n        |\n+----+----------+------------------+</span>`);
+  print(`<span class="g">[+] FLAG{sql1_dump3d_th3_us3rs} captured! Use: submit FLAG{...}</span>`);
+}
+async function runHydra(args){
+  const ip=(args.match(/(\d+\.\d+\.\d+\.\d+)/)||[])[1]||'10.10.14.20';
+  print(`<span class="m">Hydra v9.5 starting at ${new Date().toLocaleTimeString()}</span>`);await sleep(300);
+  print(`[DATA] attacking ssh://${ip}:22/`);
+  const pw=['123456','password','qwerty','admin','letmein'];
+  for(const p of pw){await sleep(350);print(`<span class="m">[ATTEMPT] target ${ip} - login "admin" - pass "${p}"</span>`);}
+  await sleep(400);
+  print(`<span class="g">[22][ssh] host: ${ip}   login: admin   password: Summer2026!</span>`);
+  print(`<span class="g">1 of 1 target successfully completed, 1 valid password found</span>`);
+  print(`<span class="g">[+] FLAG{brut3f0rc3_succ3ss} — you now have SSH access. Try: ssh admin@${ip}</span>`);
+}
+async function runMsf(){
+  print(`<span class="r">       =[ metasploit v6.4.1-dev                          ]</span>`);
+  print(`<span class="m">+ -- --=[ 2398 exploits - 1236 auxiliary - 422 post       ]</span>`);
+  await sleep(400);
+  print(`<span class="b">msf6 &gt;</span> use exploit/windows/smb/ms17_010_eternalblue`);await sleep(400);
+  print(`<span class="b">msf6 exploit(ms17_010) &gt;</span> set RHOSTS 10.10.14.20`);await sleep(300);
+  print(`<span class="b">msf6 exploit(ms17_010) &gt;</span> exploit`);await sleep(500);
+  const l=[`[*] Started reverse TCP handler on 10.10.14.9:4444`,
+   `[*] 10.10.14.20:445 - Connecting to target for exploitation.`,
+   `<span class="a">[+] 10.10.14.20:445 - Target is vulnerable to MS17-010!</span>`,
+   `[*] Sending stage (200774 bytes) to 10.10.14.20`,
+   `<span class="g">[+] Meterpreter session 1 opened (10.10.14.9:4444 -> 10.10.14.20:49812)</span>`];
+  for(const x of l){await sleep(420);print(x);}
+  await sleep(300);
+  print(`<span class="p">meterpreter &gt;</span> getuid`);await sleep(300);
+  print(`Server username: <span class="g">NT AUTHORITY\\SYSTEM</span>`);
+  print(`<span class="g">[+] FLAG{3t3rnalblu3_pwn} — SYSTEM shell! Now run: mimikatz</span>`);
+}
+async function runMimikatz(){
+  print(`<span class="p">  .#####.   mimikatz 2.2.0 (x64)\n .## ^ ##.  "A La Vie, A L'Amour"\n '#####'</span>`);
+  await sleep(400);print(`<span class="b">mimikatz #</span> privilege::debug`);await sleep(300);
+  print(`Privilege '20' OK`);await sleep(300);
+  print(`<span class="b">mimikatz #</span> sekurlsa::logonpasswords`);await sleep(500);
+  const dump=`<span class="w">Authentication Id : 0 ; 996 (00000000:000003e4)</span>
+User Name         : Administrator
+Domain            : REDTEAM
+<span class="a">NTLM     : 8846f7eaee8fb117ad06bdd830b7586c</span>
+<span class="g">Password : Summer2026!</span>
+--------
+User Name         : svc_sql
+<span class="a">NTLM     : e19ccf75ee54e06b06a5907af13cef42</span>
+<span class="g">Password : sql_r00t_99</span>`;
+  for(const line of dump.split('\n')){await sleep(160);print(line);}
+  await sleep(300);
+  print(`<span class="g">[+] FLAG{d0main_4dmin_pwn3d_by_RATAN} — FULL DOMAIN COMPROMISE! submit it to finish.</span>`);
+}
+async function runJohn(){
+  print(`<span class="m">Loaded 1 password hash (md5crypt)</span>`);await sleep(600);
+  print(`<span class="g">Summer2026!      (admin)</span>`);await sleep(300);
+  print(`1 password cracked. FLAG{cr4ck3d_th3_h4sh}`);
+}
+
+/* ============ COMMAND ENGINE ============ */
+const VALID_FLAGS=['FLAG{sql1_dump3d_th3_us3rs}','FLAG{brut3f0rc3_succ3ss}','FLAG{3t3rnalblu3_pwn}','FLAG{d0main_4dmin_pwn3d_by_RATAN}','FLAG{cr4ck3d_th3_h4sh}'];
+function resolvePath(p){
+  if(!p) return state.cwd;
+  if(p==='~') return '/root';
+  if(p==='..'){const parts=state.cwd.split('/').filter(Boolean);parts.pop();return '/'+parts.join('/')||'/';}
+  if(p.startsWith('/')) return p.replace(/\/$/,'')||'/';
+  return (state.cwd==='/'?'':state.cwd)+'/'+p;
+}
+const term={
+ busy:false,
+ async exec(raw){
+  const line=raw.trim();
+  print(`<span class="prompt"><span class="u">root</span>@<span class="h">redteam</span>:<span class="d">${state.cwd.replace('/root','~')}</span># </span>${esc(raw)}`);
+  if(!line) return;
+  checkMissions(line.toLowerCase());
+  const [c,...rest]=line.split(/\s+/);const args=rest.join(' ');
+  this.busy=true;
+  try{ await this.dispatch(c.toLowerCase(),args,line); }
+  finally{ this.busy=false; }
+ },
+ async dispatch(c,args,line){
+  switch(c){
+   case 'help': openHelp(); print('<span class="m">Command reference opened.</span>');break;
+   case 'clear': out.innerHTML='';break;
+   case 'missions': this.showMissions();break;
+   case 'nmap': await scanNmap(args);addXP(5);break;
+   case 'nikto': await scanNikto(args);addXP(5);break;
+   case 'whatweb': await scanWhatweb(args);addXP(3);break;
+   case 'sqlmap': await runSqlmap(args);addXP(8);break;
+   case 'hydra': await runHydra(args);addXP(8);break;
+   case 'msfconsole': case 'msf': await runMsf();addXP(10);break;
+   case 'mimikatz': await runMimikatz();addXP(10);break;
+   case 'john': await runJohn();addXP(6);break;
+   case 'ssh': print(`<span class="g">Connecting...</span>`);await sleep(500);
+     print(`<span class="w">Welcome to Ubuntu 22.04 LTS\nLast login: ${new Date().toDateString()}</span>`);
+     print(`<span class="g">[+] Shell obtained. Type 'ls', 'cat', 'whoami'.</span>`);break;
+   case 'whoami': print('root');break;
+   case 'pwd': print(state.cwd);break;
+   case 'id': print('uid=0(root) gid=0(root) groups=0(root)');break;
+   case 'ifconfig': case 'ip':
+     print(`<span class="b">eth0:</span> flags=4163&lt;UP,BROADCAST,RUNNING&gt;  mtu 1500\n      inet 10.10.14.9  netmask 255.255.255.0\n      RX packets 91422  TX packets 40218`);break;
+   case 'uname': print('Linux redteam 6.5.0-kali #1 SMP x86_64 GNU/Linux');break;
+   case 'date': print(new Date().toString());break;
+   case 'ls': this.ls(args);break;
+   case 'cd': this.cd(args);break;
+   case 'cat': this.cat(args);break;
+   case 'echo': print(esc(args));break;
+   case 'submit': this.submit(args);break;
+   case 'sudo': await this.dispatch(args.split(/\s+/)[0].toLowerCase(),args.split(/\s+/).slice(1).join(' '),args);break;
+   case 'exit': print('<span class="m">Session kept alive. Nice try. 😉</span>');break;
+   case 'neofetch': this.neofetch();break;
+   default: print(`<span class="r">${esc(c)}: command not found</span> <span class="m">— type 'help'</span>`);
+  }
+ },
+ showMissions(){
+  print('<span class="w">═══ MISSION OBJECTIVES ═══</span>');
+  missions.forEach((m,i)=>{const s=state.done.has(m.id)?'<span class="g">[✔ DONE]</span>':'<span class="a">[ TODO ]</span>';
+   print(`${s} <span class="b">${i+1}. ${m.t}</span> <span class="m">(${m.lvl}, +${m.xp}xp)</span>\n     <span class="m">${m.d}</span>`);});
+  print(`<span class="m">Flags captured: ${state.flags.size}/5</span>`);
+ },
+ ls(args){
+  const p=resolvePath(args);const node=FS[p];
+  if(!node){print(`<span class="r">ls: cannot access '${esc(args)}': No such file or directory</span>`);return;}
+  if(node.type==='file'){print(args);return;}
+  print(node.children.map(ch=>{const full=(p==='/'?'':p)+'/'+ch;const isdir=FS[full]&&FS[full].type==='dir';
+   return isdir?`<span class="b">${ch}/</span>`:`<span class="w">${ch}</span>`;}).join('   '));
+ },
+ cd(args){
+  if(!args||args==='~'){state.cwd='/root';return;}
+  const p=resolvePath(args);
+  if(FS[p]&&FS[p].type==='dir'){state.cwd=p;}
+  else print(`<span class="r">cd: ${esc(args)}: No such directory</span>`);
+ },
+ cat(args){
+  const p=resolvePath(args);const node=FS[p];
+  if(!node){print(`<span class="r">cat: ${esc(args)}: No such file</span>`);return;}
+  if(node.type==='dir'){print(`<span class="r">cat: ${esc(args)}: Is a directory</span>`);return;}
+  print('<span class="w">'+esc(node.content)+'</span>');
+  const fm=node.content.match(/FLAG\{[^}]+\}/);
+  if(fm)print(`<span class="g">[+] Found a flag! submit ${fm[0]}</span>`);
+ },
+ submit(f){
+  f=f.trim();
+  if(VALID_FLAGS.includes(f)){
+   if(state.flags.has(f)){print('<span class="a">Flag already submitted.</span>');return;}
+   state.flags.add(f);addXP(20);updateHUD();
+   toast('FLAG CAPTURED!',f+' (+20 XP)','fa-flag-checkered');
+   print(`<span class="g">[+] Correct! Flag accepted. (${state.flags.size}/5)</span>`);
+   if(state.flags.size===5){
+    print('<span class="g">\n╔══════════════════════════════════════╗\n║  ALL FLAGS CAPTURED — DOMAIN OWNED!  ║\n║  You completed the Red-Team Lab. 🏆  ║\n╚══════════════════════════════════════╝</span>');
+    toast('LAB COMPLETE!','All 5 flags captured. Legendary!','fa-crown');
+   }
+  } else print(`<span class="r">Invalid flag. Keep hunting.</span>`);
+ },
+ neofetch(){
+  print(`<span class="g">      _,met\$\$\$\$\$gg.          <span class="b">root@redteam</span>
+   ,g\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$P.       -----------
+ ,g\$\$P""       """Y\$\$.".     OS: RedTeam OS (Kali based)
+,\$\$P'              \`\$\$\$.     Kernel: 6.5.0-kali
+\`d\$\$'     ,\$\$P\`      \$\$\$     Shell: zsh 5.9
+ \$\$P      d\$\$'       \$\$P     Tools: 2398 exploits loaded
+ \$\$:      \$\$.       ,d\$\$'    Operator: RATAN KUMAR PATEL
+ \$\$;      Y\$b._   _,d\$P'     CEH v12 Certified
+ Y\$\$.     \`."Y\$\$\$\$P"'</span>`);
+ },
+};
+window.term=term;
+function fill(t){cmd.value=t;cmd.focus();}
+function openHelp(){$('#help').classList.add('show');}
+function closeHelp(){$('#help').classList.remove('show');}
+$('#help').addEventListener('click',e=>{if(e.target.id==='help')closeHelp();});
+
+/* input handling + history */
+const hist=[];let hi=-1;
+cmd.addEventListener('keydown',async e=>{
+ if(e.key==='Enter'){
+  if(term.busy)return;
+  const v=cmd.value;if(v.trim()){hist.push(v);hi=hist.length;}
+  cmd.value='';await term.exec(v);
+ } else if(e.key==='ArrowUp'){e.preventDefault();if(hi>0){hi--;cmd.value=hist[hi]||'';}}
+ else if(e.key==='ArrowDown'){e.preventDefault();if(hi<hist.length-1){hi++;cmd.value=hist[hi]||'';}else{hi=hist.length;cmd.value='';}}
+});
+document.addEventListener('click',e=>{if(!e.target.closest('button')&&!e.target.closest('.help-box')&&!e.target.closest('a'))cmd.focus();});
+
+/* clock */
+setInterval(()=>{$('#clock').textContent=new Date().toLocaleTimeString();},1000);
+
+/* ============ BOOT SEQUENCE ============ */
+async function boot(){
+ const b=$('#boot');
+ const lines=[
+  '[  OK  ] Started RedTeam OS Secure Boot',
+  '[  OK  ] Mounted encrypted /root partition',
+  '[  OK  ] Reached target Network (eth0: 10.10.14.9)',
+  '[  OK  ] Established VPN tunnel to lab range 10.10.14.0/24',
+  '[  OK  ] Loaded 2398 exploits, 1236 auxiliary modules',
+  '[  OK  ] Started Metasploit RPC daemon',
+  '[  OK  ] Wordlists ready (rockyou.txt · 14M entries)',
+  '[  OK  ] Operator authenticated: RATAN KUMAR PATEL (CEH v12)',
+  '',
+  '  RRRR  EEEE DDD  TTTTT EEEE  AAA  M   M',
+  '  R  R  E    D  D   T   E    A   A MM MM',
+  '  RRRR  EEE  D  D   T   EEE  AAAAA M M M',
+  '  R R   E    D  D   T   E    A   A M   M',
+  '  R  R  EEEE DDD    T   EEEE A   A M   M   OS',
+  '',
+  'Initializing live hacking environment...'
+ ];
+ for(const l of lines){b.textContent+=l+'\n';await sleep(l===''?120:150);}
+ const p=document.createElement('div');p.className='prog';b.appendChild(p);
+ for(let i=0;i<=30;i++){p.textContent='['+'#'.repeat(i)+'.'.repeat(30-i)+'] '+Math.round(i/30*100)+'%';await sleep(35);}
+ await sleep(300);b.classList.add('hide');
+ // welcome banner
+ print('<span class="g">╔══════════════════════════════════════════════════════════╗</span>');
+ print('<span class="g">║</span>  <span class="w">RED-TEAM LAB · Live Hacking Simulator</span>                   <span class="g">║</span>');
+ print('<span class="g">║</span>  <span class="m">by Ratan Kumar Patel — CEH v12 Ethical Hacker Trainer</span>   <span class="g">║</span>');
+ print('<span class="g">╚══════════════════════════════════════════════════════════╝</span>');
+ print('');
+ print('<span class="m">This is a fully simulated, 100% safe offline environment for education.</span>');
+ print('<span class="a">Your mission:</span> compromise the lab network and capture all <span class="a">5 flags</span>.');
+ print('Type <span class="g">help</span> for commands, <span class="g">missions</span> for objectives, or click a tool on the left.');
+ print('<span class="m">Suggested first move:</span> <span class="b">nmap -sV 10.10.14.20</span>');
+ print('');
+ renderMissions();updateHUD();cmd.focus();
+}
+boot();
+</script>
+</body>
+</html>
