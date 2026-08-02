@@ -18,8 +18,9 @@
 :root{
   --void:#04060a; --abyss:#070b11; --panel:#0a1017; --panel2:#0d151e;
   --line:rgba(0,255,200,.14); --line2:rgba(0,212,255,.12);
-  --mint:#00ffc8; --cyan:#00d4ff; --violet:#7b5cff; --red:#ff2e5b; --amber:#ffc247;
+  --mint:#00ffc8; --cyan:#00d4ff; --violet:#7b5cff; --red:#ff2e5b;   --amber:#ffc247;
   --txt:#dbe7ef; --dim:#8ba0b2; --faint:#5b6b7a;
+  --red-glow: 0 0 20px rgba(255, 46, 91, 0.6);
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --disp:'Chakra Petch','Space Grotesk',sans-serif;
   --body:'Space Grotesk',system-ui,sans-serif;
@@ -143,7 +144,9 @@ section{padding:110px 0;position:relative}
 .btn.solid{background:linear-gradient(100deg,var(--mint),var(--cyan));color:#02110d;border-color:transparent;font-weight:700}
 .btn.solid:hover{box-shadow:0 12px 40px -10px rgba(0,255,200,.7)}
 .btn.ghost{color:var(--dim);border-color:rgba(139,160,178,.25);background:transparent}
-.btn.ghost:hover{color:var(--txt);border-color:var(--dim);box-shadow:none}
+  .btn.ghost:hover{color:var(--txt);border-color:var(--dim);box-shadow:none}
+  .btn.red-glow { border-color: var(--red); color: var(--red); background: rgba(255, 46, 91, 0.1); }
+  .btn.red-glow:hover { background: var(--red); color: #fff; box-shadow: var(--red-glow); }
 .btn:after{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;transition:.6s;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-20deg)}
 .btn:hover:after{left:140%}
@@ -506,7 +509,7 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
       <a href="#contact" class="btn solid">Initiate Secure Contact</a>
       <a href="ratan_patel_cv.pdf" class="btn" download>Download CV</a>
       <a href="#ratanos" class="btn">Get RATAN OS</a>
-      <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener" class="btn ghost"><i class="fas fa-robot"></i> Critical Hacker's White Hat AI</a>
+      <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener" class="btn red-glow"><i class="fas fa-robot"></i> Ethical Hacker's White Hat AI</a>
       <a href="https://ratan-patel.github.io/lab.html" class="btn ghost">Enter Red-Team Lab</a>
     </div>
   </div>
@@ -558,7 +561,7 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
 
       <div class="hbtns">
         <a href="https://gofile.io/d/waVf7J" target="_blank" rel="noopener" class="btn solid">⤓ Download RATAN OS · 2.0 GB</a>
-        <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener" class="btn"><i class="fas fa-robot"></i> Critical Hacker's White Hat AI</a>
+        <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener" class="btn red-glow"><i class="fas fa-robot"></i> Ethical Hacker's White Hat AI</a>
         <a href="#contact" class="btn">Request Deployment Support</a>
       </div>
       <div class="osnote">// Distributed for lawful, authorised security testing and education only. Use responsibly.</div>
