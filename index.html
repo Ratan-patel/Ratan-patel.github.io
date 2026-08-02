@@ -450,6 +450,7 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
   <a href="#home" class="brand"><svg class="shield" viewBox="0 0 24 24" fill="none" stroke="#00ffc8" stroke-width="1.7"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>RATAN_PATEL<span>.sec</span></a>
   <button id="burger">≡</button>
   <div class="nlinks" id="nlinks">
+    <a href="ratan_patel_cv.pdf" download>// DOWNLOAD_CV</a>
     <a href="#ratanos">// RATAN_OS</a>
     <a href="#lab">// LIVE_LAB</a>
     <a href="#dossier">// DOSSIER</a>
@@ -503,6 +504,7 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
 
     <div class="hbtns">
       <a href="#contact" class="btn solid">Initiate Secure Contact</a>
+      <a href="ratan_patel_cv.pdf" class="btn" download>Download CV</a>
       <a href="#ratanos" class="btn">Get RATAN OS</a>
       <a href="https://ratan-patel.github.io/lab.html" class="btn ghost">Enter Red-Team Lab</a>
     </div>
@@ -1401,6 +1403,7 @@ const TERM=(function(){
   const CMD={
     help:()=>[['AVAILABLE COMMANDS','k'],
       ['  whoami        identity + current role','d'],
+      ['  cv            download agent dossier / CV','k'],
       ['  skills        core competency matrix','d'],
       ['  certs         certifications and academics','d'],
       ['  experience    professional trajectory','d'],
@@ -1461,6 +1464,10 @@ const TERM=(function(){
       ['  hotline   +91-8700914564 / +91-9650053559','p'],
       ['  email     patelratan460@gmail.com','p'],
       ['  base      South Extension, New Delhi, India','d']],
+    cv:()=>{
+      window.open('ratan_patel_cv.pdf', '_blank');
+      return [['Downloading CV...','k'], ['Opening PDF in new tab.','d']];
+    },
     ls:()=>[['dossier/  ratan-os/  certifications/  engagements/  handbook/','p'],
       ['resume.txt  ethics.txt  contact.txt','p']],
     banner:()=>BANNER,
@@ -1539,7 +1546,7 @@ const TERM=(function(){
   });
   addEventListener('keydown',e=>{if(e.key==='`'){e.preventDefault();inp.focus();
     inp.scrollIntoView({block:'center',behavior:'smooth'});}});
-  const chips=['whoami','ratanos','skills','certs','experience','nmap','scan','exploit','bounty','contact','matrix','clear'];
+  const chips=['whoami','cv','ratanos','skills','certs','experience','nmap','scan','exploit','bounty','contact','matrix','clear'];
   document.getElementById('chips').innerHTML=chips.map(c=>`<button class="chip">${c}</button>`).join('');
   document.getElementById('chips').onclick=e=>{
     if(!e.target.classList.contains('chip')||busy)return;
