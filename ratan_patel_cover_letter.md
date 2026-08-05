@@ -11,7 +11,7 @@ Dear [Mr./Ms./Mx. Last Name, or Hiring Team],
 
 I am writing to express my keen interest in the [Specific Job Title] position, as advertised on [Platform where you saw the advertisement]. With over six years of hands-on experience as an Ethical Hacking Trainer and Cyber Security Expert, I am confident in my ability to contribute significantly to your team and enhance your organization's security posture.
 
-Throughout my career, I have specialized in delivering practical training in Ethical Hacking, Penetration Testing, Vulnerability Assessment and Penetration Testing (VAPT), and Cyber Threat Intelligence. At Equator Cyber Solutions, I successfully trained over 500 students, designed comprehensive modules covering OWASP Top 10, Metasploit, Burp Suite, Kali Linux, Nmap, and Nessus, and led red team/blue team exercises. My expertise extends to mentoring in bug bounty hunting and exploit development, consistently receiving excellent feedback for my training programs.
+Throughout my career, I have specialized in delivering practical training in Ethical Hacking, Penetration Testing, Vulnerability Assessment and Penetration Testing (VAPT), and Cyber Threat Intelligence. At Appin Technology Lab, I successfully trained over 500 students, designed comprehensive modules covering OWASP Top 10, Metasploit, Burp Suite, Kali Linux, Nmap, and Nessus, and led red team/blue team exercises. My expertise extends to mentoring in bug bounty hunting and exploit development, consistently receiving excellent feedback for my training programs.
 
 My previous role as a Technical Security Executive at Silent Front & Software Solutions further honed my skills in conducting VAPT on client networks, implementing mitigation strategies, and preparing detailed security reports. I am proficient in a wide array of tools and technologies, including Kali Linux, Parrot OS, Wireshark, and SQLMap, ensuring a robust approach to cyber defense.
 
@@ -24,6 +24,6 @@ Thank you for considering my application. I have attached my resume for your rev
 Sincerely,
 
 Ratan Kumar Patel
-+91-8700913645
++91-8700914564
 patelratan460@gmail.com
 linkedin.com/in/ratan-patel-0bb32218
