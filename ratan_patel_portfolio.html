@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratan Kumar Patel - Professional Cybersecurity Portfolio</title>
+    <meta name="description" content="Professional Portfolio of Ratan Kumar Patel - CEH v12 Certified Ethical Hacker, Red Team Operator, and Cybersecurity Trainer. 6+ years of offensive security expertise.">
+    <meta name="author" content="Ratan Kumar Patel">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #04060a;
+            --abyss: #070b11;
+            --panel: #0a1017;
+            --mint: #00ffc8;
+            --cyan: #00d4ff;
+            --red: #ff2e5b;
+            --amber: #ffc247;
+            --txt: #dbe7ef;
+            --dim: #8ba0b2;
+            --faint: #5b6b7a;
+            --mono: 'JetBrains Mono', monospace;
+            --disp: 'Chakra Petch', sans-serif;
+            --body: 'Space Grotesk', system-ui, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--void) 0%, var(--abyss) 100%);
+            color: var(--txt);
+            font-family: var(--body);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(600px circle at 20% 50%, rgba(0, 255, 200, 0.08), transparent 80%),
+                        radial-gradient(600px circle at 80% 80%, rgba(0, 212, 255, 0.08), transparent 80%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header Section */
+        .header {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-bottom: 80px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(0, 255, 200, 0.2);
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 12px;
+            border: 2px solid var(--mint);
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.3);
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        .header-info h1 {
+            font-family: var(--disp);
+            font-size: 3.2em;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            background: linear-gradient(100deg, var(--mint), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-info .title {
+            font-family: var(--mono);
+            font-size: 1.1em;
+            color: var(--cyan);
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 24px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+
+        .contact-item strong {
+            color: var(--mint);
+            font-weight: 600;
+        }
+
+        .contact-item a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: var(--mint);
+            border-color: var(--mint);
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 70px;
+        }
+
+        .section-title {
+            font-family: var(--disp);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--mint);
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--mint), var(--cyan));
+        }
+
+        /* Experience Cards */
+        .experience-card {
+            background: linear-gradient(160deg, rgba(13, 21, 30, 0.6), rgba(7, 11, 17, 0.4));
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .experience-card:hover {
+            border-color: rgba(0, 255, 200, 0.4);
+            box-shadow: 0 20px 50px -25px rgba(0, 255, 200, 0.3);
+        }
+
+        .experience-card h3 {
+            font-family: var(--disp);
+            font-size: 1.3em;
+            color: var(--txt);
+            margin-bottom: 6px;
+        }
+
+        .experience-card .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-family: var(--mono);
+            font-size: 0.9em;
+            color: var(--dim);
+        }
+
+        .experience-card .company {
+            color: var(--mint);
+            font-weight: 600;
+        }
+
+        .experience-card .period {
+            color: var(--cyan);
+        }
+
+        .experience-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .experience-card li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: var(--dim);
+            font-size: 0.95em;
+        }
+
+        .experience-card li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .skill-box {
+            background: linear-gradient(160deg, rgba(13, 21, 30, 0.6), rgba(7, 11, 17, 0.4));
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .skill-box:hover {
+            border-color: rgba(0, 255, 200, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .skill-box h4 {
+            font-family: var(--disp);
+            font-size: 1.1em;
+            color: var(--mint);
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 255, 200, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+
+        .skill-item .name {
+            color: var(--txt);
+        }
+
+        .skill-item .level {
+            color: var(--cyan);
+            font-family: var(--mono);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 255, 200, 0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--mint), var(--cyan));
+            border-radius: 2px;
+        }
+
+        /* Certifications */
+        .cert-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .cert-item {
+            background: rgba(0, 255, 200, 0.05);
+            border-left: 3px solid var(--mint);
+            padding: 16px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .cert-item strong {
+            color: var(--mint);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .cert-item .detail {
+            color: var(--dim);
+            font-family: var(--mono);
+            font-size: 0.85em;
+        }
+
+        /* Highlights */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 255, 200, 0.1), rgba(0, 212, 255, 0.05));
+            border: 1px solid rgba(0, 255, 200, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .highlight-box .number {
+            font-family: var(--disp);
+            font-size: 2.2em;
+            font-weight: 700;
+            background: linear-gradient(100deg, var(--mint), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .highlight-box .label {
+            font-family: var(--mono);
+            font-size: 0.85em;
+            color: var(--dim);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(0, 255, 200, 0.15);
+            padding-top: 40px;
+            margin-top: 80px;
+            text-align: center;
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 0.85em;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: #333;
+            }
+
+            body::before {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 40px;
+            }
+
+            .section-title {
+                color: #333;
+            }
+
+            .experience-card, .skill-box, .highlight-box {
+                border-color: #ddd;
+                background: white;
+            }
+
+            a {
+                color: #0066cc;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                grid-template-columns: 1fr;
+            }
+
+            .header-info h1 {
+                font-size: 2.2em;
+            }
+
+            .skills-grid, .highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-list {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="assets/ratan_enhanced_photo.png" alt="Ratan Kumar Patel" class="profile-img">
+            <div class="header-info">
+                <h1>Ratan Kumar Patel</h1>
+                <div class="title">CEH v12 · Red Team Operator · Cybersecurity Trainer</div>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <strong>Email:</strong>
+                        <a href="mailto:patelratan460@gmail.com">patelratan460@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <strong>Phone:</strong>
+                        <span>+91-8700914564</span>
+                    </div>
+                    <div class="contact-item">
+                        <strong>Location:</strong>
+                        <span>South Extension, New Delhi</span>
+                    </div>
+                    <div class="contact-item">
+                        <strong>Website:</strong>
+                        <a href="https://ratan-patel.github.io" target="_blank">ratan-patel.github.io</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Highlights -->
+        <div class="highlights">
+            <div class="highlight-box">
+                <div class="number">500+</div>
+                <div class="label">Professionals Trained</div>
+            </div>
+            <div class="highlight-box">
+                <div class="number">6+</div>
+                <div class="label">Years Offensive Exp.</div>
+            </div>
+            <div class="highlight-box">
+                <div class="number">CEH v12</div>
+                <div class="label">EC-Council Verified</div>
+            </div>
+            <div class="highlight-box">
+                <div class="number">v1.0</div>
+                <div class="label">RATAN OS Shipped</div>
+            </div>
+        </div>
+
+        <!-- Professional Summary -->
+        <section>
+            <h2 class="section-title">Professional Summary</h2>
+            <p style="color: var(--dim); font-size: 1.05em; line-height: 1.8;">
+                Accomplished <strong style="color: var(--mint);">Ethical Hacker, Red Team Operator, and Cybersecurity Trainer</strong> with 6+ years of hands-on offensive security expertise. Specialised in adversarial simulation, vulnerability assessment, penetration testing, and AI-specific security research. Successfully trained 500+ corporate professionals and university students in practical, exploit-driven laboratory environments. Founder of <strong style="color: var(--mint);">RATAN OS v1.0</strong> — a lightweight ethical hacking distribution. Committed to advancing cybersecurity through rigorous training, responsible disclosure, and continuous innovation.
+            </p>
+        </section>
+
+        <!-- Professional Experience -->
+        <section>
+            <h2 class="section-title">Professional Experience</h2>
+            
+            <div class="experience-card">
+                <h3>Ethical Hacker Trainer & Technical Security Manager</h3>
+                <div class="meta">
+                    <span class="company">Appin Technology Lab · South Extension, New Delhi</span>
+                    <span class="period">2020 — 2026</span>
+                </div>
+                <ul>
+                    <li>Trained 500+ students and working professionals in offensive security, vulnerability discovery, and hardened server deployment.</li>
+                    <li>Authored and delivered OWASP web-application security, Metasploit, Burp Suite and CTF training modules end-to-end.</li>
+                    <li>Executed high-value corporate ethical hacking workshops, lab build-outs and client vulnerability assessments.</li>
+                    <li>Directed red team challenges and bespoke attack-simulation scenarios to sharpen internal security departments.</li>
+                    <li>Engineered and released RATAN OS v1.0 — a lightweight ethical hacking operating system for field engagements.</li>
+                    <li>Developed <strong>Ratan AI</strong> (Ethical White Hat AI) for offensive security assistance and threat modelling.</li>
+                </ul>
+            </div>
+
+            <div class="experience-card">
+                <h3>Technical Security Executive</h3>
+                <div class="meta">
+                    <span class="company">Corax Cyber Security Ltd</span>
+                    <span class="period">2018 — 2020</span>
+                </div>
+                <ul>
+                    <li>Conducted VAPT and ethical hacking assessments on client networks and web applications.</li>
+                    <li>Monitored network security posture and implemented mitigation strategies.</li>
+                    <li>Prepared detailed security reports and training documentation for junior analysts.</li>
+                </ul>
+            </div>
+
+            <div class="experience-card">
+                <h3>Ethical Hacking Trainer</h3>
+                <div class="meta">
+                    <span class="company">Cyber Hunterz · Lucknow</span>
+                    <span class="period">2014 — 2018</span>
+                </div>
+                <ul>
+                    <li>Delivered practical ethical hacking and penetration testing training to corporate and academic cohorts.</li>
+                    <li>Designed custom curriculum aligned with industry best practices and emerging threat landscape.</li>
+                    <li>Mentored students in bug bounty hunting and exploit development methodologies.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Core Competencies -->
+        <section>
+            <h2 class="section-title">Core Competencies</h2>
+            <div class="skills-grid">
+                <div class="skill-box">
+                    <h4>Offensive Security</h4>
+                    <div class="skill-item">
+                        <span class="name">Ethical Hacking & Pentesting</span>
+                        <span class="level">98%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 98%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">Red Team Simulation</span>
+                        <span class="level">96%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 96%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">Vulnerability Assessment</span>
+                        <span class="level">96%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 96%"></div></div>
+                </div>
+
+                <div class="skill-box">
+                    <h4>Tools & Technologies</h4>
+                    <div class="skill-item">
+                        <span class="name">Metasploit & Burp Suite Pro</span>
+                        <span class="level">97%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 97%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">Kali & Parrot Security OS</span>
+                        <span class="level">96%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 96%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">Nmap · Wireshark · Aircrack-ng</span>
+                        <span class="level">95%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 95%"></div></div>
+                </div>
+
+                <div class="skill-box">
+                    <h4>Training & Pedagogy</h4>
+                    <div class="skill-item">
+                        <span class="name">Curriculum Architecture</span>
+                        <span class="level">96%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 96%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">Corporate Bootcamps</span>
+                        <span class="level">95%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 95%"></div></div>
+                    
+                    <div class="skill-item" style="margin-top: 12px;">
+                        <span class="name">CTF Design & Lab Setup</span>
+                        <span class="level">94%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 94%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications & Education -->
+        <section>
+            <h2 class="section-title">Certifications & Education</h2>
+            <div class="cert-list">
+                <div class="cert-item">
+                    <strong>Certified Ethical Hacker (CEH) v12</strong>
+                    <div class="detail">EC-Council · ECC92840 · Valid to Jul 2027</div>
+                </div>
+                <div class="cert-item">
+                    <strong>Master of Science — Cybersecurity</strong>
+                    <div class="detail">Western Governors University · 2023</div>
+                </div>
+                <div class="cert-item">
+                    <strong>PG Diploma — Computer Application</strong>
+                    <div class="detail">BTE, U.P. Lucknow · 2013 · First Division</div>
+                </div>
+                <div class="cert-item">
+                    <strong>RATAN OS v1.0 — Self-Engineered</strong>
+                    <div class="detail">Lightweight Ethical Hacking Distribution · 2026</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flagship Projects -->
+        <section>
+            <h2 class="section-title">Flagship Projects & Initiatives</h2>
+            <div class="experience-card">
+                <h3>RATAN OS v1.0 — Lightweight Ethical Hacking Distribution</h3>
+                <p style="color: var(--dim); margin-bottom: 12px;">A purpose-built, low-footprint operating system engineered from the ground up for offensive security practitioners. Includes pre-armed offensive toolkit, live-boot capability, USB persistence, and is optimized for field engagements and training labs.</p>
+            </div>
+            <div class="experience-card">
+                <h3>Ratan AI (Ethical White Hat AI)</h3>
+                <p style="color: var(--dim); margin-bottom: 12px;">An AI-powered assistant designed specifically for ethical hackers and security professionals. Assists in threat modelling, exploit development, vulnerability research, and offensive security strategy.</p>
+            </div>
+            <div class="experience-card">
+                <h3>Corporate Red Team Simulation Programs</h3>
+                <p style="color: var(--dim); margin-bottom: 12px;">Designed and executed high-value red team exercises for Fortune 500 companies and government agencies. Includes full-scope attack simulations, post-engagement reporting, and remediation guidance.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 Ratan Kumar Patel · All Rights Reserved</p>
+            <p style="margin-top: 8px;">Professional Portfolio · Last Updated: 2026</p>
+        </footer>
+    </div>
+</body>
+</html>
