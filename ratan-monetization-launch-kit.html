@@ -88,6 +88,14 @@
       </div>
     </section>
 
+    <section class="section">
+      <div class="section-title"><h3>Direct UPI payment</h3><p>Course, audit ya mentorship ke liye</p></div>
+      <div class="links" style="display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(135deg,rgba(109,242,194,.12),rgba(99,217,255,.06));border-color:#2b6d6b">
+        <div><div class="eyebrow">PAY TO // RATAN PATEL</div><div id="upi-id" style="font:700 22px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mint);margin-top:8px">9650053559@ybl</div><p class="note">Payment karne se pehle naam aur amount verify karein.</p></div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end"><button class="save" id="copy-upi">Copy UPI ID</button><a class="btn primary" href="upi://pay?pa=9650053559%40ybl&pn=Ratan%20Patel&cu=INR">Open UPI app</a></div>
+      </div>
+    </section>
+
     <footer class="footer"><span class="mono">ratan-patel.github.io // launch kit</span><span>Payment links aur claims publish karne se pehle verify karein.</span></footer>
   </main>
   <script>
@@ -96,6 +104,7 @@
     document.querySelectorAll('[data-check]').forEach(el=>{el.checked=localStorage.getItem('ratan-check-'+el.dataset.check)==='1';el.addEventListener('change',()=>localStorage.setItem('ratan-check-'+el.dataset.check,el.checked?'1':'0'))});
     document.getElementById('save').addEventListener('click',()=>{keys.forEach(k=>{const v=document.getElementById(k).value.trim();localStorage.setItem('ratan-link-'+k,v)});keys.forEach(k=>{const v=localStorage.getItem('ratan-link-'+k);document.querySelectorAll('.cta[data-key="'+k+'"]').forEach(a=>a.href=v||'https://ratan-patel.github.io/#contact')});document.getElementById('saved').textContent='Saved. CTA links are updated on this device.'});
     keys.forEach(k=>{const v=localStorage.getItem('ratan-link-'+k);if(v)document.querySelectorAll('.cta[data-key="'+k+'"]').forEach(a=>a.href=v)});
+    document.getElementById('copy-upi').addEventListener('click',async()=>{await navigator.clipboard.writeText(document.getElementById('upi-id').textContent);document.getElementById('copy-upi').textContent='Copied'});
   </script>
 </body>
 </html>
