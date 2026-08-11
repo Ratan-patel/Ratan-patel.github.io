@@ -16,7 +16,7 @@
       <div>
         <div class="eyebrow">RATAN_PATEL // REVENUE LAYER</div>
         <h1 class="brand">Turn your skills into offers. Turn offers into income.</h1>
-        <p class="intro">Your portfolio already has strong credibility. This launch kit converts it into four clear revenue offers. Option 4, the automated blog pipeline, is intentionally excluded.</p>
+        <p class="intro">Your portfolio already has strong credibility. This launch kit converts it into five clear revenue offers. Option 4, the automated blog pipeline, is intentionally excluded.</p>
       </div>
       <nav class="top-links">
         <a class="btn" href="https://ratan-patel.github.io" target="_blank">Live portfolio</a>
@@ -25,26 +25,41 @@
     </header>
 
     <section class="grid" aria-label="Monetization offers">
-      <article class="card">
+      <article class="card" id="course-offer">
         <div class="num">01 // COURSE</div><h2>Cybersecurity Academy</h2>
         <p>CEH, ethical hacking, VAPT and RATAN OS lab-based workshops. Start with a live cohort, then package the recordings.</p>
         <div class="price">Suggested launch: INR 2,999–9,999</div><a class="btn primary cta" data-key="course" href="https://ratan-patel.github.io/#contact" target="_blank">Enrollment inquiry</a>
       </article>
-      <article class="card">
+      <article class="card" id="services-offer">
         <div class="num">02 // SERVICES</div><h2>VAPT and Red Team</h2>
         <p>Fixed-scope web audits for startups and adversary simulation for teams. Define the scope, timeline and report deliverables clearly.</p>
         <div class="price">Suggested launch: INR 75,000+</div><a class="btn primary cta" data-key="services" href="https://ratan-patel.github.io/#contact" target="_blank">Request an audit</a>
       </article>
-      <article class="card">
+      <article class="card" id="os-offer">
         <div class="num">03 // PRODUCT</div><h2>RATAN OS Store</h2>
         <p>Build an audience with the free ISO, then sell premium scripts, setup support and guided lab access.</p>
         <div class="price">Suggested launch: Free / INR 499 / INR 1,999</div><a class="btn primary cta" data-key="os" href="https://gofile.io/d/waVf7J" target="_blank">Get RATAN OS</a>
       </article>
-      <article class="card">
+      <article class="card" id="bounty-offer">
         <div class="num">05 // CREDIBILITY</div><h2>Bug Bounty Wall</h2>
         <p>Turn verified findings, severity and responsible disclosure into public proof. Its main purpose is high-trust leads, not direct sales.</p>
         <div class="price">Revenue path: audit leads and mentorship</div><a class="btn primary cta" data-key="bounty" href="https://ratan-patel.github.io/#contact" target="_blank">Hire for review</a>
       </article>
+      <article class="card" id="ai-offer">
+        <div class="num">06 // AI</div><h2>RATAN AI</h2>
+        <p>An ethical white-hat assistant for security learning, recon planning, report drafting and guided lab work.</p>
+        <div class="price">Free / Pro INR 499 per month / Expert INR 1,499 per month</div><a class="btn primary cta" data-key="ai" href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank">Try Free AI</a>
+      </article>
+    </section>
+
+    <section class="section" id="ai-plans">
+      <div class="section-title"><h3>RATAN AI Plans</h3><p>Start free, upgrade when you need more</p></div>
+      <div class="grid">
+        <div class="card"><div class="num">FREE</div><h2>Explorer</h2><p>For students and first-time users. Try the assistant before paying.</p><div class="price">INR 0</div><a class="btn primary" href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank">Start Free</a></div>
+        <div class="card"><div class="num">PRO // MONTHLY</div><h2>Security Pro</h2><p>For regular learners and independent researchers: higher usage, saved workflows and priority guidance.</p><div class="price">INR 499 per month</div><a class="btn primary cta" data-key="ai" href="https://ratan-patel.github.io/#contact" target="_blank">Join Pro</a></div>
+        <div class="card"><div class="num">EXPERT // MONTHLY</div><h2>Red Team Expert</h2><p>For professionals: advanced workflows, report templates and guided offensive-security support.</p><div class="price">INR 1,499 per month</div><a class="btn primary cta" data-key="ai" href="https://ratan-patel.github.io/#contact" target="_blank">Join Expert</a></div>
+      </div>
+      <p class="note">Subscription access becomes active after a Stripe recurring-payment link and usage limits are configured.</p>
     </section>
 
     <section class="section">
@@ -76,6 +91,7 @@
           <label for="services">Audit booking URL</label><input id="services" placeholder="https://cal.com/... or payment link">
           <label for="os">RATAN OS premium URL</label><input id="os" placeholder="https://buy.stripe.com/...">
           <label for="bounty">Mentorship / review URL</label><input id="bounty" placeholder="https://...">
+          <label for="ai">RATAN AI subscription URL</label><input id="ai" placeholder="https://buy.stripe.com/...">
           <button class="save" id="save">Save links on this device</button><p class="note" id="saved">Links are stored locally in this browser only.</p>
         </div>
         <div class="links">
@@ -99,7 +115,7 @@
     <footer class="footer"><span class="mono">ratan-patel.github.io // launch kit</span><span>Verify payment links and claims before publishing.</span></footer>
   </main>
   <script>
-    const keys=['course','services','os','bounty'];
+    const keys=['course','services','os','bounty','ai'];
     keys.forEach(k=>{const el=document.getElementById(k);el.value=localStorage.getItem('ratan-link-'+k)||''});
     document.querySelectorAll('[data-check]').forEach(el=>{el.checked=localStorage.getItem('ratan-check-'+el.dataset.check)==='1';el.addEventListener('change',()=>localStorage.setItem('ratan-check-'+el.dataset.check,el.checked?'1':'0'))});
     document.getElementById('save').addEventListener('click',()=>{keys.forEach(k=>{const v=document.getElementById(k).value.trim();localStorage.setItem('ratan-link-'+k,v)});keys.forEach(k=>{const v=localStorage.getItem('ratan-link-'+k);document.querySelectorAll('.cta[data-key="'+k+'"]').forEach(a=>a.href=v||'https://ratan-patel.github.io/#contact')});document.getElementById('saved').textContent='Saved. CTA links are updated on this device.'});
