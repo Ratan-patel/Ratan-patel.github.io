@@ -116,6 +116,22 @@
       <p class="note"><a href="https://ratan-patel.github.io/#contact" target="_blank">Open the Contact section to confirm payment or request access.</a></p>
     </section>
 
+    <section class="section" id="payment-proof">
+      <div class="section-title"><h3>Submit Payment Proof</h3><p>Send screenshot and UTR through WhatsApp</p></div>
+      <div class="editor">
+        <div class="links">
+          <label for="proof-plan">Paid plan</label>
+          <select id="proof-plan"><option value="">Choose a plan</option><option>RATAN OS Premium - INR 499</option><option>RATAN OS Bundle - INR 1,999</option><option>RATAN AI Pro - INR 499 first month</option><option>RATAN AI Expert - INR 1,499 first month</option><option>Ethical Hacking Foundation - INR 2,999</option><option>Advanced Web &amp; API Pentesting - INR 7,999</option><option>Red Team &amp; Adversary Simulation - INR 14,999</option><option>AI Security &amp; LLM Red Teaming - INR 9,999</option></select>
+          <label for="proof-name">Your name</label><input id="proof-name" placeholder="Full name">
+          <label for="proof-utr">UTR / transaction ID</label><input id="proof-utr" placeholder="Payment reference number">
+          <label for="proof-file">Payment screenshot</label><input id="proof-file" type="file" accept="image/*">
+          <button class="save" id="send-proof" type="button">Open WhatsApp Proof Request</button>
+          <p class="note" id="proof-status">The screenshot is previewed in this browser. WhatsApp will open with your details; attach the same screenshot there.</p>
+        </div>
+        <div class="links"><div class="eyebrow">SCREENSHOT PREVIEW</div><img id="proof-preview" alt="Selected payment screenshot preview" style="display:none;max-width:100%;max-height:280px;object-fit:contain;border:1px solid #2b6d6b;border-radius:12px;margin-top:12px"><p class="note" style="font-size:14px;margin-top:14px">Screenshot review is a manual safety check. Do not share your UPI PIN, OTP or full bank statement.</p></div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="section-title"><h3>Current Site Audit</h3><p>Verified against the live website</p></div>
       <div class="status">
@@ -175,6 +191,8 @@
     document.getElementById('save').addEventListener('click',()=>{keys.forEach(k=>{const v=document.getElementById(k).value.trim();localStorage.setItem('ratan-link-'+k,v)});keys.forEach(k=>{const v=localStorage.getItem('ratan-link-'+k);document.querySelectorAll('.cta[data-key="'+k+'"]').forEach(a=>a.href=v||'https://ratan-patel.github.io/#contact')});document.getElementById('saved').textContent='Saved. CTA links are updated on this device.'});
     keys.forEach(k=>{const v=localStorage.getItem('ratan-link-'+k);if(v)document.querySelectorAll('.cta[data-key="'+k+'"]').forEach(a=>a.href=v)});
     document.getElementById('copy-upi').addEventListener('click',async()=>{await navigator.clipboard.writeText(document.getElementById('upi-id').textContent);document.getElementById('copy-upi').textContent='Copied'});
+    document.getElementById('proof-file').addEventListener('change',e=>{const file=e.target.files[0],preview=document.getElementById('proof-preview');if(!file){preview.style.display='none';return}preview.src=URL.createObjectURL(file);preview.style.display='block'});
+    document.getElementById('send-proof').addEventListener('click',()=>{const plan=document.getElementById('proof-plan').value,name=document.getElementById('proof-name').value.trim(),utr=document.getElementById('proof-utr').value.trim(),file=document.getElementById('proof-file').files[0],status=document.getElementById('proof-status');if(!plan||!name||!utr||!file){status.textContent='Please choose a plan, enter your name and UTR, and select the payment screenshot first.';return}const text=encodeURIComponent(`Payment proof request\nName: ${name}\nPlan: ${plan}\nUTR: ${utr}\nI will attach the payment screenshot in this WhatsApp chat.`);window.open('https://wa.me/918700914564?text='+text,'_blank');status.textContent='WhatsApp opened. Attach the selected screenshot and send the message for manual verification.'});
   </script>
 </body>
 </html>
