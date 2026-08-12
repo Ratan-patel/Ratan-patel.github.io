@@ -20,6 +20,16 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 | Resume | [ratan_patel_resume.html](https://ratan-patel.github.io/ratan_patel_resume.html) | Print-friendly CV |
 | Monetization launch kit | [ratan-monetization-launch-kit.html](https://ratan-patel.github.io/ratan-monetization-launch-kit.html) | Services, courses, AI plans |
 
+
+## Commercial and trust pages
+
+| Page | Purpose |
+|---|---|
+| [Services](https://ratan-patel.github.io/services.html) | Scope-first VAPT and red-team packages with starting prices, process and authorization boundary. |
+| [Offers](https://ratan-patel.github.io/ratan-monetization-launch-kit.html) | Training, RATAN OS and RATAN AI access overview. |
+| [RATAN OS Release](https://ratan-patel.github.io/ratan-os-release.html) | Download route, verification status and safe-use guidance. |
+| [Policies](https://ratan-patel.github.io/terms.html) | Terms, privacy/data handling, refund guidance and acceptable use. |
+
 ## Credentials
 
 - **CEH v12** — EC-Council (ECC92840 · valid Jul 2024 – Jul 2027)
