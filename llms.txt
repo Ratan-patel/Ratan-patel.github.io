@@ -23,10 +23,11 @@
 - CTF design, lab setup and permitted bug-bounty mentoring
 
 ## Ratan OS and Ratan AI
-- Ratan OS Lite AI Edition v1.2.0 is a Debian Trixie XFCE live ISO for authorized security learning and defensive analysis.
-- It includes offline Qwen3-4B Q4_K_M with local CPU-only llama.cpp inference and curated Tool Collections.
-- The public release is distributed through a permanent GitHub Release in two verified ISO parts because of individual asset-size limits; the release page contains checksums and QEMU BIOS reassembly instructions.
-- Ratan OS is free to download. Premium setup support starts at INR 799, with exact deliverables and scope confirmed before payment.
+- Ratan OS v1.0.0 is the original Debian-based x86_64 live ISO and is free to download for authorized security learning and controlled labs.
+- Ratan OS Lite v1.1.0 is a compact 697 MiB Debian-based live ISO and is also free to download, with QEMU BIOS and USB lab use supported.
+- Ratan OS Lite AI Edition v1.2.0 is a Debian Trixie XFCE live ISO with offline Qwen3-4B Q4_K_M, local CPU-only llama.cpp inference and curated Tool Collections.
+- The AI Edition is distributed as one verified Google Drive ISO with GitHub split parts retained as backup; the release page contains checksums and QEMU BIOS instructions.
+- The original and Lite downloads require no payment. Optional premium setup support starts at INR 799, with exact deliverables and scope confirmed before payment.
 - RATAN AI is a separate learning assistant service; users must not submit production credentials, secrets or sensitive customer data.
 
 ## Public service boundaries
@@ -39,7 +40,7 @@
 - [Home](https://ratan-patel.github.io/)
 - [Services and VAPT packages](https://ratan-patel.github.io/services.html)
 - [Training, tools and access](https://ratan-patel.github.io/ratan-monetization-launch-kit.html)
-- [RATAN OS release and trust status](https://ratan-patel.github.io/ratan-os-release.html)
+- [RATAN OS free releases and AI Edition trust status](https://ratan-patel.github.io/ratan-os-release.html)
 - [Red-Team Lab Simulator](https://ratan-patel.github.io/lab.html)
 - [Terms](https://ratan-patel.github.io/terms.html), [Privacy](https://ratan-patel.github.io/privacy.html), [Refunds](https://ratan-patel.github.io/refunds.html), [Acceptable Use](https://ratan-patel.github.io/acceptable-use.html)
 

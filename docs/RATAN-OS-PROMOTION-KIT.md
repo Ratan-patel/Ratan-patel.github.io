@@ -2,7 +2,7 @@
 
 ## Positioning
 
-Ratan OS should be presented as a **Debian-based live environment for authorized security learning, defensive analysis and controlled assessment labs**. The strongest differentiator is the Lite AI Edition: offline Qwen3-4B inference through llama.cpp, no API key at runtime, QEMU BIOS support and transparent checksum/reassembly documentation.
+Ratan OS should be presented as a **Debian-based live environment for authorized security learning, defensive analysis and controlled assessment labs**. The original v1.0.0 and Lite v1.1.0 editions are free downloads, while the Lite AI Edition adds offline Qwen3-4B inference through llama.cpp, no API key at runtime, QEMU BIOS support and transparent checksum/reassembly documentation.
 
 The download itself remains free. The paid offer should be described separately as optional setup support from **INR 799**, with deliverables and scope confirmed before payment. Do not describe the product as a hacking-for-hire service, an anonymous attack platform or a tool for bypassing access controls.
 
@@ -19,17 +19,17 @@ These phrases should be used naturally in headings, descriptions and helpful exp
 
 ## Ready social post: short version
 
-**Ratan OS Lite AI Edition v1.2.0 is now available.** It is a Debian XFCE live ISO for authorized security learning and defensive analysis, with offline Qwen3-4B, CPU-only llama.cpp, QEMU BIOS support and curated Tool Collections. No API key is needed at runtime. Download, verify the SHA-256 checksum and use it only on systems you are authorized to assess: https://ratan-patel.github.io/ratan-os-release.html
+**Ratan OS original v1.0.0 and Ratan OS Lite v1.1.0 are free to download.** Choose the original full build or the compact 697 MiB Lite ISO for authorized security learning, defensive analysis and controlled QEMU/USB labs. The Lite AI Edition v1.2.0 is also available as a verified single-file download. No payment is required for the free releases. Download and verify safely: https://ratan-patel.github.io/ratan-os-release.html
 
 ## Ready social post: detailed version
 
-Meet Ratan OS Lite AI Edition v1.2.0—a compact Debian-based live environment for authorized security training, defensive analysis and controlled lab work. The AI Edition includes an offline Qwen3-4B assistant through llama.cpp, so the local assistant does not require a cloud account or API key at runtime. The release page includes permanent GitHub links, checksum verification and QEMU BIOS instructions. Use only with written authorization and an agreed scope; DDoS, credential attacks, phishing, malware, persistence, exfiltration and destructive activity are excluded. Download: https://ratan-patel.github.io/ratan-os-release.html
+Ratan OS now offers free, verified downloads for two practical lab builds: the original Ratan OS v1.0.0 and the compact Ratan OS Lite v1.1.0. Both are Debian-based live environments for authorized security learning, defensive analysis and controlled QEMU/USB labs. The optional Lite AI Edition v1.2.0 adds offline Qwen3-4B through llama.cpp and is available as a single-file ISO. No payment is required for the original or Lite releases. Use only with written authorization and an agreed scope; DDoS, credential attacks, phishing, malware, persistence, exfiltration and destructive activity are excluded. Download and verify: https://ratan-patel.github.io/ratan-os-release.html
 
 ## Marketplace positioning
 
 | Channel | Fit | Recommended use | Important caveat |
 |---|---|---|---|
-| Own GitHub Release | Strong for free distribution | Permanent verified ISO parts, source and checksums | Keep the release free and transparent |
+| Own GitHub Release | Strong for free distribution | Free original and Lite ISO assets, source and checksums | Keep releases free, transparent and authorized-use only |
 | Lemon Squeezy | Strong candidate for optional paid support or a software bundle | Sell setup-support access, documentation bundle or a separately licensed support package | Merchant review is required for security-tool content |
 | Paddle | Possible for a software offering after review | Paid software/support bundle with clearer commercial checkout | Submit the exact product description for compliance approval first |
 | Gumroad | Uncertain | Use only after written support confirmation | Its policy restricts illegal-access/hacking material and separately restricts certain AI services |
@@ -42,7 +42,7 @@ Ratan OS is a downloadable Debian-based training and assessment environment inte
 
 ## Execution status
 
-The website release page now has a canonical URL, Open Graph and Twitter metadata, SoftwareApplication structured data, updated product language and an expanded `llms.txt` entry. Public social posting, Google Search Console submission and marketplace listing submission require an authenticated account and explicit confirmation immediately before submission; no post or paid listing should be submitted silently.
+The website release page now has a canonical URL, Open Graph and Twitter metadata, SoftwareApplication structured data, prominent free-download cards for v1.0.0 and v1.1.0, and an expanded `llms.txt` entry. Public social posting, Google Search Console submission and marketplace listing submission require an authenticated account and explicit confirmation immediately before submission; no post or paid listing should be submitted silently.
 
 ## References
 
