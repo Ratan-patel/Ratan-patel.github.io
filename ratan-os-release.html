@@ -25,7 +25,7 @@
     "operatingSystem": "Debian GNU/Linux, Linux x86_64",
     "description": "Debian XFCE live operating system with offline Qwen3-4B, llama.cpp and curated authorized-security Tool Collections.",
     "url": "https://ratan-patel.github.io/ratan-os-release.html",
-    "downloadUrl": "https://github.com/Ratan-patel/ratan-os/releases/tag/v1.2.0",
+    "downloadUrl": "https://drive.usercontent.google.com/download?id=10i_niB_lrL7q8Mg4lL9GLb3UmEjAGFtl&export=download&confirm=t",
     "isAccessibleForFree": true,
     "license": "https://www.debian.org/legal/licenses/",
     "author": {
@@ -66,15 +66,15 @@
     <section class="hero">
       <div class="eyebrow">RATAN OS LITE AI EDITION // RELEASE &amp; TRUST CENTER</div>
       <h1>Ratan OS Lite AI Edition v1.2.0 — offline Qwen3-4B for authorized security learning.</h1>
-      <p>The current Ratan OS Lite AI Edition combines compact Tool Collections with an embedded, CPU-only Qwen3-4B assistant. The assistant runs locally after boot: it needs no Internet connection, cloud account or API key. This page provides permanent download parts, verification instructions and the operating boundary before users boot the image.</p>
+      <p>The current Ratan OS Lite AI Edition combines compact Tool Collections with an embedded, CPU-only Qwen3-4B assistant. The assistant runs locally after boot: it needs no Internet connection, cloud account or API key. This page provides a verified single-file download, GitHub split-part backup links, verification instructions and the operating boundary before users boot the image.</p>
       <div class="hero-actions">
-        <a class="btn primary" href="https://github.com/Ratan-patel/ratan-os/releases/tag/v1.2.0" target="_blank" rel="noopener">Open v1.2.0 AI Edition release</a>
-        <a class="btn" href="https://github.com/Ratan-patel/ratan-os/releases/download/v1.2.0/README-REASSEMBLY.md" target="_blank" rel="noopener">Read reassembly guide</a>
+        <a class="btn primary" href="https://drive.usercontent.google.com/download?id=10i_niB_lrL7q8Mg4lL9GLb3UmEjAGFtl&amp;export=download&amp;confirm=t" target="_blank" rel="noopener">Download single-file ISO</a>
+        <a class="btn" href="https://drive.google.com/file/d/10i_niB_lrL7q8Mg4lL9GLb3UmEjAGFtl/view?usp=drivesdk" target="_blank" rel="noopener">View Drive file details</a>
       </div>
     </section>
 
     <section class="section">
-      <div class="notice"><strong>Current verification status:</strong> Ratan OS Lite AI Edition v1.2.0 is published through a permanent GitHub Release. Its ISO is delivered in two parts because GitHub limits individual release assets to less than 2 GiB. Verify both parts, reconstruct the ISO and verify the final SHA-256 before booting. Do not use it with production credentials, regulated data or critical systems.</div>
+      <div class="notice"><strong>Current verification status:</strong> The complete 3.0 GiB ISO is now available as one public Google Drive file. The anonymous range-download test returned ISO 9660 content and the uploaded Drive SHA-256 matches the build: <code>7aa2c6a95a71bf99df2c3d774a817419295664403eb56b15dceb7b1f3531a90d</code>. GitHub split parts remain available as a backup. Do not use it with production credentials, regulated data or critical systems.</div>
       <div class="grid two">
         <article class="card">
           <div class="number">CURRENT BUILD</div>
@@ -96,24 +96,25 @@
     </section>
 
     <section class="section">
-      <h2>Download, verify and reconstruct</h2>
-      <p class="section-intro">Download the two ISO parts and the checksum file into the same folder. The release guide includes the complete QEMU BIOS command and local-AI startup details.</p>
+      <h2>Download and verify</h2>
+      <p class="section-intro">For the simplest installation, download the complete ISO from Google Drive as one file. The GitHub split parts remain available as a fallback, and the public checksum and guide files provide independent verification and QEMU BIOS instructions.</p>
       <div class="table-wrap">
         <table>
           <thead>
             <tr><th>Release item</th><th>Purpose</th><th>Permanent download</th></tr>
           </thead>
           <tbody>
+            <tr><td><strong>Complete ISO · 3.0 GiB</strong></td><td>Primary single-file download from public Google Drive.</td><td><a href="https://drive.usercontent.google.com/download?id=10i_niB_lrL7q8Mg4lL9GLb3UmEjAGFtl&amp;export=download&amp;confirm=t" target="_blank" rel="noopener">Download complete ISO</a></td></tr>
             <tr><td>ISO part 00 · 1.9 GB</td><td>First required segment of the AI Edition ISO.</td><td><a href="https://github.com/Ratan-patel/ratan-os/releases/download/v1.2.0/ratan-os-lite-ai-amd64.iso.part-00" target="_blank" rel="noopener">Download part 00</a></td></tr>
             <tr><td>ISO part 01 · 1.1 GB</td><td>Second required segment of the AI Edition ISO.</td><td><a href="https://github.com/Ratan-patel/ratan-os/releases/download/v1.2.0/ratan-os-lite-ai-amd64.iso.part-01" target="_blank" rel="noopener">Download part 01</a></td></tr>
-            <tr><td>SHA-256 checksums</td><td>Verifies each downloaded part and the reconstructed ISO.</td><td><a href="https://github.com/Ratan-patel/ratan-os/releases/download/v1.2.0/SHA256SUMS" target="_blank" rel="noopener">Download SHA256SUMS</a></td></tr>
-            <tr><td>Reassembly and QEMU guide</td><td>Explains how to combine parts, verify the result and boot safely.</td><td><a href="https://github.com/Ratan-patel/ratan-os/releases/download/v1.2.0/README-REASSEMBLY.md" target="_blank" rel="noopener">Read guide</a></td></tr>
+            <tr><td>SHA-256 checksums</td><td>Verifies the complete ISO or the GitHub backup parts.</td><td><a href="https://drive.usercontent.google.com/download?id=1cFggZ4vhihWsPvwwokoqezvOJjurwTEX&amp;export=download" target="_blank" rel="noopener">Download SHA256SUMS</a></td></tr>
+            <tr><td>Reassembly and QEMU guide</td><td>Explains verification, fallback reassembly and safe booting.</td><td><a href="https://drive.usercontent.google.com/download?id=1oCMyafB5unvqLE4qaC2oqPvrTY2trrmZ&amp;export=download" target="_blank" rel="noopener">Read guide</a></td></tr>
             <tr><td>Release notes</td><td>Records included offline AI components, validation and safety boundary.</td><td><a href="https://github.com/Ratan-patel/ratan-os/releases/tag/v1.2.0" target="_blank" rel="noopener">Open v1.2.0 release</a></td></tr>
             <tr><td>AI Edition source and full guide</td><td>Provides reproducible build configuration and component documentation.</td><td><a href="https://github.com/Ratan-patel/ratan-os/tree/main/lite-ai" target="_blank" rel="noopener">View source</a></td></tr>
           </tbody>
         </table>
       </div>
-      <p class="section-intro">After downloading, run <code>grep 'part-' SHA256SUMS | sha256sum -c -</code>, then <code>cat ratan-os-lite-ai-amd64.iso.part-* &gt; ratan-os-lite-ai-amd64.iso</code>, followed by <code>sha256sum -c SHA256SUMS</code>. The expected final ISO SHA-256 is <code>7aa2c6a95a71bf99df2c3d774a817419295664403eb56b15dceb7b1f3531a90d</code>.</p>
+      <p class="section-intro">For the Google Drive ISO, verify the file directly with <code>sha256sum ratan-os-lite-ai-amd64.iso</code>. For the GitHub fallback, run <code>grep 'part-' SHA256SUMS | sha256sum -c -</code>, then <code>cat ratan-os-lite-ai-amd64.iso.part-* &gt; ratan-os-lite-ai-amd64.iso</code>, followed by <code>sha256sum -c SHA256SUMS</code>. The expected final ISO SHA-256 is <code>7aa2c6a95a71bf99df2c3d774a817419295664403eb56b15dceb7b1f3531a90d</code>.</p>
     </section>
 
     <section class="section">
@@ -123,8 +124,8 @@
         <article class="card">
           <div class="number">AI EDITION</div>
           <h3>v1.2.0 · 3.0 GiB ISO</h3>
-          <p>Includes Qwen3-4B, local AI launcher and all Lite Tool Collections. It needs two downloads and at least 6 GB RAM; 8 GB or more is recommended.</p>
-          <a class="btn primary" href="https://github.com/Ratan-patel/ratan-os/releases/tag/v1.2.0" target="_blank" rel="noopener">Download AI Edition</a>
+          <p>Includes Qwen3-4B, local AI launcher and all Lite Tool Collections. The complete ISO is available as one Google Drive download; at least 6 GB RAM is required and 8 GB or more is recommended.</p>
+          <a class="btn primary" href="https://drive.usercontent.google.com/download?id=10i_niB_lrL7q8Mg4lL9GLb3UmEjAGFtl&amp;export=download&amp;confirm=t" target="_blank" rel="noopener">Download AI Edition</a>
         </article>
         <article class="card">
           <div class="number">COMPACT LITE ARCHIVE</div>
