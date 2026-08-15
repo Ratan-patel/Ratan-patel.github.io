@@ -2,7 +2,7 @@
 
 ## Positioning
 
-Ratan OS should be presented as a **Debian-based live environment for authorized security learning, defensive analysis and controlled assessment labs**. The original v1.0.0 and Lite v1.1.0 editions are free downloads, while the Lite AI Edition adds offline Qwen3-4B inference through llama.cpp, no API key at runtime, QEMU BIOS support and transparent checksum/reassembly documentation.
+Ratan OS should be presented as a **Debian-based live environment for authorized ethical hacking practice, defensive analysis and controlled assessment labs**. The original v1.0.0 and Lite v1.1.0 editions are free downloads, while the Lite AI Edition adds offline Qwen3-4B inference through llama.cpp, no API key at runtime, QEMU BIOS support and transparent checksum/reassembly documentation.
 
 The download itself remains free. The paid offer should be described separately as optional setup support from **INR 799**, with deliverables and scope confirmed before payment. Do not describe the product as a hacking-for-hire service, an anonymous attack platform or a tool for bypassing access controls.
 
@@ -10,7 +10,7 @@ The download itself remains free. The paid offer should be described separately 
 
 | Search intent | Target page | Suggested phrase family |
 |---|---|---|
-| Offline security-learning OS | `ratan-os-release.html` | offline cybersecurity Linux, Debian security lab OS, authorized security testing live ISO |
+| Offline ethical-hacking lab OS | `ratan-os-release.html` | offline ethical-hacking Linux, Debian security lab OS, authorized security testing live ISO |
 | Local AI security assistant | `ratan-os-release.html` | offline Qwen3-4B Linux, local llama.cpp security assistant, no-API-key AI lab |
 | QEMU lab setup | `ratan-os-release.html` | QEMU BIOS cybersecurity lab, bootable Debian security ISO, ISO checksum verification |
 | Setup and training support | `ratan-monetization-launch-kit.html` | Ratan OS setup support, cybersecurity lab setup India, authorized ethical hacking training |

@@ -8,7 +8,7 @@
 
 Ratan OS Lite AI Edition v1.2.0 ka **QCOW2 smartphone-virtualization special** ab available hai.
 
-A portable QCOW2 virtual-disk image for compatible Android/x86_64 virtualization apps, with offline Qwen3-4B AI, llama.cpp and a focused Debian security-learning environment. Use it for QEMU/VM lab work, defensive analysis and authorized security learning.
+A portable QCOW2 virtual-disk image for compatible Android/x86_64 virtualization apps, with offline Qwen3-4B AI, llama.cpp and a focused Debian ethical-hacking lab environment. Use it for QEMU/VM lab work, defensive analysis and authorized ethical hacking practice.
 
 Download: https://ratan-patel.github.io/ratan-os-release.html
 Direct QCOW2: https://drive.usercontent.google.com/download?id=1mdewl8U6RIACTw3uNAoNuVjADjg9OaWz&export=download&confirm=t
@@ -30,6 +30,6 @@ Direct QCOW2 download: https://drive.usercontent.google.com/download?id=1mdewl8U
 
 QCOW2 SHA-256: a409dd934fc35947e033325987498127670bbcde5afc745b091015e035cccf69
 
-The image is for authorized security learning, defensive validation and isolated labs only. Users must have explicit written authorization and agreed scope; credential theft, phishing, malware, persistence, DDoS and destructive activity are excluded.
+The image is for authorized ethical hacking practice, defensive validation and isolated labs only. Users must have explicit written authorization and agreed scope; credential theft, phishing, malware, persistence, DDoS and destructive activity are excluded.
 
 #RatanOS #RatanAI #Virtualization #QCOW2 #QEMU #Cybersecurity #DefensiveSecurity #Linux
