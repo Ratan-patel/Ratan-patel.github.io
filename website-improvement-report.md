@@ -45,7 +45,20 @@ Homepage पर Academy का compact pricing preview और `// ACADEMY` navig
 
 बदलाव live `main` branch पर publish नहीं किए गए हैं। वे स्थानीय branch `improve/gemini-audit-2026` में commit `534ddf7` पर हैं। Patch file साथ में दी गई है ताकि आप बदलावों की समीक्षा कर सकें। यदि आप चाहें तो अगला कदम GitHub पर branch push करना, pull request बनाना, या आपकी स्पष्ट अनुमति के बाद `main` में merge करना हो सकता है।
 
+## RATAN AI V5 implementation
+
+RATAN AI के लिए public page `ai/index.html` और chat route `ai/chat/index.html` बनाए गए हैं। Public page में v1 Gemini 1.5, v2 Gemini 2.0, v3 Gemini 2.5, v4 Gemini 3.6 और v5 Gemini 3.7 Flash की पूरी version history है। v5 को **LIVE NOW** mark किया गया है। Explorer free, Pro ₹499 और Expert ₹1,499 plans उसी page पर हैं। Chat route noindex है और उसमें access gate, responsible-use notice तथा Gemini 3.7 Flash chat composer है।
+
+Gemini API key को static frontend में नहीं रखा गया। `cloudflare/worker.js` में server-side proxy तैयार है। Worker `GEMINI_API_KEY` और `RATAN_AI_ACCESS_CODE` को secrets के रूप में अपेक्षित करता है, invalid access पर 401 और unconfigured deployment पर 503 देता है, message length सीमित करता है, और Gemini Interactions API के stable model string `gemini-3.7-flash` को call करता है। Worker unit test में model selection, upstream API-key header, access-code gate और response parsing सफल रहे।
+
+अभी live chat को production में स्वीकार करने से पहले Cloudflare Worker deploy करना, दोनों secrets configure करना और वास्तविक identity provider या managed access layer जोड़ना बाकी है। Static email/access-code gate केवल UI gate है; असली security boundary Worker secret check है। GitHub Pages custom `/api/ai/chat` reverse proxy नहीं देता, इसलिए या तो Worker URL को `window.RATAN_AI_PROXY_URL` में configure करना होगा, या custom domain/reverse proxy के पीछे `/api/ai/chat` map करना होगा।
+
+Google की आधिकारिक guidance के अनुसार API key को client-side code में expose नहीं करना चाहिए; इसी कारण यह separation रखा गया है [3]। Google की current model list में `gemini-3.7-flash` stable model endpoint के रूप में दर्ज है [4]। Interactions API request shape और multi-turn `previous_interaction_id` flow official text-generation guide के अनुरूप है [5]।
+
 ## References
 
 [1]: https://ratan-patel.github.io/ "Ratan Patel public website"
 [2]: https://aistudio.google.com/ "Google AI Studio"
+[3]: https://ai.google.dev/gemini-api/docs/api-key "Google Gemini API key and security guidance"
+[4]: https://ai.google.dev/gemini-api/docs/models "Google Gemini API model list"
+[5]: https://ai.google.dev/gemini-api/docs/text-generation "Google Gemini API text generation and Interactions API"

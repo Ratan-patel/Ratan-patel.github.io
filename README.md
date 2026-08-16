@@ -18,6 +18,9 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 | AI Security & LLM Red Teaming | [ai-security-llm-red-teaming.html](https://ratan-patel.github.io/ai-security-llm-red-teaming.html) | Course track |
 | Portfolio | [ratan_patel_portfolio.html](https://ratan-patel.github.io/ratan_patel_portfolio.html) | Full portfolio |
 | Resume | [ratan_patel_resume.html](https://ratan-patel.github.io/ratan_patel_resume.html) | Print-friendly CV |
+| Cyber Security Academy | [academy.html](https://ratan-patel.github.io/academy.html) | Three paid learning tracks and Full Academy bundle |
+| RATAN AI | [/ai/](https://ratan-patel.github.io/ai/) | V1→V5 product page, current Gemini 3.7 Flash assistant and plans |
+| RATAN AI Chat | [/ai/chat/](https://ratan-patel.github.io/ai/chat/) | Access-gated chat UI for the server-side Gemini proxy |
 | Monetization launch kit | [ratan-monetization-launch-kit.html](https://ratan-patel.github.io/ratan-monetization-launch-kit.html) | Services, courses, AI plans |
 
 

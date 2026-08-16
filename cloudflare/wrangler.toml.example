@@ -1,0 +1,12 @@
+name = "ratan-ai-api"
+main = "worker.js"
+compatibility_date = "2026-08-16"
+
+# Deploy from this directory with your Cloudflare account, then set secrets:
+# wrangler secret put GEMINI_API_KEY
+# wrangler secret put RATAN_AI_ACCESS_CODE
+# Do not commit real secret values.
+
+[vars]
+# The Worker uses the stable Gemini 3.7 Flash model string:
+# MODEL = "gemini-3.7-flash"

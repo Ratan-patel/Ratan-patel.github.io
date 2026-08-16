@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RATAN AI Chat | V5 Gemini 3.7 Flash</title>
+  <meta name="description" content="RATAN AI V5 live chat powered by a secure server-side Gemini API proxy.">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="../../commercial.css">
+  <style>
+    .chat-shell{max-width:920px}.chat-head{padding:28px 0 20px}.chat-head h1{font-size:clamp(36px,7vw,64px);line-height:.98;letter-spacing:-.07em;margin:12px 0}.chat-head p{max-width:720px;color:var(--muted)}.live-pill{display:inline-flex;gap:7px;align-items:center;color:var(--mint);font:800 11px ui-monospace,monospace;letter-spacing:.08em}.live-pill i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}.gate{max-width:520px}.gate label{display:block;color:var(--muted);font:700 11px ui-monospace,monospace;letter-spacing:.08em;margin:12px 0 6px}.gate input{width:100%;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px Inter,sans-serif}.gate input:focus{outline:2px solid var(--cyan);outline-offset:2px}.gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.status{min-height:22px;color:var(--muted);font-size:12px;margin-top:12px}.chat-card{display:none;margin-top:22px}.chat-card.ready{display:block}.messages{min-height:340px;max-height:56vh;overflow:auto;display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(3,10,14,.76)}.message{max-width:82%;padding:12px 14px;border-radius:12px;color:#d9e8e5;white-space:pre-wrap;font-size:14px}.message.user{justify-self:end;background:rgba(99,217,255,.14);border:1px solid rgba(99,217,255,.3)}.message.assistant{justify-self:start;background:rgba(109,242,194,.08);border:1px solid rgba(109,242,194,.2)}.message.system{justify-self:center;max-width:100%;color:var(--muted);font-size:12px;background:rgba(255,200,87,.07);border:1px solid rgba(255,200,87,.2)}.composer{display:flex;gap:10px;margin-top:12px}.composer textarea{flex:1;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px/1.5 Inter,sans-serif}.composer button{align-self:flex-end}.privacy-note{color:var(--muted);font-size:12px;margin-top:12px}.navrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.navrow a{color:var(--muted)}.navrow a:hover{color:var(--mint)}
+  </style>
+</head>
+<body>
+  <main class="wrap chat-shell">
+    <header class="chat-head">
+      <div class="mono">RATAN AI // /AI/CHAT</div>
+      <h1>V5 live <span style="color:var(--mint)">assistant.</span></h1>
+      <p><span class="live-pill"><i></i> GEMINI 3.7 FLASH · LIVE NOW</span><br>Use this chat for authorized security learning, defensive planning, report drafting and safe lab support. Do not submit passwords, API keys, personal data or confidential client information.</p>
+      <div class="navrow"><a href="../">← RATAN AI product page</a><a href="../../index.html">Portfolio</a><a href="../../acceptable-use.html">Acceptable use</a></div>
+    </header>
+
+    <section class="module gate" id="access-gate" aria-labelledby="gate-title">
+      <span class="tag">ACCESS // SIGN-IN GATE</span>
+      <h2 id="gate-title">Continue to RATAN AI chat</h2>
+      <p class="section-intro">Enter your email and access code. The static page does not store your password. Production deployment must connect this gate to a real identity provider or a server-side access code before accepting paid users.</p>
+      <label for="email">EMAIL</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+      <label for="access-code">ACCESS CODE</label><input id="access-code" type="password" autocomplete="one-time-code" placeholder="Provided after access confirmation">
+      <div class="gate-actions"><button class="btn primary" id="enter" type="button">Enter secure chat</button><a class="btn" href="mailto:patelratan460@gmail.com?subject=RATAN%20AI%20chat%20access%20request">Request access</a></div>
+      <div class="status" id="gate-status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="module chat-card" id="chat-card" aria-labelledby="chat-title">
+      <span class="tag">V5 // GEMINI 3.7 FLASH</span>
+      <h2 id="chat-title">RATAN AI conversation</h2>
+      <div class="messages" id="messages" role="log" aria-live="polite"><div class="message system">You are connected to the RATAN AI chat interface. Ask about authorized learning, defensive design, report structure or safe lab methodology.</div></div>
+      <form class="composer" id="composer"><textarea id="prompt" maxlength="4000" placeholder="Ask a safe, authorized cybersecurity learning question…" aria-label="Message for RATAN AI"></textarea><button class="btn primary" id="send" type="submit">Send</button></form>
+      <div class="privacy-note">For privacy and safety, never paste production secrets or real customer data. Chat requests are sent to the configured server-side proxy; the browser never receives the Gemini API key.</div>
+    </section>
+  </main>
+  <script>
+    const RATAN_AI_CONFIG={endpoint:window.RATAN_AI_PROXY_URL||'/api/ai/chat'};
+    const gate=document.getElementById('access-gate'),chat=document.getElementById('chat-card'),status=document.getElementById('gate-status'),email=document.getElementById('email'),code=document.getElementById('access-code'),messages=document.getElementById('messages'),prompt=document.getElementById('prompt'),send=document.getElementById('send');
+    let accessCode='',previousInteractionId='';
+    function addMessage(kind,text){const el=document.createElement('div');el.className='message '+kind;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
+    document.getElementById('enter').addEventListener('click',()=>{if(!email.value.trim()||!email.checkValidity()){status.textContent='Enter a valid email address first.';email.focus();return}accessCode=code.value.trim();gate.hidden=true;chat.classList.add('ready');status.textContent='';prompt.focus()});
+    document.getElementById('composer').addEventListener('submit',async event=>{event.preventDefault();const text=prompt.value.trim();if(!text||send.disabled)return;addMessage('user',text);prompt.value='';send.disabled=true;send.textContent='Thinking…';const reply=addMessage('assistant','');try{const response=await fetch(RATAN_AI_CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Ratan-Access-Code':accessCode},body:JSON.stringify({email:email.value.trim(),message:text,previousInteractionId})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'The secure chat proxy is not available yet.');reply.textContent=data.text||'No text response was returned.';previousInteractionId=data.interactionId||previousInteractionId}catch(error){reply.textContent='Chat is not connected yet: '+error.message;addMessage('system','Deployment note: configure the server-side Gemini proxy and access gate before accepting live users.')}finally{send.disabled=false;send.textContent='Send';prompt.focus()}});
+  </script>
+</body>
+</html>
