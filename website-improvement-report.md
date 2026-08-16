@@ -45,6 +45,12 @@ Homepage पर Academy का compact pricing preview और `// ACADEMY` navig
 
 बदलाव live `main` branch पर publish नहीं किए गए हैं। वे स्थानीय branch `improve/gemini-audit-2026` में commit `534ddf7` पर हैं। Patch file साथ में दी गई है ताकि आप बदलावों की समीक्षा कर सकें। यदि आप चाहें तो अगला कदम GitHub पर branch push करना, pull request बनाना, या आपकी स्पष्ट अनुमति के बाद `main` में merge करना हो सकता है।
 
+## Academy course reference update
+
+Academy के तीन paid tracks अब वास्तविक ethical-hacking/cybersecurity curriculum themes पर आधारित हैं। पहला track **Cybersecurity Foundations & Ethical Hacking** है, जो Harvard के CS50 Introduction to Cybersecurity topics—hacking/cracking, social-engineering risks, passwords, MFA और defensive foundations—से प्रेरित है [6]। दूसरा track **Offensive Security & Web Application Testing** है, जो MIT xPRO Professional Certificate in Cybersecurity के vulnerability testing, simulated web-application attacks और learn-by-doing themes से प्रेरित है [7]। तीसरा track **Cyber Defence, Threat Detection & Systems Security** है, जो Oxford Advanced Security तथा Oxford MSc in Software and Systems Security के attack detection, threat modelling, SOC/incident response, secure programming, network/cloud security और governance themes से प्रेरित है [8] [9]।
+
+Page copy में स्पष्ट कर दिया गया है कि RATAN Academy स्वतंत्र है और Harvard, MIT या Oxford से affiliated, accredited या certified होने का दावा नहीं करती। University names केवल public curriculum references के रूप में links सहित दिखाए गए हैं। User-provided prices और durations unchanged हैं: ₹9,999/12 weeks, ₹14,999/14 weeks और ₹12,999/10 weeks; Full Academy bundle ₹32,999 है।
+
 ## RATAN AI V5 implementation
 
 RATAN AI के लिए public page `ai/index.html` और chat route `ai/chat/index.html` बनाए गए हैं। Public page में v1 Gemini 1.5, v2 Gemini 2.0, v3 Gemini 2.5, v4 Gemini 3.6 और v5 Gemini 3.7 Flash की पूरी version history है। v5 को **LIVE NOW** mark किया गया है। Explorer free, Pro ₹499 और Expert ₹1,499 plans उसी page पर हैं। Chat route noindex है और उसमें access gate, responsible-use notice तथा Gemini 3.7 Flash chat composer है।
@@ -62,3 +68,7 @@ Google की आधिकारिक guidance के अनुसार API ke
 [3]: https://ai.google.dev/gemini-api/docs/api-key "Google Gemini API key and security guidance"
 [4]: https://ai.google.dev/gemini-api/docs/models "Google Gemini API model list"
 [5]: https://ai.google.dev/gemini-api/docs/text-generation "Google Gemini API text generation and Interactions API"
+[6]: https://pll.harvard.edu/course/cs50s-introduction-cybersecurity "Harvard CS50's Introduction to Cybersecurity"
+[7]: https://xpro.mit.edu/courses/course-v1:xPRO-PCCYx/ "MIT xPRO Professional Certificate in Cybersecurity"
+[8]: https://www.cs.ox.ac.uk/teaching/courses/2024-2025/advsec/ "Oxford Advanced Security"
+[9]: https://www.ox.ac.uk/admissions/graduate/courses/msc-software-and-systems-security "Oxford MSc in Software and Systems Security"
