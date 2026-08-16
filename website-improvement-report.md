@@ -35,6 +35,12 @@
 
 Attachment में sample report के भीतर token-जैसा और internal-host-जैसा text था। उसे live-looking credential या target detail के रूप में copy नहीं किया गया। Integrated viewer केवल `<redacted-example-token>`, `example-records` और `example.invalid` जैसे clearly fictional placeholders इस्तेमाल करता है और UI पर साफ़ लिखा है कि इसमें कोई real client data, credential या target detail नहीं है। Tab interaction `textContent` के माध्यम से सुरक्षित रूप से update होती है, इसलिए sample payload HTML injection का रास्ता नहीं बनाता।
 
+## नई Cyber Security Academy architecture
+
+नई Academy को अलग landing page `academy.html` में बनाया गया है। उसमें तीन paid tracks अलग cards में हैं: **Cyber Security Foundations** — ₹9,999 और 12 weeks; **Offensive Systems Security** — ₹14,999 और 14 weeks; तथा **Cyber Risk, Operations & Strategy** — ₹12,999 और 10 weeks। Full Academy Program तीनों tracks को ₹32,999 में जोड़ता है। सूची-मूल्य ₹37,997 होने के कारण exact saving ₹4,998 है, इसलिए UI में इसे **approximately ₹5,000 saving** लिखा गया है; यह pricing arithmetic को ईमानदारी से दर्शाता है।
+
+Homepage पर Academy का compact pricing preview और `// ACADEMY` navigation link जोड़े गए हैं। पहले से मौजूद practical learning material को **Existing Learning Tracks** नाम देकर अलग रखा गया है। RATAN OS का existing `#ratanos` section और RATAN AI के existing external CTAs को बदला नहीं गया; Academy footer में भी दोनों अलग product links के रूप में दिखते हैं। Academy page को `sitemap.xml` में भी जोड़ा गया है।
+
 ## Git स्थिति
 
 बदलाव live `main` branch पर publish नहीं किए गए हैं। वे स्थानीय branch `improve/gemini-audit-2026` में commit `534ddf7` पर हैं। Patch file साथ में दी गई है ताकि आप बदलावों की समीक्षा कर सकें। यदि आप चाहें तो अगला कदम GitHub पर branch push करना, pull request बनाना, या आपकी स्पष्ट अनुमति के बाद `main` में merge करना हो सकता है।
