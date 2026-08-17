@@ -72,3 +72,8 @@ Google की आधिकारिक guidance के अनुसार API ke
 [7]: https://xpro.mit.edu/courses/course-v1:xPRO-PCCYx/ "MIT xPRO Professional Certificate in Cybersecurity"
 [8]: https://www.cs.ox.ac.uk/teaching/courses/2024-2025/advsec/ "Oxford Advanced Security"
 [9]: https://www.ox.ac.uk/admissions/graduate/courses/msc-software-and-systems-security "Oxford MSc in Software and Systems Security"
+
+
+## Homepage Academy offer
+
+Homepage के सबसे ऊपर वाले featured-offer strip को `FEATURED OFFERS // FIVE PATHS` में बदला गया है। इसमें RATAN Academy का gold-accented card अब सीधे दिखाई देता है: तीन ethical-hacking tracks, ₹9,999 से starting price, Full Academy ₹32,999 और लगभग ₹5,000 saving के साथ `VIEW ACADEMY OFFER` CTA। यह card `academy.html` पर जाता है; RATAN AI, RATAN OS, free ethical-hacking starter और VAPT/services cards अलग बने हुए हैं।
