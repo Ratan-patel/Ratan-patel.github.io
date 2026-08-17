@@ -59,3 +59,5 @@ Top offers restoration QA: the pink `// SERVICES_&_OFFERS` band now appears imme
 
 
 Latest strip relocation QA: the Research Center page now opens directly with its hero under the navigation; the former opening pink `// SERVICES_&_OFFERS` strip is absent. The homepage still shows the full-width pink strip immediately below the menu and above the profile-photo hero. The five offer cards, USDT copy, links, and Research Center content remain present.
+
+No-pink offers redesign QA: homepage offers strip now uses a dark navy/black base with cyan, mint and white highlights; all pink tokens were removed from the strip. The strip is compact, readable, remains immediately below the menu and above the profile photo hero, and all five offer cards, USDT text and links remain intact. Local HTML parse, no-pink token scan, diff check and HTTP 200 passed; browser preview visually confirmed the new palette and placement.
