@@ -57,3 +57,5 @@ Safe research dashboard QA: user-supplied NEXUS-X concept was adapted into the c
 
 Top offers restoration QA: the pink `// SERVICES_&_OFFERS` band now appears immediately after the Research Center page header and before the hero on initial load. Browser preview shows RATAN AI, RATAN OS, Ethical Hacking Courses, VAPT/Services and RATAN Research Center cards with their USDT copy and links. The merged Research Center hero and safe simulated dashboard remain intact below. HTML parsing, exact main→offers→hero order, required card/link checks and local HTTP delivery passed.
 
+
+Latest strip relocation QA: the Research Center page now opens directly with its hero under the navigation; the former opening pink `// SERVICES_&_OFFERS` strip is absent. The homepage still shows the full-width pink strip immediately below the menu and above the profile-photo hero. The five offer cards, USDT copy, links, and Research Center content remain present.
