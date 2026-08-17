@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Security Insights | Ratan Patel</title>
+  <meta name="description" content="Practical cybersecurity insights from Ratan Patel: API authorization, VAPT readiness and safe AI security testing.">
+  <link rel="canonical" href="https://ratan-patel.github.io/insights.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Security Insights | Ratan Patel">
+  <meta property="og:description" content="Practical, authorization-first guidance for teams and ethical-hacking learners.">
+  <meta property="og:url" content="https://ratan-patel.github.io/insights.html">
+  <meta name="theme-color" content="#050b10">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="commercial.css">
+</head>
+<body>
+  <header class="site-nav"><div class="nav-inner"><a class="brand" href="index.html">RATAN_PATEL.SEC</a><nav class="nav-links" aria-label="Primary navigation"><a href="index.html">HOME</a><a href="academy.html">ACADEMY</a><a href="ratan-monetization-launch-kit.html">RATAN ACADEMY OFFER</a><a href="services.html">SERVICES</a><a href="insights.html" aria-current="page">INSIGHTS</a><a href="ai/" target="_blank" rel="noopener">RATAN AI</a><a href="index.html#contact">CONTACT</a></nav></div></header>
+  <main class="shell">
+    <section class="hero"><div class="eyebrow">RATAN_PATEL // SECURITY INSIGHTS</div><h1>Useful security thinking, without the theatre.</h1><p>Short, practical notes for product teams, security learners and authorised testers. These articles are educational guidance, not a substitute for a scoped assessment or legal authorization.</p><div class="hero-actions"><a class="btn primary" href="services.html">Request a scope conversation</a><a class="btn" href="academy.html">Explore RATAN Academy</a></div></section>
+    <section class="section"><h2>Field notes for <span style="color:var(--mint)">better decisions</span></h2><p class="section-intro">Start with the risk that most often becomes expensive later: unclear authorization, weak access control, poor evidence and untested AI boundaries.</p><div class="grid">
+      <article class="card"><div class="number">01 // API SECURITY</div><h3>Before a VAPT: make your API testable</h3><p>Prepare a written scope, test accounts, route inventory, environment boundary and a named incident contact. Validate authentication separately from authorization; a valid login does not prove that every object or action is correctly protected.</p><span class="chip">AuthN / AuthZ</span><span class="chip">API inventory</span><span class="chip">Evidence-ready</span><p class="micro">Reference: <a href="https://owasp.org/API-Security/editions/2023/en/0x11-t10/" target="_blank" rel="noopener">OWASP API Security Top 10</a>.</p></article>
+      <article class="card"><div class="number">02 // ACCESS CONTROL</div><h3>BOLA/IDOR is a business-risk problem</h3><p>Broken object-level authorization appears when an application accepts a record identifier without checking whether the authenticated subject is allowed to access that record. Test only in an approved lab or staging environment, preserve minimal evidence and report the business impact without extracting real customer data.</p><span class="chip">Server-side checks</span><span class="chip">Least privilege</span><span class="chip">Safe evidence</span><p class="micro">Reference: <a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/" target="_blank" rel="noopener">OWASP Broken Access Control</a>.</p></article>
+      <article class="card"><div class="number">03 // AI SECURITY</div><h3>Prompt injection is an application boundary issue</h3><p>Do not treat a model instruction as a security boundary. Separate untrusted content from system policy, restrict tools by least privilege, validate outputs and log high-risk actions. Never paste production secrets or personal data into an unapproved assistant.</p><span class="chip">Tool boundaries</span><span class="chip">Data handling</span><span class="chip">Human review</span><p class="micro">Reference: <a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP Top 10 for LLM Applications</a>.</p></article>
+    </div></section>
+    <section class="section"><div class="callout"><div><h2>Need advice for a real environment?</h2><p>Share the business objective, approximate asset count and authorization status. Do not send passwords, API keys, OTPs, customer data or exploit payloads in the first message.</p></div><a class="btn primary" href="services.html">Review authorized services</a></div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>© 2026 RATAN_PATEL.SEC · Lawful security testing and education only.</span><span><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a></span></div></footer>
+</body>
+</html>

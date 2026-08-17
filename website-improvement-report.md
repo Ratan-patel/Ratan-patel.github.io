@@ -82,3 +82,14 @@ Homepage के सबसे ऊपर वाले featured-offer strip को 
 ## Menu Offers page Academy callout
 
 The menu bar `// OFFERS` route, `ratan-monetization-launch-kit.html`, now opens with a prominent `00 // RATAN ACADEMY OFFER` callout. It shows the three ethical-hacking track prices, the Full Academy price of INR 32,999, the exact INR 4,998 saving, and an `Explore RATAN Academy` CTA to `academy.html`. The existing standalone courses, VAPT/Red Team services, RATAN OS and RATAN AI offers remain separate below it. Local link and pricing checks passed.
+
+
+## Business audit pass — August 2026
+
+The pasted business audit was cross-checked against the live homepage and source code. The most concrete issue was the hero counters rendering as zero; the HTML now contains truthful fallback values of `500+` and `6+`, while the animation can still enhance them when JavaScript runs. The hero now has a clearer conversion hierarchy: `REQUEST A SCOPE CALL`, `JOIN RATAN ACADEMY`, `TRY RATAN AI`, and `FREE RATAN OS DOWNLOADS`, followed by an enterprise scope note.
+
+Lead capture remains intentionally privacy-preserving because the current GitHub Pages site has no hosted form backend. The inquiry form still opens an email draft, but it now has a visible WhatsApp fallback. No CRM or Formspree endpoint was invented without a user-owned account and consent. The credentials section now offers a request-verification-details path without fabricating a public EC-Council verification URL.
+
+The homepage now links to a new `insights.html` page with three practical, authorization-first articles on API readiness, BOLA/IDOR and AI security boundaries, each linking to the relevant OWASP reference. RATAN OS now has a working `#verification` anchor from the homepage trust CTA, and the top offer copy distinguishes free downloads from optional INR 4,999 setup/checksum support. The CMU handbook copy now explicitly describes itself as an independent reference and not a CMU course, credential or partnership. Services now explain that international teams may request a USD quote while INR values remain the source starting points.
+
+Static QA after the changes: 21 HTML pages, zero broken local targets, zero duplicate IDs, zero old external RATAN AI links, Academy pricing math passed, Insights route present, verification anchor present, counter fallback present, WhatsApp fallback present, non-affiliation wording present, and the old paid-download wording removed.
