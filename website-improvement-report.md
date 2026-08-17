@@ -134,3 +134,9 @@ The homepage Featured Offers strip was moved into the existing Services area and
 ## RATAN Research Center single-page consolidation
 
 The standalone `research-center.html` route has been removed. Its research divisions, public artifacts, responsible-disclosure references, free resources and collaboration section are now merged into `ratan-monetization-launch-kit.html`, whose public title and hero now identify **RATAN Research Center**. The homepage `// SERVICES_&_OFFERS` block remains in the Services area, and all public navigation now uses the single RATAN Research Center route. Obsolete `RATAN RESEARCH CENTER OFFER`, `RESEARCH_CENTER` and standalone route references were removed from public HTML/XML. Local parsing, HTTP, naming and route checks passed.
+
+## Safe simulated Research Center dashboard
+
+The supplied cybernetics dashboard concept was adapted into the consolidated RATAN Research Center page as a fictional, lab-only interface. It includes simulation-mode metrics, a synthetic event feed, Web/API and AI-defense research panels, post-quantum study concepts, an illustrative artifact table, isolated research pods and a local-only terminal demo accepting only `help`, `status` and `clear`. The interface explicitly states that it is not live telemetry, a scanner, a bounty platform, a client report or an external API integration.
+
+Real-looking target IPs, device banners, live surveillance claims, unverifiable CVE claims, exploit payloads, shellcode, Shodan execution, fuzzing actions, remote access and network calls were excluded. Visual, HTML, unsafe-term and no-network-action QA passed locally.
