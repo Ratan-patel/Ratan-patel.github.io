@@ -118,3 +118,7 @@ Public price labels across the homepage, RATAN ACADEMY OFFER, services, RATAN OS
 
 [10]: https://paybis.com/usdt-to-inr/100/ "Paybis USDT to INR reference rate"
 [11]: https://wise.com/in/currency-converter/inr-to-usd-rate/history "Wise INR to USD mid-market reference rate"
+
+## Pink/magenta visual theme update
+
+Yellow and amber visual accents were removed from the active website styles and replaced with bright pink/magenta accents. This includes the homepage Academy card, commercial/product pages, the Academy rainbow panel's warm-yellow stop, the legacy portfolio stylesheet, the browser lab, the RATAN AI chat system message, and standalone course handbook accents. The rainbow Academy panel retains its multi-color effect but now uses pink instead of yellow for the warm stop. Local HTML parsing, stale-yellow scanning, HTTP delivery checks and visual previews passed.

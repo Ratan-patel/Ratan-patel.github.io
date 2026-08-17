@@ -45,3 +45,5 @@ USDT-only pricing visual QA: Homepage featured Academy strip now visibly shows a
 
 Rainbow Academy panel QA: local RATAN Academy Offer opening callout now renders with a multi-color red/amber/green/cyan/violet/pink gradient over a dark cyber base, white Full Academy USDT price and readable light text. The gradient animation has a 14-second cycle and disables under prefers-reduced-motion; responsive layout remains intact.
 
+Pink theme QA: Homepage featured RATAN Academy card now renders with a bright pink/magenta panel, pink CTA and pale-pink offer text instead of the former yellow/amber accent. RATAN Academy Offer opening callout keeps the rainbow gradient but its warm yellow stop is now pink/magenta; track chips and USDT pricing remain readable. Local visual previews show correct contrast and responsive layout.
+
