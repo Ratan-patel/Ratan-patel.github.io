@@ -77,3 +77,8 @@ Google की आधिकारिक guidance के अनुसार API ke
 ## Homepage Academy offer
 
 Homepage के सबसे ऊपर वाले featured-offer strip को `FEATURED OFFERS // FIVE PATHS` में बदला गया है। इसमें RATAN Academy का gold-accented card अब सीधे दिखाई देता है: तीन ethical-hacking tracks, ₹9,999 से starting price, Full Academy ₹32,999 और लगभग ₹5,000 saving के साथ `VIEW ACADEMY OFFER` CTA। यह card `academy.html` पर जाता है; RATAN AI, RATAN OS, free ethical-hacking starter और VAPT/services cards अलग बने हुए हैं।
+
+
+## Menu Offers page Academy callout
+
+The menu bar `// OFFERS` route, `ratan-monetization-launch-kit.html`, now opens with a prominent `00 // RATAN ACADEMY OFFER` callout. It shows the three ethical-hacking track prices, the Full Academy price of INR 32,999, the exact INR 4,998 saving, and an `Explore RATAN Academy` CTA to `academy.html`. The existing standalone courses, VAPT/Red Team services, RATAN OS and RATAN AI offers remain separate below it. Local link and pricing checks passed.
