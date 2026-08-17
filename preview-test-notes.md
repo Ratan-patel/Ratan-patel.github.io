@@ -39,3 +39,5 @@ Payment-method QA: local offer page visibly reloads with a direct `View payment 
 
 IMPORTANT: This section contains public payment instructions. Confirm recipient, network and amount in writing before accepting any payment; never request or expose PINs, OTPs, seed phrases or private keys.
 
+Live payment verification: GitHub Pages workflow completed successfully. Cache-busted live checks returned offer page HTTP 200, with UPI ID, supplied USDT ERC-20 wallet, USD reference-only wording, copy control and services USDT-equivalent quote all present.
+
