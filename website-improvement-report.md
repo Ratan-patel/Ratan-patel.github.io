@@ -130,3 +130,7 @@ The homepage public navigation and content were simplified by removing Insights,
 ## Research Center page and Services & Offers relocation
 
 The homepage Featured Offers strip was moved into the existing Services area and retitled `// SERVICES_&_OFFERS`; the offer cards' prices, links and card copy were preserved. The homepage now includes a `// RESEARCH_CENTER` navigation link. A new `research-center.html` page uses the existing dark commercial theme and contains an authorized/lab-based ethics banner, four research divisions, sanitized Research Artifact #001, an independent CMU MSIS themes handbook reference, an RRC-2026-XXX placeholder framework explicitly marked as not a CVE, responsible-disclosure context for Synack/Bugcrowd/HackerOne, free RATAN AI/OS/starter resources and collaboration CTAs for email, WhatsApp and LinkedIn. No new paid tools or connectors were introduced.
+
+## RATAN Research Center single-page consolidation
+
+The standalone `research-center.html` route has been removed. Its research divisions, public artifacts, responsible-disclosure references, free resources and collaboration section are now merged into `ratan-monetization-launch-kit.html`, whose public title and hero now identify **RATAN Research Center**. The homepage `// SERVICES_&_OFFERS` block remains in the Services area, and all public navigation now uses the single RATAN Research Center route. Obsolete `RATAN RESEARCH CENTER OFFER`, `RESEARCH_CENTER` and standalone route references were removed from public HTML/XML. Local parsing, HTTP, naming and route checks passed.
