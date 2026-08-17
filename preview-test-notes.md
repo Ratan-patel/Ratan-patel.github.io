@@ -35,3 +35,7 @@ Credential-removal QA: local homepage renders successfully after removing the cr
 RATAN OS latest-version QA: homepage no longer contains v1.0/v1.0.0/ratan-os-1.0 references. Hero shows OS v1.3.0 Latest CLI Build; the OS section identifies v1.3.0 Ethical CLI (Parrot 7.3, amd64, QEMU/USB) and v1.2.0 Lite AI Edition (Debian XFCE, offline Qwen3-4B, 3.0 GiB). HTML parser and git diff checks passed. Local preview visibly shows the latest RATAN OS 7.3 Ethical CLI offer.
 
 High-resolution website QA: local homepage visibly renders the sharpened portrait in the hero. Browser runtime confirmed the WebP source loaded completely at 1632x2176, with a 3/4 portrait frame and 1600px fluid max-width token at a 1280px viewport. The homepage extraction exposes the HD image asset without broken loading.
+Payment-method QA: local offer page visibly reloads with a direct `View payment methods` CTA and two payment cards. The extracted page confirms UPI ID `9650053559@ybl`, UPI app link, USDT ERC-20-only wording, wallet `0xE06c98E92afd5Ba805293c7162707aA694772c78`, copy buttons, network confirmation mail link, USD reference-only wording, and irreversibility/seed-phrase safety copy. Local HTML parse, diff check and HTTP 200 checks passed.
+
+IMPORTANT: This section contains public payment instructions. Confirm recipient, network and amount in writing before accepting any payment; never request or expose PINs, OTPs, seed phrases or private keys.
+

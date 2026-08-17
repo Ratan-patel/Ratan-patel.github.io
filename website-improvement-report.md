@@ -104,6 +104,10 @@ The standalone Academy landing page has been merged into the menu-linked `RATAN 
 
 The homepage profile portrait was restored/upscaled to a 1632 × 2176 high-resolution asset, with WebP delivery and JPEG fallback. The homepage now uses responsive image dimensions, eager high-priority loading, and updated social/schema image references. The primary homepage container expands to 1600px for large screens, while fluid typography, spacing, hero framing and mobile CTA wrapping improve readability across 4K/8K desktops, tablets and phones. Shared commercial pages use the same 1600px max-width and fluid spacing system. Local QA confirmed the HD WebP/JPEG assets load with HTTP 200, the expected dimensions are present, HTML parsing and diff checks pass, and no stale homepage profile-photo reference remains.
 
+## UPI and international crypto payment flow
+
+The consolidated RATAN ACADEMY OFFER page now keeps the India UPI route (`9650053559@ybl`) and restores the international **USDT ERC-20-only** route using the supplied Ethereum wallet address. The offer page includes direct UPI-app and copy-ID controls, a copy-USDT-address control, a network/amount confirmation email route, and clear manual-confirmation guidance. USD transfer or card checkout is not presented as an available payment method: USD figures are reference-only, and the final international amount is confirmed as USDT before payment. Services pricing now uses a USDT ERC-20 equivalent quote rather than a USD checkout amount. Terms, privacy and refund pages identify UPI UTR and blockchain TX hash as the minimum payment proof and warn users not to share PINs, OTPs, seed phrases or private keys.
+
 ## Credential-verification cleanup
 
 The unnecessary credential-verification CTA, request-verification email link, synthetic CEH verification hash and related verification wording were removed from the public homepage. The education and certification cards remain as ordinary profile information, without inviting verification or presenting a client-side hash as proof. HTML-only scan returned zero credential-verification references, and the local homepage loaded without browser console output.
