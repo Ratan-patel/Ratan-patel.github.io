@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RATAN Research Center | Security Research, Labs &amp; Responsible Disclosure</title>
+  <meta name="description" content="RATAN Research Center: independent, lawful security research across web/API security, AI/LLM security, OS tooling and adversary simulation, with sanitized artifacts and free resources.">
+  <meta name="theme-color" content="#050b10">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="commercial.css">
+  <style>
+    .research-hero{position:relative;overflow:hidden}
+    .research-hero:after{content:'RRC // 2026';position:absolute;right:-8px;bottom:-30px;color:rgba(255,79,163,.08);font:800 clamp(80px,18vw,220px)/1 'Chakra Petch',sans-serif;letter-spacing:-.08em;pointer-events:none}
+    .ethics-banner{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .ethics-banner span{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,79,163,.38);background:rgba(255,79,163,.08);border-radius:999px;padding:8px 11px;color:#ffd6ea;font:800 10px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}
+    .research-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .research-card{min-height:235px;display:flex;flex-direction:column;gap:12px}
+    .research-card .icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(255,79,163,.62);border-radius:12px;background:linear-gradient(135deg,rgba(255,79,163,.2),rgba(0,255,200,.08));color:#ffd6ea;font:800 18px ui-monospace,monospace}
+    .research-card h3{margin:0}
+    .research-card p{margin:0;color:var(--dim)}
+    .research-card .chip{margin-top:auto}
+    .artifact-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:16px}
+    .artifact{display:flex;flex-direction:column;gap:12px}
+    .artifact .artifact-id{color:var(--pink,#ff4fa3);font:800 10px ui-monospace,monospace;letter-spacing:.12em}
+    .artifact .artifact-meta{display:grid;gap:7px;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(3,6,10,.45);font:11px/1.45 ui-monospace,monospace;color:var(--faint)}
+    .artifact .artifact-meta b{color:var(--txt);font-weight:700}
+    .disclosure-grid,.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .platform,.resource{display:flex;flex-direction:column;gap:10px}
+    .platform h3,.resource h3{margin:0}
+    .platform p,.resource p{margin:0;color:var(--dim)}
+    .platform .btn,.resource .btn{margin-top:auto;align-self:flex-start}
+    .collab{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .collab .button-row{flex-shrink:0}
+    @media(max-width:1000px){.research-grid{grid-template-columns:repeat(2,1fr)}.artifact-grid{grid-template-columns:1fr 1fr}.artifact:first-child{grid-column:1/-1}}
+    @media(max-width:700px){.research-grid,.artifact-grid,.disclosure-grid,.resource-grid{grid-template-columns:1fr}.artifact:first-child{grid-column:auto}.collab{display:block}.collab .button-row{margin-top:18px}.ethics-banner span{width:100%;justify-content:center}}
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">RATAN_PATEL.SEC</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">HOME</a>
+        <a href="ratan-monetization-launch-kit.html">RATAN RESEARCH CENTER OFFER</a>
+        <a href="research-center.html">RESEARCH_CENTER</a>
+        <a href="services.html">SERVICES</a>
+        <a href="ai/" target="_blank" rel="noopener">RATAN AI</a>
+        <a href="ratan-os-release.html">RATAN OS</a>
+        <a href="index.html#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero research-hero">
+      <div class="eyebrow">RATAN_PATEL // INDEPENDENT SECURITY RESEARCH</div>
+      <h1>Research the edge.<br><em>Respect the boundary.</em></h1>
+      <p>RATAN Research Center is an independent, lab-first research space for practical security thinking. The work here is designed for authorized testing, reproducible learning, responsible disclosure and clear defensive outcomes.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#research-divisions">Explore research divisions</a>
+        <a class="btn" href="#publications">Read public artifacts</a>
+        <a class="btn" href="#collaborate">Collaborate</a>
+      </div>
+      <div class="ethics-banner" role="note" aria-label="Research ethics boundaries">
+        <span>AUTHORIZED ONLY</span>
+        <span>LAB-BASED</span>
+        <span>NON-DESTRUCTIVE</span>
+        <span>RESPONSIBLE DISCLOSURE</span>
+      </div>
+    </section>
+
+    <section class="section" id="research-divisions">
+      <div class="head"><div class="eyebrow">// RESEARCH_DIVISIONS</div><h2>Four pillars. <em>One responsible practice.</em></h2><p class="section-intro">Each division connects technical depth with safe scope, explicit assumptions and a useful defensive outcome. No public target testing, credential theft, destructive activity or confidential production data is part of this center.</p></div>
+      <div class="research-grid">
+        <article class="card research-card"><div class="icon">01</div><h3>Web &amp; API Security</h3><p>Authorization, authentication, business logic, API exposure and OWASP-aligned review patterns for modern products.</p><span class="chip">BOLA · OAuth · JWT · GraphQL</span></article>
+        <article class="card research-card"><div class="icon">02</div><h3>AI &amp; LLM Security</h3><p>Prompt injection, agent tool use, data leakage, model boundaries and repeatable evaluation of AI security controls.</p><span class="chip">Agents · Guardrails · RAG</span></article>
+        <article class="card research-card"><div class="icon">03</div><h3>OS &amp; Tooling</h3><p>Low-resource lab environments, ethical-hacking workflow design and focused tooling for controlled security work.</p><span class="chip">RATAN OS · Linux · Labs</span></article>
+        <article class="card research-card"><div class="icon">04</div><h3>Adversary Simulation</h3><p>Detection-aware scenarios, lateral-path analysis and executive-ready reporting without crossing authorization boundaries.</p><span class="chip">Purple Team · ATT&amp;CK</span></article>
+      </div>
+    </section>
+
+    <section class="section" id="publications">
+      <div class="head"><div class="eyebrow">// PUBLICATIONS_&amp;_FINDINGS</div><h2>Artifacts with <em>clear provenance.</em></h2><p class="section-intro">Public artifacts are sanitized, educational and deliberately limited. They are not client reports, security guarantees or vulnerability-bounty submissions.</p></div>
+      <div class="artifact-grid">
+        <article class="card artifact"><div class="artifact-id">RESEARCH ARTIFACT #001</div><h3>Authorization Boundary Review</h3><p>A sanitized fictional API artifact showing how a missing server-side ownership check can create a BOLA/IDOR risk.</p><div class="artifact-meta"><span>STATUS <b>EDUCATIONAL / SANITIZED</b></span><span>SCOPE <b>FICTIONAL LAB API</b></span><span>IDENTIFIER <b>RRC-ART-001</b></span><span>NO REAL HOST, TOKEN OR DATA</span></div><a class="btn" href="mailto:patelratan460@gmail.com?subject=Research%20Artifact%20001%20request">Request artifact notes</a></article>
+        <article class="card artifact"><div class="artifact-id">HANDBOOK // CMU MSIS THEMES</div><h3>Security Science Handbook</h3><p>An independent handbook translating graduate-level security themes into field-usable practice. It is not a CMU course, credential or partnership.</p><div class="artifact-meta"><span>TYPE <b>INDEPENDENT REFERENCE</b></span><span>USE <b>THEORY → LAB PRACTICE</b></span></div><a class="btn" href="index.html#vault">Open handbook reference</a></article>
+        <article class="card artifact"><div class="artifact-id">FRAMEWORK // RRC-2026-XXX</div><h3>Publication taxonomy placeholder</h3><p>RRC-2026-XXX is a placeholder framework for future Research Center publications. It is not a CVE, CVE-like claim or published vulnerability identifier.</p><div class="artifact-meta"><span>STATUS <b>PLACEHOLDER ONLY</b></span><span>NO CVE CLAIM</span></div><a class="btn" href="mailto:patelratan460@gmail.com?subject=Research%20publication%20collaboration">Discuss a publication</a></article>
+      </div>
+    </section>
+
+    <section class="section" id="responsible-disclosure">
+      <div class="head"><div class="eyebrow">// RESPONSIBLE_DISCLOSURE</div><h2>Find the right <em>reporting lane.</em></h2><p class="section-intro">Synack, Bugcrowd and HackerOne are established responsible-disclosure ecosystems. This page provides platform context only; it does not claim a current profile, ranking, bounty or platform endorsement.</p></div>
+      <div class="disclosure-grid">
+        <article class="card platform"><div class="number">01 // SYNACK</div><h3>Managed research programs</h3><p>Use the platform’s current program and researcher requirements when an authorized engagement is available.</p><a class="btn" href="https://www.synack.com/red-team/" target="_blank" rel="noopener">Platform reference</a></article>
+        <article class="card platform"><div class="number">02 // BUGCROWD</div><h3>Bug bounty and disclosure</h3><p>Follow the listed program scope, safe-harbor language and disclosure rules before testing anything.</p><a class="btn" href="https://www.bugcrowd.com/hackers/" target="_blank" rel="noopener">Platform reference</a></article>
+        <article class="card platform"><div class="number">03 // HACKERONE</div><h3>Coordinated vulnerability reporting</h3><p>Respect each program’s asset list, rate limits, exclusions and communication workflow.</p><a class="btn" href="https://www.hackerone.com/hackers" target="_blank" rel="noopener">Platform reference</a></article>
+      </div>
+      <div class="notice mint"><strong>Disclosure rule:</strong> never test a public target without permission. Preserve minimal evidence, avoid data access and contact the affected owner through the channel they specify.</div>
+    </section>
+
+    <section class="section" id="free-resources">
+      <div class="head"><div class="eyebrow">// FREE_RESEARCH_RESOURCES</div><h2>Start with <em>open access.</em></h2><p class="section-intro">These public resources are available without a new paid tool or connector. Paid offers, where present elsewhere on the site, remain separate and manually confirmed.</p></div>
+      <div class="resource-grid">
+        <article class="card resource"><div class="number">01 // STARTER TRACK</div><h3>Ethical-hacking starter route</h3><p>Review the public foundation path, lawful-use boundaries and lab-first learning approach before choosing any paid track.</p><a class="btn" href="ethical-hacking-foundation.html">Open starter route</a></article>
+        <article class="card resource"><div class="number">02 // RATAN AI</div><h3>Free prompts and safe planning</h3><p>Use the public RATAN AI page to explore safe recon planning, report drafting, hardening and guided lab prompts.</p><a class="btn" href="ai/" target="_blank" rel="noopener">Open RATAN AI</a></article>
+        <article class="card resource"><div class="number">03 // RATAN OS</div><h3>Free release downloads</h3><p>Review the latest RATAN OS release, checksums and safe-use notes before downloading a lab image.</p><a class="btn" href="ratan-os-release.html">Open OS release center</a></article>
+      </div>
+    </section>
+
+    <section class="section" id="collaborate">
+      <div class="callout collab"><div><div class="number">// COLLABORATE</div><h2>Build a useful artifact, not a louder claim.</h2><p>For a research conversation, sanitized artifact review, authorized assessment or responsible disclosure question, share the objective, scope and preferred channel. Do not send secrets or production data.</p></div><div class="button-row"><a class="btn primary" href="mailto:patelratan460@gmail.com?subject=RATAN%20Research%20Center%20collaboration">Email the Center</a><a class="btn" href="https://wa.me/918700913645?text=Hello%20Ratan%2C%20I%20would%20like%20to%20discuss%20a%20Research%20Center%20collaboration." target="_blank" rel="noopener">WhatsApp</a><a class="btn" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank" rel="noopener">LinkedIn</a></div></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><span>© 2026 RATAN_PATEL.SEC · Independent, lawful security research and education only.</span><span><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="acceptable-use.html">Acceptable Use</a></span></div></footer>
+</body>
+</html>
