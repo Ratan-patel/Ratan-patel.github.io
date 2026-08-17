@@ -47,3 +47,5 @@ Rainbow Academy panel QA: local RATAN Academy Offer opening callout now renders 
 
 Pink theme QA: Homepage featured RATAN Academy card now renders with a bright pink/magenta panel, pink CTA and pale-pink offer text instead of the former yellow/amber accent. RATAN Academy Offer opening callout keeps the rainbow gradient but its warm yellow stop is now pink/magenta; track chips and USDT pricing remain readable. Local visual previews show correct contrast and responsive layout.
 
+Research Center cleanup QA: Homepage navigation now shows only RATAN Research Center Offer, Services, RATAN OS, Live Lab, Portfolio and Contact. Insights, Training, Sample, Profile and Credentials links/sections are absent; the certs console chip is also removed. Homepage featured card and hero CTA now use RATAN Research Center wording. Offer page navigation and opening callout render RATAN RESEARCH CENTER OFFER with Research Center tracks and no Insights link. Local visual layout remains intact.
+

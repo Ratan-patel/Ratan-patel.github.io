@@ -122,3 +122,7 @@ Public price labels across the homepage, RATAN ACADEMY OFFER, services, RATAN OS
 ## Pink/magenta visual theme update
 
 Yellow and amber visual accents were removed from the active website styles and replaced with bright pink/magenta accents. This includes the homepage Academy card, commercial/product pages, the Academy rainbow panel's warm-yellow stop, the legacy portfolio stylesheet, the browser lab, the RATAN AI chat system message, and standalone course handbook accents. The rainbow Academy panel retains its multi-color effect but now uses pink instead of yellow for the warm stop. Local HTML parsing, stale-yellow scanning, HTTP delivery checks and visual previews passed.
+
+## RATAN Research Center rebrand and homepage cleanup
+
+The homepage public navigation and content were simplified by removing Insights, Training, Sample VAPT Finding, Profile/Dossier and Credentials sections, along with their related navigation dots, credentials metadata, hero credential badge and console certs command. Broken CTAs were redirected to the services and AI security track pages, and the obsolete insights page and sitemap entry were removed. Public Academy branding across the offer page, course handbooks, compatibility redirect, services navigation and RATAN AI footer was renamed to **RATAN Research Center** while the existing course content, USDT pricing and payment flow were retained. Local visual previews, HTML parsing, anchor/link scans and HTTP checks passed.
