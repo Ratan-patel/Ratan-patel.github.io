@@ -98,3 +98,8 @@ Static QA after the changes: 21 HTML pages, zero broken local targets, zero dupl
 ## RATAN Academy consolidation
 
 The standalone Academy landing page has been merged into the menu-linked `RATAN ACADEMY OFFER` page at `ratan-monetization-launch-kit.html`. The consolidated page now contains the complete three-track curriculum, official Harvard/MIT/Oxford curriculum-reference links, non-affiliation wording, individual prices, enrollment CTAs, Full Academy pricing and lawful-use boundary. The old `academy.html` route remains only as a compatibility redirect to `ratan-monetization-launch-kit.html#academy-offer`; it has been removed from the sitemap and from public navigation. Existing links were updated to the consolidated page, and local checks passed for the three tracks, bundle arithmetic, redirect, sitemap exclusion and absence of legacy Academy links.
+
+
+## Credential-verification cleanup
+
+The unnecessary credential-verification CTA, request-verification email link, synthetic CEH verification hash and related verification wording were removed from the public homepage. The education and certification cards remain as ordinary profile information, without inviting verification or presenting a client-side hash as proof. HTML-only scan returned zero credential-verification references, and the local homepage loaded without browser console output.
