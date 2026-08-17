@@ -43,3 +43,5 @@ Live payment verification: GitHub Pages workflow completed successfully. Cache-b
 
 USDT-only pricing visual QA: Homepage featured Academy strip now visibly shows approximately 105 USDT starting price and approximately 345 USDT Full Academy price with a bright electric-lime Academy card and CTA. Homepage Academy section shows 105/157/136 USDT track prices and 345 USDT bundle. RATAN Academy Offer page shows 105/157/136 USDT track chips, 345 USDT Full Academy callout and the bright electric-lime main Academy callout; payment controls remain visible and page text wraps correctly in the local desktop preview.
 
+Rainbow Academy panel QA: local RATAN Academy Offer opening callout now renders with a multi-color red/amber/green/cyan/violet/pink gradient over a dark cyber base, white Full Academy USDT price and readable light text. The gradient animation has a 14-second cycle and disables under prefers-reduced-motion; responsive layout remains intact.
+
