@@ -31,3 +31,5 @@ Business audit QA: local homepage now renders 500+ and 6+ counter fallback value
 Academy consolidation QA: `ratan-monetization-launch-kit.html` now contains the full three-track RATAN Academy curriculum, Harvard/MIT/Oxford reference links, non-affiliation notice, individual prices and Full Academy bundle. The old `/academy.html` compatibility route redirected locally to `ratan-monetization-launch-kit.html#academy-offer`; only the RATAN ACADEMY OFFER navigation entry remains.
 
 Credential-removal QA: local homepage renders successfully after removing the credential-verification CTA and synthetic verification hash. Education and certification cards remain; no browser console output/errors were observed.
+
+RATAN OS latest-version QA: homepage no longer contains v1.0/v1.0.0/ratan-os-1.0 references. Hero shows OS v1.3.0 Latest CLI Build; the OS section identifies v1.3.0 Ethical CLI (Parrot 7.3, amd64, QEMU/USB) and v1.2.0 Lite AI Edition (Debian XFCE, offline Qwen3-4B, 3.0 GiB). HTML parser and git diff checks passed. Local preview visibly shows the latest RATAN OS 7.3 Ethical CLI offer.
