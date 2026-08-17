@@ -111,3 +111,10 @@ The consolidated RATAN ACADEMY OFFER page now keeps the India UPI route (`965005
 ## Credential-verification cleanup
 
 The unnecessary credential-verification CTA, request-verification email link, synthetic CEH verification hash and related verification wording were removed from the public homepage. The education and certification cards remain as ordinary profile information, without inviting verification or presenting a client-side hash as proof. HTML-only scan returned zero credential-verification references, and the local homepage loaded without browser console output.
+
+## USDT-only public pricing update
+
+Public price labels across the homepage, RATAN ACADEMY OFFER, services, RATAN OS release support, RATAN AI plans and standalone course pages now use approximate USDT amounts only. INR labels were removed from public price displays. The conversion convention used rounded whole-USDT amounts based on a current reference of approximately 1 USDT ≈ ₹95.54 from Paybis [10] and approximately 1 INR = 0.0104593 USD from Wise [11]. These are not locked exchange rates: the site states that the final USDT amount and ERC-20 network are confirmed before payment. UPI remains available as the India payment route, while international payment remains USDT ERC-20 only.
+
+[10]: https://paybis.com/usdt-to-inr/100/ "Paybis USDT to INR reference rate"
+[11]: https://wise.com/in/currency-converter/inr-to-usd-rate/history "Wise INR to USD mid-market reference rate"
