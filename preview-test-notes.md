@@ -33,3 +33,5 @@ Academy consolidation QA: `ratan-monetization-launch-kit.html` now contains the 
 Credential-removal QA: local homepage renders successfully after removing the credential-verification CTA and synthetic verification hash. Education and certification cards remain; no browser console output/errors were observed.
 
 RATAN OS latest-version QA: homepage no longer contains v1.0/v1.0.0/ratan-os-1.0 references. Hero shows OS v1.3.0 Latest CLI Build; the OS section identifies v1.3.0 Ethical CLI (Parrot 7.3, amd64, QEMU/USB) and v1.2.0 Lite AI Edition (Debian XFCE, offline Qwen3-4B, 3.0 GiB). HTML parser and git diff checks passed. Local preview visibly shows the latest RATAN OS 7.3 Ethical CLI offer.
+
+High-resolution website QA: local homepage visibly renders the sharpened portrait in the hero. Browser runtime confirmed the WebP source loaded completely at 1632x2176, with a 3/4 portrait frame and 1600px fluid max-width token at a 1280px viewport. The homepage extraction exposes the HD image asset without broken loading.
