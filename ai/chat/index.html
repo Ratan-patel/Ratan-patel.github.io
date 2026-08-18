@@ -20,17 +20,13 @@
       <div class="navrow"><a href="../">← RATAN AI product page</a><a href="../../index.html">Portfolio</a><a href="../../acceptable-use.html">Acceptable use</a></div>
     </header>
 
-    <section class="module gate" id="access-gate" aria-labelledby="gate-title">
-      <span class="tag">ACCESS // SIGN-IN GATE</span>
-      <h2 id="gate-title">Continue to RATAN AI chat</h2>
-      <p class="section-intro">Enter your email and access code. The static page does not store your password. Production deployment must connect this gate to a real identity provider or a server-side access code before accepting paid users.</p>
-      <label for="email">EMAIL</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
-      <label for="access-code">ACCESS CODE</label><input id="access-code" type="password" autocomplete="one-time-code" placeholder="Provided after access confirmation">
-      <div class="gate-actions"><button class="btn primary" id="enter" type="button">Enter secure chat</button><a class="btn" href="mailto:patelratan460@gmail.com?subject=RATAN%20AI%20chat%20access%20request">Request access</a></div>
-      <div class="status" id="gate-status" role="status" aria-live="polite"></div>
+    <section class="module" aria-labelledby="free-access-title">
+      <span class="tag">ACCESS // FREE</span>
+      <h2 id="free-access-title">RATAN AI chat is open</h2>
+      <p class="section-intro">No email, access code or approval is required. Start a conversation below for lawful security learning, defensive planning, report drafting and safe lab support.</p>
     </section>
 
-    <section class="module chat-card" id="chat-card" aria-labelledby="chat-title">
+    <section class="module chat-card ready" id="chat-card" aria-labelledby="chat-title">
       <span class="tag">V5 // GEMINI 3.7 FLASH</span>
       <h2 id="chat-title">RATAN AI conversation</h2>
       <div class="messages" id="messages" role="log" aria-live="polite"><div class="message system">You are connected to the RATAN AI chat interface. Ask about authorized learning, defensive design, report structure or safe lab methodology.</div></div>
@@ -40,11 +36,11 @@
   </main>
   <script>
     const RATAN_AI_CONFIG={endpoint:window.RATAN_AI_PROXY_URL||'/api/ai/chat'};
-    const gate=document.getElementById('access-gate'),chat=document.getElementById('chat-card'),status=document.getElementById('gate-status'),email=document.getElementById('email'),code=document.getElementById('access-code'),messages=document.getElementById('messages'),prompt=document.getElementById('prompt'),send=document.getElementById('send');
-    let accessCode='',previousInteractionId='';
+    const chat=document.getElementById('chat-card'),messages=document.getElementById('messages'),prompt=document.getElementById('prompt'),send=document.getElementById('send');
+    let previousInteractionId='';
     function addMessage(kind,text){const el=document.createElement('div');el.className='message '+kind;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
-    document.getElementById('enter').addEventListener('click',()=>{if(!email.value.trim()||!email.checkValidity()){status.textContent='Enter a valid email address first.';email.focus();return}accessCode=code.value.trim();gate.hidden=true;chat.classList.add('ready');status.textContent='';prompt.focus()});
-    document.getElementById('composer').addEventListener('submit',async event=>{event.preventDefault();const text=prompt.value.trim();if(!text||send.disabled)return;addMessage('user',text);prompt.value='';send.disabled=true;send.textContent='Thinking…';const reply=addMessage('assistant','');try{const response=await fetch(RATAN_AI_CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Ratan-Access-Code':accessCode},body:JSON.stringify({email:email.value.trim(),message:text,previousInteractionId})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'The secure chat proxy is not available yet.');reply.textContent=data.text||'No text response was returned.';previousInteractionId=data.interactionId||previousInteractionId}catch(error){reply.textContent='Chat is not connected yet: '+error.message;addMessage('system','Deployment note: configure the server-side Gemini proxy and access gate before accepting live users.')}finally{send.disabled=false;send.textContent='Send';prompt.focus()}});
+    prompt.focus();
+    document.getElementById('composer').addEventListener('submit',async event=>{event.preventDefault();const text=prompt.value.trim();if(!text||send.disabled)return;addMessage('user',text);prompt.value='';send.disabled=true;send.textContent='Thinking…';const reply=addMessage('assistant','');try{const response=await fetch(RATAN_AI_CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,previousInteractionId})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'The free chat proxy is not available yet.');reply.textContent=data.text||'No text response was returned.';previousInteractionId=data.interactionId||previousInteractionId}catch(error){reply.textContent='Chat is not connected yet: '+error.message;addMessage('system','Deployment note: configure the server-side Gemini proxy before accepting live users.')}finally{send.disabled=false;send.textContent='Send';prompt.focus()}});
   </script>
 </body>
 </html>

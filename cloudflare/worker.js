@@ -37,17 +37,12 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(origin) });
     if (request.method !== 'POST') return json({ error: 'Use POST /chat.' }, 405, origin);
     if (!env.GEMINI_API_KEY) return json({ error: 'Gemini proxy is not configured.' }, 503, origin);
-    if (!env.RATAN_AI_ACCESS_CODE) return json({ error: 'RATAN AI access is not configured yet.' }, 503, origin);
-    if (request.headers.get('X-Ratan-Access-Code') !== env.RATAN_AI_ACCESS_CODE) return json({ error: 'Valid RATAN AI access is required.' }, 401, origin);
-
     let body;
     try { body = await request.json(); } catch { return json({ error: 'Request body must be JSON.' }, 400, origin); }
     const message = typeof body?.message === 'string' ? body.message.trim() : '';
-    const email = typeof body?.email === 'string' ? body.email.trim().slice(0, 160) : '';
     const previousInteractionId = typeof body?.previousInteractionId === 'string' ? body.previousInteractionId.trim().slice(0, 180) : '';
     if (!message) return json({ error: 'Message is required.' }, 400, origin);
     if (message.length > MAX_MESSAGE_LENGTH) return json({ error: `Message must be ${MAX_MESSAGE_LENGTH} characters or fewer.` }, 413, origin);
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'A valid email is required.' }, 400, origin);
 
     const input = {
       model: MODEL,

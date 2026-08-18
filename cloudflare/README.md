@@ -8,10 +8,10 @@ Configure these as Worker secrets, not as source files or public variables:
 
 ```text
 GEMINI_API_KEY       # Gemini API key from Google AI Studio
-RATAN_AI_ACCESS_CODE # private access code issued after access confirmation
+# No user email, access code, or paid-plan secret is required.
 ```
 
-The Worker deliberately returns `503` until both secrets exist and returns `401` when the access-code header is invalid. This prevents an accidental public, unlimited Gemini endpoint.
+The Worker returns `503` until the Gemini secret exists. The chat is intentionally open and free at the application layer, while the Worker retains message-length limits and the lawful-use system instruction.
 
 ## Deployment shape
 
@@ -22,10 +22,9 @@ Example deployment commands from this directory are intentionally documented wit
 ```bash
 npx wrangler deploy --config wrangler.toml
 npx wrangler secret put GEMINI_API_KEY
-npx wrangler secret put RATAN_AI_ACCESS_CODE
 ```
 
-Before production use, configure a real identity provider or a managed access layer. The static email/access-code gate in the page is only a UI gate; the Worker access-code check is the security boundary until full authentication is added. Restrict the Gemini API key to the Gemini API, monitor quota and billing, and rotate the key if it is ever exposed.
+The free chat is open without an email or access code. Restrict the Gemini API key to the Gemini API, monitor quota and billing, and rotate the key if it is ever exposed. Keep the lawful-use boundary and message-length limit enabled.
 
 ## Model and API references
 

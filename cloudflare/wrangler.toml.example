@@ -4,7 +4,7 @@ compatibility_date = "2026-08-16"
 
 # Deploy from this directory with your Cloudflare account, then set secrets:
 # wrangler secret put GEMINI_API_KEY
-# wrangler secret put RATAN_AI_ACCESS_CODE
+# No user access-code secret is required.
 # Do not commit real secret values.
 
 [vars]
