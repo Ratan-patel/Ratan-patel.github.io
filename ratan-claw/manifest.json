@@ -1,9 +1,9 @@
 {
-  "name": "RATAN Workbench",
-  "short_name": "RATAN Workbench",
+  "name": "RATAN CLAW",
+  "short_name": "RATAN CLAW",
   "description": "A mobile-first, approval-first task and research workspace.",
   "display": "standalone",
-  "start_url": "./",
+  "start_url": "/",
   "icons": [
     {
       "src": "./assets/ratan-mobile-workbench-logo.png",
@@ -12,7 +12,6 @@
       "purpose": "any maskable"
     }
   ],
-  "scope": "./",
   "theme_color": "#101619",
   "background_color": "#101619"
 }
