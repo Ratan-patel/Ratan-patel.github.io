@@ -108,3 +108,7 @@ body :where(.brand,.nav-links a,.eyebrow,.kicker,.number,.tag,.chip,.price,.pane
 #ratan-commerce a{background:#020407!important;background-image:none!important;color:#00ffc8!important;border:1px solid #00d4ff!important;text-shadow:0 0 7px rgba(0,255,200,.55)!important;box-shadow:0 0 10px rgba(0,212,255,.10)!important}
 #ratan-commerce a:hover{background:#07131d!important;color:#b9fff0!important;border-color:#00ffc8!important}
 @media(max-width:700px){#ratan-commerce{background:#020407!important;padding:8px!important}#ratan-commerce>div:nth-of-type(2)>div{background:#020407!important}}
+
+/* ALL BUTTONS: MATCH GET AI QCOW2 */
+body :where(a.btn,button,.button,.button-link,input[type="submit"],input[type="button"],.chip,.tag,.badge,.pill){background:#020407!important;background-image:none!important;color:#00ffc8!important;border:1px solid #00d4ff!important;box-shadow:0 0 10px rgba(0,212,255,.10)!important;text-shadow:0 0 7px rgba(0,255,200,.55)!important}
+body :where(a.btn:hover,button:hover,.button:hover,.button-link:hover,input[type="submit"]:hover,input[type="button"]:hover,.chip:hover,.tag:hover,.badge:hover,.pill:hover){background:#07131d!important;background-image:none!important;color:#b9fff0!important;border-color:#00ffc8!important;box-shadow:0 0 16px rgba(0,255,200,.22)!important}
