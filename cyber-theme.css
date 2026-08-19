@@ -119,6 +119,10 @@ body :where(a.btn:hover,button:hover,.button:hover,.button-link:hover,input[type
 #ratan-commerce>div:nth-of-type(2)>div>div:nth-child(2){color:#dbe7ef!important;text-shadow:0 0 6px rgba(0,212,255,.25)!important}
 #ratan-commerce>div:nth-of-type(2)>div>div:nth-child(3){color:#b9cdd9!important;text-shadow:0 0 5px rgba(0,212,255,.18)!important}
 #ratan-commerce>div:nth-of-type(2){color:#b9cdd9!important;text-shadow:0 0 5px rgba(0,212,255,.18)!important}
-body :where(a.btn,button,.button,.button-link,input[type="submit"],input[type="button"],.chip,.tag,.badge,.pill){background:#0b1820!important;background-image:none!important;color:#00ffc8!important}
-body :where(a.btn:hover,button:hover,.button:hover,.button-link:hover,input[type="submit"]:hover,input[type="button"]:hover,.chip:hover,.tag:hover,.badge:hover,.pill:hover){background:#10232c!important;background-image:none!important;color:#b9fff0!important}
+body :where(a.btn,button,.button,.button-link,input[type="submit"],input[type="button"],.chip,.tag,.badge,.pill){background:#1f4b58!important;background-image:none!important;color:#00ffc8!important}
+body :where(a.btn:hover,button:hover,.button:hover,.button-link:hover,input[type="submit"]:hover,input[type="button"]:hover,.chip:hover,.tag:hover,.badge:hover,.pill:hover){background:#2a6473!important;background-image:none!important;color:#b9fff0!important}
 @media(max-width:700px){#ratan-commerce{background:#07131d!important}#ratan-commerce>div:nth-of-type(2)>div{background:#0b1820!important}}
+
+/* UPPER STRIP BUTTONS FOLLOW THE LIGHTER LOWER-SECTION FILL */
+#ratan-commerce a{background:#1f4b58!important;background-image:none!important;color:#00ffc8!important;border-color:#00d4ff!important}
+#ratan-commerce a:hover{background:#2a6473!important;background-image:none!important;color:#b9fff0!important}
