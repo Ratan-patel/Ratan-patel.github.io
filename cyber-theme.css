@@ -42,3 +42,21 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyber-mint)!important
 footer,.footer{border-color:var(--cyber-line)!important;background:rgba(3,6,10,.88)!important;color:var(--cyber-muted)!important}
 footer a,.footer a{color:var(--cyber-mint)!important}
 @media(max-width:700px){body::before{background-size:42px 42px;opacity:.10}.btn,.button,.button-link{min-height:44px}}
+
+/* FULL DARK CYBER INTERFACE LAYER */
+body::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.055;background:repeating-linear-gradient(0deg,rgba(0,255,200,.35) 0,rgba(0,255,200,.35) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen}
+.shell,.wrap,main{position:relative}
+.shell::before,.wrap::before{content:"// SECURE_CHANNEL :: AUTHORIZED_OPERATOR";display:block;margin-bottom:18px;color:var(--cyber-faint);font:700 9px/1.2 var(--cyber-mono);letter-spacing:.18em}
+.site-nav{box-shadow:0 0 0 1px rgba(0,255,200,.04),0 10px 35px rgba(0,0,0,.55),inset 0 -1px rgba(0,212,255,.16)!important}
+.site-nav::after{content:"● ONLINE  //  ENCRYPTED";position:absolute;right:clamp(16px,3vw,52px);top:4px;color:var(--cyber-mint);font:700 8px/1 var(--cyber-mono);letter-spacing:.12em;opacity:.78}
+.hero{position:relative;isolation:isolate;border:1px solid var(--cyber-line)!important;border-radius:18px;background:linear-gradient(145deg,rgba(8,17,24,.96),rgba(2,5,9,.98))!important;box-shadow:0 0 0 1px rgba(0,212,255,.04),0 25px 80px rgba(0,0,0,.42),inset 0 0 70px rgba(0,255,200,.04);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.42;background-image:linear-gradient(rgba(0,255,200,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.075) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(135deg,black,transparent 78%)}
+.hero::after{content:"[ SYSTEM_READY ]";position:absolute;right:22px;top:18px;color:var(--cyber-mint);font:700 9px/1 var(--cyber-mono);letter-spacing:.14em;opacity:.75}
+.hero h1,.section h2{ text-shadow:0 0 24px rgba(0,212,255,.16)}
+.section{border-top:1px solid rgba(0,255,200,.08);padding-top:38px}
+.section::before{content:"// CYBER_MODULE";display:block;margin-bottom:8px;color:var(--cyber-cyan);font:700 9px/1 var(--cyber-mono);letter-spacing:.18em;opacity:.82}
+.card,.panel,.box,.feature,.module,.tile,.step,.faq details{box-shadow:inset 0 0 34px rgba(0,255,200,.025),0 14px 40px rgba(0,0,0,.26)!important}
+.card::after,.panel::after{content:"";position:absolute;inset:8px;border:1px solid rgba(0,212,255,.06);border-radius:inherit;pointer-events:none}
+.btn,.button,.button-link{border-radius:4px!important;text-transform:uppercase;letter-spacing:.09em;position:relative;overflow:hidden}
+.btn::before,.button::before,.button-link::before{content:">_";margin-right:8px;color:currentColor}
+@media(max-width:700px){.site-nav::after{display:none}.hero::after{right:14px;top:14px;font-size:8px}.shell::before,.wrap::before{font-size:8px}}
