@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 2. PARTICLE SYSTEM
 function initParticleSystem() {
   const particleTypes = ['✦', '✧', '⚡', '◆', '●', '☆', '★'];
-  const colors = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b'];
+  const colors = ['#f2f6f9', '#c3ced8', '#8e9aa6', '#dce4ea'];
   
   setInterval(() => {
     const particle = document.createElement('div');
@@ -137,7 +137,7 @@ function enableInteractiveAnimations() {
     
     card.addEventListener('mouseenter', function() {
       this.style.transform = 'perspective(1000px) rotateY(10deg) rotateX(-5deg)';
-      this.style.boxShadow = '0 20px 60px rgba(16, 185, 129, 0.3)';
+      this.style.boxShadow = '0 20px 60px rgba(230, 238, 245, 0.3)';
     });
     
     card.addEventListener('mouseleave', function() {
@@ -177,7 +177,7 @@ function toggleAvatarDance() {
 
 // 10. GLITCH TEXT EFFECT ON HOVER
 function enableGlitchEffect() {
-  const glossyText = document.querySelectorAll('.text-emerald-400, .text-cyan-400');
+  const glossyText = document.querySelectorAll('.text-slate-200, .text-slate-300');
   
   glossyText.forEach(el => {
     el.addEventListener('mouseenter', function() {
@@ -306,7 +306,7 @@ function createMorphingBlob() {
   blob.style.position = 'absolute';
   blob.style.width = '300px';
   blob.style.height = '300px';
-  blob.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1))';
+  blob.style.background = 'linear-gradient(135deg, rgba(230, 238, 245, 0.1), rgba(195, 205, 215, 0.1))';
   blob.style.borderRadius = '40% 60% 70% 30% / 40% 50% 60% 50%';
   blob.style.filter = 'blur(40px)';
   blob.style.animation = 'morphBlob 8s ease-in-out infinite';
@@ -358,7 +358,7 @@ function createWaveBackground() {
       left: 0;
       width: 200%;
       height: 100px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(16,185,129,0.05)"/></svg>');
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(230,238,245,0.05)"/></svg>');
       background-size: 600px 100px;
       animation: wave 10s linear infinite;
       pointer-events: none;
@@ -408,7 +408,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 function activateMatrixMode() {
-  document.body.style.filter = 'hue-rotate(90deg) saturate(2)';
+  document.body.style.filter = 'contrast(1.08)';
   setTimeout(() => {
     document.body.style.filter = '';
   }, 3000);

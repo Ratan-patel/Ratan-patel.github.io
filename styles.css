@@ -20,7 +20,7 @@ html {
 
 /* Caret Blinker in Terminal */
 #terminal-input {
-  caret-color: #10b981;
+  caret-color: #f2f6f9;
 }
 
 /* Card glassmorphism grids */
@@ -39,10 +39,10 @@ html {
 }
 
 #terminal-body::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.3);
+  background: rgba(230, 238, 245, 0.3);
   border-radius: 3px;
 }
 
 #terminal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.6);
+  background: rgba(230, 238, 245, 0.6);
 }

@@ -20,7 +20,7 @@ function runTerminalCommand(cmd) {
 
   // Add the prompt line to history
   let cmdLine = document.createElement('div');
-  cmdLine.innerHTML = `<span class="text-emerald-400">ratan@security-hotline:~$</span> <span class="text-white">${cmd}</span>`;
+  cmdLine.innerHTML = `<span class="text-slate-200">ratan@security-hotline:~$</span> <span class="text-white">${cmd}</span>`;
   history.appendChild(cmdLine);
 
   let response = document.createElement('div');
@@ -29,25 +29,25 @@ function runTerminalCommand(cmd) {
   switch (cmd) {
     case 'help':
       response.innerHTML = `
-        <span class="text-emerald-400 font-bold">Available commands:</span><br>
-        - <span class="text-cyan-400">whoami</span>   : Display professional profile of Ratan Kumar Patel<br>
-        - <span class="text-cyan-400">skills</span>   : Print core security competencies & tools used<br>
-        - <span class="text-cyan-400">exp</span>      : Print complete professional work history<br>
-        - <span class="text-cyan-400">certs</span>    : List cybersecurity academic records & certifications<br>
-        - <span class="text-cyan-400">contact</span>  : Display secure messenger links & hotlines<br>
-        - <span class="text-cyan-400">nmap</span>     : Simulate an offensive port vulnerability scan<br>
-        - <span class="text-cyan-400">matrix</span>   : Stream falling green matrix digital rain<br>
-        - <span class="text-cyan-400">crack</span>    : Simulate brute-forcing an encrypted vault<br>
-        - <span class="text-cyan-400">socials</span>  : Show direct links to social network channels<br>
-        - <span class="text-cyan-400">clear</span>    : Clear terminal console screen
+        <span class="text-slate-200 font-bold">Available commands:</span><br>
+        - <span class="text-slate-300">whoami</span>   : Display professional profile of Ratan Kumar Patel<br>
+        - <span class="text-slate-300">skills</span>   : Print core security competencies & tools used<br>
+        - <span class="text-slate-300">exp</span>      : Print complete professional work history<br>
+        - <span class="text-slate-300">certs</span>    : List cybersecurity academic records & certifications<br>
+        - <span class="text-slate-300">contact</span>  : Display secure messenger links & hotlines<br>
+        - <span class="text-slate-300">nmap</span>     : Simulate an offensive port vulnerability scan<br>
+        - <span class="text-slate-300">matrix</span>   : Stream falling green matrix digital rain<br>
+        - <span class="text-slate-300">crack</span>    : Simulate brute-forcing an encrypted vault<br>
+        - <span class="text-slate-300">socials</span>  : Show direct links to social network channels<br>
+        - <span class="text-slate-300">clear</span>    : Clear terminal console screen
       `;
       break;
 
     case 'whoami':
       response.innerHTML = `
         <span class="text-white font-bold">Ratan Kumar Patel</span><br>
-        Role: <span class="text-emerald-400">CEH Cyber Security Trainer & Hacking Expert</span><br>
-        Exp : <span class="text-cyan-400">6+ Years in Ethical Hacking & VAPT</span><br>
+        Role: <span class="text-slate-200">CEH Cyber Security Trainer & Hacking Expert</span><br>
+        Exp : <span class="text-slate-300">6+ Years in Ethical Hacking & VAPT</span><br>
         Bio : Specializes in training corporate networks, setting up CTF labs, and auditing system servers. Trained 500+ security aspirants with practical workshops.
       `;
       break;
@@ -55,19 +55,19 @@ function runTerminalCommand(cmd) {
     case 'skills':
       response.innerHTML = `
         <span class="text-white font-bold">Core Competencies:</span><br>
-        [+] <span class="text-emerald-400">Penetration Testing</span> : Web apps (OWASP), Networks, Firewall hardening<br>
-        [+] <span class="text-emerald-400">Offensive Technologies</span> : Red Teaming, CTF Lab Engineering, Exploit Building<br>
-        [+] <span class="text-emerald-400">Tool Stack</span> : Metasploit, Burp Suite, Nmap, Wireshark, Nessus, Kali Linux
+        [+] <span class="text-slate-200">Penetration Testing</span> : Web apps (OWASP), Networks, Firewall hardening<br>
+        [+] <span class="text-slate-200">Offensive Technologies</span> : Red Teaming, CTF Lab Engineering, Exploit Building<br>
+        [+] <span class="text-slate-200">Tool Stack</span> : Metasploit, Burp Suite, Nmap, Wireshark, Nessus, Kali Linux
       `;
       break;
 
     case 'exp':
       response.innerHTML = `
         <span class="text-white font-bold">Work Experience Summary:</span><br>
-        1. <span class="text-emerald-400">Equator Cyber Solutions (2020-2026)</span> : Technical Security Manager & Trainer<br>
+        1. <span class="text-slate-200">Equator Cyber Solutions (2020-2026)</span> : Technical Security Manager & Trainer<br>
            - Designing OWASP curricula & custom practical labs<br>
            - Delivered corporate workshops & cyber security bootcamps<br>
-        2. <span class="text-cyan-400">Silent Front & Software Solutions (2018-2020)</span> : Tech Security Executive<br>
+        2. <span class="text-slate-300">Silent Front & Software Solutions (2018-2020)</span> : Tech Security Executive<br>
            - Executed comprehensive VAPT audits on enterprise web interfaces
       `;
       break;
@@ -75,24 +75,24 @@ function runTerminalCommand(cmd) {
     case 'certs':
       response.innerHTML = `
         <span class="text-white font-bold">Verifiable Academic Records:</span><br>
-        [✓] <span class="text-emerald-400">Certified Ethical Hacker (CEH) v12</span> - EC-Council (Issued: Jul 2024, ID: ECC92840)<br>
-        [✓] <span class="text-emerald-400">MS in Cybersecurity & Information Assurance</span> - Western Governors University (2023)<br>
-        [✓] <span class="text-cyan-400">PG Diploma in Computer Application</span> - Board of Technical Education, U.P (2013)
+        [✓] <span class="text-slate-200">Certified Ethical Hacker (CEH) v12</span> - EC-Council (Issued: Jul 2024, ID: ECC92840)<br>
+        [✓] <span class="text-slate-200">MS in Cybersecurity & Information Assurance</span> - Western Governors University (2023)<br>
+        [✓] <span class="text-slate-300">PG Diploma in Computer Application</span> - Board of Technical Education, U.P (2013)
       `;
       break;
 
     case 'contact':
       response.innerHTML = `
         <span class="text-white font-bold">Secure Gateway Channels:</span><br>
-        - Email : <a class="text-emerald-400 hover:underline" href="mailto:patelratan460@gmail.com">patelratan460@gmail.com</a><br>
+        - Email : <a class="text-slate-200 hover:underline" href="mailto:patelratan460@gmail.com">patelratan460@gmail.com</a><br>
         - Phone : +91-8700913645 / 9650053559<br>
-        - WhatsApp : <a class="text-emerald-400 hover:underline" href="https://wa.me/918700913645" target="_blank">Start Secure Chat</a><br>
-        - LinkedIn : <a class="text-cyan-400 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">LinkedIn Profile</a>
+        - WhatsApp : <a class="text-slate-200 hover:underline" href="https://wa.me/918700913645" target="_blank">Start Secure Chat</a><br>
+        - LinkedIn : <a class="text-slate-300 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">LinkedIn Profile</a>
       `;
       break;
 
     case 'matrix':
-      response.innerHTML = `<span class="text-emerald-400 animate-pulse">[SYS] Establishing neural interface... Streaming digital rain.</span>`;
+      response.innerHTML = `<span class="text-slate-200 animate-pulse">[SYS] Establishing neural interface... Streaming digital rain.</span>`;
       history.appendChild(response);
       scrollTerminal();
 
@@ -101,14 +101,14 @@ function runTerminalCommand(cmd) {
         if (linesCount >= 15) {
           clearInterval(matrixInterval);
           let doneLine = document.createElement('div');
-          doneLine.className = "text-emerald-400 font-bold pl-4 py-1 border-l border-slate-800";
+          doneLine.className = "text-slate-200 font-bold pl-4 py-1 border-l border-slate-800";
           doneLine.innerHTML = "[+] Signal stream terminated successfully.";
           history.appendChild(doneLine);
           scrollTerminal();
           return;
         }
         let rainLine = document.createElement('div');
-        rainLine.className = "text-emerald-500 font-mono text-xs pl-4 py-0.5 border-l border-slate-800 tracking-widest";
+        rainLine.className = "text-slate-300 font-mono text-xs pl-4 py-0.5 border-l border-slate-800 tracking-widest";
 
         // Generate random binary & hacker code strings
         let chars = "010101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$*&%+=?/";
@@ -125,7 +125,7 @@ function runTerminalCommand(cmd) {
 
     case 'crack':
     case 'hack':
-      response.innerHTML = `<span class="text-cyan-400 animate-pulse">[SYS] Targeting local encrypted node... Initiating decryption...</span>`;
+      response.innerHTML = `<span class="text-slate-300 animate-pulse">[SYS] Targeting local encrypted node... Initiating decryption...</span>`;
       history.appendChild(response);
       scrollTerminal();
 
@@ -143,7 +143,7 @@ function runTerminalCommand(cmd) {
 
       let pct = 0;
       let crackLine = document.createElement('div');
-      crackLine.className = "text-amber-500 font-bold pl-4 py-1 border-l border-slate-800";
+      crackLine.className = "text-slate-200 font-bold pl-4 py-1 border-l border-slate-800";
 
       setTimeout(() => {
         crackLine.innerHTML = `[>] Cracking credential hash: 0%`;
@@ -159,7 +159,7 @@ function runTerminalCommand(cmd) {
           crackLine.innerHTML = `[>] Cracking credential hash: ${pct}% [COMPLETE]`;
 
           let successLog = document.createElement('div');
-          successLog.className = "text-emerald-400 font-bold pl-4 py-1 border-l border-slate-800";
+          successLog.className = "text-slate-200 font-bold pl-4 py-1 border-l border-slate-800";
           successLog.innerHTML = `
             [SUCCESS] Match found: "rpatel_sec_admin_pass"<br>
             [SUCCESS] Decrypting node partition... Mounting root file system...<br>
@@ -177,9 +177,9 @@ function runTerminalCommand(cmd) {
     case 'socials':
       response.innerHTML = `
         <span class="text-white font-bold">Ratan Kumar Patel - Professional Networks:</span><br>
-        - <span class="text-cyan-400">LinkedIn</span>: <a class="text-emerald-400 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">linkedin.com/in/ratan-kumar-patel-032a43367/</a><br>
-        - <span class="text-cyan-400">GitHub</span>: <a class="text-emerald-400 hover:underline" href="https://github.com/ratan-patel" target="_blank">github.com/ratan-patel</a><br>
-        - <span class="text-cyan-400">WhatsApp</span>: <a class="text-emerald-400 hover:underline" href="https://wa.me/918700913645" target="_blank">Start WhatsApp Chat</a>
+        - <span class="text-slate-300">LinkedIn</span>: <a class="text-slate-200 hover:underline" href="https://www.linkedin.com/in/ratan-kumar-patel-032a43367/" target="_blank">linkedin.com/in/ratan-kumar-patel-032a43367/</a><br>
+        - <span class="text-slate-300">GitHub</span>: <a class="text-slate-200 hover:underline" href="https://github.com/ratan-patel" target="_blank">github.com/ratan-patel</a><br>
+        - <span class="text-slate-300">WhatsApp</span>: <a class="text-slate-200 hover:underline" href="https://wa.me/918700913645" target="_blank">Start WhatsApp Chat</a>
       `;
       break;
 
@@ -210,9 +210,9 @@ function runTerminalCommand(cmd) {
         log2.innerHTML = `
           Not shown: 997 closed tcp ports (reset)<br>
           PORT &nbsp;&nbsp;&nbsp;&nbsp;STATE &nbsp;&nbsp;&nbsp;SERVICE &nbsp;&nbsp;&nbsp;&nbsp;VERSION<br>
-          22/tcp &nbsp;&nbsp;<span class="text-red-500">OPEN</span> &nbsp;&nbsp;&nbsp;&nbsp;ssh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OpenSSH 8.9p1 (Secure Keyed)<br>
-          80/tcp &nbsp;&nbsp;<span class="text-emerald-500">FILTERED</span> http &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apache httpd 2.4.52<br>
-          443/tcp &nbsp;<span class="text-emerald-500">FILTERED</span> https &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nginx SSL Gateway (TLSv1.3)
+          22/tcp &nbsp;&nbsp;<span class="text-slate-100">OPEN</span> &nbsp;&nbsp;&nbsp;&nbsp;ssh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OpenSSH 8.9p1 (Secure Keyed)<br>
+          80/tcp &nbsp;&nbsp;<span class="text-slate-300">FILTERED</span> http &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apache httpd 2.4.52<br>
+          443/tcp &nbsp;<span class="text-slate-300">FILTERED</span> https &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nginx SSL Gateway (TLSv1.3)
         `;
         history.appendChild(log2);
         scrollTerminal();
@@ -220,7 +220,7 @@ function runTerminalCommand(cmd) {
 
       setTimeout(() => {
         let log3 = document.createElement('div');
-        log3.className = "text-emerald-400 font-bold pl-4 py-1 border-l border-slate-800";
+        log3.className = "text-slate-200 font-bold pl-4 py-1 border-l border-slate-800";
         log3.innerHTML = `
           [✔] Scan Complete: 0 vulnerabilities found. Target system is properly hardened.<br>
           Nmap done: 1 IP address (1 host up) scanned in 1.84 seconds.
@@ -231,7 +231,7 @@ function runTerminalCommand(cmd) {
       return;
 
     default:
-      response.innerHTML = `<span class="text-red-500">bash: command not found: ${cmd}</span>. Type <span class="text-emerald-400 font-bold">'help'</span> to view available operations.`;
+      response.innerHTML = `<span class="text-slate-100">bash: command not found: ${cmd}</span>. Type <span class="text-slate-200 font-bold">'help'</span> to view available operations.`;
   }
 
   history.appendChild(response);
@@ -270,7 +270,7 @@ function scanCertificate(certName, bgGradient, fontAwesomeIcon, docUrl) {
   modal.classList.remove('hidden');
   title.textContent = `Validating: ${certName}`;
   status.textContent = 'CONNECTING VERIFICATION SYSTEM...';
-  status.className = 'text-cyan-400 font-bold uppercase animate-pulse';
+  status.className = 'text-slate-300 font-bold uppercase animate-pulse';
   progressBar.style.width = '0%';
   iconContainer.style.background = bgGradient;
   iconElement.className = `fa ${fontAwesomeIcon} text-4xl text-white`;
@@ -291,7 +291,7 @@ function scanCertificate(certName, bgGradient, fontAwesomeIcon, docUrl) {
   setTimeout(() => {
     progressBar.style.width = '30%';
     status.textContent = 'SCANNING DIGEST HASH...';
-    status.className = 'text-amber-400 font-bold uppercase animate-pulse';
+    status.className = 'text-slate-200 font-bold uppercase animate-pulse';
     log1.classList.remove('hidden');
   }, 600);
 
@@ -304,7 +304,7 @@ function scanCertificate(certName, bgGradient, fontAwesomeIcon, docUrl) {
   setTimeout(() => {
     progressBar.style.width = '100%';
     status.textContent = 'ACCESS GRANTED - VERIFIED GENUINE';
-    status.className = 'text-emerald-400 font-bold uppercase animate-bounce';
+    status.className = 'text-slate-200 font-bold uppercase animate-bounce';
     log3.classList.remove('hidden');
     log4.classList.remove('hidden');
 
@@ -365,7 +365,7 @@ function handleFormDispatch(e) {
   setTimeout(() => {
     progress.style.width = '35%';
     logs.innerHTML += `
-      <div class="flex items-center gap-1.5 text-cyan-400">
+      <div class="flex items-center gap-1.5 text-slate-300">
         <span>[SYS]</span> <span>Encrypting dispatch (AES-256-GCM)...</span>
       </div>
     `;
@@ -374,7 +374,7 @@ function handleFormDispatch(e) {
   setTimeout(() => {
     progress.style.width = '70%';
     logs.innerHTML += `
-      <div class="flex items-center gap-1.5 text-amber-400">
+      <div class="flex items-center gap-1.5 text-slate-200">
         <span>[NET]</span> <span>Routing packet through secure proxy...</span>
       </div>
     `;
@@ -383,7 +383,7 @@ function handleFormDispatch(e) {
   setTimeout(() => {
     progress.style.width = '100%';
     logs.innerHTML += `
-      <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
+      <div class="flex items-center gap-1.5 text-slate-200 font-bold">
         <span>[OK]</span> <span>DISPATCH RECEIVED. Secure channels open.</span>
       </div>
     `;
