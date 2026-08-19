@@ -1,0 +1,12 @@
+name = "ratan-ai-api"
+main = "worker.js"
+compatibility_date = "2026-08-19"
+
+[[kv_namespaces]]
+binding = "TRIAL_KV"
+id = "d6a28b60a6a940f58eb77773af570a4b"
+
+# Keep secrets out of source control:
+# npx wrangler secret put GEMINI_API_KEY
+# Optional after manual payment workflow is ready:
+# npx wrangler secret put PAID_ACCESS_CODE

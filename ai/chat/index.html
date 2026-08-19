@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RATAN AI Chat | V5 Gemini 3.7 Flash</title>
-  <meta name="description" content="RATAN AI V5 live chat powered by a secure server-side Gemini API proxy.">
+  <title>RATAN AI Chat | 5-Minute Free Trial</title>
+  <meta name="description" content="RATAN AI V5 five-minute free trial powered by a secure server-side Gemini API proxy.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="../../commercial.css">
   <style>
-    .chat-shell{max-width:920px}.chat-head{padding:28px 0 20px}.chat-head h1{font-size:clamp(36px,7vw,64px);line-height:.98;letter-spacing:-.07em;margin:12px 0}.chat-head p{max-width:720px;color:var(--muted)}.live-pill{display:inline-flex;gap:7px;align-items:center;color:var(--mint);font:800 11px ui-monospace,monospace;letter-spacing:.08em}.live-pill i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}.gate{max-width:520px}.gate label{display:block;color:var(--muted);font:700 11px ui-monospace,monospace;letter-spacing:.08em;margin:12px 0 6px}.gate input{width:100%;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px Inter,sans-serif}.gate input:focus{outline:2px solid var(--cyan);outline-offset:2px}.gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.status{min-height:22px;color:var(--muted);font-size:12px;margin-top:12px}.chat-card{display:none;margin-top:22px}.chat-card.ready{display:block}.messages{min-height:340px;max-height:56vh;overflow:auto;display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(3,10,14,.76)}.message{max-width:82%;padding:12px 14px;border-radius:12px;color:#d9e8e5;white-space:pre-wrap;font-size:14px}.message.user{justify-self:end;background:rgba(99,217,255,.14);border:1px solid rgba(99,217,255,.3)}.message.assistant{justify-self:start;background:rgba(109,242,194,.08);border:1px solid rgba(109,242,194,.2)}.message.system{justify-self:center;max-width:100%;color:var(--muted);font-size:12px;background:rgba(255,90,165,.08);border:1px solid rgba(255,90,165,.22)}.composer{display:flex;gap:10px;margin-top:12px}.composer textarea{flex:1;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px/1.5 Inter,sans-serif}.composer button{align-self:flex-end}.privacy-note{color:var(--muted);font-size:12px;margin-top:12px}.navrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.navrow a{color:var(--muted)}.navrow a:hover{color:var(--mint)}
+    .chat-shell{max-width:920px}.chat-head{padding:28px 0 20px}.chat-head h1{font-size:clamp(36px,7vw,64px);line-height:.98;letter-spacing:-.07em;margin:12px 0}.chat-head p{max-width:720px;color:var(--muted)}.live-pill{display:inline-flex;gap:7px;align-items:center;color:var(--mint);font:800 11px ui-monospace,monospace;letter-spacing:.08em}.live-pill i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}.trial-banner{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;border-color:rgba(109,242,194,.35);background:linear-gradient(135deg,rgba(109,242,194,.1),rgba(13,27,35,.92))}.trial-clock{font:800 clamp(25px,5vw,38px)/1 ui-monospace,monospace;color:var(--mint);letter-spacing:.04em}.trial-label{display:block;color:var(--muted);font:800 10px ui-monospace,monospace;letter-spacing:.12em;margin-bottom:6px}.status{min-height:22px;color:var(--muted);font-size:12px;margin-top:12px}.status.error{color:#ff9fba}.chat-card{display:none;margin-top:22px}.chat-card.ready{display:block}.messages{min-height:340px;max-height:56vh;overflow:auto;display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(3,10,14,.76)}.message{max-width:82%;padding:12px 14px;border-radius:12px;color:#d9e8e5;white-space:pre-wrap;font-size:14px}.message.user{justify-self:end;background:rgba(99,217,255,.14);border:1px solid rgba(99,217,255,.3)}.message.assistant{justify-self:start;background:rgba(109,242,194,.08);border:1px solid rgba(109,242,194,.2)}.message.system{justify-self:center;max-width:100%;color:var(--muted);font-size:12px;background:rgba(255,90,165,.08);border:1px solid rgba(255,90,165,.22)}.composer{display:flex;gap:10px;margin-top:12px}.composer textarea{flex:1;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px/1.5 Inter,sans-serif}.composer button{align-self:flex-end}.privacy-note{color:var(--muted);font-size:12px;margin-top:12px}.navrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.navrow a{color:var(--muted)}.navrow a:hover{color:var(--mint)}.paid-gate{display:none;margin-top:18px;border-color:rgba(255,90,165,.42);background:linear-gradient(135deg,rgba(255,90,165,.1),rgba(13,27,35,.94))}.paid-gate.visible{display:block}.paid-gate h2{margin:0 0 8px}.paid-gate p{color:var(--muted)}.paid-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.access-code-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.access-code-row input{flex:1;min-width:220px;border:1px solid var(--line);border-radius:10px;background:#061016;color:var(--ink);padding:12px 13px;font:14px Inter,sans-serif}.access-code-row input:focus{outline:2px solid var(--cyan);outline-offset:2px}@media(max-width:620px){.composer{display:grid}.composer button{width:100%}}
   </style>
 </head>
 <body>
@@ -20,10 +20,10 @@
       <div class="navrow"><a href="../">← RATAN AI product page</a><a href="../../index.html">Portfolio</a><a href="../../acceptable-use.html">Acceptable use</a></div>
     </header>
 
-    <section class="module" aria-labelledby="free-access-title">
-      <span class="tag">ACCESS // FREE</span>
-      <h2 id="free-access-title">RATAN AI chat is open</h2>
-      <p class="section-intro">No email, access code or approval is required. Start a conversation below for lawful security learning, defensive planning, report drafting and safe lab support.</p>
+    <section class="module trial-banner" aria-labelledby="trial-title">
+      <div><span class="tag">ACCESS // FREE TRIAL</span><h2 id="trial-title">Try RATAN AI free for 5 minutes.</h2><p class="section-intro">The timer is checked by the server when the production proxy is configured. After the trial, payment and access activation remain manual through the existing UPI/USDT page.</p></div>
+      <div><span class="trial-label">TIME REMAINING</span><div class="trial-clock" id="trial-clock">05:00</div></div>
+      <div class="status" id="trial-status" role="status" aria-live="polite">Starting your free trial…</div>
     </section>
 
     <section class="module chat-card ready" id="chat-card" aria-labelledby="chat-title">
@@ -33,14 +33,39 @@
       <form class="composer" id="composer"><textarea id="prompt" maxlength="4000" placeholder="Ask a safe, authorized cybersecurity learning question…" aria-label="Message for RATAN AI"></textarea><button class="btn primary" id="send" type="submit">Send</button></form>
       <div class="privacy-note">For privacy and safety, never paste production secrets or real customer data. Chat requests are sent to the configured server-side proxy; the browser never receives the Gemini API key.</div>
     </section>
+
+    <section class="module paid-gate" id="paid-gate" aria-labelledby="paid-title">
+      <span class="tag">TRIAL COMPLETE // PAID ACCESS</span>
+      <h2 id="paid-title">Your 5-minute free trial has ended.</h2>
+      <p>To continue, use the existing payment page. India payments remain on UPI/INR, and international payments remain on USDT ERC-20. After manual confirmation, enter the access code provided by the administrator.</p>
+      <div class="paid-actions"><a class="btn primary" href="../../ratan-monetization-launch-kit.html#payment-methods">View UPI / USDT payment options</a><a class="btn" href="mailto:patelratan460@gmail.com?subject=RATAN%20AI%20paid%20access%20request">Email for activation</a><a class="btn" href="https://wa.me/918700913645?text=Hello%20Ratan%2C%20I%20have%20completed%20payment%20for%20RATAN%20AI%20access.%20Please%20send%20my%20activation%20code." target="_blank" rel="noopener">WhatsApp activation</a></div>
+      <div class="access-code-row"><input id="access-code" type="password" autocomplete="one-time-code" placeholder="Enter manual activation code"><button class="btn" id="activate" type="button">Activate</button></div>
+      <div class="status" id="paid-status" role="status" aria-live="polite"></div>
+    </section>
   </main>
   <script>
-    const RATAN_AI_CONFIG={endpoint:window.RATAN_AI_PROXY_URL||'/api/ai/chat'};
+    const RATAN_AI_CONFIG={
+      endpoint:window.RATAN_AI_PROXY_URL||'/api/ai/chat',
+      trialEndpoint:window.RATAN_AI_TRIAL_URL||(window.RATAN_AI_PROXY_URL?window.RATAN_AI_PROXY_URL.replace(/\/chat\/?$/,'/trial'):'/api/ai/trial'),
+      trialSeconds:300,
+    };
     const chat=document.getElementById('chat-card'),messages=document.getElementById('messages'),prompt=document.getElementById('prompt'),send=document.getElementById('send');
-    let previousInteractionId='';
+    const clock=document.getElementById('trial-clock'),trialStatus=document.getElementById('trial-status'),paidGate=document.getElementById('paid-gate'),paidStatus=document.getElementById('paid-status'),accessCode=document.getElementById('access-code'),activate=document.getElementById('activate');
+    let previousInteractionId='', expiresAt=0, paidAccessCode='';
+    const storageKey='ratan_ai_trial_client_id';
+    function getClientId(){let id='';try{id=localStorage.getItem(storageKey)||'';if(!id){id=(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`);localStorage.setItem(storageKey,id)}}catch(_){id=`${Date.now()}-${Math.random().toString(36).slice(2)}`}return id}
+    const clientId=getClientId();
     function addMessage(kind,text){const el=document.createElement('div');el.className='message '+kind;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
-    prompt.focus();
-    document.getElementById('composer').addEventListener('submit',async event=>{event.preventDefault();const text=prompt.value.trim();if(!text||send.disabled)return;addMessage('user',text);prompt.value='';send.disabled=true;send.textContent='Thinking…';const reply=addMessage('assistant','');try{const response=await fetch(RATAN_AI_CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,previousInteractionId})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'The free chat proxy is not available yet.');reply.textContent=data.text||'No text response was returned.';previousInteractionId=data.interactionId||previousInteractionId}catch(error){reply.textContent='Chat is not connected yet: '+error.message;addMessage('system','Deployment note: configure the server-side Gemini proxy before accepting live users.')}finally{send.disabled=false;send.textContent='Send';prompt.focus()}});
+    function formatTime(seconds){const safe=Math.max(0,Math.ceil(seconds));return `${String(Math.floor(safe/60)).padStart(2,'0')}:${String(safe%60).padStart(2,'0')}`}
+    function setTrialState(nextExpiresAt,source){expiresAt=Number(nextExpiresAt)||0;clock.textContent=formatTime(Math.max(0,Math.ceil((expiresAt-Date.now())/1000)));trialStatus.textContent=source==='server'?'Server-checked free trial is active.':'Free trial is active in this browser.';trialStatus.classList.remove('error');if(expiresAt<=Date.now())lockTrial('Your 5-minute free trial has ended.')}
+    function lockTrial(reason){expiresAt=0;clock.textContent='00:00';trialStatus.textContent=reason;trialStatus.classList.add('error');send.disabled=true;prompt.disabled=true;paidGate.classList.add('visible');addMessage('system',reason+' Continue after manual payment activation.')}
+    function localFallback(){const key='ratan_ai_trial_started_at';let started=0;try{started=Number(localStorage.getItem(key)||0);if(!started){started=Date.now();localStorage.setItem(key,String(started))}}catch(_){started=Date.now()}setTrialState(started+RATAN_AI_CONFIG.trialSeconds*1000,'local')}
+    async function startTrial(){try{const response=await fetch(RATAN_AI_CONFIG.trialEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({clientId})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Trial service unavailable.');setTrialState(data.expiresAt,'server')}catch(error){localFallback();trialStatus.textContent='Trial timer is running locally; server trial storage is not connected yet.';trialStatus.classList.add('error');console.warn(error)}}
+    function tick(){if(!expiresAt)return;const remaining=Math.max(0,Math.ceil((expiresAt-Date.now())/1000));clock.textContent=formatTime(remaining);if(remaining<=0)lockTrial('Your 5-minute free trial has ended.')}
+    setInterval(tick,1000);
+    activate.addEventListener('click',()=>{paidAccessCode=accessCode.value.trim();if(!paidAccessCode){paidStatus.textContent='Enter the activation code received after manual payment confirmation.';return}paidStatus.textContent='Activation code saved for the next request. Send a new message to verify it.';paidStatus.classList.remove('error');prompt.disabled=false;send.disabled=false});
+    startTrial();prompt.focus();
+    document.getElementById('composer').addEventListener('submit',async event=>{event.preventDefault();if(expiresAt&&Date.now()>=expiresAt){lockTrial('Your 5-minute free trial has ended.');return}const text=prompt.value.trim();if(!text||send.disabled)return;addMessage('user',text);prompt.value='';send.disabled=true;send.textContent='Thinking…';const reply=addMessage('assistant','');try{const headers={'Content-Type':'application/json'};if(paidAccessCode)headers['X-Ratan-Access-Code']=paidAccessCode;const response=await fetch(RATAN_AI_CONFIG.endpoint,{method:'POST',headers,body:JSON.stringify({message:text,previousInteractionId,clientId})});const data=await response.json().catch(()=>({}));if(data.trialExpired){lockTrial(data.error||'Your 5-minute free trial has ended.');throw new Error(data.error||'Trial expired.')}if(!response.ok)throw new Error(data.error||'The RATAN AI proxy is not available yet.');reply.textContent=data.text||'No text response was returned.';previousInteractionId=data.interactionId||previousInteractionId}catch(error){reply.textContent='';addMessage('system',error.message)}finally{if(!paidGate.classList.contains('visible')){send.disabled=false;prompt.focus()}send.textContent='Send'}});
   </script>
 </body>
 </html>
