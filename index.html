@@ -588,7 +588,33 @@ body::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;opa
 #home .btn{border-radius:4px!important;text-transform:uppercase;letter-spacing:.09em;box-shadow:0 0 0 1px rgba(0,255,200,.04),0 8px 24px rgba(0,0,0,.28)}
 #home .btn::before{content:">_";margin-right:8px;color:currentColor}
 #home .h2,#home .name{ text-shadow:0 0 26px rgba(0,212,255,.2)}
-@media(max-width:700px){#nav::after{display:none}}
+@media(max-width:700px){
+  #nav::after{display:block!important;position:relative;top:auto;right:auto;left:auto;clear:both;width:100%;height:15px;padding:2px 16px 0;text-align:right;font-size:7px;letter-spacing:.1em;border-top:1px solid rgba(0,255,200,.08)}
+  #nav .navin{flex-direction:column;align-items:stretch;gap:9px;padding:10px 16px 7px}
+  #nav .brand{font-size:14px}
+  #nav #burger{display:none}
+  #nav .nlinks{position:static;inset:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:4px;flex-direction:initial;background:transparent;border:0;border-radius:0;padding:0;backdrop-filter:none}
+  #nav .nlinks a{padding:8px 3px;text-align:center;border:1px solid rgba(0,255,200,.11);background:rgba(0,255,200,.025);font-size:8px;letter-spacing:.04em}
+  #home>.wrap,#academy>.wrap,#services>.wrap,#ratanos>.wrap,#soc>.wrap,#lab>.wrap,#vault>.wrap,#disclosure>.wrap,#contact>.wrap{padding:18px 16px 0}
+  #home>.wrap::before,#academy>.wrap::before,#services>.wrap::before,#ratanos>.wrap::before,#soc>.wrap::before,#lab>.wrap::before,#vault>.wrap::before,#disclosure>.wrap::before,#contact>.wrap::before{font-size:7px;letter-spacing:.12em;white-space:nowrap;overflow:hidden}
+  #home .hgrid,#home .osgrid{grid-template-columns:1fr!important;gap:24px}
+  #home .name{font-size:clamp(46px,16vw,78px);line-height:.94;letter-spacing:-.055em}
+  #home .role{font-size:14px}
+  #home .mission{padding:16px!important}
+  #home .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  #home .stat{padding:12px 7px!important;border-radius:11px!important}
+  #home .stat .cnt{font-size:20px}
+  #home .hbtns{display:grid;grid-template-columns:1fr;gap:8px}
+  #home .btn{width:100%;min-height:44px;padding:12px 10px;font-size:9px}
+  #home .holo{min-height:300px}
+  #home .holo .frame{transform:scale(.88);transform-origin:center top}
+  .homepage-top-offers{position:relative;z-index:6;margin-top:275px!important;background:rgba(2,5,9,.92)!important;border:1px solid rgba(0,255,200,.16);border-radius:13px;padding:8px;box-shadow:inset 0 0 28px rgba(0,255,200,.03),0 12px 30px rgba(0,0,0,.34)}
+  .homepage-top-offers>div{grid-template-columns:1fr!important}
+  .homepage-top-offers>div>div{background:rgba(7,16,30,.96)!important}
+  #home .card,#home .holo,#home .stat,#home .mission,#home .term,#home .demo-note{border-radius:13px!important}
+  #home .card::after,#home .stat::after,#home .holo::after{inset:6px}
+  #home .offergrid{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body class="booting" style=""><div id="boot" class=""><div class="bootbox">

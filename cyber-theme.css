@@ -60,3 +60,29 @@ body::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opa
 .btn,.button,.button-link{border-radius:4px!important;text-transform:uppercase;letter-spacing:.09em;position:relative;overflow:hidden}
 .btn::before,.button::before,.button-link::before{content:">_";margin-right:8px;color:currentColor}
 @media(max-width:700px){.site-nav::after{display:none}.hero::after{right:14px;top:14px;font-size:8px}.shell::before,.wrap::before{font-size:8px}}
+
+/* PHONE VIEW: SAME CYBER IDENTITY, RESPONSIVE GEOMETRY */
+@media(max-width:700px){
+  body{min-width:320px}
+  .site-nav::after{display:block;position:static;padding:0 16px 7px;text-align:right;font-size:7px;letter-spacing:.1em}
+  .nav-inner{flex-direction:column;align-items:stretch;gap:10px;padding:11px 16px 8px}
+  .brand{font-size:14px}
+  .nav-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:4px}
+  .nav-links a{padding:9px 4px;text-align:center;border:1px solid rgba(0,255,200,.10);background:rgba(0,255,200,.025);font-size:8px;letter-spacing:.04em}
+  .shell,.wrap{padding-inline:16px}
+  .shell::before,.wrap::before{margin-bottom:12px;font-size:7px;letter-spacing:.12em;white-space:nowrap;overflow:hidden}
+  .hero{padding:44px 16px 28px;border-radius:14px}
+  .hero::before{background-size:24px 24px;opacity:.3}
+  .hero::after{top:13px;right:14px;font-size:7px}
+  .hero h1{font-size:clamp(34px,11vw,54px);line-height:1.02;letter-spacing:-.045em}
+  .hero p{font-size:14px;line-height:1.55}
+  .section{padding-top:30px;margin-top:24px}
+  .section::before{font-size:8px}
+  .grid,.grid.two,.process{grid-template-columns:1fr!important}
+  .card,.panel,.box,.feature,.module,.tile,.step,.faq details{border-radius:13px;padding:18px!important}
+  .card::after,.panel::after{inset:6px}
+  .hero-actions,.button-row{display:grid;grid-template-columns:1fr;gap:8px}
+  .btn,.button,.button-link{width:100%;min-height:44px;padding:12px 10px;font-size:10px}
+  .callout{border-radius:14px;padding:18px!important}
+  table{min-width:590px}
+}
