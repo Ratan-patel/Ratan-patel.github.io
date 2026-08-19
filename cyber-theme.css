@@ -86,3 +86,17 @@ body::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opa
   .callout{border-radius:14px;padding:18px!important}
   table{min-width:590px}
 }
+
+/* EXACT AUTHORIZED ENGAGEMENTS TEXT SYSTEM */
+:root{--reference-text:#00ffc8;--reference-glow:0 0 7px rgba(0,255,200,.55),0 0 18px rgba(0,212,255,.22)}
+body{font-family:var(--cyber-mono)!important;color:var(--reference-text)!important}
+body *:not(canvas):not(svg):not(path){font-family:var(--cyber-mono)!important;color:var(--reference-text)!important;text-shadow:var(--reference-glow)!important}
+body :where(h1,h2,h3,h4,h5,h6,p,span,a,button,label,li,dt,dd,td,th,small,strong,b,em,code,pre,summary,option,figcaption){font-family:var(--cyber-mono)!important;color:var(--reference-text)!important;text-shadow:var(--reference-glow)!important}
+body :where(h1,h2,h3,h4,h5,h6){font-weight:800!important;letter-spacing:.045em!important}
+body :where(p,li,td,dd,figcaption){font-weight:500!important;letter-spacing:.035em!important;line-height:1.7!important}
+body :where(a,button,.btn,.button,.button-link,.chip,.tag,.badge,.pill){font-weight:800!important;letter-spacing:.08em!important;text-transform:uppercase}
+body :where(input,textarea,select){font-family:var(--cyber-mono)!important;color:var(--reference-text)!important;text-shadow:var(--reference-glow)!important}
+body :where(input::placeholder,textarea::placeholder){color:var(--reference-text)!important;opacity:.72}
+body :where(a:hover,button:hover,.btn:hover,.button:hover,.button-link:hover){color:#b9fff0!important;text-shadow:0 0 9px rgba(0,255,200,.85),0 0 24px rgba(0,212,255,.35)!important}
+body :where(.muted,.micro,.lede,.section-intro,.hero p,.card p,.callout p,.step span,.list,td){color:var(--reference-text)!important;opacity:.8}
+body :where(.brand,.nav-links a,.eyebrow,.kicker,.number,.tag,.chip,.price,.panelhead,.section-tag){color:var(--reference-text)!important;text-shadow:var(--reference-glow)!important}
