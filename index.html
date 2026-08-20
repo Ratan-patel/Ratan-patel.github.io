@@ -145,7 +145,11 @@ h1,h2,h3,h4{font-family:var(--disp);line-height:1.08;letter-spacing:-.5px}
 ::-webkit-scrollbar-thumb{background:linear-gradient(var(--mint),var(--cyan));border-radius:9px}
 
 /* ============ 02 · GLOBAL LAYERS ============ */
-#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 72% 18%,rgba(41,105,196,.18),transparent 34%),
+  radial-gradient(ellipse at 20% 76%,rgba(122,54,196,.16),transparent 38%),
+  linear-gradient(180deg,#03050d 0%,#07101c 50%,#03050b 100%);filter:saturate(1.12)}
+#bg3d{will-change:transform}
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
 .scan{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.5;
@@ -153,6 +157,22 @@ h1,h2,h3,h4{font-family:var(--disp);line-height:1.08;letter-spacing:-.5px}
 .vig{position:fixed;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(2,4,7,.75) 100%)}
 main,nav,footer{position:relative;z-index:4}
+
+/* ============ SPACE UI POLISH ============ */
+.hbadge{box-shadow:0 0 28px rgba(0,212,255,.12),inset 0 0 18px rgba(0,255,200,.03)}
+.holo{backdrop-filter:blur(9px);box-shadow:0 40px 90px -50px rgba(0,255,200,.5),0 0 0 1px rgba(255,255,255,.025) inset}
+.stat,.card,.telem{backdrop-filter:blur(10px)}
+#home:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 30% 46%,rgba(0,212,255,.08),transparent 34%),radial-gradient(ellipse at 84% 72%,rgba(123,92,255,.09),transparent 30%);opacity:.9}
+@media(max-width:700px){
+  #home{padding:104px 0 54px;min-height:100svh}
+  .hgrid{gap:28px}.hbadge{font-size:9.5px;letter-spacing:1.7px}
+  h1.name{font-size:clamp(42px,14vw,70px);letter-spacing:-1.8px}
+  .hbio{font-size:15px}.mission{margin:20px 0;padding:15px 16px}
+  .stats{gap:8px;margin:22px 0}.stat{padding:14px 8px}.stat span{font-size:8px;letter-spacing:1px}
+  .holo{padding:10px;border-radius:18px}.holo .frame{aspect-ratio:4/5}
+  section{padding:76px 0}.wrap{padding-inline:16px}.btn{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){#bg3d{opacity:.8}}
 
 /* ============ 03 · CURSOR ============ */
 #cur,#curDot{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%}
@@ -1058,8 +1078,10 @@ body::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;opa
 try{
 const T = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
 const cv = document.getElementById('bg3d');
-const rnd = new T.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
-rnd.setPixelRatio(Math.min(devicePixelRatio,1.8));
+const isPhone=matchMedia('(max-width: 700px)').matches;
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rnd = new T.WebGLRenderer({canvas:cv,alpha:true,antialias:true,powerPreference:'high-performance'});
+rnd.setPixelRatio(Math.min(devicePixelRatio,isPhone?1.25:1.8));
 rnd.setSize(innerWidth,innerHeight);
 const sc = new T.Scene();
 sc.fog = new T.FogExp2(0x04060a,0.055);
@@ -1068,8 +1090,33 @@ cam.position.set(0,0,9);
 
 const world = new T.Group(); sc.add(world);
 
+/* atmospheric lighting + procedural textures keep the scene self-contained */
+sc.add(new T.AmbientLight(0x5a76a5,1.25));
+const keyLight=new T.DirectionalLight(0xffffff,2.1); keyLight.position.set(-5,5,8); sc.add(keyLight);
+function makePlanetTexture(base,accent,banded=false){
+  const c=document.createElement('canvas'); c.width=c.height=256; const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,256,256); g.addColorStop(0,base); g.addColorStop(.52,accent); g.addColorStop(1,base); x.fillStyle=g; x.fillRect(0,0,256,256);
+  for(let i=0;i<(banded?110:76);i++){const y=Math.random()*256,h=2+Math.random()*18;x.globalAlpha=.06+Math.random()*.14;x.fillStyle=i%2?'#c8f7ff':'#06162c';x.fillRect(0,y,256,h)}
+  for(let i=0;i<1500;i++){const px=Math.random()*256,py=Math.random()*256,r=Math.random()*1.8;x.globalAlpha=Math.random()*.22;x.fillStyle='#ffffff';x.fillRect(px,py,r,r)}
+  x.globalAlpha=1; return new T.CanvasTexture(c);
+}
+function addPlanet(position,radius,base,accent,ringColor){
+  const group=new T.Group(); group.position.set(...position); world.add(group);
+  const mesh=new T.Mesh(new T.SphereGeometry(radius,32,22),new T.MeshStandardMaterial({map:makePlanetTexture(base,accent,Boolean(ringColor)),roughness:.92,metalness:.03}));
+  mesh.rotation.z=.18; group.add(mesh);
+  const atmosphere=new T.Mesh(new T.SphereGeometry(radius*1.07,32,22),new T.MeshBasicMaterial({color:new T.Color(accent),transparent:true,opacity:.16,side:T.BackSide,blending:T.AdditiveBlending,depthWrite:false})); group.add(atmosphere);
+  let ring=null;
+  if(ringColor){ring=new T.Mesh(new T.TorusGeometry(radius*1.48,radius*.085,4,100),new T.MeshBasicMaterial({color:ringColor,transparent:true,opacity:.48,side:T.DoubleSide,blending:T.AdditiveBlending}));ring.rotation.x=1.08;ring.rotation.z=.28;group.add(ring)}
+  return {group,mesh,ring};
+}
+function makeNebula(colorA,colorB,position,scale,opacity){
+  const c=document.createElement('canvas'); c.width=c.height=256; const x=c.getContext('2d');
+  const g=x.createRadialGradient(128,128,0,128,128,128); g.addColorStop(0,colorA); g.addColorStop(.42,colorB); g.addColorStop(1,'rgba(0,0,0,0)'); x.fillStyle=g; x.fillRect(0,0,256,256);
+  const sprite=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(c),transparent:true,opacity,blending:T.AdditiveBlending,depthWrite:false})); sprite.position.set(...position); sprite.scale.set(scale,scale*.58,1); world.add(sprite); return sprite;
+}
+
 /* particle field */
-const N=2800, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+const N=isPhone?1500:3200, pos=new Float32Array(N*3), col=new Float32Array(N*3);
 const cA=new T.Color(0x00ffc8), cB=new T.Color(0x00d4ff), cC=new T.Color(0x7b5cff);
 for(let i=0;i<N;i++){
   pos[i*3]=(Math.random()-.5)*46; pos[i*3+1]=(Math.random()-.5)*30; pos[i*3+2]=(Math.random()-.5)*40;
@@ -1082,9 +1129,17 @@ pg.setAttribute('color',new T.BufferAttribute(col,3));
 const pts=new T.Points(pg,new T.PointsMaterial({size:.062,vertexColors:true,transparent:true,opacity:.85,
   blending:T.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));
 world.add(pts);
+const nebulae=[
+  makeNebula('rgba(119,219,255,.28)','rgba(33,91,189,.1)',[-7,3,-9],9,.42),
+  makeNebula('rgba(230,118,255,.2)','rgba(91,51,180,.08)',[5,-4,-12],8,.34),
+  makeNebula('rgba(95,255,218,.16)','rgba(12,117,146,.06)',[0,5,-17],11,.3)
+];
+const planetA=addPlanet([-3.7,1.35,-3.2],1.18,'#0b355f','#31b5c6','#8deaff');
+const planetB=addPlanet([3.6,-2.35,-2.5],.58,'#56277e','#db71c3','#f2c1ff');
+const moon=addPlanet([-1.4,-2.8,-1.2],.28,'#6f778c','#c8d1dc',null);
 
 /* security core */
-const core=new T.Group(); core.position.set(3.4,.2,0); world.add(core);
+const core=new T.Group(); core.position.set(2.9,.45,-.4); core.scale.setScalar(.78); world.add(core);
 const wire=new T.Mesh(new T.IcosahedronGeometry(1.85,1),
   new T.MeshBasicMaterial({color:0x00ffc8,wireframe:true,transparent:true,opacity:.5}));
 core.add(wire);
@@ -1117,7 +1172,7 @@ for(let i=0;i<9;i++){
 }
 /* wire grid floor */
 const grid=new T.GridHelper(70,54,0x00ffc8,0x0c3b33);
-grid.material.transparent=true; grid.material.opacity=.16; grid.position.y=-7.5; world.add(grid);
+grid.material.transparent=true; grid.material.opacity=isPhone?.08:.16; grid.position.y=-7.5; grid.visible=!isPhone; world.add(grid);
 
 let scrollP=0, mx=0, my=0, tmx=0, tmy=0;
 addEventListener('mousemove',e=>{tmx=(e.clientX/innerWidth-.5); tmy=(e.clientY/innerHeight-.5);},{passive:true});
@@ -1131,6 +1186,12 @@ const clock=new T.Clock();
   const boost=document.body.classList.contains('dance')?7:1;
   mx+=(tmx-mx)*.05; my+=(tmy-my)*.05;
   core.rotation.y+=.0026*boost; core.rotation.x=Math.sin(t*.25)*.16;
+  if(!reducedMotion){
+    planetA.group.rotation.y+=.0018*boost; planetA.mesh.rotation.y+=.0022*boost;
+    planetB.group.rotation.y-=.0031*boost; planetB.mesh.rotation.x+=.0015*boost;
+    moon.group.rotation.y+=.0024*boost; moon.mesh.rotation.z+=.001*boost;
+    nebulae.forEach((n,i)=>{n.position.x+=Math.sin(t*.05+i)*.0009;n.position.y+=Math.cos(t*.04+i)*.0007;n.material.rotation=Math.sin(t*.025+i)*.08;});
+  }
   inner.rotation.y-=.006*boost; inner.rotation.x+=.004*boost;
   rings.forEach((r,i)=>{ r.rotation.z+=(.004+i*.0022)*boost; });
   sats.forEach(s=>{ const d=s.userData; d.a+=d.sp*.014*boost;
