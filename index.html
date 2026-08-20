@@ -145,11 +145,12 @@ h1,h2,h3,h4{font-family:var(--disp);line-height:1.08;letter-spacing:-.5px}
 ::-webkit-scrollbar-thumb{background:linear-gradient(var(--mint),var(--cyan));border-radius:9px}
 
 /* ============ 02 · GLOBAL LAYERS ============ */
-#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-  radial-gradient(ellipse at 72% 18%,rgba(41,105,196,.18),transparent 34%),
-  radial-gradient(ellipse at 20% 76%,rgba(122,54,196,.16),transparent 38%),
-  linear-gradient(180deg,#03050d 0%,#07101c 50%,#03050b 100%);filter:saturate(1.12)}
-#bg3d{will-change:transform}
+#bg2d{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 72% 18%,rgba(41,105,196,.22),transparent 34%),
+  radial-gradient(ellipse at 20% 76%,rgba(122,54,196,.2),transparent 38%),
+  linear-gradient(180deg,#03050d 0%,#07101c 50%,#03050b 100%);filter:saturate(1.18)}
+#bg3d{position:fixed;inset:0;z-index:1;pointer-events:none;background:transparent!important;will-change:transform}
+@media(max-width:700px){#bg2d{opacity:.92}}
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
 .scan{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.5;
@@ -644,7 +645,7 @@ body::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;opa
   <div class="bar"><i id="bbar" style="width: 0%;"></i></div>
   <div id="bootlog"></div>
   <div class="granted" id="granted">ACCESS GRANTED</div>
-</div></div><canvas id="bg3d" aria-hidden="true" data-engine="three.js r160" width="1920" height="824" style="width: 1920px; height: 824px; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"></canvas><div class="grain"></div><div class="scan"></div><div class="vig"></div><div id="prog" style="width: 0%;"></div><div id="cur" style="transform: translate(0px, 0px);"></div><div id="curDot"></div><nav id="nav" aria-label="Primary navigation" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);"><div class="navin">
+</div></div><canvas id="bg2d" aria-hidden="true"></canvas><canvas id="bg3d" aria-hidden="true" data-engine="three.js r160" width="1920" height="824" style="width: 1920px; height: 824px; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"></canvas><div class="grain"></div><div class="scan"></div><div class="vig"></div><div id="prog" style="width: 0%;"></div><div id="cur" style="transform: translate(0px, 0px);"></div><div id="curDot"></div><nav id="nav" aria-label="Primary navigation" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);"><div class="navin">
   <a href="#home" class="brand"><svg class="shield" viewBox="0 0 24 24" fill="none" stroke="#00ffc8" stroke-width="1.7"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"></path><path d="M9 12l2.2 2.2L15.5 10"></path></svg>RATAN_PATEL<span>.sec</span></a>
   <button id="burger" type="button" aria-label="Open navigation menu" aria-expanded="false">≡</button>
   <div class="nlinks" id="nlinks">
@@ -1210,6 +1211,42 @@ const clock=new T.Clock();
     'radial-gradient(900px 600px at 78% 22%,rgba(0,255,200,.13),transparent 62%),radial-gradient(700px 500px at 12% 78%,rgba(123,92,255,.12),transparent 60%)';
   console.warn('webgl fallback',err);
 }
+</script><script>
+/* ============ VISIBLE 2D SPACE FALLBACK ============ */
+(function(){
+  const c=document.getElementById('bg2d'); if(!c)return;
+  const ctx=c.getContext('2d',{alpha:true}); if(!ctx)return;
+  let w=0,h=0,dpr=1,stars=[],last=0;
+  const planets=[
+    {x:.67,y:.83,r:.145,phase:.2,speed:.00042,dx:.026,dy:.012,base:'#071f48',hi:'#55d9e7',ring:false},
+    {x:.25,y:.2,r:.12,phase:2.5,speed:-.0003,dx:.018,dy:.02,base:'#24284f',hi:'#aab8ea',ring:true},
+    {x:.86,y:.48,r:.075,phase:4.5,speed:.00055,dx:.025,dy:.014,base:'#461f72',hi:'#e38bda',ring:true},
+    {x:.12,y:.67,r:.035,phase:1.3,speed:-.0008,dx:.016,dy:.01,base:'#6a7186',hi:'#dbe4f1',ring:false}
+  ];
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize(){
+    dpr=Math.min(devicePixelRatio||1,1.6);w=innerWidth;h=innerHeight;c.width=Math.floor(w*dpr);c.height=Math.floor(h*dpr);c.style.width=w+'px';c.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=w<700?110:190;stars=Array.from({length:n},(_,i)=>({x:Math.random()*w,y:Math.random()*h,z:.25+Math.random()*.95,r:.4+Math.random()*(w<700?1.2:1.8),tw:Math.random()*6.28,s:.0002+Math.random()*.0006}));
+  }
+  function nebula(x,y,r,color){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,color);g.addColorStop(.45,color.replace('0.18','0.08').replace('0.16','0.07'));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+  function drawPlanet(p,t){
+    const min=Math.min(w,h),r=p.r*min,ox=p.x*w+Math.sin(t*p.speed+p.phase)*p.dx*w,oy=p.y*h+Math.cos(t*p.speed*.8+p.phase)*p.dy*h;
+    ctx.save();ctx.translate(ox,oy);ctx.rotate(t*p.speed*.7+p.phase*.05);
+    if(p.ring){ctx.save();ctx.rotate(-.22);ctx.strokeStyle='rgba(184,229,255,.5)';ctx.lineWidth=Math.max(2,r*.07);ctx.beginPath();ctx.ellipse(0,0,r*1.65,r*.38,0,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='rgba(111,185,255,.22)';ctx.lineWidth=Math.max(1,r*.16);ctx.beginPath();ctx.ellipse(0,0,r*1.85,r*.45,0,0,Math.PI*2);ctx.stroke();ctx.restore()}
+    const glow=ctx.createRadialGradient(-r*.25,-r*.32,r*.1,0,0,r*1.2);glow.addColorStop(0,p.hi+'cc');glow.addColorStop(.55,p.base);glow.addColorStop(1,'#020814');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.beginPath();ctx.arc(0,0,r*.98,0,Math.PI*2);ctx.clip();
+    for(let i=-3;i<7;i++){ctx.globalAlpha=.13+((i+4)%3)*.045;ctx.fillStyle=i%2?'#9eefff':'#061638';ctx.beginPath();ctx.ellipse(Math.sin(i*2.1)*r*.25,i*r*.23,r*1.1,r*.07,Math.sin(i)*.25,0,Math.PI*2);ctx.fill()}
+    ctx.globalAlpha=.3;ctx.fillStyle='#fff';for(let i=0;i<7;i++){const a=i*2.41+p.phase;ctx.beginPath();ctx.arc(Math.cos(a)*r*.55,Math.sin(a)*r*.55,r*(.018+i*.004),0,Math.PI*2);ctx.fill()}ctx.restore();
+    ctx.globalAlpha=.45;ctx.strokeStyle=p.hi;ctx.lineWidth=Math.max(1,r*.025);ctx.beginPath();ctx.arc(0,0,r*1.03,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  function frame(t){
+    const dt=Math.min(40,t-last||16);last=t;ctx.clearRect(0,0,w,h);
+    nebula(w*.18,h*.2,Math.max(w,h)*.35,'rgba(77,185,255,.18)');nebula(w*.82,h*.76,Math.max(w,h)*.4,'rgba(177,91,255,.16)');nebula(w*.6,h*.45,Math.max(w,h)*.32,'rgba(34,217,198,.1)');
+    stars.forEach(s=>{if(!reduced){s.y+=dt*s.s*.035;if(s.y>h+4)s.y=-4}s.tw+=dt*.0015;ctx.globalAlpha=.3+.55*(.5+.5*Math.sin(s.tw));ctx.fillStyle=s.z>.75?'#dcfbff':'#7edaff';ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.z,0,Math.PI*2);ctx.fill()});
+    planets.forEach(p=>drawPlanet(p,reduced?0:t));ctx.globalAlpha=1;requestAnimationFrame(frame);
+  }
+  resize();addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
+})();
 </script><script>
 /* ============ 01 · 2-SECOND RESEARCH BOOT ============ */
 (function(){
