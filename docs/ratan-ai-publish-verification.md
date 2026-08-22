@@ -1,5 +1,5 @@
 # Ratan AI V6 Publication Verification
 
-The GitHub Pages build for commit `a6b848f` completed successfully. The public Ratan AI URL was refreshed immediately afterward but still returned the previous V5 content, indicating a CDN propagation or cache delay rather than a failed repository update.
+The GitHub Pages build completed successfully. The default public URL initially returned the previous V5 page while GitHub Pages/CDN cache propagation was in progress. A cache-busted check first verified the updated release, and a fresh normal-URL extraction later confirmed that the public Ratan AI V6 and Super Agent pages are serving the current production content.
 
-The committed source contains the V6 Groq launch, Free and $5 USDT/month plan positioning, the Super Agent preview, and the secure hosted-chat link. Recheck the public URL after GitHub Pages propagation completes.
+The deployed Ratan AI V6 page contains the Groq launch, Free and $5 USDT/month plan positioning, the Super Agent preview, and the secure hosted-chat link. The deployed Super Agent page accurately presents the advanced module as an early-access product direction rather than as an already deployed autonomous service.
