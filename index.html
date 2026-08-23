@@ -153,7 +153,18 @@ h1,h2,h3,h4{font-family:var(--disp);line-height:1.08;letter-spacing:-.5px}
   linear-gradient(rgba(255,42,82,.045) 1px,transparent 1px),
   linear-gradient(90deg,rgba(255,42,82,.045) 1px,transparent 1px),
   radial-gradient(ellipse at 50% 46%,rgba(255,42,82,.06),transparent 58%)!important;background-size:72px 72px,72px 72px,100% 100%;will-change:transform;mix-blend-mode:screen;animation:tacticalGrid 18s linear infinite}
-@media(max-width:700px){#bg2d{opacity:.94}#bg3d{opacity:.72;background-size:52px 52px,52px 52px,100% 100%!important}}
+#redteam-motion{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;mix-blend-mode:screen}
+#redteam-motion .ring{position:absolute;left:68%;top:43%;width:min(43vw,620px);aspect-ratio:1;border:1px solid rgba(255,46,91,.18);border-radius:50%;transform:translate(-50%,-50%) rotateX(66deg) rotateZ(0deg);box-shadow:0 0 26px rgba(255,46,91,.08),inset 0 0 26px rgba(255,46,91,.05);animation:ringSpin 14s linear infinite}
+#redteam-motion .ring.r2{width:min(31vw,440px);border-color:rgba(255,138,91,.22);transform:translate(-50%,-50%) rotateX(66deg) rotateZ(35deg);animation-duration:9s;animation-direction:reverse}
+#redteam-motion .ring.r3{width:min(20vw,280px);border-color:rgba(168,85,247,.25);transform:translate(-50%,-50%) rotateX(66deg) rotateZ(70deg);animation-duration:6s}
+#redteam-motion .ring::after{content:'';position:absolute;left:50%;top:-7px;width:9px;height:9px;border-radius:50%;background:#ff2e5b;box-shadow:0 0 16px 5px rgba(255,46,91,.7);transform:translateX(-50%)}
+#redteam-motion .node{position:absolute;width:7px;height:7px;border-radius:50%;background:#ff8a5b;box-shadow:0 0 0 0 rgba(255,138,91,.65),0 0 14px 3px rgba(255,138,91,.7);animation:nodePulse 2.4s ease-in-out infinite}
+#redteam-motion .node.n1{left:58%;top:30%;animation-delay:-.4s}.node.n2{left:82%;top:56%;animation-delay:-1.3s}.node.n3{left:70%;top:70%;animation-delay:-1.9s}.node.n4{left:46%;top:63%;animation-delay:-.8s}
+#redteam-motion .sweep{position:absolute;left:68%;top:43%;width:min(44vw,640px);height:1px;background:linear-gradient(90deg,transparent,rgba(255,46,91,.7),transparent);transform-origin:left center;animation:radarSweep 5s linear infinite;box-shadow:0 0 12px rgba(255,46,91,.65)}
+@keyframes ringSpin{to{transform:translate(-50%,-50%) rotateX(66deg) rotateZ(360deg)}}
+@keyframes nodePulse{0%,100%{transform:scale(.65);opacity:.5;box-shadow:0 0 0 0 rgba(255,138,91,0),0 0 10px 2px rgba(255,138,91,.35)}50%{transform:scale(1.45);opacity:1;box-shadow:0 0 0 12px rgba(255,138,91,0),0 0 20px 5px rgba(255,138,91,.85)}}
+@keyframes radarSweep{to{transform:rotate(360deg)}}
+@media(max-width:700px){#bg2d{opacity:.94}#bg3d{opacity:.72;background-size:52px 52px,52px 52px,100% 100%!important}#redteam-motion{opacity:.72}#redteam-motion .ring{left:72%;top:35%;width:72vw}#redteam-motion .ring.r2{width:54vw}#redteam-motion .ring.r3{width:38vw}}
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
 .scan{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.5;
@@ -177,7 +188,7 @@ main,nav,footer{position:relative;z-index:4}
   section{padding:76px 0}.wrap{padding-inline:16px}.btn{width:100%;justify-content:center}
 }
 @keyframes tacticalGrid{0%{background-position:0 0,0 0,0 0}100%{background-position:72px 144px,-72px 72px,0 0}}
-@media(prefers-reduced-motion:reduce){#bg3d{opacity:.72;animation:none;background-size:88px 88px,88px 88px,100% 100%!important}}
+@media(prefers-reduced-motion:reduce){#bg3d{opacity:.72;animation:none;background-size:88px 88px,88px 88px,100% 100%!important}#redteam-motion .ring,#redteam-motion .node,#redteam-motion .sweep{animation:none!important}}
 
 /* ============ 03 · CURSOR ============ */
 #cur,#curDot{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%}
@@ -649,7 +660,7 @@ body::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;opa
   <div class="bar"><i id="bbar" style="width: 0%;"></i></div>
   <div id="bootlog"></div>
   <div class="granted" id="granted">ACCESS GRANTED</div>
-</div></div><canvas id="bg2d" aria-hidden="true"></canvas><canvas id="bg3d" aria-hidden="true" data-engine="three.js r160" width="1920" height="824" style="width: 1920px; height: 824px; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"></canvas><div class="grain"></div><div class="scan"></div><div class="vig"></div><div id="prog" style="width: 0%;"></div><div id="cur" style="transform: translate(0px, 0px);"></div><div id="curDot"></div><nav id="nav" aria-label="Primary navigation" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);"><div class="navin">
+</div></div><canvas id="bg2d" aria-hidden="true"></canvas><canvas id="bg3d" aria-hidden="true" data-engine="three.js r160" width="1920" height="824" style="width: 1920px; height: 824px; translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"></canvas><div id="redteam-motion" aria-hidden="true"><i class="ring r1"></i><i class="ring r2"></i><i class="ring r3"></i><i class="node n1"></i><i class="node n2"></i><i class="node n3"></i><i class="node n4"></i><i class="sweep"></i></div><div class="grain"></div><div class="scan"></div><div class="vig"></div><div id="prog" style="width: 0%;"></div><div id="cur" style="transform: translate(0px, 0px);"></div><div id="curDot"></div><nav id="nav" aria-label="Primary navigation" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);"><div class="navin">
   <a href="#home" class="brand"><svg class="shield" viewBox="0 0 24 24" fill="none" stroke="#00ffc8" stroke-width="1.7"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"></path><path d="M9 12l2.2 2.2L15.5 10"></path></svg>RATAN_PATEL<span>.sec</span></a>
   <button id="burger" type="button" aria-label="Open navigation menu" aria-expanded="false">≡</button>
   <div class="nlinks" id="nlinks">
