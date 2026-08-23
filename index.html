@@ -146,15 +146,18 @@ h1,h2,h3,h4{font-family:var(--disp);line-height:1.08;letter-spacing:-.5px}
 
 /* ============ 02 · GLOBAL LAYERS ============ */
 #bg2d{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-  radial-gradient(ellipse at 72% 18%,rgba(41,105,196,.22),transparent 34%),
-  radial-gradient(ellipse at 20% 76%,rgba(122,54,196,.2),transparent 38%),
-  linear-gradient(180deg,#03050d 0%,#07101c 50%,#03050b 100%);filter:saturate(1.18)}
-#bg3d{position:fixed;inset:0;z-index:1;pointer-events:none;background:transparent!important;will-change:transform}
-@media(max-width:700px){#bg2d{opacity:.92}}
+  radial-gradient(ellipse at 78% 18%,rgba(255,36,78,.23),transparent 34%),
+  radial-gradient(ellipse at 18% 74%,rgba(172,24,66,.2),transparent 38%),
+  linear-gradient(180deg,#090308 0%,#170911 48%,#050308 100%);filter:saturate(1.2)}
+#bg3d{position:fixed;inset:0;z-index:1;pointer-events:none;background:
+  linear-gradient(rgba(255,42,82,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,42,82,.045) 1px,transparent 1px),
+  radial-gradient(ellipse at 50% 46%,rgba(255,42,82,.06),transparent 58%)!important;background-size:72px 72px,72px 72px,100% 100%;will-change:transform;mix-blend-mode:screen;animation:tacticalGrid 18s linear infinite}
+@media(max-width:700px){#bg2d{opacity:.94}#bg3d{opacity:.72;background-size:52px 52px,52px 52px,100% 100%!important}}
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
 .scan{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.5;
-  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.22) 2px 4px);mix-blend-mode:multiply}
+  background:repeating-linear-gradient(180deg,rgba(255,46,91,.018) 0 2px,rgba(0,0,0,.24) 2px 4px);mix-blend-mode:multiply}
 .vig{position:fixed;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(2,4,7,.75) 100%)}
 main,nav,footer{position:relative;z-index:4}
@@ -173,7 +176,8 @@ main,nav,footer{position:relative;z-index:4}
   .holo{padding:10px;border-radius:18px}.holo .frame{aspect-ratio:4/5}
   section{padding:76px 0}.wrap{padding-inline:16px}.btn{width:100%;justify-content:center}
 }
-@media(prefers-reduced-motion:reduce){#bg3d{opacity:.8}}
+@keyframes tacticalGrid{0%{background-position:0 0,0 0,0 0}100%{background-position:72px 144px,-72px 72px,0 0}}
+@media(prefers-reduced-motion:reduce){#bg3d{opacity:.72;animation:none;background-size:88px 88px,88px 88px,100% 100%!important}}
 
 /* ============ 03 · CURSOR ============ */
 #cur,#curDot{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%}
@@ -1078,7 +1082,7 @@ body::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;opa
   <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="refunds.html">Refunds</a> · <a href="acceptable-use.html">Acceptable Use</a> · <a href=".well-known/security.txt">Security</a></span>
   <span id="uptime">SESSION_UPTIME 00:24</span>
 </div></footer><script type="module">
-/* ============ 3D BACKGROUND · three.js r160 ============ */
+/* ============ 3D RED-TEAM THREAT NETWORK · three.js r160 ============ */
 try{
 const T = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
 const cv = document.getElementById('bg3d');
@@ -1088,19 +1092,19 @@ const rnd = new T.WebGLRenderer({canvas:cv,alpha:true,antialias:true,powerPrefer
 rnd.setPixelRatio(Math.min(devicePixelRatio,isPhone?1.25:1.8));
 rnd.setSize(innerWidth,innerHeight);
 const sc = new T.Scene();
-sc.fog = new T.FogExp2(0x04060a,0.055);
+sc.fog = new T.FogExp2(0x120308,0.058);
 const cam = new T.PerspectiveCamera(55,innerWidth/innerHeight,.1,120);
 cam.position.set(0,0,9);
 
 const world = new T.Group(); sc.add(world);
 
 /* atmospheric lighting + procedural textures keep the scene self-contained */
-sc.add(new T.AmbientLight(0x5a76a5,1.25));
-const keyLight=new T.DirectionalLight(0xffffff,2.1); keyLight.position.set(-5,5,8); sc.add(keyLight);
+sc.add(new T.AmbientLight(0x7a182c,1.18));
+const keyLight=new T.DirectionalLight(0xffd9df,2.05); keyLight.position.set(-5,5,8); sc.add(keyLight);
 function makePlanetTexture(base,accent,banded=false){
   const c=document.createElement('canvas'); c.width=c.height=256; const x=c.getContext('2d');
   const g=x.createLinearGradient(0,0,256,256); g.addColorStop(0,base); g.addColorStop(.52,accent); g.addColorStop(1,base); x.fillStyle=g; x.fillRect(0,0,256,256);
-  for(let i=0;i<(banded?110:76);i++){const y=Math.random()*256,h=2+Math.random()*18;x.globalAlpha=.06+Math.random()*.14;x.fillStyle=i%2?'#c8f7ff':'#06162c';x.fillRect(0,y,256,h)}
+  for(let i=0;i<(banded?110:76);i++){const y=Math.random()*256,h=2+Math.random()*18;x.globalAlpha=.06+Math.random()*.14;x.fillStyle=i%2?'#ffb0bd':'#260812';x.fillRect(0,y,256,h)}
   for(let i=0;i<1500;i++){const px=Math.random()*256,py=Math.random()*256,r=Math.random()*1.8;x.globalAlpha=Math.random()*.22;x.fillStyle='#ffffff';x.fillRect(px,py,r,r)}
   x.globalAlpha=1; return new T.CanvasTexture(c);
 }
@@ -1121,7 +1125,7 @@ function makeNebula(colorA,colorB,position,scale,opacity){
 
 /* particle field */
 const N=isPhone?1500:3200, pos=new Float32Array(N*3), col=new Float32Array(N*3);
-const cA=new T.Color(0x00ffc8), cB=new T.Color(0x00d4ff), cC=new T.Color(0x7b5cff);
+const cA=new T.Color(0xff2e5b), cB=new T.Color(0xff8a5b), cC=new T.Color(0xa855f7);
 for(let i=0;i<N;i++){
   pos[i*3]=(Math.random()-.5)*46; pos[i*3+1]=(Math.random()-.5)*30; pos[i*3+2]=(Math.random()-.5)*40;
   const c = Math.random()<.62?cA:(Math.random()<.7?cB:cC);
@@ -1134,25 +1138,25 @@ const pts=new T.Points(pg,new T.PointsMaterial({size:.062,vertexColors:true,tran
   blending:T.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));
 world.add(pts);
 const nebulae=[
-  makeNebula('rgba(119,219,255,.28)','rgba(33,91,189,.1)',[-7,3,-9],9,.42),
-  makeNebula('rgba(230,118,255,.2)','rgba(91,51,180,.08)',[5,-4,-12],8,.34),
-  makeNebula('rgba(95,255,218,.16)','rgba(12,117,146,.06)',[0,5,-17],11,.3)
+  makeNebula('rgba(255,46,91,.28)','rgba(118,20,51,.1)',[-7,3,-9],9,.42),
+  makeNebula('rgba(255,138,91,.2)','rgba(92,25,45,.08)',[5,-4,-12],8,.34),
+  makeNebula('rgba(168,85,247,.16)','rgba(72,25,105,.06)',[0,5,-17],11,.3)
 ];
-const planetA=addPlanet([-3.7,1.35,-3.2],1.18,'#0b355f','#31b5c6','#8deaff');
-const planetB=addPlanet([3.6,-2.35,-2.5],.58,'#56277e','#db71c3','#f2c1ff');
-const moon=addPlanet([-1.4,-2.8,-1.2],.28,'#6f778c','#c8d1dc',null);
+const planetA=addPlanet([-3.7,1.35,-3.2],1.18,'#4a0b22','#ff526d','#ffb0bd');
+const planetB=addPlanet([3.6,-2.35,-2.5],.58,'#43123c','#e58cff','#f2c1ff');
+const moon=addPlanet([-1.4,-2.8,-1.2],.28,'#3d2028','#ff9b76',null);
 
 /* security core */
 const core=new T.Group(); core.position.set(2.9,.45,-.4); core.scale.setScalar(.78); world.add(core);
 const wire=new T.Mesh(new T.IcosahedronGeometry(1.85,1),
-  new T.MeshBasicMaterial({color:0x00ffc8,wireframe:true,transparent:true,opacity:.5}));
+  new T.MeshBasicMaterial({color:0xff2e5b,wireframe:true,transparent:true,opacity:.58}));
 core.add(wire);
 const inner=new T.Mesh(new T.IcosahedronGeometry(1.18,0),
-  new T.MeshBasicMaterial({color:0x00d4ff,transparent:true,opacity:.12}));
+  new T.MeshBasicMaterial({color:0xff8a5b,transparent:true,opacity:.14}));
 core.add(inner);
 const glowMat=new T.ShaderMaterial({
   transparent:true,blending:T.AdditiveBlending,depthWrite:false,side:T.BackSide,
-  uniforms:{c:{value:new T.Color(0x00ffc8)}},
+  uniforms:{c:{value:new T.Color(0xff2e5b)}},
   vertexShader:`varying vec3 vN;varying vec3 vP;void main(){vN=normalize(normalMatrix*normal);
     vec4 mv=modelViewMatrix*vec4(position,1.);vP=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`uniform vec3 c;varying vec3 vN;varying vec3 vP;
@@ -1161,7 +1165,7 @@ core.add(new T.Mesh(new T.SphereGeometry(2.15,42,42),glowMat));
 
 /* orbital rings */
 const rings=[];
-[[2.7,0x00ffc8,.55],[3.4,0x00d4ff,.42],[4.15,0x7b5cff,.3]].forEach((r,i)=>{
+[[2.7,0xff2e5b,.6],[3.4,0xff8a5b,.46],[4.15,0xa855f7,.34]].forEach((r,i)=>{
   const m=new T.Mesh(new T.TorusGeometry(r[0],.012,3,140),
     new T.MeshBasicMaterial({color:r[1],transparent:true,opacity:r[2]}));
   m.rotation.x=Math.PI/2 - i*.42; m.rotation.y=i*.5; core.add(m); rings.push(m);
@@ -1170,12 +1174,12 @@ const rings=[];
 const sats=[];
 for(let i=0;i<9;i++){
   const s=new T.Mesh(new T.OctahedronGeometry(.085,0),
-    new T.MeshBasicMaterial({color:i%3?0x00ffc8:0xffc247}));
+    new T.MeshBasicMaterial({color:i%3?0xff2e5b:0xffc247}));
   s.userData={a:Math.random()*6.28,r:2.7+Math.random()*1.6,sp:.13+Math.random()*.3,y:(Math.random()-.5)*2.4};
   core.add(s); sats.push(s);
 }
 /* wire grid floor */
-const grid=new T.GridHelper(70,54,0x00ffc8,0x0c3b33);
+const grid=new T.GridHelper(70,54,0xff2e5b,0x3b1420);
 grid.material.transparent=true; grid.material.opacity=isPhone?.08:.16; grid.position.y=-7.5; grid.visible=!isPhone; world.add(grid);
 
 let scrollP=0, mx=0, my=0, tmx=0, tmy=0;
@@ -1211,20 +1215,20 @@ const clock=new T.Clock();
 })();
 }catch(err){
   document.getElementById('bg3d').style.background =
-    'radial-gradient(900px 600px at 78% 22%,rgba(0,255,200,.13),transparent 62%),radial-gradient(700px 500px at 12% 78%,rgba(123,92,255,.12),transparent 60%)';
+    'radial-gradient(900px 600px at 78% 22%,rgba(255,46,91,.16),transparent 62%),radial-gradient(700px 500px at 12% 78%,rgba(168,85,247,.13),transparent 60%)';
   console.warn('webgl fallback',err);
 }
 </script><script>
-/* ============ VISIBLE 2D SPACE FALLBACK ============ */
+/* ============ VISIBLE 2D RED-TEAM FALLBACK ============ */
 (function(){
   const c=document.getElementById('bg2d'); if(!c)return;
   const ctx=c.getContext('2d',{alpha:true}); if(!ctx)return;
   let w=0,h=0,dpr=1,stars=[],last=0;
   const planets=[
-    {x:.67,y:.83,r:.145,phase:.2,speed:.00042,dx:.026,dy:.012,base:'#071f48',hi:'#55d9e7',ring:false},
-    {x:.25,y:.2,r:.12,phase:2.5,speed:-.0003,dx:.018,dy:.02,base:'#24284f',hi:'#aab8ea',ring:true},
-    {x:.86,y:.48,r:.075,phase:4.5,speed:.00055,dx:.025,dy:.014,base:'#461f72',hi:'#e38bda',ring:true},
-    {x:.12,y:.67,r:.035,phase:1.3,speed:-.0008,dx:.016,dy:.01,base:'#6a7186',hi:'#dbe4f1',ring:false}
+    {x:.67,y:.83,r:.145,phase:.2,speed:.00042,dx:.026,dy:.012,base:'#4a0b22',hi:'#ff526d',ring:false},
+    {x:.25,y:.2,r:.12,phase:2.5,speed:-.0003,dx:.018,dy:.02,base:'#3b1420',hi:'#ffb0bd',ring:true},
+    {x:.86,y:.48,r:.075,phase:4.5,speed:.00055,dx:.025,dy:.014,base:'#43123c',hi:'#e58cff',ring:true},
+    {x:.12,y:.67,r:.035,phase:1.3,speed:-.0008,dx:.016,dy:.01,base:'#3d2028',hi:'#ff9b76',ring:false}
   ];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function resize(){
@@ -1235,17 +1239,17 @@ const clock=new T.Clock();
   function drawPlanet(p,t){
     const min=Math.min(w,h),r=p.r*min,ox=p.x*w+Math.sin(t*p.speed+p.phase)*p.dx*w,oy=p.y*h+Math.cos(t*p.speed*.8+p.phase)*p.dy*h;
     ctx.save();ctx.translate(ox,oy);ctx.rotate(t*p.speed*.7+p.phase*.05);
-    if(p.ring){ctx.save();ctx.rotate(-.22);ctx.strokeStyle='rgba(184,229,255,.5)';ctx.lineWidth=Math.max(2,r*.07);ctx.beginPath();ctx.ellipse(0,0,r*1.65,r*.38,0,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='rgba(111,185,255,.22)';ctx.lineWidth=Math.max(1,r*.16);ctx.beginPath();ctx.ellipse(0,0,r*1.85,r*.45,0,0,Math.PI*2);ctx.stroke();ctx.restore()}
-    const glow=ctx.createRadialGradient(-r*.25,-r*.32,r*.1,0,0,r*1.2);glow.addColorStop(0,p.hi+'cc');glow.addColorStop(.55,p.base);glow.addColorStop(1,'#020814');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();
+    if(p.ring){ctx.save();ctx.rotate(-.22);ctx.strokeStyle='rgba(255,176,189,.56)';ctx.lineWidth=Math.max(2,r*.07);ctx.beginPath();ctx.ellipse(0,0,r*1.65,r*.38,0,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='rgba(255,82,109,.24)';ctx.lineWidth=Math.max(1,r*.16);ctx.beginPath();ctx.ellipse(0,0,r*1.85,r*.45,0,0,Math.PI*2);ctx.stroke();ctx.restore()}
+    const glow=ctx.createRadialGradient(-r*.25,-r*.32,r*.1,0,0,r*1.2);glow.addColorStop(0,p.hi+'cc');glow.addColorStop(.55,p.base);glow.addColorStop(1,'#080206');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();
     ctx.save();ctx.beginPath();ctx.arc(0,0,r*.98,0,Math.PI*2);ctx.clip();
-    for(let i=-3;i<7;i++){ctx.globalAlpha=.13+((i+4)%3)*.045;ctx.fillStyle=i%2?'#9eefff':'#061638';ctx.beginPath();ctx.ellipse(Math.sin(i*2.1)*r*.25,i*r*.23,r*1.1,r*.07,Math.sin(i)*.25,0,Math.PI*2);ctx.fill()}
+    for(let i=-3;i<7;i++){ctx.globalAlpha=.13+((i+4)%3)*.045;ctx.fillStyle=i%2?'#ffb0bd':'#260812';ctx.beginPath();ctx.ellipse(Math.sin(i*2.1)*r*.25,i*r*.23,r*1.1,r*.07,Math.sin(i)*.25,0,Math.PI*2);ctx.fill()}
     ctx.globalAlpha=.3;ctx.fillStyle='#fff';for(let i=0;i<7;i++){const a=i*2.41+p.phase;ctx.beginPath();ctx.arc(Math.cos(a)*r*.55,Math.sin(a)*r*.55,r*(.018+i*.004),0,Math.PI*2);ctx.fill()}ctx.restore();
     ctx.globalAlpha=.45;ctx.strokeStyle=p.hi;ctx.lineWidth=Math.max(1,r*.025);ctx.beginPath();ctx.arc(0,0,r*1.03,0,Math.PI*2);ctx.stroke();ctx.restore();
   }
   function frame(t){
     const dt=Math.min(40,t-last||16);last=t;ctx.clearRect(0,0,w,h);
-    nebula(w*.18,h*.2,Math.max(w,h)*.35,'rgba(77,185,255,.18)');nebula(w*.82,h*.76,Math.max(w,h)*.4,'rgba(177,91,255,.16)');nebula(w*.6,h*.45,Math.max(w,h)*.32,'rgba(34,217,198,.1)');
-    stars.forEach(s=>{if(!reduced){s.y+=dt*s.s*.035;if(s.y>h+4)s.y=-4}s.tw+=dt*.0015;ctx.globalAlpha=.3+.55*(.5+.5*Math.sin(s.tw));ctx.fillStyle=s.z>.75?'#dcfbff':'#7edaff';ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.z,0,Math.PI*2);ctx.fill()});
+    nebula(w*.18,h*.2,Math.max(w,h)*.35,'rgba(255,46,91,.18)');nebula(w*.82,h*.76,Math.max(w,h)*.4,'rgba(168,85,247,.16)');nebula(w*.6,h*.45,Math.max(w,h)*.32,'rgba(255,138,91,.1)');
+    stars.forEach(s=>{if(!reduced){s.y+=dt*s.s*.035;if(s.y>h+4)s.y=-4}s.tw+=dt*.0015;ctx.globalAlpha=.3+.55*(.5+.5*Math.sin(s.tw));ctx.fillStyle=s.z>.75?'#ffe7eb':'#ff7892';ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.z,0,Math.PI*2);ctx.fill()});
     planets.forEach(p=>drawPlanet(p,reduced?0:t));ctx.globalAlpha=1;requestAnimationFrame(frame);
   }
   resize();addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
