@@ -1,4 +1,0 @@
-Contact: mailto:patelratan460@gmail.com
-Policy: https://ratan-patel.github.io/acceptable-use.html
-Preferred-Languages: en, hi
-Canonical: https://ratan-patel.github.io/.well-known/security.txt
