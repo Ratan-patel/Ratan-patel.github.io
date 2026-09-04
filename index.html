@@ -1096,16 +1096,17 @@ addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProje
 const clock=new T.Clock();
 (function loop(){
   requestAnimationFrame(loop);
-  const t=clock.getElapsedTime();
-  const boost=document.body.classList.contains('dance')?7:1;
+  // Historical visual mode: keep the globe, rings, satellites and particle field static.
+  const t=0;
+  const boost=0;
   mx+=(tmx-mx)*.05; my+=(tmy-my)*.05;
-  core.rotation.y+=.0026*boost; core.rotation.x=Math.sin(t*.25)*.16;
-  inner.rotation.y-=.006*boost; inner.rotation.x+=.004*boost;
-  rings.forEach((r,i)=>{ r.rotation.z+=(.004+i*.0022)*boost; });
-  sats.forEach(s=>{ const d=s.userData; d.a+=d.sp*.014*boost;
-    s.position.set(Math.cos(d.a)*d.r, d.y+Math.sin(t+d.a)*.28, Math.sin(d.a)*d.r);
-    s.rotation.x+=.02;s.rotation.y+=.02; });
-  pts.rotation.y=t*.014; grid.position.z=(t*1.4)%2.6;
+  core.rotation.y=0; core.rotation.x=0;
+  inner.rotation.y=0; inner.rotation.x=0;
+  rings.forEach((r,i)=>{ r.rotation.z=i*.02; });
+  sats.forEach(s=>{ const d=s.userData;
+    s.position.set(Math.cos(d.a)*d.r, d.y+Math.sin(d.a)*.28, Math.sin(d.a)*d.r);
+    s.rotation.x=0; s.rotation.y=0; });
+  pts.rotation.y=0; grid.position.z=0;
   world.position.y = scrollP*7.5;
   world.rotation.z = scrollP*.28;
   cam.position.x = mx*1.5; cam.position.y = -my*1.1;
