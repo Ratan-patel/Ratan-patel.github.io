@@ -12,6 +12,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 |---|---|---|
 | Home | [/](https://ratan-patel.github.io/) | Main landing page — background, skills, experience, gallery |
 | Red-Team Lab | [lab.html](https://ratan-patel.github.io/lab.html) | Browser-based hacking simulator (nmap, nikto, sqlmap, hydra, mimikatz, terminal) |
+| Pentest Lab Arsenal | [pentest-lab.html](https://ratan-patel.github.io/pentest-lab.html) | Full controlled-sandbox manifest, tool inventory, ATT&CK mapping and rebuild guide |
 | Ethical Hacking Foundation | [ethical-hacking-foundation.html](https://ratan-patel.github.io/ethical-hacking-foundation.html) | Course track |
 | Advanced Web & API Pentesting | [advanced-web-api-pentesting.html](https://ratan-patel.github.io/advanced-web-api-pentesting.html) | Course track |
 | Red Team Adversary Simulation | [red-team-adversary-simulation.html](https://ratan-patel.github.io/red-team-adversary-simulation.html) | Course track |
