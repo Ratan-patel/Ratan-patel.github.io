@@ -285,6 +285,13 @@ h1.name b{display:block;font-weight:700;background:linear-gradient(100deg,#eafff
 .stat b{display:block;font-family:var(--disp);font-size:clamp(20px,2.7vw,32px);color:var(--mint);letter-spacing:-1px}
 .stat span{font-family:var(--mono);font-size:9px;letter-spacing:1.4px;color:var(--faint);text-transform:uppercase}
 .hbtns{display:flex;gap:13px;flex-wrap:wrap}
+/* compact RATAN PENTEST LAB hero card */
+.pentest-card{position:relative;padding:28px;border:1px solid rgba(0,255,200,.35);border-radius:22px;background:linear-gradient(145deg,rgba(0,255,200,.10),rgba(5,8,13,.96) 52%,rgba(255,43,109,.08));box-shadow:0 0 42px rgba(0,255,200,.09);overflow:hidden}
+.pentest-card:after{content:'RPL // 01';position:absolute;right:22px;top:20px;color:var(--faint);font:10px var(--mono);letter-spacing:1px}
+.pentest-card-top{display:flex;align-items:center;gap:8px;color:var(--mint);font:11px var(--mono);letter-spacing:2px;margin-bottom:28px}
+.pentest-mark{font:700 clamp(25px,3vw,40px)/1.05 var(--display);letter-spacing:1px;color:var(--txt);margin-bottom:18px}.pentest-mark b{color:var(--mint);display:block}
+.pentest-card p{color:var(--muted);font-size:15px;line-height:1.65;margin-bottom:20px}.pentest-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.pentest-mini-grid span{padding:9px 10px;border:1px solid var(--line);border-radius:8px;color:var(--faint);font:10px var(--mono);letter-spacing:1px}.pentest-free{display:inline-block;color:#06100f;background:var(--mint);padding:7px 11px;border-radius:5px;font:800 11px var(--mono);letter-spacing:1px;margin-bottom:18px}.pentest-card .btn{display:block;text-align:center;width:100%;margin-bottom:12px}.pentest-card small{display:block;color:var(--faint);font:10px/1.5 var(--mono);letter-spacing:.5px}
+
 /* holo profile */
 .holo{position:relative;padding:16px;border:1px solid var(--line);border-radius:22px;
   background:linear-gradient(150deg,rgba(0,255,200,.09),rgba(7,11,17,.85) 45%,rgba(123,92,255,.09));
@@ -555,7 +562,7 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
     <a href="services.html">// SERVICES</a>
     <a href="ratan-os-release.html">// RATAN_OS</a>
     <a href="#lab">// LIVE_LAB</a>
-    <a href="#dossier">// PROFILE</a>
+    <a href="pentest-lab.html">// PENTEST_LAB</a>
     <a href="#creds">// CREDENTIALS</a>
     <a href="ratan_patel_portfolio.html">// PORTFOLIO</a>
     <a href="#contact">// CONTACT</a>
@@ -609,20 +616,14 @@ body.dance .card,body.dance .stat,body.dance .holo{animation:wig 1.1s ease-in-ou
   </div>
 
   <div>
-    <div class="holo" id="holo">
-      <div class="frame">
-        <img src="https://ratan-patel.github.io/assets/profile-photo.jpg" alt="Ratan Kumar Patel">
-        <div class="hlbl a">🔒 SECURED_AGENT</div>
-        <div class="hlbl b">ID · RKP_CEH_v12</div>
-      </div>
-      <div class="telem">
-        <div class="trow"><span>SYSTEM_STATUS</span><b>ONLINE</b></div>
-        <div class="trow"><span>THREAT_POSTURE</span><b id="posture" style="color: var(--cyan);">1 SCAN CONTAINED</b></div>
-        <div class="trow"><span>BASE_OF_OPS</span><b class="g">NEW DELHI · IN</b></div>
-        <div class="trow"><span>VERIFY_HASH</span><b id="vhash">CEH_v12_6e4bd</b></div>
-        <canvas id="spark" width="451" height="44"></canvas>
-      </div>
-      <button class="egg" id="egg">🎭 ENGAGE DANCE_MODE</button>
+    <div class="pentest-card" id="pentest-preview">
+      <div class="pentest-card-top"><span class="pulse"></span> LIVE LAB MODULE</div>
+      <div class="pentest-mark">RATAN <b>PENTEST LAB</b></div>
+      <p>Controlled offensive-security sandbox with tool inventory, MITRE ATT&amp;CK mapping, lab workflow and rebuild guide.</p>
+      <div class="pentest-mini-grid"><span>30+ TOOLS</span><span>697 TECHNIQUES</span><span>9/9 EXERCISES</span></div>
+      <div class="pentest-free">100% FREE ACCESS</div>
+      <a href="pentest-lab.html" class="btn solid">OPEN RATAN PENTEST LAB</a>
+      <small>Authorized training scope only · No payment required</small>
     </div>
   </div>
 </div></div></section>
