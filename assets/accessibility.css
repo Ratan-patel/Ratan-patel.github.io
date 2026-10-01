@@ -1,0 +1,12 @@
+/* Small quality-of-life layer for keyboard, touch and reduced-motion users. */
+.skip-link{position:fixed;top:10px;left:10px;z-index:20000;padding:10px 14px;border-radius:8px;background:#00ffc8;color:#03110d;font:700 12px/1 'JetBrains Mono',monospace;transform:translateY(-150%);transition:transform .2s}
+.skip-link:focus{transform:translateY(0);outline:3px solid #fff;outline-offset:3px}
+:focus-visible{outline:2px solid #00ffc8;outline-offset:4px}
+button{font:inherit}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+  #boot{display:none!important}
+  body.booting{overflow:auto;height:auto}
+  #bg3d,.grain,.scan,.vig,#cur,#curDot{display:none!important}
+}
+@media (hover:none){body{cursor:auto!important}}
