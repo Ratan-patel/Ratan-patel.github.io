@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#04060a"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#00ffc8" stroke-opacity=".55" stroke-width="1.6"/>
+  <rect x="8" y="8" width="48" height="3" rx="1.5" fill="#00ffc8" fill-opacity=".28"/>
+  <text x="12" y="42" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="26" font-weight="700" fill="#00ffc8">R<tspan fill="#00d4ff">&gt;</tspan></text>
+  <rect x="12" y="47" width="18" height="4" fill="#00ffc8">
+    <animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/>
+  </rect>
+  <circle cx="52" cy="14" r="2.2" fill="#ff2e5b"/>
+</svg>
