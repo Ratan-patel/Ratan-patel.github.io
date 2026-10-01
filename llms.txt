@@ -38,6 +38,7 @@
 
 ## Key pages
 - [Home](https://ratan-patel.github.io/)
+- [CMU MSIS-aligned Cybersecurity Handbook (free online book)](https://ratan-patel.github.io/cmu-msis-handbook.html)
 - [Services and VAPT packages](https://ratan-patel.github.io/services.html)
 - [Training, tools and access](https://ratan-patel.github.io/ratan-monetization-launch-kit.html)
 - [RATAN OS free releases and AI Edition trust status](https://ratan-patel.github.io/ratan-os-release.html)

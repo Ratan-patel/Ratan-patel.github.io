@@ -1,0 +1,18 @@
+{
+  "name": "RATAN_PATEL.SEC — Offensive Security",
+  "short_name": "RKP.SEC",
+  "description": "CEH v12 offensive security practitioner — VAPT, red team, AI security training and free labs.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#04060a",
+  "theme_color": "#04060a",
+  "lang": "en",
+  "categories": ["education", "security", "portfolio"],
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/icon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "maskable" },
+    { "src": "assets/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

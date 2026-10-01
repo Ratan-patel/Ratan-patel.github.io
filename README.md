@@ -17,6 +17,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 | Advanced Web & API Pentesting | [advanced-web-api-pentesting.html](https://ratan-patel.github.io/advanced-web-api-pentesting.html) | Course track |
 | Red Team Adversary Simulation | [red-team-adversary-simulation.html](https://ratan-patel.github.io/red-team-adversary-simulation.html) | Course track |
 | AI Security & LLM Red Teaming | [ai-security-llm-red-teaming.html](https://ratan-patel.github.io/ai-security-llm-red-teaming.html) | Course track |
+| CMU MSIS Handbook | [cmu-msis-handbook.html](https://ratan-patel.github.io/cmu-msis-handbook.html) | Free online cybersecurity handbook — 6 chapters, 40 sections, practical examples |
 | Portfolio | [ratan_patel_portfolio.html](https://ratan-patel.github.io/ratan_patel_portfolio.html) | Full portfolio |
 | Resume | [ratan_patel_resume.html](https://ratan-patel.github.io/ratan_patel_resume.html) | Print-friendly CV |
 | Monetization launch kit | [ratan-monetization-launch-kit.html](https://ratan-patel.github.io/ratan-monetization-launch-kit.html) | Services, courses, AI plans |
