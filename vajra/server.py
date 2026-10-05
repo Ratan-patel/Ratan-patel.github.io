@@ -231,9 +231,24 @@ class Handler(BaseHTTPRequestHandler):
 
 def serve(host="0.0.0.0", port=8080):
     httpd = ThreadingHTTPServer((host, port), Handler)
-    print("\n⚡ VAJRA Web UI live:  http://localhost:%d" % port)
+    url = "http://localhost:%d" % port
+    print("\n⚡ VAJRA Web UI live:  %s" % url)
     print("📱 Phone browser mein kholo → menu → 'Add to Home Screen' → app ban jayega!")
     print("   (Band karne ke liye Ctrl+C)\n")
+    # Termux mein browser auto-kholo + phone ko jagaye rakho
+    try:
+        import subprocess
+        subprocess.Popen(["termux-open-url", url],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+    try:
+        import subprocess
+        subprocess.Popen(["termux-wake-lock"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print("🔒 Wake-lock laga diya (Android server ko band nahi karega).\n")
+    except Exception:
+        print("💡 Tip: 'termux-wake-lock' chalao taaki Android background mein server na maare.\n")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
