@@ -1,0 +1,19 @@
+{
+  "name": "VAJRA — AI Ethical Hacking Agent",
+  "short_name": "VAJRA",
+  "description": "Advanced AI agent for authorized security testing on Termux — recon, scanning, vuln analysis, exploitation, reporting.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
