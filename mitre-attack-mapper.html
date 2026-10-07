@@ -136,7 +136,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="index.html">HOME</a>
         <a href="services.html">SERVICES</a>
-        <a href="mitre-attack-mapper.html" aria-current="page">ATT&amp;CK MAPPER</a>
+        <a href="engagement-kit.html">ENGAGEMENT KIT</a><a href="mitre-attack-mapper.html" aria-current="page">ATT&amp;CK MAPPER</a>
         <a href="c2-frameworks.html">C2 LAB</a>
         <a href="pentest-lab.html">PENTEST LAB</a>
         <a href="ratan-os-release.html">RATAN OS</a>
@@ -235,9 +235,58 @@
             <button class="btn" id="btn-print">Print / PDF</button>
             <input type="file" id="file" accept="application/json,.json" hidden>
           </div>
+          <div class="button-row" style="margin:0 0 14px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.1)">
+            <span class="ctl-label" style="align-self:center">Hand off to your existing toolchain</span>
+            <button class="btn" id="btn-md">Coverage report (.md)</button>
+            <button class="btn" id="btn-sigma">Sigma skeletons (.yml)</button>
+            <button class="btn" id="btn-nav">ATT&amp;CK Navigator layer (.json)</button>
+          </div>
           <textarea class="out" id="out" spellcheck="false" aria-label="Generated emulation plan"></textarea>
         </article>
       </div>
+    </section>
+
+    <section class="section" id="exports">
+      <h2>Exports that plug into the tools you already run</h2>
+      <p class="section-intro">A coverage score nobody can act on is a vanity metric. These three exports turn the assessment into artefacts another team can consume without re-reading this page.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="number">01 // VISUALISE</div>
+          <h3>ATT&amp;CK Navigator layer</h3>
+          <p>Score every assessed technique green, amber or red and load it straight into MITRE's own Navigator. Each cell carries your status and the telemetry note as a tooltip, so the heatmap is self-explaining in a briefing.</p>
+          <ul class="list">
+            <li>Open <a href="https://mitre-attack.github.io/attack-navigator/" target="_blank" rel="noopener">attack-navigator</a> → <em>Create new layer</em> → <em>Enterprise</em></li>
+            <li>Layer menu → <em>Open Existing Layer</em> → <em>Upload from local</em></li>
+            <li>Layer format 4.5, baseline Enterprise v19</li>
+          </ul>
+          <p class="micro">The layer deliberately does not pin a tactic per technique, so entries land in every tactic they legitimately belong to — that survives the v19 tactic rename cleanly.</p>
+        </article>
+        <article class="card">
+          <div class="number">02 // DETECT</div>
+          <h3>Sigma detection skeletons</h3>
+          <p>Every gap and partial becomes a <a href="https://github.com/SigmaHQ/sigma" target="_blank" rel="noopener">Sigma</a> rule skeleton carrying the correct <span class="chip">attack.*</span> tags, a sensible logsource category, the telemetry you recorded, and a placeholder selection.</p>
+          <ul class="list">
+            <li>Tags include both tactic and technique ID</li>
+            <li>Logsource category mapped per tactic</li>
+            <li>Field name suggested per logsource category</li>
+            <li>Severity set high for credential, lateral, persistence, impact and defense-impairment tactics</li>
+          </ul>
+          <p class="micro"><strong>These are skeletons, not rules.</strong> The selection block is a placeholder on purpose. Deploy as enrichment-only, measure noise, then promote. An untuned generated rule is worse than no rule.</p>
+        </article>
+        <article class="card">
+          <div class="number">03 // REPORT</div>
+          <h3>Client-ready coverage report</h3>
+          <p>A structured Markdown document: executive summary, coverage-by-tactic table, prioritised gap tables with telemetry guidance, partial-detection promotion list, a 90-day remediation roadmap and an honest limitations section.</p>
+          <ul class="list">
+            <li>Names the weakest tactic and why it matters</li>
+            <li>Orders gaps by kill-chain position, not alphabetically</li>
+            <li>States the methodology limits — an assessor who names limits is trusted more, not less</li>
+            <li>Converts to PDF from any Markdown renderer</li>
+          </ul>
+          <p class="micro">Edit the prepared-by line and the client name before sending. Everything else is generated from your assessment.</p>
+        </article>
+      </div>
+      <div class="notice"><strong>Why these exist.</strong> Purple-team and detection-engineering work dies in a slide deck. Output that lands in Navigator scores, a Sigma repository and a written report is output that changes behaviour after the engagement ends — which is the only part a client remembers.</div>
     </section>
 
     <section class="section">
@@ -262,7 +311,7 @@
       <ol class="steplist">
         <li><b>Choose the adversary that actually threatens you</b><p>Not the most famous one. A regional bank models financially motivated intrusion; a SaaS company models cloud-credential abuse. Pick the group whose goals match your assets, then pull only the tactics you have telemetry for.</p></li>
         <li><b>Convert the technique list into hypotheses</b><p>Each gap becomes one falsifiable sentence: "If an operator performed credential dumping on this host, our stack would raise an alert within ten minutes and name the host." A hypothesis you cannot state is not a test.</p></li>
-        <li><b>Define the safety envelope before anything runs</b><p>Written authorisation, named asset list, an out-of-band abort channel, a white-cell owner who can halt the run, and a rollback plan for every change. If the abort path is a group chat, the envelope is not real.</p></li>
+        <li><b>Define the safety envelope before anything runs</b><p>Written authorisation, named asset list, an out-of-band abort channel, a white-cell owner who can halt the run, and a rollback plan for every change. If the abort path is a group chat, the envelope is not real. — <a href="engagement-kit.html">generate the authorisation, ROE and abort procedure here</a>.</p></li>
         <li><b>Run atomically, in order, with the clock visible</b><p>Use one technique per step: note the start time, execute, capture the telemetry you expected to fire, and note what actually fired. Tooling such as Atomic Red Team maps tests to technique IDs and keeps steps small enough to be attributable.</p></li>
         <li><b>Report per technique, not per tool</b><p>The deliverable is not "we ran Sliver". It is "T1003.001 produced no alert; passive telemetry existed but had no rule; two of three hosts were blind". That sentence costs money to fix, and that is the point.</p></li>
       </ol>
@@ -282,7 +331,7 @@
         <article class="card"><div class="number">02 // LOG ≠ ALERT</div><h3>Confusing telemetry with detection</h3><p>Sysmon logging process creation is not coverage. A tuned rule that fires, with a triage path behind it, is coverage. Mark anything else as partial.</p></article>
         <article class="card"><div class="number">03 // STALE MAPPINGS</div><h3>Running last year's matrix</h3><p>After the v19 split, a map still keyed to Defense Evasion is mis-sorted at the tactic level. Re-check tactic assignment before you argue about technique detail.</p></article>
       </div>
-      <div class="notice"><strong>Authorised use only.</strong> Everything here is a planning and measurement aid for systems you own or have written permission to test. Loading an adversary profile does not authorise targeting anyone: it tells you which behaviours to rehearse in a lab you control. See <a href="acceptable-use.html">Acceptable Use</a> and <a href="terms.html">Terms</a>.</div>
+      <div class="notice"><strong>Authorised use only.</strong> Everything here is a planning and measurement aid for systems you own or have written permission to test. If you are about to run this against a client, the <a href="engagement-kit.html">Engagement Kit</a> generates the authorisation letter and rules of engagement that make it defensible. Loading an adversary profile does not authorise targeting anyone: it tells you which behaviours to rehearse in a lab you control. See <a href="acceptable-use.html">Acceptable Use</a> and <a href="terms.html">Terms</a>.</div>
     </section>
   </main>
 
