@@ -43,6 +43,9 @@
 - [Training, tools and access](https://ratan-patel.github.io/ratan-monetization-launch-kit.html)
 - [RATAN OS free releases and AI Edition trust status](https://ratan-patel.github.io/ratan-os-release.html)
 - [Red-Team Lab Simulator](https://ratan-patel.github.io/lab.html)
+- [MITRE ATT&CK Mapper & Coverage Cockpit](https://ratan-patel.github.io/mitre-attack-mapper.html) — free interactive ATT&CK v19 coverage mapper with real adversary profiles, gap analysis and an adversary-emulation plan generator (runs fully in the browser)
+- [C2 Frameworks: Cobalt Strike alternatives & detection playbook](https://ratan-patel.github.io/c2-frameworks.html) — verified 2026 comparison of open-source command-and-control frameworks (Sliver, Mythic, Merlin, AdaptixC2, Havoc archive status), home-lab architecture and the defender-side detection playbook
+- [RATAN OS Advanced Edition roadmap & build planner](https://ratan-patel.github.io/ratan-os-advanced.html) — module catalogue, isolated lab profiles and an interactive manifest generator for a Debian live ethical-hacking lab OS
 - [Terms](https://ratan-patel.github.io/terms.html), [Privacy](https://ratan-patel.github.io/privacy.html), [Refunds](https://ratan-patel.github.io/refunds.html), [Acceptable Use](https://ratan-patel.github.io/acceptable-use.html)
 
 ## Connect
