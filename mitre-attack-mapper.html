@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MITRE ATT&amp;CK Mapper &amp; Coverage Cockpit — v19 Aligned | RATAN_PATEL.SEC</title>
+  <meta name="description" content="Free interactive MITRE ATT&CK v19 coverage mapper: map detections to 15 Enterprise tactics, score coverage, find gaps, load real adversary profiles (APT29, Lazarus, Scattered Spider) and generate an adversary-emulation test plan.">
+  <link rel="canonical" href="https://ratan-patel.github.io/mitre-attack-mapper.html">
+  <meta name="theme-color" content="#050b10">
+  <meta name="keywords" content="MITRE ATT&CK, ATT&CK v19, coverage mapper, adversary emulation, purple team, detection engineering, gap analysis, Stealth tactic, Defense Impairment, emulation plan">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MITRE ATT&CK Mapper &amp; Coverage Cockpit — v19 Aligned">
+  <meta property="og:description" content="Map, score and report ATT&CK coverage in the browser. Real adversary profiles, gap analysis and an emulation-plan generator. Free, offline-capable, no signup.">
+  <meta property="og:url" content="https://ratan-patel.github.io/mitre-attack-mapper.html">
+  <meta property="og:site_name" content="RATAN_PATEL.SEC">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="author" content="Ratan Kumar Patel">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="commercial.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MITRE ATT&CK Mapper & Coverage Cockpit",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Any browser",
+    "description": "Interactive MITRE ATT&CK v19 coverage mapper with adversary profiles, gap analysis and adversary-emulation plan generation. Runs fully in the browser; no data leaves the device.",
+    "url": "https://ratan-patel.github.io/mitre-attack-mapper.html",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "author": { "@type": "Person", "name": "Ratan Patel", "url": "https://ratan-patel.github.io/" },
+    "about": { "@type": "Thing", "name": "MITRE ATT&CK Enterprise v19" }
+  }
+  </script>
+  <style>
+    /* ---------- ATT&CK mapper local styles (built on commercial.css) ---------- */
+    .tool-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:6px 0 18px}
+    .badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+    .v-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font:700 11px/1 ui-monospace,monospace;letter-spacing:.06em;color:var(--cyan);background:rgba(99,217,255,.07)}
+    .v-badge.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(109,242,194,.7);animation:ping 2.2s infinite}
+    @keyframes ping{0%{box-shadow:0 0 0 0 rgba(109,242,194,.6)}70%{box-shadow:0 0 0 8px rgba(109,242,194,0)}100%{box-shadow:0 0 0 0 rgba(109,242,194,0)}}
+
+    .dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:11px;margin:4px 0 8px}
+    .kpi{background:linear-gradient(150deg,rgba(15,34,43,.96),rgba(8,18,24,.96));border:1px solid var(--line);border-radius:16px;padding:15px 16px;position:relative;overflow:hidden}
+    .kpi:before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at 110% -10%,rgba(109,242,194,.13),transparent 60%);pointer-events:none}
+    .kpi b{position:relative;display:block;font:800 30px/1 Chakra Petch,Inter,sans-serif;letter-spacing:-.04em;color:var(--ink)}
+    .kpi span{position:relative;display:block;margin-top:6px;font:700 10px/1.3 ui-monospace,monospace;letter-spacing:.11em;color:var(--muted);text-transform:uppercase}
+    .kpi.cover b{color:var(--mint)}.kpi.gap b{color:var(--danger)}.kpi.part b{color:var(--amber)}.kpi.pct b{color:var(--cyan)}
+
+    .covbar{height:9px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+    .covbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--cyan));transition:width .35s ease}
+    .covbar.tan i{background:linear-gradient(90deg,var(--amber),#ff9f45)}
+
+    .controls{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:18px 0 6px;padding:15px;border:1px solid var(--line);border-radius:16px;background:rgba(11,24,32,.75)}
+    .controls input[type=search],.controls select{background:#08141a;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font:600 13px/1 Inter,sans-serif;min-width:190px}
+    .controls input[type=search]{flex:1 1 240px;min-width:200px}
+    .controls select{font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.03em}
+    .controls input:focus,.controls select:focus{outline:3px solid var(--cyan);outline-offset:2px}
+    .ctl-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .ctl-label{font:700 10px/1 ui-monospace,monospace;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+
+    /* status legend chips double as the click-to-cycle explainer */
+    .legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0 16px;font-size:12px;color:var(--muted)}
+    .legend b{font-weight:700}
+    .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:middle}
+    .dot.s0{background:#3b4a55}.dot.s1{background:var(--danger)}.dot.s2{background:var(--amber)}.dot.s3{background:var(--mint)}.dot.na{background:#2a3742}
+
+    /* ---------- matrix ---------- */
+    .matrix{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(232px,1fr);gap:11px;overflow-x:auto;padding:6px 4px 18px;scroll-snap-type:x proximity}
+    .tac{background:rgba(9,20,27,.72);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-height:260px;scroll-snap-align:start}
+    .tac-hd{padding:12px 13px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(11,24,32,.97);backdrop-filter:blur(9px);border-radius:16px 16px 0 0;z-index:2}
+    .tac-hd .tid{font:700 10px/1 ui-monospace,monospace;letter-spacing:.1em;color:var(--muted)}
+    .tac-hd h3{font:700 15px/1.15 Chakra Petch,Inter,sans-serif;letter-spacing:-.01em;margin:5px 0 8px;color:var(--ink)}
+    .tac-hd .tmeta{display:flex;justify-content:space-between;align-items:center;font:700 10px/1 ui-monospace,monospace;color:var(--muted);margin-bottom:6px}
+    .tac-body{padding:9px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:58vh}
+    .tac.focus{border-color:var(--mint);box-shadow:0 0 0 1px rgba(109,242,194,.28)}
+
+    .tech{display:flex;gap:8px;align-items:flex-start;text-align:left;width:100%;background:rgba(255,255,255,.022);border:1px solid rgba(255,255,255,.075);border-left:3px solid #3b4a55;border-radius:9px;padding:8px 9px;cursor:pointer;color:var(--ink);font:500 12.5px/1.34 Inter,sans-serif;transition:background .14s ease,border-color .14s ease,transform .14s ease}
+    .tech:hover{background:rgba(109,242,194,.08);transform:translateX(2px)}
+    .tech:focus-visible{outline:3px solid var(--cyan);outline-offset:1px}
+    .tech .code{font:700 10px/1.5 ui-monospace,monospace;color:var(--muted);white-space:nowrap;min-width:62px}
+    .tech .nm{flex:1}
+    .tech .mk{font:700 10px/1.5 ui-monospace,monospace;color:var(--amber);white-space:nowrap}
+    .tech[data-st="1"]{border-left-color:var(--danger);background:rgba(255,120,151,.07)}
+    .tech[data-st="2"]{border-left-color:var(--amber);background:rgba(255,200,87,.07)}
+    .tech[data-st="3"]{border-left-color:var(--mint);background:rgba(109,242,194,.09)}
+    .tech[data-legacy="1"] .code{color:#8f7a4d}
+    .tech mark{background:rgba(255,200,87,.28);color:#fff5d6;border-radius:3px;padding:0 2px}
+    .tech.hit{box-shadow:0 0 0 1px rgba(255,200,87,.5)}
+
+    /* ---------- panels ---------- */
+    .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:16px}
+    .panel{background:linear-gradient(150deg,rgba(15,34,43,.95),rgba(8,18,24,.96));border:1px solid var(--line);border-radius:18px;padding:19px 20px}
+    .panel h3{font:800 19px/1.15 Chakra Petch,Inter,sans-serif;margin:0 0 4px;letter-spacing:-.02em}
+    .panel .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+    .gap-list{max-height:340px;overflow:auto;margin:0;padding:0;list-style:none}
+    .gap-list li{display:flex;gap:9px;justify-content:space-between;align-items:baseline;padding:8px 3px;border-bottom:1px dashed rgba(255,255,255,.09);font-size:13px}
+    .gap-list li:last-child{border-bottom:0}
+    .gap-list .gname{color:var(--ink)}
+    .gap-list .gcode{font:700 10px/1.4 ui-monospace,monospace;color:var(--muted);white-space:nowrap}
+    .gap-list .gtac{font:700 10px/1.4 ui-monospace,monospace;color:var(--cyan);white-space:nowrap}
+    .empty{color:var(--muted);font-size:13px;padding:14px 2px}
+
+    textarea.out{width:100%;min-height:300px;background:#061119;border:1px solid var(--line);border-radius:12px;color:#cfe6e2;font:500 12px/1.65 ui-monospace,monospace;padding:13px;resize:vertical}
+    textarea.out:focus{outline:3px solid var(--cyan);outline-offset:2px}
+
+    .bars{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+    .bar-row{display:grid;grid-template-columns:172px 1fr 54px;gap:10px;align-items:center;font-size:12px}
+    .bar-row span:first-child{color:var(--muted);font:700 10.5px/1.3 ui-monospace,monospace;letter-spacing:.04em}
+    .bar-row .val{text-align:right;font:700 11px/1 ui-monospace,monospace;color:var(--ink)}
+    @media(max-width:980px){.panels{grid-template-columns:1fr}.bar-row{grid-template-columns:132px 1fr 48px}}
+    @media(max-width:640px){.matrix{grid-auto-columns:minmax(210px,88vw)}.tool-head{flex-direction:column;align-items:flex-start}}
+
+    .v19grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px;margin-top:6px}
+    .chg{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 16px}
+    .chg b{display:block;color:var(--mint);font:800 12px/1.3 ui-monospace,monospace;letter-spacing:.06em;margin-bottom:8px}
+    .chg p{margin:0;color:var(--muted);font-size:13px}
+    .chg code{font:700 11px/1.4 ui-monospace,monospace;color:var(--amber);background:#0a1220;border:1px solid #14243a;padding:1px 5px;border-radius:4px}
+
+    .steplist{counter-reset:s;list-style:none;margin:14px 0 0;padding:0}
+    .steplist li{counter-increment:s;position:relative;padding:0 0 18px 46px;color:var(--muted);font-size:14px}
+    .steplist li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;font:800 13px/1.7 ui-monospace,monospace;color:var(--mint);border:1px solid var(--line);border-radius:9px;width:32px;height:30px;display:grid;place-items:center;background:rgba(109,242,194,.06)}
+    .steplist li b{color:var(--ink);display:block;margin-bottom:3px;font-family:Chakra Petch,Inter,sans-serif;font-size:15px;letter-spacing:-.01em}
+    .steplist li:last-child:after{display:none}
+    .steplist li:not(:last-child):after{content:"";position:absolute;left:15px;top:34px;bottom:2px;width:1px;background:var(--line)}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);background:#0d2027;border:1px solid var(--mint);color:var(--ink);padding:11px 17px;border-radius:12px;font:700 12px/1 ui-monospace,monospace;letter-spacing:.04em;opacity:0;pointer-events:none;transition:.25s ease;z-index:99;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+    .toast.on{opacity:1;transform:translate(-50%,0)}
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">RATAN_PATEL.SEC</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">HOME</a>
+        <a href="services.html">SERVICES</a>
+        <a href="engagement-kit.html">ENGAGEMENT KIT</a><a href="mitre-attack-mapper.html" aria-current="page">ATT&amp;CK MAPPER</a>
+        <a href="c2-frameworks.html">C2 LAB</a>
+        <a href="pentest-lab.html">PENTEST LAB</a>
+        <a href="ratan-os-release.html">RATAN OS</a>
+        <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener">RATAN AI</a>
+        <a href="index.html#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">RATAN TRADE-CRAFT TOOLKIT // PURPLE-TEAM PLANNING</div>
+      <h1>MITRE ATT&amp;CK Mapper &amp; Coverage Cockpit.</h1>
+      <p>Score what your defences actually see. Load a real adversary profile, walk the ATT&amp;CK v19 Enterprise tactics, mark each technique as covered, partial or gap, and this cockpit turns that into a coverage percentage, a prioritised gap list and a ready-to-run adversary-emulation test plan. Everything runs in your browser — nothing is uploaded, nothing is stored on a server.</p>
+      <div class="badge-row" style="margin-top:20px">
+        <span class="v-badge live">Engineering baseline: ATT&amp;CK Enterprise v19</span>
+        <span class="v-badge">15 tactics · Stealth + Defense Impairment split</span>
+        <span class="v-badge">Browser-local · no upload</span>
+        <span class="v-badge">FREE</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cockpit-h">
+      <h2 id="cockpit-h" style="font-size:clamp(24px,3.4vw,36px)">Coverage cockpit</h2>
+      <p class="section-intro">Pick a technique set (or start blank), then click any technique to cycle its status:
+        <span class="dot s0"></span>Unassessed → <span class="dot s1"></span>Gap → <span class="dot s2"></span>Partial → <span class="dot s3"></span>Covered → back to Unassessed.
+        Your work autosaves to this browser only.</p>
+
+      <div class="dash" id="dash" aria-live="polite">
+        <div class="kpi pct"><b id="k-pct">0%</b><span>Weighted coverage</span></div>
+        <div class="kpi cover"><b id="k-covered">0</b><span>Covered</span></div>
+        <div class="kpi part"><b id="k-partial">0</b><span>Partial</span></div>
+        <div class="kpi gap"><b id="k-gap">0</b><span>Gaps</span></div>
+        <div class="kpi"><b id="k-total">0</b><span>Techniques in scope</span></div>
+      </div>
+
+      <div class="controls">
+        <div class="ctl-group" style="flex:1 1 240px">
+          <label class="ctl-label" for="q">Search</label>
+          <input type="search" id="q" placeholder="e.g. kerberoast, T1059, logon script, proxy" autocomplete="off">
+        </div>
+        <div class="ctl-group">
+          <label class="ctl-label" for="profile">Adversary profile</label>
+          <select id="profile">
+            <option value="">— none (blank matrix) —</option>
+          </select>
+        </div>
+        <div class="ctl-group">
+          <label class="ctl-label" for="filter">Show</label>
+          <select id="filter">
+            <option value="all">All techniques</option>
+            <option value="assessed">Assessed only</option>
+            <option value="open">Gaps &amp; partial only</option>
+            <option value="unassessed">Unassessed only</option>
+          </select>
+        </div>
+        <div class="ctl-group">
+          <button class="btn" id="btn-focus">Focus tactic…</button>
+          <button class="btn" id="btn-gaps">Mark all gaps</button>
+          <button class="btn" id="btn-clear">Reset</button>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span><span class="dot s0"></span><b>Unassessed</b> — no telemetry decision taken yet</span>
+        <span><span class="dot s1"></span><b>Gap</b> — behaviour would not be detected</span>
+        <span><span class="dot s2"></span><b>Partial</b> — logged, but no reliable alert</span>
+        <span><span class="dot s3"></span><b>Covered</b> — alert plus a tested detection rule</span>
+        <span style="color:#8f7a4d"><b>◆</b> legacy ID — renumbered or retired in ATT&amp;CK v19</span>
+      </div>
+
+      <div class="matrix" id="matrix" aria-label="ATT&CK technique matrix"></div>
+      <p class="micro">Curated subset of techniques, weighted toward behaviours that show up in real red-team and ransomware engagements. Tactics and IDs follow the ATT&amp;CK v19 restructure.</p>
+    </section>
+
+    <section class="section">
+      <div class="panels">
+        <article class="panel">
+          <h3>Prioritised gap list</h3>
+          <p class="hint">Ranked by ATT&amp;CK tactic order — earliest attacker stage first, because that is where detection pays off most.</p>
+          <ul class="gap-list" id="gap-list"></ul>
+        </article>
+        <article class="panel">
+          <h3>Per-tactic coverage</h3>
+          <p class="hint">Spot the tactic where your visibility collapses. That is usually one log source, not twenty rules.</p>
+          <div class="bars" id="bars"></div>
+        </article>
+        <article class="panel" style="grid-column:1/-1">
+          <h3>Adversary-emulation test plan</h3>
+          <p class="hint">Generated from your gaps. Every line is a hypothesis to test in an authorised lab — not an instruction to run against production.</p>
+          <div class="button-row" style="margin:0 0 12px">
+            <button class="btn primary" id="btn-plan">Generate plan</button>
+            <button class="btn" id="btn-copy">Copy</button>
+            <button class="btn" id="btn-export">Export JSON</button>
+            <button class="btn" id="btn-import">Import JSON</button>
+            <button class="btn" id="btn-print">Print / PDF</button>
+            <input type="file" id="file" accept="application/json,.json" hidden>
+          </div>
+          <div class="button-row" style="margin:0 0 14px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.1)">
+            <span class="ctl-label" style="align-self:center">Hand off to your existing toolchain</span>
+            <button class="btn" id="btn-md">Coverage report (.md)</button>
+            <button class="btn" id="btn-sigma">Sigma skeletons (.yml)</button>
+            <button class="btn" id="btn-nav">ATT&amp;CK Navigator layer (.json)</button>
+          </div>
+          <textarea class="out" id="out" spellcheck="false" aria-label="Generated emulation plan"></textarea>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="exports">
+      <h2>Exports that plug into the tools you already run</h2>
+      <p class="section-intro">A coverage score nobody can act on is a vanity metric. These three exports turn the assessment into artefacts another team can consume without re-reading this page.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="number">01 // VISUALISE</div>
+          <h3>ATT&amp;CK Navigator layer</h3>
+          <p>Score every assessed technique green, amber or red and load it straight into MITRE's own Navigator. Each cell carries your status and the telemetry note as a tooltip, so the heatmap is self-explaining in a briefing.</p>
+          <ul class="list">
+            <li>Open <a href="https://mitre-attack.github.io/attack-navigator/" target="_blank" rel="noopener">attack-navigator</a> → <em>Create new layer</em> → <em>Enterprise</em></li>
+            <li>Layer menu → <em>Open Existing Layer</em> → <em>Upload from local</em></li>
+            <li>Layer format 4.5, baseline Enterprise v19</li>
+          </ul>
+          <p class="micro">The layer deliberately does not pin a tactic per technique, so entries land in every tactic they legitimately belong to — that survives the v19 tactic rename cleanly.</p>
+        </article>
+        <article class="card">
+          <div class="number">02 // DETECT</div>
+          <h3>Sigma detection skeletons</h3>
+          <p>Every gap and partial becomes a <a href="https://github.com/SigmaHQ/sigma" target="_blank" rel="noopener">Sigma</a> rule skeleton carrying the correct <span class="chip">attack.*</span> tags, a sensible logsource category, the telemetry you recorded, and a placeholder selection.</p>
+          <ul class="list">
+            <li>Tags include both tactic and technique ID</li>
+            <li>Logsource category mapped per tactic</li>
+            <li>Field name suggested per logsource category</li>
+            <li>Severity set high for credential, lateral, persistence, impact and defense-impairment tactics</li>
+          </ul>
+          <p class="micro"><strong>These are skeletons, not rules.</strong> The selection block is a placeholder on purpose. Deploy as enrichment-only, measure noise, then promote. An untuned generated rule is worse than no rule.</p>
+        </article>
+        <article class="card">
+          <div class="number">03 // REPORT</div>
+          <h3>Client-ready coverage report</h3>
+          <p>A structured Markdown document: executive summary, coverage-by-tactic table, prioritised gap tables with telemetry guidance, partial-detection promotion list, a 90-day remediation roadmap and an honest limitations section.</p>
+          <ul class="list">
+            <li>Names the weakest tactic and why it matters</li>
+            <li>Orders gaps by kill-chain position, not alphabetically</li>
+            <li>States the methodology limits — an assessor who names limits is trusted more, not less</li>
+            <li>Converts to PDF from any Markdown renderer</li>
+          </ul>
+          <p class="micro">Edit the prepared-by line and the client name before sending. Everything else is generated from your assessment.</p>
+        </article>
+      </div>
+      <div class="notice"><strong>Why these exist.</strong> Purple-team and detection-engineering work dies in a slide deck. Output that lands in Navigator scores, a Sigma repository and a written report is output that changes behaviour after the engagement ends — which is the only part a client remembers.</div>
+    </section>
+
+    <section class="section">
+      <h2>What changed in ATT&amp;CK v19</h2>
+      <p class="section-intro">If your coverage map or detection backlog was last touched before April 2026, it is referencing a tactic that no longer exists. This is the accurate short version.</p>
+      <div class="v19grid">
+        <article class="chg"><b>DEFENSE EVASION IS GONE</b><p><code>TA0005</code> was retired and split into two tactics: <b>Stealth</b>, which keeps the <code>TA0005</code> ID, and <b>Defense Impairment</b> <code>(TA0112)</code>. Hiding inside legitimate behaviour and actively breaking security controls are different problems and now sit in different columns.</p></article>
+        <article class="chg"><b>T1562 MERGED AWAY</b><p><code>T1562</code> Impair Defenses was retired. It and two of its sub-techniques were merged into a new technique, <code>T1685</code> <b>Disable or Modify Tools</b>. Any detection rule keyed to T1562 has to be re-pointed.</p></article>
+        <article class="chg"><b>TWO NEW DEFENSIVE TACTIC ENTRIES</b><p><code>T1687</code> <b>Exploitation for Defense Impairment</b> is new, and <code>T1211</code> was renamed to <b>Exploitation for Stealth</b>. A new sub-technique <code>T1686.003</code> covers the Windows host firewall specifically.</p></article>
+        <article class="chg"><b>AI IS NOW OFFICIAL TTP</b><p>v19 added <code>T1682</code> <b>Query Public AI Services</b> and <code>T1683</code> <b>Generate Content</b>. Adversaries using AI to scale reconnaissance and lure writing are now mapped behaviour, not an analyst's hunch.</p></article>
+        <article class="chg"><b>SOCIAL ENGINEERING GOT A PARENT</b><p>A new <code>T1684</code> <b>Social Engineering</b> parent technique with <code>T1684.001</code> Impersonation and <code>T1684.002</code> Email Spoofing re-homes behaviour that used to be scattered across Initial Access.</p></article>
+        <article class="chg"><b>DETECTIONS BECAME ANALYTICS</b><p>Back in v18, flat detection lists were replaced by <b>Detection Strategies</b> <span class="micro">(DET…)</span> and <b>Analytics</b> <span class="micro">(AN…)</span> tied to data components. It is a better model — and it means copy-pasted old mapping tables are quietly wrong.</p></article>
+        <article class="chg"><b>SCALE OF THE ENTERPRISE MATRIX</b><p>Post-restructure the Enterprise matrix runs to 15 tactics, 222 techniques and 475 sub-techniques, with roughly 178 tracked threat groups. Nobody covers all of it — which is exactly why you scope to a threat model instead of chasing a percentage.</p></article>
+        <article class="chg"><b>PHASE ONE, NOT THE END</b><p>MITRE has flagged that technique descriptions, scope realignments and further deprecations land in later releases. Treat any static spreadsheet as a snapshot, and verify IDs against <a href="https://attack.mitre.org/" target="_blank" rel="noopener">attack.mitre.org</a> before you ship detection-as-code.</p></article>
+      </div>
+      <div class="notice mint"><strong>Accuracy note:</strong> the technique set shipped with this cockpit is a curated, hand-checked subset. Tactic names, tactic IDs and the v19 changes above are aligned to the ATT&amp;CK v19 release; individual sub-technique IDs were renumbered during the restructure, so entries carrying the <b>◆ legacy</b> marker also show their pre-v19 identifier. Always confirm against the current ATT&amp;CK release before publishing rules or customer-facing mapping.</div>
+    </section>
+
+    <section class="section">
+      <h2>Adversary emulation in five steps</h2>
+      <p class="section-intro">Emulation is not "run a C2 and see what happens". It is a hypothesis-driven test of whether defenders can see a specific, documented adversary behaviour.</p>
+      <ol class="steplist">
+        <li><b>Choose the adversary that actually threatens you</b><p>Not the most famous one. A regional bank models financially motivated intrusion; a SaaS company models cloud-credential abuse. Pick the group whose goals match your assets, then pull only the tactics you have telemetry for.</p></li>
+        <li><b>Convert the technique list into hypotheses</b><p>Each gap becomes one falsifiable sentence: "If an operator performed credential dumping on this host, our stack would raise an alert within ten minutes and name the host." A hypothesis you cannot state is not a test.</p></li>
+        <li><b>Define the safety envelope before anything runs</b><p>Written authorisation, named asset list, an out-of-band abort channel, a white-cell owner who can halt the run, and a rollback plan for every change. If the abort path is a group chat, the envelope is not real. — <a href="engagement-kit.html">generate the authorisation, ROE and abort procedure here</a>.</p></li>
+        <li><b>Run atomically, in order, with the clock visible</b><p>Use one technique per step: note the start time, execute, capture the telemetry you expected to fire, and note what actually fired. Tooling such as Atomic Red Team maps tests to technique IDs and keeps steps small enough to be attributable.</p></li>
+        <li><b>Report per technique, not per tool</b><p>The deliverable is not "we ran Sliver". It is "T1003.001 produced no alert; passive telemetry existed but had no rule; two of three hosts were blind". That sentence costs money to fix, and that is the point.</p></li>
+      </ol>
+      <div class="callout">
+        <div>
+          <h2>Want this run properly, with a report leadership can act on?</h2>
+          <p>I run scope-first purple-team engagements: written authorisation, a named asset list, technique-level evidence, and a remediation roadmap scored against your real threat model.</p>
+        </div>
+        <a class="btn primary" href="services.html">See engagement options</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>How teams usually get this wrong</h2>
+      <div class="grid">
+        <article class="card"><div class="number">01 // COVERAGE THEATRE</div><h3>Chasing a percentage</h3><p>"We cover 78% of ATT&amp;CK" means nothing without a threat model. Cover the twenty techniques your actual adversary uses, and let the vanity number go.</p></article>
+        <article class="card"><div class="number">02 // LOG ≠ ALERT</div><h3>Confusing telemetry with detection</h3><p>Sysmon logging process creation is not coverage. A tuned rule that fires, with a triage path behind it, is coverage. Mark anything else as partial.</p></article>
+        <article class="card"><div class="number">03 // STALE MAPPINGS</div><h3>Running last year's matrix</h3><p>After the v19 split, a map still keyed to Defense Evasion is mis-sorted at the tactic level. Re-check tactic assignment before you argue about technique detail.</p></article>
+      </div>
+      <div class="notice"><strong>Authorised use only.</strong> Everything here is a planning and measurement aid for systems you own or have written permission to test. If you are about to run this against a client, the <a href="engagement-kit.html">Engagement Kit</a> generates the authorisation letter and rules of engagement that make it defensible. Loading an adversary profile does not authorise targeting anyone: it tells you which behaviours to rehearse in a lab you control. See <a href="acceptable-use.html">Acceptable Use</a> and <a href="terms.html">Terms</a>.</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>RATAN_PATEL.SEC // MITRE ATT&amp;CK Mapper &amp; Coverage Cockpit</span>
+      <span>
+        <a href="index.html">Home</a><a href="services.html">Services</a><a href="c2-frameworks.html">C2 lab</a><a href="pentest-lab.html">Pentest lab</a><a href="acceptable-use.html">Acceptable use</a>
+      </span>
+    </div>
+    <div class="footer-inner" style="margin-top:9px">
+      <span>Aligned to MITRE ATT&amp;CK® Enterprise v19. ATT&amp;CK is a registered trademark of The MITRE Corporation. This is an independent educational mapping tool and is not endorsed by or affiliated with MITRE.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/attack-mapper.js"></script>
+</body>
+</html>

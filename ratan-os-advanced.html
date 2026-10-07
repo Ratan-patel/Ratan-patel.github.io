@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RATAN OS Advanced Edition — Roadmap &amp; Build Planner | Offline Ethical-Hacking Lab OS</title>
+  <meta name="description" content="RATAN OS Advanced Edition roadmap and interactive build planner: module catalogue, lab profiles for web/AD/AI red-team practice, offline AI runtime, signed repository and reproducible-build engineering for an authorised-security Debian live ISO.">
+  <link rel="canonical" href="https://ratan-patel.github.io/ratan-os-advanced.html">
+  <meta name="theme-color" content="#050b10">
+  <meta name="keywords" content="RATAN OS, Debian live ISO, ethical hacking OS, offline AI, Qwen3 llama.cpp, security lab distribution, AD lab, AI red team lab, reproducible build, signed repository">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RATAN OS Advanced Edition — Roadmap &amp; Build Planner">
+  <meta property="og:description" content="Plan your own RATAN OS build: pick modules, get a reproducible manifest, an ISO size estimate and a lab profile for authorised practice.">
+  <meta property="og:url" content="https://ratan-patel.github.io/ratan-os-advanced.html">
+  <meta property="og:site_name" content="RATAN_PATEL.SEC">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="author" content="Ratan Kumar Patel">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="commercial.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Ratan OS Advanced Edition",
+    "applicationCategory": "OperatingSystem",
+    "operatingSystem": "Debian GNU/Linux, Linux x86_64",
+    "description": "Debian-based live operating system for authorised security learning: offline local AI assistant, curated tool collections, isolated lab profiles and a verified release pipeline.",
+    "url": "https://ratan-patel.github.io/ratan-os-advanced.html",
+    "isAccessibleForFree": true,
+    "license": "https://www.debian.org/legal/licenses/",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "author": { "@type": "Person", "name": "Ratan Patel", "url": "https://ratan-patel.github.io/" },
+    "softwareHelp": { "@type": "CreativeWork", "url": "https://ratan-patel.github.io/ratan-os-release.html" }
+  }
+  </script>
+  <style>
+    .status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:13px;margin-top:6px}
+    .rel{background:linear-gradient(150deg,rgba(15,34,43,.95),rgba(8,18,24,.96));border:1px solid var(--line);border-radius:17px;padding:18px 19px;position:relative;overflow:hidden}
+    .rel:before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at 108% -10%,rgba(109,242,194,.12),transparent 60%);pointer-events:none}
+    .rel>*{position:relative}
+    .rel h3{font:800 20px/1.1 Chakra Petch,Inter,sans-serif;margin:11px 0 8px;letter-spacing:-.025em}
+    .rel p{margin:0;color:var(--muted);font-size:13.5px}
+    .pillst{display:inline-block;font:800 9.5px/1 ui-monospace,monospace;letter-spacing:.11em;padding:5px 8px;border-radius:6px;border:1px solid var(--line)}
+    .pillst.ship{color:var(--mint);background:rgba(109,242,194,.1);border-color:rgba(109,242,194,.45)}
+    .pillst.wip{color:var(--amber);background:rgba(255,200,87,.1);border-color:rgba(255,200,87,.45)}
+    .pillst.plan{color:var(--cyan);background:rgba(99,217,255,.08);border-color:rgba(99,217,255,.4)}
+
+    /* ---- planner ---- */
+    .planner{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;margin-top:8px}
+    @media(max-width:1000px){.planner{grid-template-columns:1fr}}
+    .modgroup{background:linear-gradient(150deg,rgba(15,34,43,.95),rgba(8,18,24,.96));border:1px solid var(--line);border-radius:17px;padding:17px 18px;margin-bottom:13px}
+    .modgroup h3{font:800 17px/1.2 Chakra Petch,Inter,sans-serif;margin:0 0 3px;letter-spacing:-.02em}
+    .modgroup .gh{color:var(--muted);font-size:12.5px;margin:0 0 13px}
+    .mod{display:flex;gap:11px;align-items:flex-start;padding:9px 10px;border-radius:11px;border:1px solid transparent;cursor:pointer;transition:.15s ease}
+    .mod:hover{background:rgba(109,242,194,.06);border-color:var(--line)}
+    .mod input{appearance:none;width:19px;height:19px;flex:0 0 19px;margin-top:2px;border:1.6px solid #3a5560;border-radius:5px;background:#08141a;position:relative;cursor:pointer}
+    .mod input:checked{background:var(--mint);border-color:var(--mint)}
+    .mod input:checked:after{content:"";position:absolute;left:5px;top:1.5px;width:6px;height:11px;border:solid #04110f;border-width:0 2.4px 2.4px 0;transform:rotate(43deg)}
+    .mod input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    .mod .txt{flex:1}
+    .mod .txt b{display:block;color:var(--ink);font-size:14px;font-weight:700}
+    .mod .txt span{color:var(--muted);font-size:12.5px;line-height:1.5}
+    .mod .size{font:700 10px/1.6 ui-monospace,monospace;color:var(--cyan);white-space:nowrap}
+    .mod .req{font:700 9px/1 ui-monospace,monospace;letter-spacing:.07em;color:var(--amber);border:1px solid rgba(255,200,87,.4);border-radius:5px;padding:3px 5px;white-space:nowrap;align-self:center}
+    .mod.locked{opacity:.45}
+
+    .side{position:sticky;top:78px;align-self:start}
+    .est{background:linear-gradient(150deg,rgba(15,34,43,.96),rgba(8,18,24,.97));border:1px solid var(--line);border-radius:18px;padding:19px 20px}
+    .est h3{font:800 19px/1.15 Chakra Petch,Inter,sans-serif;margin:0 0 13px;letter-spacing:-.02em}
+    .estrow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.09);font-size:13px;color:var(--muted)}
+    .estrow:last-of-type{border-bottom:0}
+    .estrow b{color:var(--ink);font:700 13px/1.4 ui-monospace,monospace}
+    .bigest{margin:13px 0 5px;padding:14px;border-radius:13px;background:rgba(109,242,194,.08);border:1px solid rgba(109,242,194,.35);text-align:center}
+    .bigest b{display:block;font:800 34px/1 Chakra Petch,Inter,sans-serif;color:var(--mint);letter-spacing:-.04em}
+    .bigest span{display:block;margin-top:6px;font:700 10px/1.3 ui-monospace,monospace;letter-spacing:.11em;color:var(--muted);text-transform:uppercase}
+    .warnbox{margin-top:12px;font-size:12.5px;color:#ffe8ac;border:1px solid rgba(255,200,87,.4);background:rgba(255,200,87,.08);border-radius:11px;padding:11px 13px}
+    textarea.mani{width:100%;min-height:250px;background:#061119;border:1px solid var(--line);border-radius:12px;color:#cfe6e2;font:500 11.5px/1.6 ui-monospace,monospace;padding:12px;resize:vertical;margin-top:13px}
+    textarea.mani:focus{outline:3px solid var(--cyan);outline-offset:2px}
+
+    .layer{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+    .lay{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+    .lay i{font-style:normal;font:800 11px/1.5 ui-monospace,monospace;letter-spacing:.08em;color:var(--mint);border:1px solid var(--line);border-radius:9px;padding:7px 0;text-align:center;background:rgba(109,242,194,.06)}
+    .lay b{display:block;color:var(--ink);font-family:Chakra Petch,Inter,sans-serif;font-size:15.5px;margin-bottom:4px}
+    .lay p{margin:0;color:var(--muted);font-size:13.5px}
+    .lay code{font:700 11px/1.5 ui-monospace,monospace;color:var(--amber);background:#0a1220;border:1px solid #14243a;padding:1px 5px;border-radius:4px}
+
+    .profiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:13px}
+    .prof{background:linear-gradient(150deg,rgba(15,34,43,.95),rgba(8,18,24,.96));border:1px solid var(--line);border-radius:16px;padding:18px}
+    .prof h3{font:800 18px/1.15 Chakra Petch,Inter,sans-serif;margin:9px 0 8px;letter-spacing:-.02em}
+    .prof p{color:var(--muted);margin:0 0 11px;font-size:13.5px}
+    .prof ul{margin:0;padding-left:18px;color:#c9dad8;font-size:13px}
+    .prof li{margin:5px 0}
+    .trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:13px}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);background:#0d2027;border:1px solid var(--mint);color:var(--ink);padding:11px 17px;border-radius:12px;font:700 12px/1 ui-monospace,monospace;letter-spacing:.04em;opacity:0;pointer-events:none;transition:.25s ease;z-index:99}
+    .toast.on{opacity:1;transform:translate(-50%,0)}
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">RATAN_PATEL.SEC</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">HOME</a>
+        <a href="services.html">SERVICES</a>
+        <a href="engagement-kit.html">ENGAGEMENT KIT</a><a href="mitre-attack-mapper.html">ATT&amp;CK MAPPER</a>
+        <a href="c2-frameworks.html">C2 LAB</a>
+        <a href="pentest-lab.html">PENTEST LAB</a>
+        <a href="ratan-os-advanced.html" aria-current="page">RATAN OS</a>
+        <a href="https://v1qmk5wx2361-d.space-z.ai/" target="_blank" rel="noopener">RATAN AI</a>
+        <a href="index.html#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">RATAN OS ADVANCED EDITION // ROADMAP &amp; BUILD SYSTEM</p>
+      <h1>Build the lab OS you actually need.</h1>
+      <p>RATAN OS is a Debian-based live system for authorised security work: an offline AI assistant that never phones home, curated tool collections, and isolated lab profiles you can boot without touching a production network. This page is the engineering roadmap and an interactive planner — choose the modules you want for your own build and get a reproducible manifest, a size estimate and a dependency check.</p>
+      <div class="button-row" style="margin-top:22px">
+        <a class="btn primary" href="#planner">Open the build planner</a>
+        <a class="btn" href="ratan-os-release.html">Downloads &amp; trust centre</a>
+        <a class="btn" href="ratan-os-release.html#free-downloads">Free ISOs</a>
+      </div>
+      <div class="notice mint" style="margin-top:22px"><strong>Status honesty:</strong> the released builds are v1.0.0 (original), v1.1.0 (Lite), v1.2.0 (Lite AI Edition) and v1.3.0 (Ratan OS 7.3 Ethical CLI). Everything marked <b>in development</b> or <b>planned</b> below is a roadmap item on this page — not a shipped download. Nothing here should be read as a promise of a release date.</div>
+    </section>
+
+    <section class="section">
+      <h2>Release status board</h2>
+      <p class="section-intro">Seven releases tracked, four shipped, three in the design pipeline. Click through to the release page for verified downloads and checksums of the shipped builds.</p>
+      <div class="status-grid">
+        <article class="rel">
+          <span class="pillst ship">SHIPPED</span>
+          <h3>v1.0.0 — Original</h3>
+          <p>x86_64 live ISO with the foundational authorised-security environment. Free download, permanent GitHub release asset.</p>
+        </article>
+        <article class="rel">
+          <span class="pillst ship">SHIPPED</span>
+          <h3>v1.1.0 — Lite</h3>
+          <p>A 697 MiB compact image for QEMU BIOS and USB lab work where bandwidth and boot speed matter more than breadth.</p>
+        </article>
+        <article class="rel">
+          <span class="pillst ship">SHIPPED</span>
+          <h3>v1.2.0 — Lite AI Edition</h3>
+          <p>~3.0 GiB Debian XFCE live ISO with offline Qwen3-4B Q4_K_M, CPU-only llama.cpp inference and a local browser interface bound to <code>127.0.0.1</code>. No API key, no cloud account, no network required.</p>
+        </article>
+        <article class="rel">
+          <span class="pillst ship">SHIPPED</span>
+          <h3>v1.3.0 — Ratan OS 7.3 Ethical CLI</h3>
+          <p>Parrot 7.3-based CLI-only live image with focused reconnaissance, web assessment, packet analysis, wireless auditing, password auditing, Metasploit and reverse-engineering tooling. Ships as a bootable ISO and a QEMU QCOW2, with published SHA256SUMS. Separate lineage from the Debian live desktop builds above.</p>
+        </article>
+        <article class="rel">
+          <span class="pillst plan">PLANNED</span>
+          <h3>v1.4.0 — Lab Profiles &amp; Signed Repo</h3>
+          <p>One-command lab profiles (web, Active Directory, AI/LLM red team, C2 sandbox), plus a GPG-signed APT repository so post-boot package installs are verifiable rather than ad hoc.</p>
+        </article>
+        <article class="rel">
+          <span class="pillst plan">PLANNED</span>
+          <h3>v2.0.0 — Platform</h3>
+          <p>Reproducible builds with a published SBOM, Secure Boot support, a networked multi-VM range orchestration layer, and a machine-readable report engine that emits per-technique evidence straight into client-ready output.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="planner">
+      <h2>Build planner</h2>
+      <p class="section-intro">Tick the modules you want. Dependencies resolve automatically, the manifest updates live, and you can copy a build recipe straight into a Debian live-build pipeline. Sizes are engineering estimates, not measurements — every build differs.</p>
+      <div class="planner">
+        <div>
+          <div class="modgroup">
+            <h3>1 · Base system</h3>
+            <p class="gh">The foundation. One is always required.</p>
+            <div id="mg-base"></div>
+          </div>
+          <div class="modgroup">
+            <h3>2 · Offline AI runtime</h3>
+            <p class="gh">Local inference with no network dependency. Pick a model size that matches the hardware you will boot on.</p>
+            <div id="mg-ai"></div>
+          </div>
+          <div class="modgroup">
+            <h3>3 · Tool collections</h3>
+            <p class="gh">Curated sets. Each one is deliberately scoped — a shelf, not a junk drawer.</p>
+            <div id="mg-tools"></div>
+          </div>
+          <div class="modgroup">
+            <h3>4 · Isolated lab profiles</h3>
+            <p class="gh">Pre-configured practice environments. They run on an internal switch with no route to your home network.</p>
+            <div id="mg-lab"></div>
+          </div>
+          <div class="modgroup">
+            <h3>5 · Release engineering</h3>
+            <p class="gh">The parts that make a distribution trustworthy rather than merely convenient.</p>
+            <div id="mg-rel"></div>
+          </div>
+        </div>
+
+        <aside class="side">
+          <div class="est">
+            <h3>Your build</h3>
+            <div class="estrow"><span>Modules selected</span><b id="s-count">0</b></div>
+            <div class="estrow"><span>Packages (approx.)</span><b id="s-pkgs">0</b></div>
+            <div class="estrow"><span>ISO size (approx.)</span><b id="s-size">0 MiB</b></div>
+            <div class="estrow"><span>Minimum RAM to boot</span><b id="s-ram">—</b></div>
+            <div class="estrow"><span>Recommended disk</span><b id="s-disk">—</b></div>
+            <div class="estrow"><span>Requires internet after boot</span><b id="s-net">No</b></div>
+            <div class="bigest">
+              <b id="s-total">0 MiB</b>
+              <span>Estimated image size</span>
+            </div>
+            <div class="warnbox" id="s-warn" hidden></div>
+            <div class="button-row" style="margin-top:13px">
+              <button class="btn primary" id="b-manifest">Build manifest</button>
+              <button class="btn" id="b-copy">Copy</button>
+              <button class="btn" id="b-iso">Use full preset</button>
+              <button class="btn" id="b-lite">Use Lite preset</button>
+            </div>
+            <textarea class="mani" id="mani" spellcheck="false" aria-label="Generated build manifest"></textarea>
+          </div>
+        </aside>
+      </div>
+      <p class="micro">Estimates use squashfs compression assumptions typical for Debian live images. Adding a 4B-parameter quantised model is the single biggest size driver; that is why the AI Edition weighs roughly 3 GiB.</p>
+    </section>
+
+    <section class="section">
+      <h2>Architecture</h2>
+      <p class="section-intro">Six layers, each independently verifiable. If a layer cannot be inspected and rebuilt, it does not belong in a security distribution — including the AI parts.</p>
+      <div class="layer">
+        <div class="lay"><i>LAYER 6</i><div><b>Report &amp; evidence</b><p>Per-technique evidence capture, timestamped operator logs, and output that maps directly to the ATT&amp;CK coverage report: <code>airt report --format=sarif</code>, <code>attack-map export</code>.</p></div></div>
+        <div class="lay"><i>LAYER 5</i><div><b>Lab profiles</b><p>Declarative YAML describing an isolated range — vulnerable web target, domain controller and workstation pair, or an AI/LLM endpoint with the AIRT scanner pointed at it. Booted on an internal virtual switch with egress denied by default.</p></div></div>
+        <div class="lay"><i>LAYER 4</i><div><b>Tool collections</b><p>Curated apt and source-built sets, version-pinned and provenance-checked. Each collection is documented as a shelf with a stated purpose, which keeps the image auditable and keeps users from installing the entire internet.</p></div></div>
+        <div class="lay"><i>LAYER 3</i><div><b>Offline AI runtime</b><p>llama.cpp compiled CPU-only with a quantised GGUF model, served on loopback and proxied to a local browser UI. No telemetry, no outbound calls, no API key — the design constraint is that inference works on a plane with Wi-Fi off.</p></div></div>
+        <div class="lay"><i>LAYER 2</i><div><b>Package layer</b><p>Debian Trixie base with a signed local repository for the project's own packages, so boot-time and post-boot installs are both verifiable. Unsigned external repositories defeat the point of a trust centre.</p></div></div>
+        <div class="lay"><i>LAYER 1</i><div><b>Base system</b><p>Debian live-build with XFCE, a reproducible build script committed to the repository, and a published SBOM once the v2.0.0 pipeline lands.</p></div></div>
+      </div>
+      <div class="notice"><strong>Design rule that shapes everything above:</strong> the AI assistant is local by construction, not by configuration. A security distribution that quietly ships your notes to a vendor API has failed at the first requirement. If a feature cannot work offline, it does not ship.</div>
+    </section>
+
+    <section class="section">
+      <h2>Lab profiles</h2>
+      <p class="section-intro">The point of a hacking-focused OS is not a bigger toolbox — it is a smaller distance between "I read about this technique" and "I watched it happen in telemetry." Each profile is a self-contained range you can boot, break and destroy.</p>
+      <div class="profiles">
+        <article class="prof">
+          <span class="chip">PROFILE 01</span>
+          <h3>Web &amp; API range</h3>
+          <p>A deliberately vulnerable application stack plus an API target, instrumented so you see both the exploitation and the server-side evidence.</p>
+          <ul>
+            <li>Vulnerable app + API target</li>
+            <li>Reverse proxy and WAF in front for bypass practice</li>
+            <li>Access and error logs shipped to a local index</li>
+            <li>Maps to OWASP Top 10 and API Top 10 categories</li>
+          </ul>
+        </article>
+        <article class="prof">
+          <span class="chip">PROFILE 02</span>
+          <h3>Active Directory range</h3>
+          <p>Domain controller plus two member hosts on an isolated switch. Identity-centric intrusion practice with real audit logs to read.</p>
+          <ul>
+            <li>Domain + member server topology</li>
+            <li>Kerberos and delegation practice scenarios</li>
+            <li>Windows security event collection and search</li>
+            <li>Detection review as the second half of every exercise</li>
+          </ul>
+        </article>
+        <article class="prof">
+          <span class="chip">PROFILE 03</span>
+          <h3>AI / LLM red-team range</h3>
+          <p>A local model endpoint wired to the AIRT scanner from this site, so prompt-injection and boundary testing runs entirely offline.</p>
+          <ul>
+            <li>Local inference endpoint, no cloud dependency</li>
+            <li>AIRT probes with OWASP LLM Top-10 mapping</li>
+            <li>Deterministic scoring with canary-token evidence</li>
+            <li>SARIF and HTML reports for review sessions</li>
+          </ul>
+        </article>
+        <article class="prof">
+          <span class="chip">PROFILE 04</span>
+          <h3>C2 sandbox range</h3>
+          <p>For studying command-and-control architecture and — more importantly — what it looks like in network telemetry. Read the framing on the <a href="c2-frameworks.html">C2 frameworks page</a> before using it.</p>
+          <ul>
+            <li>Internal-switch-only topology, egress denied</li>
+            <li>Connection and TLS metadata capture</li>
+            <li>Beacon-interval and fingerprint analysis exercises</li>
+            <li>Redirector allowlisting practice</li>
+          </ul>
+        </article>
+        <article class="prof">
+          <span class="chip">PROFILE 05</span>
+          <h3>Forensics &amp; response range</h3>
+          <p>Pre-captured artefacts from a completed exercise, so you can practise investigation without generating an incident first.</p>
+          <ul>
+            <li>Disk and memory captures with a known timeline</li>
+            <li>Log corpus with injected attacker activity</li>
+            <li>Timeline reconstruction and hypothesis testing</li>
+            <li>Report against a written scenario</li>
+          </ul>
+        </article>
+        <article class="prof">
+          <span class="chip">PROFILE 06</span>
+          <h3>Purple-team range</h3>
+          <p>The one that produces the most employable skill: run the technique, then measure your own detection of it, in one loop.</p>
+          <ul>
+            <li>Technique execution linked to ATT&amp;CK IDs</li>
+            <li>Local telemetry stack for detection writing</li>
+            <li>Coverage export into the <a href="mitre-attack-mapper.html">ATT&amp;CK mapper</a></li>
+            <li>Gap report generation for a written deliverable</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Trust engineering</h2>
+      <p class="section-intro">A security distribution is judged by what it can prove about itself. These are the commitments that separate a hobby ISO from something a professional can boot on a work laptop.</p>
+      <div class="trust">
+        <article class="card"><div class="number">01 // INTEGRITY</div><h3>Published checksums</h3><p>Every release ships SHA-256 hashes alongside the image, generated from the build output rather than typed by hand. Verify before boot — a corrupted live image is an unreliable lab.</p></article>
+        <article class="card"><div class="number">02 // AUTHENTICITY</div><h3>GPG-signed releases</h3><p>Release artefacts and the project's own package repository are signed with a published, documented key. You should be able to prove that what you downloaded is what was built, without trusting the download page.</p></article>
+        <article class="card"><div class="number">03 // REPRODUCIBILITY</div><h3>Build script in the open</h3><p>The live-build configuration lives in the repository. Anyone can rebuild the image and compare results — the strongest available answer to "what is actually inside this ISO?"</p></article>
+        <article class="card"><div class="number">04 // TRANSPARENCY</div><h3>SBOM per release</h3><p>Once the v2.0.0 pipeline ships, every release carries a machine-readable software bill of materials, so an organisation can audit exactly which components are present and at which versions.</p></article>
+        <article class="card"><div class="number">05 // PRIVACY</div><h3>No telemetry, by design</h3><p>The assistant binds to loopback, the image does not require an account, and nothing is uploaded. This is architectural, not a policy promise you have to take on faith.</p></article>
+        <article class="card"><div class="number">06 // BOUNDARIES</div><h3>Documented operating limits</h3><p>The project states plainly what the image is for and what it must never be used on: no production credentials, no regulated data, no critical systems. Read the <a href="acceptable-use.html">acceptable-use</a> and <a href="terms.html">terms</a> pages before deploying it anywhere.</p></article>
+      </div>
+      <div class="notice"><strong>Not security-audited.</strong> RATAN OS is a learning and lab platform, not an audited enterprise product, and this page does not claim otherwise. Boot it on hardware you can afford to lose, on networks you are authorised to change, and never as your only defence against anything.</div>
+    </section>
+
+    <section class="section">
+      <h2>From a roadmap item to a release</h2>
+      <p class="section-intro">How a module here becomes something you can download. This is the pipeline the v1.4.0 lab-profile and signed-repository work will pass through.</p>
+      <div class="process">
+        <div class="step"><b>01 // SCOPE</b><span>A module earns its place only if it serves a stated learning outcome. No outcome, no package.</span></div>
+        <div class="step"><b>02 // PIN</b><span>Every dependency is version-pinned with provenance recorded, so builds are repeatable months later.</span></div>
+        <div class="step"><b>03 // BUILD</b><span>Debian live-build runs from the committed configuration; the image is produced by script, never assembled by hand.</span></div>
+        <div class="step"><b>04 // TEST</b><span>Boot in QEMU BIOS, confirm the AI runtime answers offline, confirm lab profiles cannot reach the internet.</span></div>
+        <div class="step"><b>05 // SIGN &amp; PUBLISH</b><span>Hash, sign, publish with a verification guide and an honest statement of what the build does not do.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Get started</h2>
+      <div class="callout">
+        <div>
+          <h2>Download a free build, or plan your own</h2>
+          <p>Grab v1.0.0, v1.1.0 Lite or the v1.2.0 Lite AI Edition from the trust centre with checksums and QEMU BIOS instructions. Then use the planner above to design the build you would actually want.</p>
+        </div>
+        <a class="btn primary" href="ratan-os-release.html">Open the trust centre</a>
+      </div>
+      <div class="grid two" style="margin-top:16px">
+        <article class="card">
+          <div class="number">NEXT STEP // TEAM</div>
+          <h3>Set up this range as a workshop</h3>
+          <p>The profiles on this page map directly to the corporate workshop tracks. If you need a cohort trained on a controlled range rather than slides, that is what I do.</p>
+          <a class="btn" href="services.html">Training options</a>
+        </article>
+        <article class="card">
+          <div class="number">NEXT STEP // SOLO</div>
+          <h3>Pair it with the ATT&amp;CK mapper</h3>
+          <p>A lab without measurement produces memories, not skills. Load an adversary profile, run the range, and score what your own telemetry caught.</p>
+          <a class="btn" href="mitre-attack-mapper.html">Open the mapper</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>RATAN_PATEL.SEC // RATAN OS Advanced Edition roadmap &amp; build planner</span>
+      <span>
+        <a href="index.html">Home</a><a href="ratan-os-release.html">Release &amp; trust centre</a><a href="mitre-attack-mapper.html">ATT&amp;CK mapper</a><a href="c2-frameworks.html">C2 lab</a><a href="acceptable-use.html">Acceptable use</a><a href="terms.html">Terms</a>
+      </span>
+    </div>
+    <div class="footer-inner" style="margin-top:9px">
+      <span>Roadmap items and size estimates are planning information, not commitments. Built on Debian GNU/Linux; Debian is a registered trademark of Software in the Public Interest, Inc.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/ratan-os-builder.js"></script>
+</body>
+</html>

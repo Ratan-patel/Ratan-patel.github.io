@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Engagement Kit — Rules of Engagement, Authorisation &amp; Scope Builder | RATAN_PATEL.SEC</title>
+  <meta name="description" content="Free interactive builder for penetration-testing Rules of Engagement, an Authorization to Test letter, a scope and exclusions checklist, an abort procedure and an engagement log template. For authorised security testing only.">
+  <link rel="canonical" href="https://ratan-patel.github.io/engagement-kit.html">
+  <meta name="theme-color" content="#050b10">
+  <meta name="keywords" content="rules of engagement template, penetration testing authorization letter, scope of work pentest, get out of jail letter, penetration test contract, abort procedure, engagement log, VAPT documentation">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Engagement Kit — ROE, Authorisation &amp; Scope Builder">
+  <meta property="og:description" content="Generate the paperwork that makes security testing lawful and safe: authorisation letter, rules of engagement, exclusions, abort procedure and engagement log.">
+  <meta property="og:url" content="https://ratan-patel.github.io/engagement-kit.html">
+  <meta property="og:site_name" content="RATAN_PATEL.SEC">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="author" content="Ratan Kumar Patel">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="commercial.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "RATAN_PATEL.SEC Engagement Kit",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any browser",
+    "description": "Interactive builder for penetration-testing Rules of Engagement, Authorization to Test letters, scope and exclusion checklists, abort procedures and engagement log templates. Runs entirely in the browser.",
+    "url": "https://ratan-patel.github.io/engagement-kit.html",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "author": { "@type": "Person", "name": "Ratan Kumar Patel", "url": "https://ratan-patel.github.io/" }
+  }
+  </script>
+  <style>
+    .warning-banner{border:1px solid rgba(255,120,151,.5);background:linear-gradient(120deg,rgba(255,120,151,.13),rgba(255,120,151,.05));border-radius:16px;padding:18px 20px;margin:22px 0;color:#ffd7e0}
+    .warning-banner strong{color:#ffb3c6;display:block;margin-bottom:8px;font-family:Chakra Petch,Inter,sans-serif;font-size:17px}
+    .warning-banner ul{margin:8px 0 0;padding-left:20px}
+    .warning-banner li{margin:5px 0}
+
+    .kit{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+    @media(max-width:1040px){.kit{grid-template-columns:1fr}}
+
+    fieldset.fs{border:1px solid var(--line);border-radius:17px;padding:17px 19px 19px;margin:0 0 14px;background:linear-gradient(150deg,rgba(15,34,43,.95),rgba(8,18,24,.96))}
+    fieldset.fs legend{font:800 12px/1 ui-monospace,monospace;letter-spacing:.12em;color:var(--mint);padding:0 8px;text-transform:uppercase}
+    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+    .fgrid.one{grid-template-columns:1fr}
+    .fld{display:flex;flex-direction:column;gap:5px}
+    .fld label{font:700 10.5px/1.3 ui-monospace,monospace;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+    .fld input,.fld select,.fld textarea{background:#08141a;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;font:500 13.5px/1.5 Inter,sans-serif;width:100%}
+    .fld textarea{min-height:88px;resize:vertical;font-size:13px}
+    .fld input:focus,.fld select:focus,.fld textarea:focus{outline:3px solid var(--cyan);outline-offset:2px}
+    .fld .hint{font-size:11px;color:var(--muted);line-height:1.45;margin:0}
+    .fld input[type=datetime-local]{font-family:ui-monospace,monospace;font-size:12.5px}
+
+    .perm{display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:11px;border:1px solid transparent;cursor:pointer;transition:.14s ease}
+    .perm:hover{background:rgba(109,242,194,.06);border-color:var(--line)}
+    .perm input{appearance:none;width:19px;height:19px;flex:0 0 19px;margin-top:2px;border:1.6px solid #3a5560;border-radius:5px;background:#08141a;position:relative;cursor:pointer}
+    .perm input:checked{background:var(--mint);border-color:var(--mint)}
+    .perm input:checked:after{content:"";position:absolute;left:5px;top:1.5px;width:6px;height:11px;border:solid #04110f;border-width:0 2.4px 2.4px 0;transform:rotate(43deg)}
+    .perm input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    .perm.danger input:checked{background:var(--danger);border-color:var(--danger)}
+    .perm .t b{display:block;color:var(--ink);font-size:13.5px;font-weight:700}
+    .perm .t span{color:var(--muted);font-size:12px;line-height:1.5}
+    .perm .flag{font:800 9px/1 ui-monospace,monospace;letter-spacing:.08em;padding:4px 6px;border-radius:5px;border:1px solid rgba(255,200,87,.45);color:var(--amber);background:rgba(255,200,87,.09);white-space:nowrap;align-self:center}
+    .perm .flag.red{border-color:rgba(255,120,151,.5);color:var(--danger);background:rgba(255,120,151,.1)}
+
+    /* output side */
+    .outpane{position:sticky;top:78px}
+    .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
+    .tab{background:rgba(11,24,32,.8);border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:9px 12px;font:700 10.5px/1 ui-monospace,monospace;letter-spacing:.06em;cursor:pointer;transition:.14s ease}
+    .tab:hover{color:var(--ink);border-color:var(--mint)}
+    .tab[aria-selected=true]{background:rgba(109,242,194,.12);border-color:var(--mint);color:var(--mint)}
+    .tab:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    textarea.doc{width:100%;min-height:560px;background:#061119;border:1px solid var(--line);border-radius:14px;color:#d8ece8;font:500 12px/1.7 ui-monospace,monospace;padding:15px;resize:vertical;white-space:pre}
+    textarea.doc:focus{outline:3px solid var(--cyan);outline-offset:2px}
+    .docmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font:700 10.5px/1.4 ui-monospace,monospace;color:var(--muted);letter-spacing:.05em;margin:0 0 9px}
+    .readiness{display:grid;gap:8px;margin-top:12px}
+    .chk{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--muted);padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(11,24,32,.6)}
+    .chk .ic{font:800 11px/1.5 ui-monospace,monospace;flex:0 0 auto}
+    .chk.ok{border-color:rgba(109,242,194,.4);background:rgba(109,242,194,.07)}
+    .chk.ok .ic{color:var(--mint)}
+    .chk.bad{border-color:rgba(255,120,151,.45);background:rgba(255,120,151,.08)}
+    .chk.bad .ic{color:var(--danger)}
+    .chk.warn{border-color:rgba(255,200,87,.45);background:rgba(255,200,87,.08)}
+    .chk.warn .ic{color:var(--amber)}
+    .chk b{color:var(--ink);font-weight:700}
+
+    .steplist{counter-reset:s;list-style:none;margin:14px 0 0;padding:0}
+    .steplist li{counter-increment:s;position:relative;padding:0 0 18px 46px;color:var(--muted);font-size:14px}
+    .steplist li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;font:800 13px/1.7 ui-monospace,monospace;color:var(--mint);border:1px solid var(--line);border-radius:9px;width:32px;height:30px;display:grid;place-items:center;background:rgba(109,242,194,.06)}
+    .steplist li b{color:var(--ink);display:block;margin-bottom:3px;font-family:Chakra Petch,Inter,sans-serif;font-size:15px}
+    .steplist li:not(:last-child):after{content:"";position:absolute;left:15px;top:34px;bottom:2px;width:1px;background:var(--line)}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);background:#0d2027;border:1px solid var(--mint);color:var(--ink);padding:11px 17px;border-radius:12px;font:700 12px/1 ui-monospace,monospace;letter-spacing:.04em;opacity:0;pointer-events:none;transition:.25s ease;z-index:99}
+    .toast.on{opacity:1;transform:translate(-50%,0)}
+    @media print{
+      .site-nav,.kit>div:first-child,.tabs,.docmeta,.readiness,.button-row,.warning-banner,.footer,.toast{display:none!important}
+      textarea.doc{border:0;min-height:auto;height:auto;color:#000;background:#fff;font-size:11px;white-space:pre-wrap}
+      body{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">RATAN_PATEL.SEC</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">HOME</a>
+        <a href="services.html">SERVICES</a>
+        <a href="engagement-kit.html" aria-current="page">ENGAGEMENT KIT</a>
+        <a href="mitre-attack-mapper.html">ATT&amp;CK MAPPER</a>
+        <a href="c2-frameworks.html">C2 LAB</a>
+        <a href="pentest-lab.html">PENTEST LAB</a>
+        <a href="ratan-os-release.html">RATAN OS</a>
+        <a href="index.html#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">RATAN TRADE-CRAFT TOOLKIT // ENGAGEMENT GOVERNANCE</p>
+      <h1>The paperwork is the part that keeps you out of trouble.</h1>
+      <p>Almost every penetration-testing disaster starts the same way: testing began before authorisation was written down, or the written scope was vague enough to argue about afterwards. This builder generates the five documents that prevent that — an <strong>Authorization to Test</strong> letter, <strong>Rules of Engagement</strong>, a <strong>scope and exclusions checklist</strong>, an <strong>abort procedure</strong> and an <strong>engagement log template</strong> — from a short form.</p>
+      <p style="margin-top:12px">It runs entirely in your browser. Nothing you type is transmitted or stored on a server.</p>
+      <div class="button-row" style="margin-top:24px">
+        <a class="btn primary" href="#builder">Open the builder</a>
+        <a class="btn" href="#roe">What a proper ROE contains</a>
+        <a class="btn" href="#legal">Legal basis</a>
+        <a class="btn" href="#mistakes">Common mistakes</a>
+      </div>
+    </section>
+
+    <div class="warning-banner">
+      <strong>Read this before you use any generated document.</strong>
+      <ul>
+        <li>These are <strong>templates</strong>, not legal advice. Your client's legal team — and, where appropriate, your own — must review anything before it is signed.</li>
+        <li>An authorisation is only as strong as the person who signs it. It must be signed by someone with <strong>genuine authority over the assets</strong>, not by an engineer who "has permission from their manager".</li>
+        <li>Written authorisation does not transfer liability. Testing outside the agreed scope can still be a criminal offence and a civil claim, even with a signed letter in hand.</li>
+        <li>Testing a third-party cloud, SaaS or hosted service usually requires <strong>that provider's</strong> permission as well as your client's. A client cannot authorise someone else's infrastructure.</li>
+        <li>No document protects you if you test assets you were not asked to test. Scope discipline is a habit, not a form.</li>
+      </ul>
+    </div>
+
+    <section class="section" id="builder">
+      <h2>Engagement builder</h2>
+      <p class="section-intro">Fill the form once. All five documents generate from the same inputs, so they cannot contradict each other — which is the failure mode that turns paperwork into evidence against you.</p>
+
+      <div class="kit">
+        <div>
+          <fieldset class="fs">
+            <legend>Parties</legend>
+            <div class="fgrid">
+              <div class="fld"><label for="k-client">Client / asset owner</label><input id="k-client" type="text" placeholder="e.g. Acme Technologies Pvt Ltd"></div>
+              <div class="fld"><label for="k-signatory">Authorising signatory</label><input id="k-signatory" type="text" placeholder="Full name, designation"></div>
+              <div class="fld"><label for="k-signemail">Signatory email</label><input id="k-signemail" type="email" placeholder="name@client.example"></div>
+              <div class="fld"><label for="k-assessor">Assessor / tester</label><input id="k-assessor" type="text" value="Ratan Kumar Patel"></div>
+              <div class="fld"><label for="k-assessororg">Assessor organisation</label><input id="k-assessororg" type="text" value="RATAN_PATEL.SEC"></div>
+              <div class="fld"><label for="k-ref">Engagement reference</label><input id="k-ref" type="text" placeholder="e.g. ACME-2026-VAPT-01"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Engagement shape</legend>
+            <div class="fgrid">
+              <div class="fld">
+                <label for="k-type">Engagement type</label>
+                <select id="k-type">
+                  <option>External network penetration test</option>
+                  <option>Internal network penetration test</option>
+                  <option>Web application VAPT</option>
+                  <option>API security assessment</option>
+                  <option>Mobile application assessment</option>
+                  <option>Cloud configuration &amp; identity review</option>
+                  <option>Red team / adversary emulation</option>
+                  <option>AI / LLM security assessment</option>
+                  <option>Purple team / detection validation</option>
+                </select>
+              </div>
+              <div class="fld">
+                <label for="k-mode">Knowledge base</label>
+                <select id="k-mode">
+                  <option>Black box</option>
+                  <option selected>Grey box</option>
+                  <option>White box</option>
+                  <option>Assumed breach</option>
+                </select>
+              </div>
+              <div class="fld">
+                <label for="k-env">Primary environment</label>
+                <select id="k-env">
+                  <option>Staging / non-production (preferred)</option>
+                  <option>Production</option>
+                  <option>Both, with separately agreed windows</option>
+                </select>
+                <p class="hint">Testing production raises impact risk. If selected, the rules below tighten automatically.</p>
+              </div>
+              <div class="fld">
+                <label for="k-window-from">Test window — start</label>
+                <input id="k-window-from" type="datetime-local">
+              </div>
+              <div class="fld">
+                <label for="k-window-to">Test window — end</label>
+                <input id="k-window-to" type="datetime-local">
+              </div>
+              <div class="fld">
+                <label for="k-tz">Timezone</label>
+                <input id="k-tz" type="text" value="IST (UTC+05:30)">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Scope</legend>
+            <div class="fgrid one">
+              <div class="fld">
+                <label for="k-scope">Assets explicitly IN scope</label>
+                <textarea id="k-scope" placeholder="One per line, with identifiers. Be specific:
+https://app.acme.example (staging tenant)
+10.20.30.0/24 (internal DMZ segment)
+api.acme.example — /v2/* only
+Mobile app: com.acme.app build 2411 (test account)"></textarea>
+                <p class="hint">Ambiguous scope is the most common cause of a "friendly" test becoming an incident. Name hosts, ranges, paths, accounts and builds.</p>
+              </div>
+              <div class="fld">
+                <label for="k-exclude">Assets explicitly OUT of scope</label>
+                <textarea id="k-exclude" placeholder="One per line. Never leave this empty:
+Production customer database
+Payment gateway and PCI systems
+Third-party SaaS (shared responsibility boundary)
+Corporate email of staff not in the approved test-account list
+Anything not listed in the IN scope list"></textarea>
+                <p class="hint">Silence is not a boundary. If it is not excluded in writing, an assessor can reasonably assume it is in scope — and that assumption is what gets people prosecuted.</p>
+              </div>
+              <div class="fld">
+                <label for="k-accounts">Test accounts / credentials provided</label>
+                <textarea id="k-accounts" placeholder="Describe accounts by role, never paste real secrets here:
+- app_user@test.acme.example — standard role
+- app_admin@test.acme.example — admin role
+- API key issued for this engagement (delivered out of band)"></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Contacts &amp; escalation</legend>
+            <div class="fgrid">
+              <div class="fld"><label for="k-tc">Primary technical contact</label><input id="k-tc" type="text" placeholder="Name, role"></div>
+              <div class="fld"><label for="k-tce">Technical contact phone</label><input id="k-tce" type="tel" placeholder="+91 ..."></div>
+              <div class="fld"><label for="k-ec1">Emergency contact 1 (24×7)</label><input id="k-ec1" type="text" placeholder="Name, role, phone"></div>
+              <div class="fld"><label for="k-ec2">Emergency contact 2 (24×7)</label><input id="k-ec2" type="text" placeholder="Name, role, phone"></div>
+              <div class="fld"><label for="k-soc">Client SOC / on-call inbox</label><input id="k-soc" type="text" placeholder="soc@client.example — so blue team is not blindsided"></div>
+              <div class="fld"><label for="k-blueknown">Is the defending team informed?</label>
+                <select id="k-blueknown">
+                  <option value="yes">Yes — full or partial transparency</option>
+                  <option value="blind">No — blind test (must be approved in writing)</option>
+                </select>
+                <p class="hint">A blind test still needs a named person who can stop it. Blind for the SOC is fine; blind for the business is negligent.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Permitted activities</legend>
+            <p class="hint" style="margin:0 0 12px;font-size:12.5px;color:var(--muted)">Only the two baseline activities start enabled. Everything high-impact starts switched off — enable it solely where the client has consciously agreed, in writing. High-impact selections change the generated ROE and raise readiness warnings.</p>
+            <div id="perms"></div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Data handling &amp; delivery</legend>
+            <div class="fgrid">
+              <div class="fld">
+                <label for="k-data">Maximum data classification accessed</label>
+                <select id="k-data">
+                  <option>Public and internal, non-sensitive only</option>
+                  <option>Confidential business data (no personal data)</option>
+                  <option>Personal data (requires DPA / written justification)</option>
+                </select>
+              </div>
+              <div class="fld"><label for="k-retention">Evidence retention period</label><input id="k-retention" type="text" value="90 days after final report acceptance"></div>
+              <div class="fld"><label for="k-destroy">Evidence destruction date</label><input id="k-destroy" type="date"></div>
+              <div class="fld"><label for="k-report">Report delivery date</label><input id="k-report" type="date"></div>
+              <div class="fld"><label for="k-retest">Retest window</label><input id="k-retest" type="text" placeholder="e.g. 30 days after remediation sign-off"></div>
+              <div class="fld"><label for="k-juris">Governing jurisdiction</label><input id="k-juris" type="text" value="India"></div>
+            </div>
+          </fieldset>
+
+          <div class="button-row">
+            <button class="btn primary" id="k-build">Generate all documents</button>
+            <button class="btn" id="k-copy">Copy current</button>
+            <button class="btn" id="k-dl">Download .md</button>
+            <button class="btn" id="k-dlall">Download all (.md)</button>
+            <button class="btn" id="k-print">Print / PDF</button>
+            <button class="btn" id="k-reset">Clear</button>
+          </div>
+        </div>
+
+        <aside class="outpane">
+          <div class="tabs" role="tablist" aria-label="Generated documents">
+            <button class="tab" role="tab" id="tab-auth" aria-selected="true">01 Authorisation</button>
+            <button class="tab" role="tab" id="tab-roe" aria-selected="false">02 ROE</button>
+            <button class="tab" role="tab" id="tab-scope" aria-selected="false">03 Scope</button>
+            <button class="tab" role="tab" id="tab-abort" aria-selected="false">04 Abort</button>
+            <button class="tab" role="tab" id="tab-log" aria-selected="false">05 Log</button>
+          </div>
+          <div class="docmeta">
+            <span id="k-docname">AUTHORISATION TO TEST</span>
+            <span id="k-docsize"></span>
+          </div>
+          <textarea class="doc" id="k-out" spellcheck="false" aria-label="Generated document"></textarea>
+
+          <div class="readiness" id="k-ready" aria-live="polite"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="roe">
+      <h2>What a proper Rules of Engagement contains</h2>
+      <p class="section-intro">A one-page purchase order is not an ROE. These are the clauses that matter when something goes wrong at 2am and someone has to decide whether to keep going.</p>
+      <ol class="steplist">
+        <li><b>Named assets, not categories</b><p>"The web application" is not a scope. "https://app.acme.example, staging tenant, /v2 API paths only" is. Every asset should be identifiable by a stranger reading the document.</p></li>
+        <li><b>Explicit exclusions</b><p>Third-party and shared infrastructure, payment systems, medical or safety-critical systems, employee personal devices, and everything not in the in-scope list. An empty exclusions section is a red flag in any ROE review.</p></li>
+        <li><b>Who can authorise, and who can stop</b><p>One named signatory with authority over the assets, and one named person who can halt the engagement immediately, 24×7, including outside business hours.</p></li>
+        <li><b>Time windows and blackout periods</b><p>Explicit start and end, in a stated timezone. If the engagement has no end date, you have no way to prove a later finding was out of scope.</p></li>
+        <li><b>Permitted techniques, individually consented</b><p>Social engineering, physical testing, denial of service, persistence and data-exfiltration proof are each separately negotiated. Bundling them into "testing" is how engagements end up in court.</p></li>
+        <li><b>Defined impact ceiling</b><p>What happens if a test accidentally causes an outage, corrupts data, or locks an account. Who is called, in what order, and within what time. Agree this before it is needed, because you will not be thinking clearly when it is.</p></li>
+        <li><b>Abort criteria and the abort path</b><p>The specific conditions that stop testing immediately — a production outage, a real security incident in progress, a third-party system being touched accidentally — plus the out-of-band channel used to issue the abort. Not the engagement chat group.</p></li>
+        <li><b>Blue-team coordination and detection handling</b><p>Whether the defenders are informed, and what happens when they detect you and respond. A red team that gets blocked and says nothing produces a report that is wrong about the client's security.</p></li>
+        <li><b>Data handling, retention and destruction</b><p>What data you may access, where captures are stored, who can reach them, and the date they are destroyed with written confirmation. If personal data is involved, a data-processing agreement belongs here too.</p></li>
+        <li><b>Liability, insurance and governing law</b><p>Professional indemnity cover, the limits of the assessor's responsibility, and the jurisdiction that governs the contract. Have this reviewed — it is the clause that gets tested in court, not the technical annex.</p></li>
+      </ol>
+      <div class="notice mint"><strong>The test to apply to your own ROE:</strong> hand it to an engineer who has never met the client, at 2am, and ask them whether they can tell exactly what they may and may not do. If they have to guess, the document is not finished.</div>
+    </section>
+
+    <section class="section" id="legal">
+      <h2>Legal basis — why the paperwork matters</h2>
+      <p class="section-intro">The technical skills are what get you hired. Knowing where the legal line sits is what lets you keep working.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="number">INDIA</div>
+          <h3>Information Technology Act, 2000</h3>
+          <p>Unauthorised access, downloading or manipulation of data in a computer resource is addressed under <strong>§43</strong> (civil liability), <strong>§66</strong> (computer-related offences) and related provisions, with aggravated penalties where critical information infrastructure or protected systems are involved. "I was doing security testing" is not a defence — written authorisation from the asset owner is.</p>
+          <p class="micro">This is a plain-language summary for assessors, not legal advice. Consult a qualified lawyer for your jurisdiction and engagement.</p>
+        </article>
+        <article class="card">
+          <div class="number">COMPARATIVE</div>
+          <h3>Other jurisdictions</h3>
+          <p>Frameworks such as the US Computer Fraud and Abuse Act, the UK Computer Misuse Act, and equivalent computer-misuse statutes in most countries criminalise access beyond what is authorised. Some jurisdictions add mandatory reporting duties if you encounter evidence of a separate crime, including certain categories of illegal content.</p>
+          <p class="micro">If you operate across borders, the ROE should name the governing law and confirm where evidence is permitted to be stored.</p>
+        </article>
+        <article class="card">
+          <div class="number">CLOUD &amp; THIRD PARTIES</div>
+          <h3>You cannot authorise someone else's systems</h3>
+          <p>A client's signature does not extend to infrastructure they do not own. Testing cloud-hosted infrastructure, shared SaaS, or a payment provider typically requires that provider's own permission under their policy. Testing a shared platform's controls on behalf of one tenant can affect every other tenant — a fact that turns a procedural slip into a serious incident.</p>
+          <p class="micro">Read the provider's penetration-testing policy before you touch anything hosted by them, and note the policy version in your engagement reference.</p>
+        </article>
+        <article class="card">
+          <div class="number">PROOF</div>
+          <h3>What actually protects you</h3>
+          <p>A signed letter from someone with authority, describing named assets and a date range, stored somewhere you can retrieve it quickly. Not a screenshot of a chat message from a colleague. Not an email that says "go ahead" without naming what "ahead" means.</p>
+          <p class="micro">If you cannot produce the authorisation within minutes of being asked, assume you cannot prove you had it.</p>
+        </article>
+      </div>
+      <div class="notice"><strong>A practical habit:</strong> before touching anything, put the authorisation letter, the ROE, the emergency contact list and the abort procedure in one folder on the machine you will operate from. Offline copy as well. The moment you need them is a moment you will not have time to search for them.</div>
+    </section>
+
+    <section class="section" id="mistakes">
+      <h2>How engagements go wrong</h2>
+      <p class="section-intro">Nearly every incident traceable to process — rather than skill — comes from one of these six.</p>
+      <div class="grid two">
+        <article class="card"><div class="number">01</div><h3>Starting before signing</h3><p>"The contract is with legal, we can begin the recon." Recon is testing. Nothing begins before the signature, including passive work, because the authorisation clock has to cover the whole engagement.</p></article>
+        <article class="card"><div class="number">02</div><h3>Category scope</h3><p>"All company web applications." Which environment? Which tenant? Whose third-party integration? Scope by category is scope by assumption.</p></article>
+        <article class="card"><div class="number">03</div><h3>Assuming exclusions are obvious</h3><p>If the exclusions section is blank because "obviously we wouldn't test payroll", that thought belongs on paper. Reviewers, insurers and lawyers do not share your instincts.</p></article>
+        <article class="card"><div class="number">04</div><h3>No agreed impact ceiling</h3><p>An account lockout, a test record in production, a triggered failover at 3am. Without a pre-agreed response, the conversation stops being about security and starts being about blame.</p></article>
+        <article class="card"><div class="number">05</div><h3>Blind for the wrong people</h3><p>Hiding the test from the SOC is a legitimate way to measure detection. Hiding it from the person who can stop it, or from the on-call engineer who will be paged at 2am, is how a test becomes an incident.</p></article>
+        <article class="card"><div class="number">06</div><h3>Evidence kept forever, everywhere</h3><p>Credentials, screenshots of personal data and memory dumps left on a laptop for eighteen months. Retention and destruction dates are not administrative overhead; they are the part of the engagement a regulator will ask about.</p></article>
+      </div>
+      <div class="callout">
+        <div>
+          <h2>Want this handled properly for you?</h2>
+          <p>Every engagement I run starts with scope, written authorisation and defined stop conditions agreed before anything is touched — and ends with a report your team can act on.</p>
+        </div>
+        <a class="btn primary" href="services.html">See engagement options</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Pair this with the coverage work</h2>
+      <div class="grid">
+        <article class="card"><div class="number">PLANNING</div><h3><a href="mitre-attack-mapper.html">MITRE ATT&amp;CK Mapper</a></h3><p>The engagement plan needs techniques. Score coverage, generate an emulation test plan and export Sigma skeletons and a client report.</p></article>
+        <article class="card"><div class="number">ARCHITECTURE</div><h3><a href="c2-frameworks.html">C2 Frameworks &amp; Detection</a></h3><p>Red-team infrastructure design, operator OPSEC and the detection layers that catch it — the technical counterpart to this document set.</p></article>
+        <article class="card"><div class="number">LAB</div><h3><a href="ratan-os-advanced.html">RATAN OS Build Planner</a></h3><p>Build the isolated range you rehearse on, so the client environment is never the first place you run a technique.</p></article>
+      </div>
+      <div class="notice"><strong>Not legal advice.</strong> This page summarises widely used practice so assessors and clients can have a better first conversation. Have your own legal counsel review any agreement before signing. See also <a href="terms.html">Terms</a> and <a href="acceptable-use.html">Acceptable Use</a>.</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>RATAN_PATEL.SEC // Engagement Kit — ROE, authorisation &amp; scope builder</span>
+      <span>
+        <a href="index.html">Home</a><a href="services.html">Services</a><a href="mitre-attack-mapper.html">ATT&amp;CK mapper</a><a href="c2-frameworks.html">C2 lab</a><a href="terms.html">Terms</a><a href="acceptable-use.html">Acceptable use</a>
+      </span>
+    </div>
+    <div class="footer-inner" style="margin-top:9px">
+      <span>Templates for authorised security testing only. Not legal advice. Generated locally in your browser; nothing is transmitted or stored.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/engagement-kit.js"></script>
+</body>
+</html>
