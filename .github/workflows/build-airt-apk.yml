@@ -15,7 +15,7 @@ on:
       - ".github/workflows/build-airt-apk.yml"
 
 permissions:
-  contents: read
+  contents: write   # needed to publish the APK as a release asset
 
 env:
   PROJECT_DIR: tools/ai-redteam-scanner/android
@@ -94,13 +94,38 @@ jobs:
           ls -lh out
           unzip -l out/AIRT-Scanner-1.0.0-release.apk | grep -E "assets/index.html|AndroidManifest" || true
 
-      - name: Upload APKs
+      - name: Upload APKs (workflow artifact)
         uses: actions/upload-artifact@v4
         with:
           name: airt-scanner-apk
           path: out/*.apk
           if-no-files-found: error
           retention-days: 90
+
+      # Permanent, phone-friendly download link:
+      #   https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: airt-v1.0.0
+          name: "AIRT Scanner 1.0.0 (Android APK)"
+          body: |
+            Android build of the **AIRT — AI Red-Teaming Scanner** web console.
+
+            * `AIRT-Scanner-1.0.0-release.apk` — install this one
+            * `AIRT-Scanner-1.0.0-debug.apk` — same app with debug logging
+
+            Install: download on the phone → open it → allow "install from unknown sources"
+            when Android asks. Android 7.0+ (minSdk 24), no account, no telemetry.
+
+            ⚠️ Authorised testing only. The app sends real adversarial prompts to whatever
+            endpoint you point it at.
+
+            Build: `.github/workflows/build-airt-apk.yml` (AGP 8.5.2, JDK 17, no third-party
+            runtime dependencies). Full toolkit: `tools/ai-redteam-scanner/`.
+          files: out/*.apk
+          fail_on_unmatched_files: true
+          make_latest: true
 
       - name: Upload build reports when something fails
         if: failure()
