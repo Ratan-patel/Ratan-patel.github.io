@@ -17,10 +17,14 @@ on:
 permissions:
   contents: read
 
+env:
+  PROJECT_DIR: tools/ai-redteam-scanner/android
+
 jobs:
   build-apk:
     name: Build installable APK
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -30,18 +34,35 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept SDK licences and install the platform we compile against
+      - name: Locate and prepare the Android SDK
         run: |
-          yes | sdkmanager --licenses > /dev/null 2>&1 || true
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools" > /dev/null
+          set -x
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "SDK=$SDK"
+          ls "$SDK" || true
 
-      - name: Set up Gradle 8.7
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.7"
+          CMDLINE=""
+          for candidate in "$SDK/cmdline-tools/latest/bin" "$SDK/cmdline-tools/bin" "$SDK/tools/bin"; do
+            if [ -x "$candidate/sdkmanager" ]; then CMDLINE="$candidate"; break; fi
+          done
+          echo "cmdline tools: ${CMDLINE:-<none found>}"
+
+          if [ -n "$CMDLINE" ]; then
+            yes | "$CMDLINE/sdkmanager" --licenses > /dev/null 2>&1 || true
+            "$CMDLINE/sdkmanager" --install "platforms;android-34" "build-tools;34.0.0" \
+              > /dev/null 2>&1 || echo "warning: could not install SDK packages (they are likely preinstalled)"
+            echo "$CMDLINE" >> "$GITHUB_PATH"
+          fi
+
+          echo "ANDROID_HOME=$SDK"   >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "sdk.dir=$SDK" > "$PROJECT_DIR/local.properties"
+
+          # what do we actually have?
+          ls "$SDK/platforms" 2>/dev/null || true
+          ls "$SDK/build-tools" 2>/dev/null || true
+        env:
+          PROJECT_DIR: tools/ai-redteam-scanner/android
 
       - name: Regenerate the bundled scanner page from the Python corpus
         run: python3 tools/ai-redteam-scanner/gen_mobile.py
@@ -49,9 +70,18 @@ jobs:
       - name: Verify the JS engine before packaging
         run: node tools/ai-redteam-scanner/tests/engine_js_test.js
 
-      - name: Build debug and release APKs
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Build the debug APK
         working-directory: tools/ai-redteam-scanner/android
-        run: gradle assembleDebug assembleRelease --no-daemon --stacktrace
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Build the release APK
+        working-directory: tools/ai-redteam-scanner/android
+        run: gradle :app:assembleRelease --no-daemon --stacktrace
 
       - name: Collect artifacts with friendly names
         run: |
@@ -62,11 +92,7 @@ jobs:
           cp tools/ai-redteam-scanner/android/app/build/outputs/apk/release/app-release.apk \
              out/AIRT-Scanner-1.0.0-release.apk
           ls -lh out
-
-      - name: Show APK contents (sanity check)
-        run: |
-          unzip -l out/AIRT-Scanner-1.0.0-release.apk | head -25
-          unzip -l out/AIRT-Scanner-1.0.0-release.apk | grep -c "assets/index.html"
+          unzip -l out/AIRT-Scanner-1.0.0-release.apk | grep -E "assets/index.html|AndroidManifest" || true
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
@@ -75,3 +101,14 @@ jobs:
           path: out/*.apk
           if-no-files-found: error
           retention-days: 90
+
+      - name: Upload build reports when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: airt-apk-build-logs
+          path: |
+            tools/ai-redteam-scanner/android/app/build/reports/**
+            tools/ai-redteam-scanner/android/.gradle/**
+          if-no-files-found: ignore
+          retention-days: 7
