@@ -28,6 +28,21 @@ its system prompt, or execute tool calls. Therefore:
 
 ## Quickstart (60 seconds)
 
+No install needed — pick whichever is convenient:
+
+```bash
+# A) from the repo root, no cd, no install
+python3 tools/ai-redteam-scanner/airt-cli.py demo --mutate-all
+
+# B) inside the tool directory (same thing)
+cd tools/ai-redteam-scanner && python3 -m airt demo --mutate-all
+
+# C) optional: install so `airt` works everywhere
+cd tools/ai-redteam-scanner && pip install -e . && airt version
+```
+
+Full walkthrough:
+
 ```bash
 git clone https://github.com/Ratan-patel/Ratan-patel.github.io.git
 cd Ratan-patel.github.io/tools/ai-redteam-scanner
