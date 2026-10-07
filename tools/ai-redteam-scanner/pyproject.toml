@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airt-scanner"
+version = "1.0.0"
+description = "AIRT - AI Red-Teaming Scanner: automated prompt-injection, jailbreak and boundary testing for LLM endpoints (stdlib only)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Ratan Patel" }]
+keywords = ["ai-security", "llm", "red-team", "prompt-injection", "jailbreak", "owasp-llm", "pentest"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+]
+dependencies = []
+
+[project.scripts]
+airt = "airt.cli:main"
+
+[project.urls]
+Source = "https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/tools/ai-redteam-scanner"
+Documentation = "https://github.com/Ratan-patel/Ratan-patel.github.io/blob/main/tools/ai-redteam-scanner/README.md"
+
+[tool.setuptools]
+packages = ["airt"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+airt = ["webui.html"]
