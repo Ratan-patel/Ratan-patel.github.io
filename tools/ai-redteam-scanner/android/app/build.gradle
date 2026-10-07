@@ -1,0 +1,37 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'io.github.ratanpatel.airt'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "io.github.ratanpatel.airt"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
+        release {
+            minifyEnabled false
+            // signed with the debug key so the artifact is installable without a keystore;
+            // for a Play/enterprise release, supply your own signingConfig.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// no external dependencies: framework-only WebView + HttpURLConnection
+dependencies { }

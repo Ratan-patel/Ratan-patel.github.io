@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+airt_*.json
+airt_*.html
+airt_*.sarif
+airt_*.jsonl
+scan.json
+report.html
+.airt/

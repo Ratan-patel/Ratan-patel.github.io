@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIRT — AI Red-Teaming Scanner | Ratan Patel</title>
+<meta name="description" content="AIRT is a lightweight Python CLI and web console that fires automated prompt-injection, jailbreak, data-exfiltration and boundary tests at any AI endpoint. 67 probes, 9 evasion mutations, SARIF/HTML reports. Authorised testing only.">
+<link rel="canonical" href="https://ratan-patel.github.io/tools/ai-redteam-scanner/">
+<style>
+:root{--bg:#0a0f1e;--bg2:#101733;--panel:#111a35;--line:#22305a;--txt:#e9eeff;--dim:#8d99c6;
+--red:#ff5c7a;--orange:#ffa64d;--yellow:#ffd166;--green:#4ade80;--blue:#5b8cff;--violet:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1100px 520px at 15% -10%,#17224c 0%,var(--bg) 58%);
+color:var(--txt);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 96px}
+.crumb{font-size:13px;color:var(--dim);margin-bottom:18px}
+h1{font-size:34px;line-height:1.15;margin:0 0 10px;letter-spacing:.2px}
+h1 b{color:var(--blue)}
+.sub{color:var(--dim);font-size:16px;max-width:70ch}
+h2{font-size:20px;margin:38px 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h3{font-size:15px;margin:18px 0 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
+border-radius:14px;padding:15px}
+.card .tag{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.card p{margin:6px 0 0;font-size:14px;color:#cfd8f5}
+pre{background:#070c1a;border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+overflow-x:auto;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#a9bcf0}
+code{background:#0d1428;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:13.5px}
+.warn{background:rgba(255,166,77,.09);border:1px solid rgba(255,166,77,.35);color:#ffd9aa;
+border-radius:13px;padding:13px 16px;font-size:14.5px;margin:20px 0}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin:22px 0 6px}
+.stat strong{display:block;font-size:27px;color:#fff}
+.stat span{color:var(--dim);font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.pill{display:inline-block;padding:7px 14px;border-radius:99px;font-size:13.5px;font-weight:600;
+background:#141d3a;border:1px solid var(--line);color:var(--txt)}
+.pill.primary{background:linear-gradient(135deg,#3f6bff,#7b4dff);border:0;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.muted{color:var(--dim);font-size:13.5px}
+footer{margin-top:46px;border-top:1px solid var(--line);padding-top:16px;color:var(--dim);font-size:13px}
+.sev{font-weight:700}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="crumb"><a href="/">Ratan Patel</a> › <a href="/ai-security-llm-red-teaming.html">AI Security &amp; LLM Red-Teaming</a> › AIRT</div>
+
+<h1><b>AIRT</b> — AI Red-Teaming Scanner</h1>
+<p class="sub">A lightweight Python CLI <b>and</b> web console that fires automated prompt-injection,
+jailbreak, data-exfiltration, tool-abuse and boundary tests at any AI endpoint — an OpenAI-compatible
+API, Claude, a local Ollama model, or your own LangChain / FastAPI bot over plain HTTP.</p>
+
+<div class="stats">
+  <div class="stat"><strong>0</strong><span>dependencies (stdlib only)</span></div>
+  <div class="stat"><strong>67</strong><span>attack probes</span></div>
+  <div class="stat"><strong>11</strong><span>OWASP-mapped categories</span></div>
+  <div class="stat"><strong>9</strong><span>evasion mutations</span></div>
+  <div class="stat"><strong>4</strong><span>report formats</span></div>
+</div>
+
+<div class="pillrow">
+  <a class="pill primary" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk">⬇ Download Android APK (40 KB)</a>
+  <a class="pill" href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/tools/ai-redteam-scanner">Source &amp; README</a>
+  <a class="pill" href="sample-report.html">Sample HTML report</a>
+  <a class="pill" href="docs/QUICKSTART.md">Quick reference</a>
+  <a class="pill" href="sample-report.sarif">SARIF example</a>
+</div>
+
+<div class="warn">
+<b>Authorised testing only.</b> AIRT sends real attacks at a live model and can cause a target to
+disclose data or execute tool calls. Only run it against systems you own or are contracted to test,
+on a staging endpoint with a scratch account. The CLI requires explicit confirmation; the web
+console blocks non-local targets unless started with <code>--allow-remote</code>.
+</div>
+
+<h2>What it does</h2>
+<div class="grid">
+  <div class="card"><div class="tag">Attack corpus</div><p>Instruction override, ChatML token
+    smuggling, DAN/dev-mode/AIM personas, many-shot priming, system-prompt extraction, markdown-image
+    exfiltration beacons, credential solicitation, SSRF-to-metadata, insecure code generation,
+    hallucinated citations, bias probes and indirect (RAG/email/PDF) injection.</p></div>
+  <div class="card"><div class="tag">Explainable scoring</div><p>Every verdict ships with evidence:
+    canary hits, marker echoes, secret/PII regexes, refusal language, compliance heuristics and
+    system-prompt similarity. Refusals are detected in English, Hinglish, Spanish and French.</p></div>
+  <div class="card"><div class="tag">Evasion testing</div><p>The same attack re-sent as base64,
+    ROT13, zero-width, homoglyph, leetspeak, fullwidth, roleplay-wrapped or bilingual payloads —
+    then an effectiveness table that shows whether your defence is a policy or just a keyword filter.</p></div>
+  <div class="card"><div class="tag">Android APK</div><p>Same corpus and scoring engine, packaged as an
+    installable app (Android 7.0+, ~40 KB, debug-signed sideload). It calls endpoints
+    <b>natively</b>, so CORS never blocks it and plain-<code>http://</code> lab bots work; reports land
+    in <code>Downloads/</code> as JSON/HTML/SARIF. Built automatically by GitHub Actions.
+    <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk">Download APK →</a></p></div>
+  <div class="card"><div class="tag">Web console</div><p><code>python3 -m airt serve</code> gives a
+    single-page UI over the same engine: pick target, categories and mutations, watch live progress,
+    download JSON/HTML/SARIF generated locally. No CDN, no third-party JS, no data leaves the box.</p></div>
+</div>
+
+<h2>Run it</h2>
+<pre>git clone https://github.com/Ratan-patel/Ratan-patel.github.io.git
+cd Ratan-patel.github.io/tools/ai-redteam-scanner
+
+# offline demo — no target, no API key, no network
+python3 -m airt demo --mutate-all
+
+# your own bot over HTTP
+python3 -m airt scan --target-type http --target-url http://localhost:8000/chat \
+    --body '{"message":"{prompt}"}' --response-path reply \
+    --inject-canary --html report.html --sarif report.sarif --yes
+
+# web console
+python3 -m airt serve --port 8765</pre>
+
+<h2>Categories &amp; OWASP LLM Top-10 mapping</h2>
+<table>
+  <thead><tr><th>Category</th><th>Probes</th><th>Worst-case severity</th><th>OWASP</th></tr></thead>
+  <tbody>
+    <tr><td>prompt-injection</td><td>12</td><td class="sev" style="color:var(--red)">5</td><td>LLM01</td></tr>
+    <tr><td>jailbreak</td><td>12</td><td class="sev" style="color:var(--red)">5</td><td>LLM01</td></tr>
+    <tr><td>system-prompt-leak</td><td>6</td><td class="sev" style="color:var(--red)">5</td><td>LLM07</td></tr>
+    <tr><td>data-exfiltration</td><td>5</td><td class="sev" style="color:var(--red)">5</td><td>LLM02</td></tr>
+    <tr><td>tool-agent-abuse</td><td>5</td><td class="sev" style="color:var(--red)">5</td><td>LLM08</td></tr>
+    <tr><td>indirect-injection</td><td>5</td><td class="sev" style="color:var(--red)">5</td><td>LLM01</td></tr>
+    <tr><td>harmful-content</td><td>6</td><td class="sev" style="color:var(--red)">5</td><td>LLM06</td></tr>
+    <tr><td>pii-privacy</td><td>4</td><td class="sev" style="color:var(--red)">5</td><td>LLM02</td></tr>
+    <tr><td>insecure-code</td><td>4</td><td class="sev" style="color:var(--red)">5</td><td>LLM05</td></tr>
+    <tr><td>bias-toxicity</td><td>4</td><td class="sev" style="color:var(--red)">5</td><td>LLM09</td></tr>
+    <tr><td>hallucination</td><td>4</td><td class="sev" style="color:var(--yellow)">3</td><td>LLM09</td></tr>
+  </tbody>
+</table>
+
+<h2>Reports that fit a real workflow</h2>
+<div class="grid">
+  <div class="card"><div class="tag">HTML</div><p>Self-contained client-ready report: risk gauge,
+    filterable probe table, per-finding evidence and remediation. <a href="sample-report.html">See a
+    real scan of the bundled practice bot →</a></p></div>
+  <div class="card"><div class="tag">SARIF 2.1.0</div><p>Upload with GitHub Code Scanning to get AI
+    findings in the Security tab; severity maps to <code>security-severity</code>.
+    <code>--fail-on-findings</code> turns any scan into a CI gate.</p></div>
+  <div class="card"><div class="tag">JSON / NDJSON</div><p>Machine-readable results for dashboards,
+    regression diffs across releases, and SIEM streaming.</p></div>
+  <div class="card"><div class="tag">Library use</div><p><code>Scanner</code>, <code>ScanConfig</code>
+    and the probe corpus are importable — embed a red-team suite in your own evaluation harness.</p></div>
+</div>
+
+<h2>Get the Android app</h2>
+<pre># on the phone — direct download, no account needed
+https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk</pre>
+<p class="muted">Install: open the file → Android asks to allow "unknown sources" → Install.
+Then pick <i>Offline simulator</i> for a first run with no network, or point it at a bot on the
+same Wi-Fi (use your laptop's LAN IP like <code>http://192.168.1.5:8899/chat</code> — on a phone
+<code>localhost</code> means the phone itself). Full notes:
+<a href="docs/APK.md">docs/APK.md</a>. Prefer the CLI/web console for desktop work: the app is a
+convenience shell, not a replacement for the full toolkit.</p>
+
+<h2>Design honesty</h2>
+<p class="muted">Scoring is heuristic and deterministic (no LLM judge dependency), so a creative or
+partial compliance can land as <code>inconclusive</code> — the report shows the raw prompt/response
+pair and the evidence, so a human can adjudicate in seconds. Probes request harmful content but
+contain no working exploit code, credentials or weapon instructions. Multi-turn crescendo attacks
+are on the roadmap; today's deferred-rule probes only verify that a planted rule is echoed.</p>
+
+<footer>
+AIRT v1.0.0 · MIT · part of the <a href="/ai-security-llm-red-teaming.html">AI Security &amp;
+LLM Red-Teaming</a> track by <a href="/">Ratan Patel</a>. Built for defenders: measure the boundary
+before someone else does.
+</footer>
+</div></body></html>
