@@ -69,6 +69,26 @@ VULNERABLE 30  LIKELY 8  UNCLEAR 43  RESISTED 0  ERROR 0
 Security Posture  [████████████████████████████████]  100.0/100  grade F
 ```
 
+## Android app (APK)
+
+There is a phone build of the scanner UI — useful when the target only lives on a lab
+network you can reach from mobile:
+
+**[⬇ AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk)**
+(~40 KB, Android 7.0+, debug-signed, sideload) · [install & usage notes](docs/APK.md)
+
+It is a thin WebView shell around the same 67-probe corpus with the scoring engine ported to
+JavaScript (`js/engine.js`, verified 8/8 for verdict parity against `airt/scoring.py`). Requests
+are made **natively**, so the app is not limited by CORS and can talk to plain-`http://`
+lab endpoints. Reports are written to `Downloads/` as JSON/HTML/SARIF.
+
+The APK is produced by `.github/workflows/build-airt-apk.yml` on GitHub runners (JDK 17,
+Gradle 8.7, runner-provided Android SDK, no third-party runtime dependencies) and published
+to the release tag automatically. `python3 gen_mobile.py` regenerates the bundled single-file
+page from the Python corpus, so the app never drifts from the CLI.
+
+Local build (if you have the Android SDK): `cd android && gradle :app:assembleRelease`.
+
 ## Targets
 
 | `--target-type` | Use it for | Key flags |
