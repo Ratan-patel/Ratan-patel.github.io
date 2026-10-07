@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AIRT is a testing tool: staging bots are frequently plain HTTP inside a lab VLAN,
+     so cleartext is permitted for all destinations. Do not ship a production app like this. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />   <!-- lets testers inspect traffic through a proxy -->
+        </trust-anchors>
+    </base-config>
+</network-security-config>

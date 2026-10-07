@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AIRT mark: a shield with a scan line -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path
+        android:fillColor="#5B8CFF"
+        android:pathData="M54,26 L76,34 L76,54 C76,66 66,76 54,82 C42,76 32,66 32,54 L32,34 Z" />
+    <path
+        android:fillColor="#0B1020"
+        android:pathData="M54,34 L68,39 L68,54 C68,62 62,69 54,73 C46,69 40,62 40,54 L40,39 Z" />
+    <path
+        android:fillColor="#A78BFA"
+        android:pathData="M46,52 L62,52 L62,56 L46,56 Z" />
+    <path
+        android:fillColor="#4ADE80"
+        android:pathData="M46,60 L58,60 L58,64 L46,64 Z" />
+</vector>
