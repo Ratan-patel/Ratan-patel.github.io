@@ -41,6 +41,8 @@ jobs:
           SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
           echo "SDK=$SDK"
           ls "$SDK" || true
+          SDK_LOG="$RUNNER_TEMP/sdkmanager.log"
+          : > "$SDK_LOG"
 
           CMDLINE=""
           for candidate in "$SDK/cmdline-tools/latest/bin" "$SDK/cmdline-tools/bin" "$SDK/tools/bin"; do
@@ -49,11 +51,11 @@ jobs:
           echo "cmdline tools: ${CMDLINE:-<none found>}"
 
           if [ -n "$CMDLINE" ]; then
-            yes | "$CMDLINE/sdkmanager" --sdk_root="$SDK" --licenses > /dev/null 2>&1 || true
-            # AGP 9.4 supports up to API 37 and needs build-tools 36+.
-            for package in "platforms;android-37" "build-tools;37.0.0" "build-tools;36.0.0"; do
-              echo "--- sdkmanager --install $package"
-              "$CMDLINE/sdkmanager" --sdk_root="$SDK" --install "$package" 2>&1 | tail -5 || true
+            yes | "$CMDLINE/sdkmanager" --sdk_root="$SDK" --licenses >> "$SDK_LOG" 2>&1 || true
+            for package in "platforms;android-37" "platforms;android-36" \
+                           "build-tools;37.0.0" "build-tools;36.0.0"; do
+              echo "--- sdkmanager --install $package" | tee -a "$SDK_LOG"
+              "$CMDLINE/sdkmanager" --sdk_root="$SDK" --install "$package" >> "$SDK_LOG" 2>&1 || true
             done
             echo "$CMDLINE" >> "$GITHUB_PATH"
           fi
@@ -62,18 +64,32 @@ jobs:
           ls "$SDK/platforms" || true
           echo "--- available build-tools ---"
           ls "$SDK/build-tools" || true
+          echo "--- sdkmanager log (tail) ---"
+          tail -25 "$SDK_LOG" || true
 
-          if [ ! -d "$SDK/platforms/android-37" ]; then
-            echo "::error::platforms;android-37 is missing from the runner SDK - compileSdk 37 cannot build"
+          # Pick the newest platform the runner actually has. API 37 is preferred; if the SDK
+          # channel does not offer it, the app still builds against 36 instead of failing.
+          if [ -d "$SDK/platforms/android-37" ]; then
+            echo "RATAN_COMPILE_SDK=37" >> "$GITHUB_ENV"
+            echo "RATAN_TARGET_SDK=37"  >> "$GITHUB_ENV"
+          elif [ -d "$SDK/platforms/android-36" ]; then
+            echo "RATAN_COMPILE_SDK=36" >> "$GITHUB_ENV"
+            echo "RATAN_TARGET_SDK=36"  >> "$GITHUB_ENV"
+            echo "::warning::platforms;android-37 unavailable - building against API 36"
+            tail -8 "$SDK_LOG" | tr -d '\r' | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::notice::sdkmanager: $line"
+            done
+          else
+            tail -8 "$SDK_LOG" | tr -d '\r' | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::sdkmanager: $line"
+            done
+            echo "::error::no usable Android platform in $SDK/platforms"
             exit 1
           fi
 
           echo "ANDROID_HOME=$SDK"   >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
           echo "sdk.dir=$SDK" > "$PROJECT_DIR/local.properties"
-
-          ls "$SDK/platforms" 2>/dev/null || true
-          ls "$SDK/build-tools" 2>/dev/null || true
 
       - name: Regenerate the AIRT toolkit corpus (single source of truth)
         run: |

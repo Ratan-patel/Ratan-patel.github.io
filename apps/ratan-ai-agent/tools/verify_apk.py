@@ -16,11 +16,12 @@ import subprocess
 import sys
 import zipfile
 
-EXPECTED_PACKAGE = "io.github.ratanpatel.ratanagent"
-EXPECTED_VERSION_CODE = "200"
-EXPECTED_VERSION_NAME = "2.0.0"
-EXPECTED_TARGET_SDK = "37"
-EXPECTED_MIN_SDK = "24"
+EXPECTED_PACKAGE = os.environ.get("RATAN_PACKAGE", "io.github.ratanpatel.ratanagent")
+EXPECTED_VERSION_CODE = os.environ.get("RATAN_VERSION_CODE", "200")
+EXPECTED_VERSION_NAME = os.environ.get("RATAN_VERSION_NAME", "2.0.0")
+# CI exports the level it actually built against (37 on API-37 SDKs, 36 where unavailable)
+EXPECTED_TARGET_SDK = os.environ.get("RATAN_TARGET_SDK", "37")
+EXPECTED_MIN_SDK = os.environ.get("RATAN_MIN_SDK", "24")
 REQUIRED_ENTRIES = ("AndroidManifest.xml", "classes.dex", "assets/home.html", "assets/toolkit.html")
 ASSET_MARKERS = {
     "assets/home.html": ("RatanBridge", "Red-team toolkit"),

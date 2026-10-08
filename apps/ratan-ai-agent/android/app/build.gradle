@@ -6,18 +6,23 @@ plugins {
 // debug key so that `gradle :app:assembleRelease` still produces something installable.
 def keystorePath = System.getenv("RATAN_KEYSTORE_PATH")
 
+// Android 17 (API 37) is the target; CI may pass a lower level if the runner's SDK channel
+// does not offer 37 yet, and the build must still produce an installable APK.
+def compileSdkLevel = Integer.parseInt(System.getenv("RATAN_COMPILE_SDK") ?: "37")
+def targetSdkLevel = Integer.parseInt(System.getenv("RATAN_TARGET_SDK") ?: String.valueOf(compileSdkLevel))
+
 android {
     namespace = 'io.github.ratanpatel.ratanagent'
-    compileSdk = 37                      // Android 17 (API 37) — latest stable platform
+    compileSdk = compileSdkLevel
 
     defaultConfig {
         applicationId = "io.github.ratanpatel.ratanagent"
         minSdk = 24                      // Android 7.0 and newer
-        targetSdk = 37
+        targetSdk = targetSdkLevel
         versionCode = 200
         versionName = "2.0.0"
 
-        buildConfigField "int", "COMPILE_SDK", "37"
+        buildConfigField "int", "COMPILE_SDK", String.valueOf(compileSdkLevel)
         buildConfigField "String", "AGENT_URL", "\"https://v1qmk5wx2361-d.space-z.ai/\""
     }
 
