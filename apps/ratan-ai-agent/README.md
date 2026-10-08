@@ -22,7 +22,7 @@ could be reviewed, rebuilt, or patched. 2.0 replaces it with an app that is **bu
 | Source in repo | no | yes — `android/app/src/main/java/…` |
 | Platform | unknown | `compileSdk`/`targetSdk` **36** today (Android 16 — the newest platform the public SDK channel publishes); the workflow moves to **API 37** by itself the moment Google ships `platforms;android-37`. Android 17's `ACCESS_LOCAL_NETWORK` flow is already implemented. |
 | Toolchain | unknown | AGP 9.4.0 · Gradle 9.6.0 · JDK 21 · build-tools 36+ |
-| Verified build (2.1, 2026-10-08) | — | 703,725 bytes (~690 KB) · signing certificate SHA-256 `79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83` — the certificate is the stable identity, the APK hash changes with every rebuild and is quoted in the release notes |
+| Stable identity | — | signing certificate SHA-256 `79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83` · package `io.github.ratanpatel.ratanagent` · every build is a fresh ZIP, so the APK hash changes per rebuild and the release notes always quote the current one · site page: [ratan-ai-agent.html](https://ratan-patel.github.io/ratan-ai-agent.html) |
 | Reproducible build | no | GitHub Actions, every push |
 | Signature | changed between builds | stable key → updates install in place |
 | Offline value | none | bundled AIRT red-team toolkit (67 probes) |

@@ -16,6 +16,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 | Engagement Kit | [engagement-kit.html](https://ratan-patel.github.io/engagement-kit.html) | Interactive builder for the paperwork that makes testing lawful: **Authorization to Test** letter, **Rules of Engagement**, scope & exclusions checklist, abort procedure and engagement log. Includes readiness checks that block on empty exclusions, third-party testing and production-plus-high-impact combinations. Templates only — not legal advice |
 | MITRE ATT&CK Mapper | [mitre-attack-mapper.html](https://ratan-patel.github.io/mitre-attack-mapper.html) | Interactive ATT&CK **v19** coverage cockpit — 180+ techniques across 15 tactics, real adversary profiles (APT29, Lazarus, Scattered Spider, Volt Typhoon, APT41), per-tactic scoring, gap analysis and an adversary-emulation plan generator. Runs fully client-side |
 | C2 Frameworks & Detection | [c2-frameworks.html](https://ratan-patel.github.io/c2-frameworks.html) | Verified 2026 comparison of Cobalt Strike alternatives (Sliver, Mythic, Merlin, AdaptixC2, Empire, PoshC2 — plus Havoc's archive status), C2 architecture and redirector design, operator OPSEC, home-lab build guide and the defender-side detection playbook |
+| RATAN AI AGENT app | [ratan-ai-agent.html](https://ratan-patel.github.io/ratan-ai-agent.html) | Android release & trust center: download, the optional bring-your-own-API setup, stable signing-certificate fingerprint and troubleshooting |
 | RATAN OS Advanced | [ratan-os-advanced.html](https://ratan-patel.github.io/ratan-os-advanced.html) | Roadmap, architecture and an interactive build planner for RATAN OS Advanced Edition — module catalogue, size/RAM estimates, dependency resolution, isolated lab profiles and a generated live-build manifest |
 | Ethical Hacking Foundation | [ethical-hacking-foundation.html](https://ratan-patel.github.io/ethical-hacking-foundation.html) | Course track |
 | Advanced Web & API Pentesting | [advanced-web-api-pentesting.html](https://ratan-patel.github.io/advanced-web-api-pentesting.html) | Course track |
@@ -64,7 +65,7 @@ toolchain required on your machine:
 
 | App | Source | Download |
 |---|---|---|
-| **RATAN AI AGENT 2.1** — assistant + bring-your-own-API chat + offline red-team toolkit, Android 17 ready | [`apps/ratan-ai-agent/`](apps/ratan-ai-agent/) | [Ratan-AI-Agent-2.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk) |
+| **RATAN AI AGENT 2.1** — assistant + bring-your-own-API chat + offline red-team toolkit, Android 17 ready ([release page](https://ratan-patel.github.io/ratan-ai-agent.html)) | [`apps/ratan-ai-agent/`](apps/ratan-ai-agent/) | [Ratan-AI-Agent-2.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk) |
 | **AIRT Scanner 1.0** — AI red-teaming probe engine for a phone | [`tools/ai-redteam-scanner/`](tools/ai-redteam-scanner/) | [AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/airt-v1.0.0/AIRT-Scanner-1.0.0-release.apk) |
 
 Both are framework-only WebView apps (no analytics, no third-party runtime), signed with a

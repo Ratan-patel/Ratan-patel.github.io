@@ -9,8 +9,8 @@ the workflow artifact `ratan-ai-agent-apk` if the direct link is blocked on your
 
 ## Install
 
-1. Open the link in Chrome/Firefox on the phone. The APK is small — 703,725 bytes (≈690 KB)
-   in the first 2.0 build — so it downloads instantly.
+1. Open the link in Chrome/Firefox on the phone. The APK is about 700 KB, so it downloads
+   instantly.
 2. Open it from the notification or **Files → Downloads**.
 3. Android warns about unknown sources → allow it for the browser, then tap **Install**.
 4. Launch **RATAN AI AGENT**. The first screen is a local dashboard that works with no network.
