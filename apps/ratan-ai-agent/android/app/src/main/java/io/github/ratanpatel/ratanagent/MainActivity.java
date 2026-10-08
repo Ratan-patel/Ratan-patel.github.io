@@ -233,10 +233,13 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail detail) {
-                toast("WebView process restarted");
+            public boolean onRenderProcessGone(WebView view, android.webkit.RenderProcessGoneDetail detail) {
+                // Returning true tells the framework we handled the crash ourselves: the shell
+                // rebuilds its WebView instead of taking the whole app down with it.
+                toast("WebView engine restarted");
                 createWebView();
                 web.loadUrl(HOME_URL);
+                return true;
             }
         });
 
