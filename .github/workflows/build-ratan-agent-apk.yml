@@ -27,10 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
@@ -49,14 +49,23 @@ jobs:
           echo "cmdline tools: ${CMDLINE:-<none found>}"
 
           if [ -n "$CMDLINE" ]; then
-            yes | "$CMDLINE/sdkmanager" --licenses > /dev/null 2>&1 || true
+            yes | "$CMDLINE/sdkmanager" --sdk_root="$SDK" --licenses > /dev/null 2>&1 || true
             # AGP 9.4 supports up to API 37 and needs build-tools 36+.
             for package in "platforms;android-37" "build-tools;37.0.0" "build-tools;36.0.0"; do
-              "$CMDLINE/sdkmanager" --install "$package" > /dev/null 2>&1 \
-                && echo "installed $package" \
-                || echo "warning: could not install $package (preinstalled?)"
+              echo "--- sdkmanager --install $package"
+              "$CMDLINE/sdkmanager" --sdk_root="$SDK" --install "$package" 2>&1 | tail -5 || true
             done
             echo "$CMDLINE" >> "$GITHUB_PATH"
+          fi
+
+          echo "--- available platforms ---"
+          ls "$SDK/platforms" || true
+          echo "--- available build-tools ---"
+          ls "$SDK/build-tools" || true
+
+          if [ ! -d "$SDK/platforms/android-37" ]; then
+            echo "::error::platforms;android-37 is missing from the runner SDK - compileSdk 37 cannot build"
+            exit 1
           fi
 
           echo "ANDROID_HOME=$SDK"   >> "$GITHUB_ENV"
@@ -119,11 +128,15 @@ jobs:
 
       - name: Build the debug APK
         working-directory: apps/ratan-ai-agent/android
-        run: gradle :app:assembleDebug --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          gradle :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee "$RUNNER_TEMP/gradle.log"
 
       - name: Build the release APK
         working-directory: apps/ratan-ai-agent/android
-        run: gradle :app:assembleRelease --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          gradle :app:assembleRelease --no-daemon --stacktrace 2>&1 | tee -a "$RUNNER_TEMP/gradle.log"
 
       - name: Collect artifacts with friendly names
         run: |
@@ -208,6 +221,38 @@ jobs:
 
             ⚠️ Authorised testing only: run probes and LAN scans exclusively against systems you
             own or have written permission to test.
+
+      - name: Surface the build failure
+        if: failure()
+        run: |
+          LOG="$RUNNER_TEMP/gradle.log"
+          if [ ! -f "$LOG" ]; then
+            echo "no gradle log captured" 
+            exit 0
+          fi
+          {
+            echo "## Gradle failure (tail)"
+            echo '```'
+            tail -80 "$LOG" | tr -d '\r'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # annotations are the one channel that survives log-download restrictions
+          START=$(grep -n "What went wrong\|Execution failed for task\|FAILURE: Build failed\|A problem occurred" "$LOG" \
+                  | tail -1 | cut -d: -f1)
+          if [ -z "$START" ]; then START=$(( $(wc -l < "$LOG") - 15 )); fi
+          sed -n "${START},$((START + 14))p" "$LOG" | tr -d '\r' | head -10 | while IFS= read -r line; do
+            [ -n "$line" ] && echo "::error::$line"
+          done
+          exit 0
+
+      - name: Upload the Gradle log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-log
+          path: ${{ runner.temp }}/gradle.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload build reports when something fails
         if: failure()
