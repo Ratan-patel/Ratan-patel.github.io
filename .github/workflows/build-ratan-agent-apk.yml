@@ -1,0 +1,221 @@
+name: Build RATAN AI AGENT APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - "arena/**"
+    paths:
+      - "apps/ratan-ai-agent/**"
+      - ".github/workflows/build-ratan-agent-apk.yml"
+      - "tools/ai-redteam-scanner/mobile.html"
+      - "tools/ai-redteam-scanner/mobile.template.html"
+      - "tools/ai-redteam-scanner/gen_mobile.py"
+      - "tools/ai-redteam-scanner/airt/payloads.py"
+
+permissions:
+  contents: write   # publishes the APK as a release asset
+
+env:
+  PROJECT_DIR: apps/ratan-ai-agent/android
+  RELEASE_TAG: ratan-ai-agent-v2.0
+
+jobs:
+  build-apk:
+    name: Build installable APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Locate and prepare the Android SDK
+        run: |
+          set -x
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "SDK=$SDK"
+          ls "$SDK" || true
+
+          CMDLINE=""
+          for candidate in "$SDK/cmdline-tools/latest/bin" "$SDK/cmdline-tools/bin" "$SDK/tools/bin"; do
+            if [ -x "$candidate/sdkmanager" ]; then CMDLINE="$candidate"; break; fi
+          done
+          echo "cmdline tools: ${CMDLINE:-<none found>}"
+
+          if [ -n "$CMDLINE" ]; then
+            yes | "$CMDLINE/sdkmanager" --licenses > /dev/null 2>&1 || true
+            # AGP 9.4 supports up to API 37 and needs build-tools 36+.
+            for package in "platforms;android-37" "build-tools;37.0.0" "build-tools;36.0.0"; do
+              "$CMDLINE/sdkmanager" --install "$package" > /dev/null 2>&1 \
+                && echo "installed $package" \
+                || echo "warning: could not install $package (preinstalled?)"
+            done
+            echo "$CMDLINE" >> "$GITHUB_PATH"
+          fi
+
+          echo "ANDROID_HOME=$SDK"   >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "sdk.dir=$SDK" > "$PROJECT_DIR/local.properties"
+
+          ls "$SDK/platforms" 2>/dev/null || true
+          ls "$SDK/build-tools" 2>/dev/null || true
+
+      - name: Regenerate the AIRT toolkit corpus (single source of truth)
+        run: |
+          python3 tools/ai-redteam-scanner/gen_mobile.py
+          node tools/ai-redteam-scanner/tests/engine_js_test.js
+
+      - name: Bundle the toolkit into the agent app
+        run: |
+          python3 apps/ratan-ai-agent/tools/sync_assets.py
+          python3 apps/ratan-ai-agent/tools/sync_assets.py --check
+
+      - name: Verify the bundled web assets
+        run: |
+          node apps/ratan-ai-agent/tools/check_web_assets.js \
+            apps/ratan-ai-agent/android/app/src/main/assets/home.html \
+            apps/ratan-ai-agent/android/app/src/main/assets/toolkit.html
+
+      - name: Configure release signing
+        env:
+          SECRET_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          SECRET_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          SECRET_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          SECRET_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -e
+          if [ -n "$SECRET_KEYSTORE" ]; then
+            echo "$SECRET_KEYSTORE" | base64 -d > "$RUNNER_TEMP/ratan-agent.p12"
+            {
+              echo "RATAN_KEYSTORE_PATH=$RUNNER_TEMP/ratan-agent.p12"
+              echo "RATAN_KEYSTORE_PASSWORD=$SECRET_STORE_PASSWORD"
+              echo "RATAN_KEY_ALIAS=$SECRET_KEY_ALIAS"
+              echo "RATAN_KEY_PASSWORD=$SECRET_KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
+            echo "signing with the keystore from repository secrets"
+          else
+            # The in-repo keystore keeps the signature stable across builds so that
+            # `adb install -r` / a normal update installs over the previous release.
+            # It is public by design — see apps/ratan-ai-agent/keystore/README.md.
+            {
+              echo "RATAN_KEYSTORE_PATH=$GITHUB_WORKSPACE/apps/ratan-ai-agent/keystore/ratan-agent-release.p12"
+              echo "RATAN_KEYSTORE_PASSWORD=quartz-agent-ratan-zenith-b3e6bf297507"
+              echo "RATAN_KEY_ALIAS=ratan-agent"
+              echo "RATAN_KEY_PASSWORD=quartz-agent-ratan-zenith-b3e6bf297507"
+            } >> "$GITHUB_ENV"
+            echo "signing with the repository keystore (public by design)"
+          fi
+
+      - name: Set up Gradle 9.6.0
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.6.0"
+
+      - name: Build the debug APK
+        working-directory: apps/ratan-ai-agent/android
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Build the release APK
+        working-directory: apps/ratan-ai-agent/android
+        run: gradle :app:assembleRelease --no-daemon --stacktrace
+
+      - name: Collect artifacts with friendly names
+        run: |
+          set -e
+          mkdir -p out
+          cp "$PROJECT_DIR/app/build/outputs/apk/debug/app-debug.apk" \
+             out/Ratan-AI-Agent-2.0.0-debug.apk
+          cp "$PROJECT_DIR/app/build/outputs/apk/release/app-release.apk" \
+             out/Ratan-AI-Agent-2.0.0-release.apk
+          ls -lh out
+
+      - name: Verify the release APK (package, SDK levels, bundled pages)
+        run: |
+          set -e
+          AAPT2=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | sort -V | tail -1)
+          export AAPT2
+          python3 apps/ratan-ai-agent/tools/verify_apk.py out/Ratan-AI-Agent-2.0.0-release.apk
+
+      - name: Sanity-check the debug APK
+        run: |
+          set -e
+          unzip -l out/Ratan-AI-Agent-2.0.0-debug.apk | grep -q "assets/toolkit.html"
+          unzip -l out/Ratan-AI-Agent-2.0.0-debug.apk | grep -q "classes.dex"
+          echo "debug APK contains dex + bundled toolkit"
+
+      - name: Print the signing certificate fingerprint
+        run: |
+          set -e
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.0.0-release.apk | head -8
+
+      - name: Upload APKs (workflow artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratan-ai-agent-apk
+          path: out/*.apk
+          if-no-files-found: error
+          retention-days: 90
+
+      # Permanent, phone-friendly link:
+      #   https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: "RATAN AI AGENT 2.0 (Android APK)"
+          make_latest: true
+          body: |
+            ## RATAN AI AGENT 2.0 — rebuilt from source, targeting Android 17
+
+            * `Ratan-AI-Agent-2.0.0-release.apk` — install this one
+            * `Ratan-AI-Agent-2.0.0-debug.apk` — same app with devtools + user-CA trust
+
+            ### What is inside
+            * **Android 17 (API 37)** target, `minSdk 24` (Android 7.0+), built with AGP 9.4 and
+              Gradle 9.6 on JDK 21 — the current stable toolchain, not a legacy one.
+            * **Local-network permission handled properly**: Android 17 refuses LAN access to
+              apps that have not been granted `ACCESS_LOCAL_NETWORK`; the app declares it and
+              walks you through the grant so lab targets stay reachable.
+            * **Hardened WebView shell**: only bundled pages and the configured agent origin ever
+              render in-app; every other link is handed to the browser. No file:// reads from
+              remote content, no mixed content, Safe Browsing on, third-party cookies off.
+            * **Native HTTP bridge** — no CORS, so the phone can test a bot on `192.168.x.x`,
+              a local model server, or your own staging endpoint. Per-hop redirect policy,
+              response caps, gzip, header-injection guards, and Authorization headers dropped
+              on cross-host redirects.
+            * **Bundled offline red-team toolkit**: 67 probes across 11 categories with 9 evasion
+              mutations, OWASP LLM Top-10 mapped — the same corpus as the CLI, and the same page
+              the standalone scanner ships.
+            * **Reports land in Downloads/**: JSON, standalone HTML and SARIF 2.1.0 for GitHub
+              code scanning.
+            * Signed with a stable release key (SHA-256 of the APK certificate is printed by the
+              build), so future updates install straight over this one.
+
+            ### Install
+            1. Download the release APK on the phone (the debug one is for development).
+            2. Open it → allow "install unknown apps" for the browser when Android asks.
+            3. Launch → **Open RATAN AI AGENT**, or use **Red-team toolkit** with no network at all.
+
+            If an older RATAN AI AGENT build is installed, uninstall it first — 2.0 is signed with
+            a different key than the 1.1 APK and Android refuses to replace across signatures.
+
+            ⚠️ Authorised testing only: run probes and LAN scans exclusively against systems you
+            own or have written permission to test.
+
+      - name: Upload build reports when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratan-agent-build-logs
+          path: |
+            apps/ratan-ai-agent/android/app/build/reports/**
+            apps/ratan-ai-agent/android/.gradle/**
+          if-no-files-found: ignore
+          retention-days: 7

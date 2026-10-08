@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Release policy.
+  * The assistant endpoint is pinned to TLS: cleartext is refused for the agent domain.
+  * Cleartext stays permitted in the base config because every real lab target (a bot on
+    192.168.x.x, a local model server on :11434) speaks plain http and a testing tool that
+    cannot reach the target is decoration. The native HTTP engine adds its own layer on top:
+    public-internet cleartext is refused unless the operator explicitly turns it on.
+  * Only system trust anchors are honoured here. The debug build swaps in a config that also
+    trusts user CAs, so an operator can proxy their own traffic without weakening release.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">space-z.ai</domain>
+    </domain-config>
+
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

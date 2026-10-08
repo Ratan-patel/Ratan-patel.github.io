@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fallback icon for API 24-25 (adaptive icons arrive with API 26). Self-contained vector. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#0B1020" android:pathData="M0,0h108v108h-108z" />
+    <path android:fillColor="#1B2C55" android:pathData="M0,0h108v3h-108z M0,105h108v3h-108z" />
+    <path android:fillColor="#5B8CFF"
+        android:pathData="M54,20 L80,30 L80,54 C80,68 68,80 54,87 C40,80 28,68 28,54 L28,30 Z" />
+    <path android:fillColor="#0B1020"
+        android:pathData="M54,29 L71,36 L71,54 C71,63 64,71 54,76 C44,71 37,63 37,54 L37,36 Z" />
+    <path android:fillColor="#00FFC8" android:pathData="M43,46 l7,6 -7,6 v-4 l3,-2 -3,-2 z" />
+    <path android:fillColor="#A78BFA" android:pathData="M52,56 h12 v3 h-12 z" />
+</vector>

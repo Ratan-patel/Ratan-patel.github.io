@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="agent_bg">#060A16</color>
+    <color name="agent_surface">#0B1020</color>
+    <color name="agent_accent">#5B8CFF</color>
+    <color name="agent_accent_mint">#00FFC8</color>
+    <color name="agent_icon_bg">#0B1020</color>
+</resources>

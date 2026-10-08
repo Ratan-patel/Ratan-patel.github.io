@@ -2,7 +2,7 @@
 
 Download (phone-friendly, always the latest build):
 
-**https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk**
+**https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/airt-v1.0.0/AIRT-Scanner-1.0.0-release.apk**
 
 Also available on the [Releases page](https://github.com/Ratan-patel/Ratan-patel.github.io/releases)
 as a workflow artifact (`airt-scanner-apk`) if the direct link is blocked.

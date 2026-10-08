@@ -57,6 +57,20 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 - **LinkedIn:** [linkedin.com/in/ratan-kumar-patel-032a43367](https://www.linkedin.com/in/ratan-kumar-patel-032a43367/)
 - **Website:** [ratan-patel.github.io](https://ratan-patel.github.io/)
 
+## Android builds in this repo
+
+Two apps are built here by GitHub Actions and published as release assets — no local Android
+toolchain required on your machine:
+
+| App | Source | Download |
+|---|---|---|
+| **RATAN AI AGENT 2.0** — assistant + offline red-team toolkit, Android 17 (API 37) | [`apps/ratan-ai-agent/`](apps/ratan-ai-agent/) | [Ratan-AI-Agent-2.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk) |
+| **AIRT Scanner 1.0** — AI red-teaming probe engine for a phone | [`tools/ai-redteam-scanner/`](tools/ai-redteam-scanner/) | [AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/airt-v1.0.0/AIRT-Scanner-1.0.0-release.apk) |
+
+Both are framework-only WebView apps (no analytics, no third-party runtime), signed with a
+stable key so updates install in place, and both ship the same 67-probe AIRT corpus so the
+phone and the CLI can never disagree about what was tested.
+
 ## Site technical
 
 - Pure HTML/CSS/JS, hosted on GitHub Pages
