@@ -74,7 +74,7 @@ Security Posture  [████████████████████�
 There is a phone build of the scanner UI — useful when the target only lives on a lab
 network you can reach from mobile:
 
-**[⬇ AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/AIRT-Scanner-1.0.0-release.apk)**
+**[⬇ AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/airt-v1.0.0/AIRT-Scanner-1.0.0-release.apk)**
 (~40 KB, Android 7.0+, debug-signed, sideload) · [install & usage notes](docs/APK.md)
 
 It is a thin WebView shell around the same 67-probe corpus with the scoring engine ported to

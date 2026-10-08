@@ -67,8 +67,9 @@
 
   cmd('ACTION', 'Try RATAN AI assistant', 'ai chat assistant', 'fas fa-robot', ext('https://v1qmk5wx2361-d.space-z.ai/'));
   cmd('ACTION', 'Download CV (PDF)', 'cv resume pdf download', 'fas fa-download', ext('ratan_patel_cv.pdf'));
-  cmd('ACTION', 'Get RATAN AI Agent APK', 'apk android app download', 'fab fa-android',
-      ext('https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v1.1/Ratan-Agent.apk'));
+  cmd('ACTION', 'RATAN AI AGENT release page', 'agent app apk verify download page', 'fas fa-mobile-screen', page('ratan-ai-agent.html'));
+  cmd('ACTION', 'Get RATAN AI Agent APK', 'apk android app download agent', 'fab fa-android',
+      ext('https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk'));
   cmd('ACTION', 'WhatsApp Ratan', 'whatsapp chat message', 'fab fa-whatsapp', ext('https://wa.me/' + PHONE));
   cmd('ACTION', 'Email Ratan', 'email mail contact', 'fas fa-envelope', function () { window.location.href = 'mailto:' + EMAIL; });
   cmd('ACTION', 'Copy email address', 'copy email clipboard', 'fas fa-copy', function () { copyText(EMAIL, 'EMAIL COPIED → ' + EMAIL); });

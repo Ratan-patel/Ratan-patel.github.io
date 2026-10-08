@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug builds additionally trust user-installed CAs, which is what makes an interception
+  proxy (Burp/mitmproxy/ZAP) usable while testing the app's own traffic. This file is only
+  compiled into the debug variant — release builds keep the strict main config.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

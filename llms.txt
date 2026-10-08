@@ -29,6 +29,9 @@
 - The AI Edition is distributed as one verified Google Drive ISO with GitHub split parts retained as backup; the release page contains checksums and QEMU BIOS instructions.
 - The original and Lite downloads require no payment. Optional premium setup support starts at INR 799, with exact deliverables and scope confirmed before payment.
 - RATAN AI is a separate learning assistant service; users must not submit production credentials, secrets or sensitive customer data.
+- RATAN AI AGENT is the free Android app build of the assistant (v2.1.0, Android 7.0+, about 700 KB). It ships pointed at the hosted assistant and can optionally run on the user's own provider — an OpenAI-compatible endpoint, Anthropic, a local Ollama server or any private JSON API — with credentials held in the Android Keystore (never returned to the page) and only ever sent to the endpoint the user configured.
+- The app bundles an offline AI red-team toolkit: 67 probes across 11 categories with 9 evasion mutations, mapped to the OWASP LLM Top-10 (2025). Authorised testing only.
+- The app is built from source in the repository by GitHub Actions (AGP 9.4.0, Gradle 9.6.0, JDK 21, target API 36 with the Android 17 local-network permission flow implemented), signed with a documented stable certificate: 79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83.
 
 ## Public service boundaries
 - Security services begin only after written authorization, an agreed asset list and a defined scope.
@@ -41,6 +44,7 @@
 - [CMU MSIS-aligned Cybersecurity Handbook (free online book)](https://ratan-patel.github.io/cmu-msis-handbook.html)
 - [Services and VAPT packages](https://ratan-patel.github.io/services.html)
 - [Training, tools and access](https://ratan-patel.github.io/ratan-monetization-launch-kit.html)
+- [RATAN AI AGENT — Android app release & trust center](https://ratan-patel.github.io/ratan-ai-agent.html) — free Android build of the assistant with optional bring-your-own-API, Keystore-held keys and an offline 67-probe red-team toolkit; carries the download link, the stable signing-certificate fingerprint and install/troubleshooting steps
 - [RATAN OS free releases and AI Edition trust status](https://ratan-patel.github.io/ratan-os-release.html)
 - [Red-Team Lab Simulator](https://ratan-patel.github.io/lab.html)
 - [Engagement Kit — Rules of Engagement & Authorisation builder](https://ratan-patel.github.io/engagement-kit.html) — free interactive generator for a penetration-testing Authorization to Test letter, Rules of Engagement, scope and exclusions checklist, abort procedure and engagement log template
