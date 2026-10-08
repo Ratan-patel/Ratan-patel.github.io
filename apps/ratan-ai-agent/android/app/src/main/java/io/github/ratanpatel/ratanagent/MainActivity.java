@@ -526,16 +526,12 @@ public class MainActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(requestCode, permissions, results);
         if (requestCode == REQ_WEB_PERMISSIONS) {
-            boolean allGranted = results.length > 0;
-            for (int result : results) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allGranted = false;
-                }
-            }
+            // captured by the lambda below, so it has to be final
+            final boolean granted = results.length > 0 && allGranted(results);
             for (final PermissionRequest request : new ArrayList<>(pendingWebPermissions)) {
                 runOnUiThread(() -> {
                     try {
-                        if (allGranted) {
+                        if (granted) {
                             request.grant(request.getResources());
                         } else {
                             request.deny();
@@ -621,6 +617,15 @@ public class MainActivity extends Activity {
     }
 
     // ------------------------------------------------------------------ helpers
+
+    private static boolean allGranted(int[] results) {
+        for (int result : results) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public boolean hasPermission(String permission) {
         return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
