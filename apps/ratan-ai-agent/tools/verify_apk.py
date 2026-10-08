@@ -24,7 +24,9 @@ EXPECTED_TARGET_SDK = os.environ.get("RATAN_TARGET_SDK", "37")
 EXPECTED_MIN_SDK = os.environ.get("RATAN_MIN_SDK", "24")
 REQUIRED_ENTRIES = ("AndroidManifest.xml", "classes.dex", "assets/home.html", "assets/toolkit.html")
 ASSET_MARKERS = {
-    "assets/home.html": ("RatanBridge", "Red-team toolkit"),
+    # the dashboard must carry the bridge contract *and* the bring-your-own-API surface
+    "assets/home.html": ("RatanBridge", "Red-team toolkit", "llmChatAsync", "llmSetKey",
+                         "SAVE KEY", "Android Keystore", "PRIVATE / CUSTOM"),
     "assets/toolkit.html": ("AirTBridge", "owasp"),
 }
 

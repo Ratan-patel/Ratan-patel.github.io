@@ -300,8 +300,8 @@ jobs:
           fi
 
           gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" \
-            -f body="$(printf 'RATAN AI AGENT 2.0 published (targetSdk %s)\n\nrelease APK sha256: %s (%s bytes)\ndebug APK sha256: %s\nsigning cert sha256: %s\nassets: %s' \
-              "${RATAN_TARGET_SDK:-36}" "$SHA_REL" "$SIZE_REL" "$SHA_DBG" "$CERT" "$COUNT")" \
+            -f body="$(printf 'RATAN AI AGENT %s published (targetSdk %s)\n\nrelease APK sha256: %s (%s bytes)\ndebug APK sha256: %s\nsigning cert sha256: %s\nassets: %s' \
+              "$TAG" "${RATAN_TARGET_SDK:-36}" "$SHA_REL" "$SIZE_REL" "$SHA_DBG" "$CERT" "$COUNT")" \
             --jq '.html_url' || echo "could not post the commit comment"
 
       - name: Surface the build failure
