@@ -608,8 +608,14 @@ public class AgentBridge {
             json.put("hint", secrets.hint(LlmClient.KEY_NAME, 4));
             json.put("note", "key stored in the Android Keystore — it is never returned to the page");
         } catch (Exception exc) {
-            json.put("ok", false);
-            json.put("error", exc.getClass().getSimpleName() + ": " + exc.getMessage());
+            // JSONObject.put() itself declares a checked exception, so even the failure path
+            // needs a guard here.
+            try {
+                json.put("ok", false);
+                json.put("error", exc.getClass().getSimpleName() + ": " + exc.getMessage());
+            } catch (Exception ignored) {
+                return "{\"ok\":false}";
+            }
         }
         return json.toString();
     }
