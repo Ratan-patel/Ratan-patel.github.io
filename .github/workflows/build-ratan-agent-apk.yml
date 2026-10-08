@@ -246,10 +246,12 @@ jobs:
 
       - name: Surface the build failure
         if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           LOG="$RUNNER_TEMP/gradle.log"
           if [ ! -f "$LOG" ]; then
-            echo "no gradle log captured" 
+            echo "no gradle log captured"
             exit 0
           fi
           {
@@ -258,13 +260,25 @@ jobs:
             tail -80 "$LOG" | tr -d '\r'
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-          # annotations are the one channel that survives log-download restrictions
+
+          # Annotations and a commit comment carry the error out of the run, so a red build is
+          # debuggable without downloading logs.
           START=$(grep -n "What went wrong\|Execution failed for task\|FAILURE: Build failed\|A problem occurred" "$LOG" \
-                  | tail -1 | cut -d: -f1)
+                  | tail -1 | cut -d: -f1 || true)
           if [ -z "$START" ]; then START=$(( $(wc -l < "$LOG") - 15 )); fi
-          sed -n "${START},$((START + 14))p" "$LOG" | tr -d '\r' | head -10 | while IFS= read -r line; do
-            if [ -n "$line" ]; then echo "::error::$line"; fi
+          sed -n "${START},$((START + 12))p" "$LOG" | tr -d '\r' | head -8 | while IFS= read -r line; do
+            if [ -n "$line" ]; then
+              echo "::error::$(printf '%s' "$line" | sed 's/%/%25/g' | tr -d '\n')"
+            fi
           done
+
+          BODY=$(printf 'RATAN AI AGENT build failure on `%s`\n\n```\n%s\n```' \
+            "${GITHUB_SHA:0:10}" "$(tail -60 "$LOG" | tr -d '\r')")
+          if gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" -f body="$BODY" --jq '.html_url'; then
+            echo "failure tail posted as a commit comment"
+          else
+            echo "could not post the commit comment"
+          fi
           exit 0
 
       - name: Upload the Gradle log
