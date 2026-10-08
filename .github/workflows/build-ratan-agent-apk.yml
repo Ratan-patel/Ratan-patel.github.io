@@ -218,7 +218,7 @@ jobs:
           SIZE_DBG=$(stat -c%s out/Ratan-AI-Agent-2.0.0-debug.apk)
           APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
           CERT=$("$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.0.0-release.apk \
-                 | grep -i "certificate SHA-256" | head -1 | cut -d: -f2- | tr -d ' ' || true)
+                 | grep -i "SHA-256" | head -1 | tr -d ' ' | sed 's/.*://' || true)
 
           cat > "$RUNNER_TEMP/notes.md" <<EOF
           ## RATAN AI AGENT 2.0 — rebuilt from source in this repository

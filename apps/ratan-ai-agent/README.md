@@ -20,8 +20,9 @@ could be reviewed, rebuilt, or patched. 2.0 replaces it with an app that is **bu
 | | 1.1 upload | 2.0 (this directory) |
 |---|---|---|
 | Source in repo | no | yes — `android/app/src/main/java/…` |
-| Platform | unknown | `compileSdk 37`, `targetSdk 37` (Android 17, latest stable) |
+| Platform | unknown | `compileSdk`/`targetSdk` **36** today (Android 16 — the newest platform the public SDK channel publishes); the workflow moves to **API 37** by itself the moment Google ships `platforms;android-37`. Android 17's `ACCESS_LOCAL_NETWORK` flow is already implemented. |
 | Toolchain | unknown | AGP 9.4.0 · Gradle 9.6.0 · JDK 21 · build-tools 36+ |
+| Verified build (2026-10-08) | — | 703,725 bytes · SHA-256 `fdf63bf0340d8e4d6ee57b6c7cc2fd4fa3242c7bfbb65f672d1b371843e9d370` · cert `79dce484…ca83` |
 | Reproducible build | no | GitHub Actions, every push |
 | Signature | changed between builds | stable key → updates install in place |
 | Offline value | none | bundled AIRT red-team toolkit (67 probes) |

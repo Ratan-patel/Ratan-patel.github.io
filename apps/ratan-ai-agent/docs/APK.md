@@ -9,8 +9,8 @@ the workflow artifact `ratan-ai-agent-apk` if the direct link is blocked on your
 
 ## Install
 
-1. Open the link in Chrome/Firefox on the phone. The APK is tiny (well under 200 KB), so it
-   downloads instantly.
+1. Open the link in Chrome/Firefox on the phone. The APK is small — 703,725 bytes (≈690 KB)
+   in the first 2.0 build — so it downloads instantly.
 2. Open it from the notification or **Files → Downloads**.
 3. Android warns about unknown sources → allow it for the browser, then tap **Install**.
 4. Launch **RATAN AI AGENT**. The first screen is a local dashboard that works with no network.
@@ -19,7 +19,7 @@ the workflow artifact `ratan-ai-agent-apk` if the direct link is blocked on your
 > key, and Android refuses to replace an app across signatures. Nothing is lost — 1.1 stored
 > nothing on the device that 2.0 needs.
 
-**Requirements:** Android 7.0+ (`minSdk 24`), ~5 MB free space, internet for the chat feature.
+**Requirements:** Android 7.0+ (`minSdk 24`), about 3 MB free space, internet for the chat feature.
 The offline toolkit needs no network at all.
 
 ## First run
@@ -71,8 +71,11 @@ The dashboard can also copy or share a diagnostics blob (build, device, permissi
   download yourself:
 
   ```bash
+  sha256sum Ratan-AI-Agent-2.0.0-release.apk
+  # 2.0.0 (2026-10-08): fdf63bf0340d8e4d6ee57b6c7cc2fd4fa3242c7bfbb65f672d1b371843e9d370
   apksigner verify --print-certs Ratan-AI-Agent-2.0.0-release.apk | head -5
-  sha256sum Ratan-AI-Agent-2.0.0-release.apk        # compare with the release notes
+  # signing certificate SHA-256: 79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83
+  # (the release notes always carry the current value)
   ```
 
 ## Troubleshooting
