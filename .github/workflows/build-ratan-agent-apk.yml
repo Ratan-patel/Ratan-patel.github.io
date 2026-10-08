@@ -76,12 +76,18 @@ jobs:
             echo "RATAN_COMPILE_SDK=36" >> "$GITHUB_ENV"
             echo "RATAN_TARGET_SDK=36"  >> "$GITHUB_ENV"
             echo "::warning::platforms;android-37 unavailable - building against API 36"
-            tail -8 "$SDK_LOG" | tr -d '\r' | while IFS= read -r line; do
-              [ -n "$line" ] && echo "::notice::sdkmanager: $line"
+            grep -Ei "warn|error|fail|not installed|not available|exception" "$SDK_LOG" \
+              | tail -8 | tr -d '\r' | while IFS= read -r line; do
+              if [ -n "$line" ]; then echo "::notice::sdkmanager: $line"; fi
             done
+            if [ -n "$CMDLINE" ]; then
+              "$CMDLINE/sdkmanager" --sdk_root="$SDK" --list 2>/dev/null | grep -E "platforms;android-3[5-9]" | head -10 | while IFS= read -r line; do
+                if [ -n "$line" ]; then echo "::notice::available: $line"; fi
+              done
+            fi
           else
             tail -8 "$SDK_LOG" | tr -d '\r' | while IFS= read -r line; do
-              [ -n "$line" ] && echo "::error::sdkmanager: $line"
+              if [ -n "$line" ]; then echo "::error::sdkmanager: $line"; fi
             done
             echo "::error::no usable Android platform in $SDK/platforms"
             exit 1
@@ -257,7 +263,7 @@ jobs:
                   | tail -1 | cut -d: -f1)
           if [ -z "$START" ]; then START=$(( $(wc -l < "$LOG") - 15 )); fi
           sed -n "${START},$((START + 14))p" "$LOG" | tr -d '\r' | head -10 | while IFS= read -r line; do
-            [ -n "$line" ] && echo "::error::$line"
+            if [ -n "$line" ]; then echo "::error::$line"; fi
           done
           exit 0
 
