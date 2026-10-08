@@ -62,14 +62,20 @@ public class AgentBridge {
         return thread;
     });
 
+    /** One chat at a time: a runaway page cannot fan out a hundred paid completions. */
+    private final java.util.concurrent.atomic.AtomicBoolean chatBusy =
+            new java.util.concurrent.atomic.AtomicBoolean(false);
+
     private final MainActivity activity;
     private final Prefs prefs;
+    private final SecureStore secrets;
     private WebView web;
 
     public AgentBridge(MainActivity activity, WebView web, Prefs prefs) {
         this.activity = activity;
         this.web = web;
         this.prefs = prefs;
+        this.secrets = new SecureStore(activity);
     }
 
     // ------------------------------------------------------------------ app info
@@ -551,6 +557,150 @@ public class AgentBridge {
         } catch (Exception ignored) {
             // primitives only
         }
+    }
+
+    // ------------------------------------------------------------------ bring your own API
+
+    /**
+     * Current provider profile. The API key is represented only by a masked tail — the value
+     * itself is never handed back to JavaScript once stored.
+     */
+    @JavascriptInterface
+    public String llmInfo() {
+        if (!trustedCaller()) {
+            return "{\"error\":\"untrusted page\"}";
+        }
+        return LlmClient.info(activity, prefs, secrets);
+    }
+
+    @JavascriptInterface
+    public String llmSaveConfig(String configJson) {
+        if (!trustedCaller()) {
+            return "{\"ok\":false,\"error\":\"untrusted page\"}";
+        }
+        return LlmClient.saveConfig(prefs, configJson);
+    }
+
+    /** Stores (or replaces) the provider credential in the Android Keystore. Write-only by design. */
+    @JavascriptInterface
+    public String llmSetKey(String key) {
+        JSONObject json = new JSONObject();
+        try {
+            if (!trustedCaller()) {
+                json.put("ok", false);
+                json.put("error", "untrusted page");
+                return json.toString();
+            }
+            if (key == null || key.trim().isEmpty()) {
+                secrets.remove(LlmClient.KEY_NAME);
+                json.put("ok", true);
+                json.put("cleared", true);
+                json.put("hint", "");
+                return json.toString();
+            }
+            if (!secrets.isAvailable()) {
+                json.put("ok", false);
+                json.put("error", "this device has no usable Android Keystore, so the key cannot be stored safely");
+                return json.toString();
+            }
+            secrets.put(LlmClient.KEY_NAME, key.trim());
+            json.put("ok", true);
+            json.put("hint", secrets.hint(LlmClient.KEY_NAME, 4));
+            json.put("note", "key stored in the Android Keystore — it is never returned to the page");
+        } catch (Exception exc) {
+            json.put("ok", false);
+            json.put("error", exc.getClass().getSimpleName() + ": " + exc.getMessage());
+        }
+        return json.toString();
+    }
+
+    @JavascriptInterface
+    public boolean llmHasKey() {
+        return secrets.has(LlmClient.KEY_NAME);
+    }
+
+    @JavascriptInterface
+    public String llmClearKey() {
+        JSONObject json = new JSONObject();
+        try {
+            if (!trustedCaller()) {
+                json.put("ok", false);
+                return json.toString();
+            }
+            secrets.remove(LlmClient.KEY_NAME);
+            json.put("ok", true);
+            json.put("hint", "");
+        } catch (Exception ignored) {
+            // nothing to report
+        }
+        return json.toString();
+    }
+
+    /** Blocking completion; prefer {@link #llmChatAsync} from the UI so the page stays responsive. */
+    @JavascriptInterface
+    public String llmChat(String messagesJson) {
+        if (!trustedCaller()) {
+            return "{\"ok\":false,\"error\":\"untrusted page\"}";
+        }
+        if (!chatBusy.compareAndSet(false, true)) {
+            return "{\"ok\":false,\"error\":\"another completion is still running\"}";
+        }
+        try {
+            return LlmClient.chat(activity, prefs, secrets, messagesJson);
+        } finally {
+            chatBusy.set(false);
+        }
+    }
+
+    @JavascriptInterface
+    public void llmChatAsync(final String id, final String messagesJson) {
+        if (!trustedCaller()) {
+            deliverLlm(id, "{\"ok\":false,\"error\":\"untrusted page\"}");
+            return;
+        }
+        if (!chatBusy.compareAndSet(false, true)) {
+            deliverLlm(id, "{\"ok\":false,\"error\":\"another completion is still running\"}");
+            return;
+        }
+        POOL.execute(() -> {
+            String result;
+            try {
+                result = LlmClient.chat(activity, prefs, secrets, messagesJson);
+            } finally {
+                chatBusy.set(false);
+            }
+            deliverLlm(id, result);
+        });
+    }
+
+    @JavascriptInterface
+    public String llmTest() {
+        if (!trustedCaller()) {
+            return "{\"ok\":false,\"error\":\"untrusted page\"}";
+        }
+        if (!chatBusy.compareAndSet(false, true)) {
+            return "{\"ok\":false,\"error\":\"another completion is still running\"}";
+        }
+        try {
+            return LlmClient.test(activity, prefs, secrets);
+        } finally {
+            chatBusy.set(false);
+        }
+    }
+
+    private void deliverLlm(final String id, final String payload) {
+        final WebView view = web;
+        if (view == null) {
+            return;
+        }
+        view.post(() -> {
+            try {
+                view.evaluateJavascript("window.__llmCallback && window.__llmCallback("
+                        + MainActivity.quote(id) + ", " + MainActivity.quote(payload) + ");", null);
+            } catch (Exception ignored) {
+                // page gone
+            }
+        });
     }
 
     // ------------------------------------------------------------------ internals

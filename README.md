@@ -64,7 +64,7 @@ toolchain required on your machine:
 
 | App | Source | Download |
 |---|---|---|
-| **RATAN AI AGENT 2.0** — assistant + offline red-team toolkit, Android 17 (API 37) | [`apps/ratan-ai-agent/`](apps/ratan-ai-agent/) | [Ratan-AI-Agent-2.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk) |
+| **RATAN AI AGENT 2.1** — assistant + bring-your-own-API chat + offline red-team toolkit, Android 17 ready | [`apps/ratan-ai-agent/`](apps/ratan-ai-agent/) | [Ratan-AI-Agent-2.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk) |
 | **AIRT Scanner 1.0** — AI red-teaming probe engine for a phone | [`tools/ai-redteam-scanner/`](tools/ai-redteam-scanner/) | [AIRT-Scanner-1.0.0-release.apk](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/airt-v1.0.0/AIRT-Scanner-1.0.0-release.apk) |
 
 Both are framework-only WebView apps (no analytics, no third-party runtime), signed with a

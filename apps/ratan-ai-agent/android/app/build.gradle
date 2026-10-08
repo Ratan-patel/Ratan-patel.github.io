@@ -19,8 +19,8 @@ android {
         applicationId = "io.github.ratanpatel.ratanagent"
         minSdk = 24                      // Android 7.0 and newer
         targetSdk = targetSdkLevel
-        versionCode = 200
-        versionName = "2.0.0"
+        versionCode = 210
+        versionName = "2.1.0"
 
         buildConfigField "int", "COMPILE_SDK", String.valueOf(compileSdkLevel)
         buildConfigField "String", "AGENT_URL", "\"https://v1qmk5wx2361-d.space-z.ai/\""

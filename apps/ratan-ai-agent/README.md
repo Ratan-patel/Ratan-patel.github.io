@@ -1,13 +1,13 @@
-# RATAN AI AGENT 2.0 — Android app
+# RATAN AI AGENT 2.1 — Android app
 
 Source of the installable Android build of the RATAN AI assistant, produced by
 `.github/workflows/build-ratan-agent-apk.yml` and published as a GitHub Release.
 
 **Download (phone-friendly, always the newest build):**
 
-> **https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk**
+> **https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk**
 
-Release notes, checksums and the debug build: [releases/tag/ratan-ai-agent-v2.0](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratan-ai-agent-v2.0) ·
+Release notes, checksums and the debug build: [releases/tag/ratan-ai-agent-v2.1](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratan-ai-agent-v2.1) ·
 install walkthrough: [docs/APK.md](docs/APK.md).
 
 ---
@@ -22,11 +22,46 @@ could be reviewed, rebuilt, or patched. 2.0 replaces it with an app that is **bu
 | Source in repo | no | yes — `android/app/src/main/java/…` |
 | Platform | unknown | `compileSdk`/`targetSdk` **36** today (Android 16 — the newest platform the public SDK channel publishes); the workflow moves to **API 37** by itself the moment Google ships `platforms;android-37`. Android 17's `ACCESS_LOCAL_NETWORK` flow is already implemented. |
 | Toolchain | unknown | AGP 9.4.0 · Gradle 9.6.0 · JDK 21 · build-tools 36+ |
-| Verified build (2026-10-08) | — | 703,725 bytes (~690 KB) · signing certificate SHA-256 `79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83` — the certificate is the stable identity, the APK hash changes with every rebuild and is quoted in the release notes |
+| Verified build (2.1, 2026-10-08) | — | 703,725 bytes (~690 KB) · signing certificate SHA-256 `79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83` — the certificate is the stable identity, the APK hash changes with every rebuild and is quoted in the release notes |
 | Reproducible build | no | GitHub Actions, every push |
 | Signature | changed between builds | stable key → updates install in place |
 | Offline value | none | bundled AIRT red-team toolkit (67 probes) |
 | Third-party code | unknown | none — framework-only, no analytics |
+
+## Bring your own API (optional) — new in 2.1
+
+The app ships pointed at the hosted RATAN AI assistant. You can instead drive it with **your own
+provider**, entirely from the dashboard (section 06 · CHAT). Nothing is mandatory: leave the
+toggle off and the hosted agent behaves exactly as before.
+
+| Preset | What it talks to | Notes |
+|---|---|---|
+| `openai` | OpenAI **or anything OpenAI-compatible** — Azure OpenAI, Groq, Together, OpenRouter, vLLM, LM Studio, llama.cpp server, a self-hosted gateway | blank base URL = `https://api.openai.com`; the app appends `/v1/chat/completions` (or accepts a full URL you paste) |
+| `anthropic` | Claude models | adds `x-api-key` + `anthropic-version`, moves the system prompt out of band, always sends `max_tokens` |
+| `ollama` | a local model server (`http://127.0.0.1:11434`, or your laptop's LAN IP) | no key required; needs local-network access from Android 17 |
+| `custom` | any private JSON API you can describe | you supply path, extra headers, a body template and a response path |
+
+Custom placeholders: `{{MODEL}}`, `{{PROMPT}}`, `{{MESSAGES}}` (raw JSON array), `{{SYSTEM}}`,
+`{{TEMPERATURE}}`, `{{MAX_TOKENS}}`, and `{{KEY}}` inside headers only.
+
+### How the credential is handled
+
+| Property | Implementation |
+|---|---|
+| Storage | Android Keystore key (AES-256-GCM, random IV per write, hardware-backed where available) via `SecureStore.java` |
+| Exposure to the page | **none** — the dashboard may write a key and can only ever read back a masked tail (`…a1b2`) |
+| Scope of use | the credential is attached only to the URL built from your stored profile; the web layer cannot choose the destination |
+| Redirects | `Authorization`/`Cookie`/`x-api-key` are dropped on any cross-host redirect |
+| Errors | the key is redacted out of every message, hint and raw snippet before it reaches the UI |
+| Backups | disabled for the app's files and preferences (`data_extraction_rules.xml`) |
+| Concurrency | one completion in flight at a time, so a misbehaving page cannot fan out paid calls |
+
+`TEST CONNECTION` runs a minimal round-trip and reports the provider's own error text plus a
+plain-language hint (rejected key, unknown model, wrong path, rate limit, unreachable host,
+LAN permission missing).
+
+Use keys and endpoints that you own or are authorised to use — the app stores them on the device
+and sends them nowhere else.
 
 ## What the app does
 
@@ -51,6 +86,8 @@ could be reviewed, rebuilt, or patched. 2.0 replaces it with an app that is **bu
   probe of the configured endpoint.
 * **Configurable endpoint** — point the app at a self-hosted deployment (or a lab instance) from
   the dashboard; timeouts and response caps are adjustable too.
+* **Bring your own API** — chat against OpenAI-compatible endpoints, Anthropic, a local Ollama
+  server, or a private JSON API, with the key held in the Android Keystore (see below).
 
 ## Layout
 
@@ -63,6 +100,7 @@ apps/ratan-ai-agent/
 │       ├── build.gradle              API 37, signing via env, buildConfig fields
 │       └── src/
 │           ├── main/java/…/          MainActivity · AgentBridge · HttpEngine · NetPolicy · Prefs
+│           │                          SecureStore (Keystore secrets) · LlmClient (BYOK providers)
 │           ├── main/assets/          home.html (dashboard) · toolkit.html (generated)
 │           ├── main/res/             icon, theme (+v31 splash), network security config
 │           ├── debug/res/xml/        debug-only NSC that trusts user CAs (for a proxy)

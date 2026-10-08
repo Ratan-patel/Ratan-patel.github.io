@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#060A16">
-<title>RATAN AI AGENT 2.0</title>
+<title>RATAN AI AGENT 2.1</title>
 <style>
   :root{
     --shell-top:0px; --shell-bottom:0px;
@@ -32,6 +32,7 @@
   .chip.mint{color:var(--mint);border-color:rgba(0,255,200,.4)}
   .chip.warn{color:var(--warn);border-color:rgba(255,176,32,.45)}
   .chip.bad{color:var(--bad);border-color:rgba(255,92,122,.45)}
+  .chip.violet{color:var(--violet);border-color:rgba(167,139,250,.45)}
   .banner{margin-top:12px;padding:11px 13px;border-radius:12px;border:1px solid rgba(255,176,32,.5);
     background:rgba(255,176,32,.08);color:#FFE3B0;font:12px/1.5 var(--sans);display:none}
   .banner.show{display:block}
@@ -40,8 +41,10 @@
     border-radius:14px;padding:14px}
   .card.primary{border-color:rgba(91,140,255,.55);box-shadow:0 0 24px rgba(91,140,255,.12)}
   .card.mint{border-color:rgba(0,255,200,.4);box-shadow:0 0 22px rgba(0,255,200,.08)}
+  .card.violet{border-color:rgba(167,139,250,.45);box-shadow:0 0 22px rgba(167,139,250,.1)}
   .kicker{font:800 10px var(--mono);letter-spacing:.14em;color:var(--accent)}
   .card.mint .kicker{color:var(--mint)}
+  .card.violet .kicker{color:var(--violet)}
   .card h2{font:700 17px/1.3 var(--sans);margin-top:6px}
   .card p{margin:6px 0 0;color:var(--muted);font:12.5px/1.5 var(--sans)}
   .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -50,8 +53,10 @@
     text-decoration:none;display:inline-flex;align-items:center;gap:7px}
   button.solid{background:var(--accent);border-color:transparent;color:#04101F}
   button.mint{background:var(--mint);border-color:transparent;color:#04101F}
+  button.violet{background:var(--violet);border-color:transparent;color:#160F2E}
   button.ghost{background:transparent}
   button:active,.btn:active{transform:translateY(1px)}
+  button[disabled]{opacity:.45;cursor:not-allowed}
   .list{margin-top:10px;display:grid;gap:6px}
   .item{display:flex;justify-content:space-between;gap:10px;font:12.5px var(--mono);
     padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#0A1223}
@@ -67,8 +72,9 @@
   label.field{display:block;margin-top:10px}
   label.field span{display:block;font:700 10.5px var(--mono);letter-spacing:.1em;color:var(--muted);
     margin-bottom:5px}
-  input[type=text],input[type=number]{width:100%;background:#0A1223;border:1px solid var(--line);
-    color:var(--text);border-radius:10px;padding:11px 12px;font:13px var(--mono)}
+  input[type=text],input[type=number],input[type=password],textarea,select{width:100%;background:#0A1223;
+    border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 12px;font:13px var(--mono)}
+  textarea{min-height:74px;resize:vertical;line-height:1.5}
   .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;
     border-bottom:1px dashed #17264a}
   .switch:last-child{border-bottom:0}
@@ -80,8 +86,25 @@
     background:#5C6B8A;transition:.16s}
   .toggle.on{background:rgba(0,255,200,.22);border-color:rgba(0,255,200,.55)}
   .toggle.on i{left:25px;background:var(--mint)}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .seg button{padding:8px 11px;font:800 10px var(--mono)}
+  .seg button.active{background:rgba(167,139,250,.2);border-color:rgba(167,139,250,.7);color:#DCD2FF}
+  .hintline{margin-top:8px;font:11.5px/1.5 var(--mono);color:var(--muted);word-break:break-word}
+  .hintline.good{color:var(--good)} .hintline.bad{color:var(--bad)} .hintline.warn{color:var(--warn)}
+  .keyrow{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  .keyrow input{flex:1 1 160px}
+  .chat{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:#080F1F;
+    max-height:44vh;overflow:auto;padding:10px;display:grid;gap:9px;align-content:start}
+  .msg{max-width:92%;padding:9px 11px;border-radius:12px;font:13px/1.5 var(--sans);white-space:pre-wrap;
+    word-break:break-word}
+  .msg.user{margin-left:auto;background:rgba(91,140,255,.18);border:1px solid rgba(91,140,255,.55)}
+  .msg.assistant{background:#0E1830;border:1px solid var(--line)}
+  .msg.error{background:rgba(255,92,122,.12);border:1px solid rgba(255,92,122,.5);color:#FFD3DC}
+  .msg.pending{background:#0B1428;border:1px dashed var(--line);color:var(--muted);font-style:italic}
+  .msg .meta{display:block;margin-top:5px;font:10px var(--mono);color:var(--muted);letter-spacing:.06em}
+  .composer{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
+  .composer textarea{min-height:52px;max-height:120px}
   footer{margin-top:16px;color:var(--muted);font:11px/1.6 var(--mono);text-align:center}
-  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   @media (min-width:720px){ .grid{grid-template-columns:1fr 1fr} .grid .wide{grid-column:1/-1} }
 </style>
 </head>
@@ -97,6 +120,7 @@
   </div>
   <div class="chips">
     <span class="chip" id="chipVersion">v—</span>
+    <span class="chip" id="chipMode">mode —</span>
     <span class="chip" id="chipNet">network…</span>
     <span class="chip" id="chipSdk">api —</span>
   </div>
@@ -108,18 +132,31 @@
 
   <section class="card primary">
     <div class="kicker">01 · ASSISTANT</div>
-    <h2>Open RATAN AI AGENT</h2>
+    <h2>Open the hosted RATAN AI AGENT</h2>
     <p id="agentTarget">—</p>
-    <p>Secure chat session with the ethical-hacking assistant: recon planning, report drafting,
-       hardening guidance and guided lab work. Voice and image input are supported.</p>
+    <p>Full secure chat session with the hosted assistant: recon planning, report drafting,
+       hardening guidance and guided lab work. Voice and image input supported.</p>
     <div class="row">
       <button class="solid" id="openAgent">OPEN AGENT</button>
       <button class="ghost" id="openAgentExternal">OPEN IN BROWSER</button>
     </div>
   </section>
 
+  <section class="card violet">
+    <div class="kicker">02 · YOUR OWN API</div>
+    <h2>Bring your own key (optional)</h2>
+    <p>Point the app at your own provider — an OpenAI-compatible endpoint, Anthropic, a local
+       Ollama server, or any private JSON API you can describe. Your key is stored in the
+       Android Keystore, is never returned to the page, and is only ever sent to the endpoint
+       you configure.</p>
+    <div class="row">
+      <button class="violet" id="jumpChat">SET UP MY API</button>
+      <button class="ghost" id="jumpSettings">TRANSPORT SETTINGS</button>
+    </div>
+  </section>
+
   <section class="card mint">
-    <div class="kicker">02 · OFFLINE</div>
+    <div class="kicker">03 · OFFLINE</div>
     <h2>Red-team toolkit</h2>
     <p>Bundled AIRT engine — 67 prompt-injection, jailbreak, exfiltration and tool-abuse probes
        across 11 categories, 9 evasion mutations, mapped to the OWASP LLM Top-10 (2025).
@@ -131,11 +168,12 @@
   </section>
 
   <section class="card">
-    <div class="kicker">03 · LAB</div>
+    <div class="kicker">04 · LAB</div>
     <h2>Local network access</h2>
     <p id="lanState">—</p>
     <p>Android 17 requires an explicit permission before any app may talk to devices on the
-       local network. Grant it to test a bot, model server or staging target on the same Wi-Fi.</p>
+       local network. Grant it to test a bot, model server or staging target on the same Wi-Fi —
+       including a local Ollama endpoint for the chat above.</p>
     <div class="list" id="lanAddresses"></div>
     <div class="row">
       <button class="ghost" id="grantLan">GRANT LAN ACCESS</button>
@@ -145,7 +183,7 @@
   </section>
 
   <section class="card">
-    <div class="kicker">04 · DIAGNOSTICS</div>
+    <div class="kicker">05 · DIAGNOSTICS</div>
     <h2>Device &amp; build</h2>
     <div class="list" id="deviceList"></div>
     <div class="row">
@@ -156,17 +194,110 @@
     <div class="checks" id="selfTest"></div>
   </section>
 
-  <section class="card wide">
-    <div class="kicker">05 · SETTINGS</div>
-    <h2>Engine &amp; transport</h2>
+  <!-- ===================== CHAT: bring your own API ===================== -->
+  <section class="card wide violet" id="chatCard">
+    <div class="kicker">06 · CHAT</div>
+    <h2>Talk to your provider</h2>
+    <p>Switch to <strong>My own API</strong> to chat here without leaving the app. Choose a preset
+       or describe a private endpoint yourself, then test the connection before you rely on it.</p>
+
+    <div class="switch">
+      <div><div class="t">Use my own API for chat</div>
+        <div class="s">Off = the hosted agent in section 01 stays the only assistant</div></div>
+      <div class="toggle" id="tgCustomMode"><i></i></div>
+    </div>
+
+    <div id="providerPane">
+      <div class="seg" id="providerSeg">
+        <button data-provider="openai">OPENAI-COMPATIBLE</button>
+        <button data-provider="anthropic">ANTHROPIC</button>
+        <button data-provider="ollama">OLLAMA (LOCAL)</button>
+        <button data-provider="custom">PRIVATE / CUSTOM</button>
+      </div>
+
+      <label class="field"><span>BASE URL (blank = provider default)</span>
+        <input type="text" id="llmBaseUrl" inputmode="url" autocapitalize="off" spellcheck="false">
+      </label>
+      <div class="hintline" id="defaultUrlHint">—</div>
+
+      <label class="field"><span>MODEL</span>
+        <input type="text" id="llmModel" autocapitalize="off" spellcheck="false"
+               placeholder="for example gpt-4o-mini · claude-sonnet-4-5 · qwen2.5:7b">
+      </label>
+
+      <div id="customOnly" style="display:none">
+        <label class="field"><span>PATH APPENDED TO BASE URL</span>
+          <input type="text" id="llmPath" autocapitalize="off" spellcheck="false"
+                 placeholder="/v1/chat/completions — leave blank to use the base URL as-is">
+        </label>
+        <label class="field"><span>EXTRA HEADERS (JSON)</span>
+          <textarea id="llmCustomHeaders" spellcheck="false"
+                    placeholder='{"X-API-Key":"{{KEY}}","X-Tenant":"lab"}'></textarea>
+        </label>
+        <label class="field"><span>REQUEST BODY TEMPLATE (JSON)</span>
+          <textarea id="llmCustomBody" spellcheck="false"
+                    placeholder='{"model":"{{MODEL}}","prompt":"{{PROMPT}}","temperature":{{TEMPERATURE}}}'>
+          </textarea>
+        </label>
+        <div class="hintline">Placeholders: <code>{{MODEL}}</code> <code>{{PROMPT}}</code> (last user
+          message) <code>{{MESSAGES}}</code> (full JSON array) <code>{{SYSTEM}}</code>
+          <code>{{TEMPERATURE}}</code> <code>{{MAX_TOKENS}}</code>. <code>{{KEY}}</code> works in
+          headers only.</div>
+        <label class="field"><span>RESPONSE PATH (dot/bracket)</span>
+          <input type="text" id="llmResponsePath" autocapitalize="off" spellcheck="false"
+                 placeholder="choices[0].message.content">
+        </label>
+      </div>
+
+      <label class="field"><span>API KEY <em style="color:var(--muted);font-style:normal">(write-only · stored in the Android Keystore)</em></span></label>
+      <div class="keyrow">
+        <input type="password" id="llmKey" autocomplete="off" autocapitalize="off" spellcheck="false"
+               placeholder="paste your key, then press SAVE KEY">
+        <button class="violet" id="saveKey">SAVE KEY</button>
+        <button class="ghost" id="clearKey">CLEAR</button>
+      </div>
+      <div class="hintline" id="keyState">—</div>
+
+      <label class="field"><span>SYSTEM PROMPT (optional)</span>
+        <textarea id="llmSystem" spellcheck="false"
+                  placeholder="leave blank for the built-in authorised-testing prompt"></textarea>
+      </label>
+
+      <label class="field"><span>TEMPERATURE</span>
+        <input type="number" id="llmTemperature" min="0" max="2" step="0.1"></label>
+      <label class="field"><span>MAX TOKENS</span>
+        <input type="number" id="llmMaxTokens" min="16" max="32768" step="16"></label>
+
+      <div class="row">
+        <button class="solid" id="saveProvider">SAVE PROFILE</button>
+        <button class="ghost" id="testProvider">TEST CONNECTION</button>
+        <button class="ghost" id="clearChatTop">CLEAR CHAT</button>
+      </div>
+      <div class="hintline" id="providerNote">—</div>
+
+      <div class="chat" id="chatLog">
+        <div class="msg assistant">Ready when you are. Configure a provider above, press
+          <strong>TEST CONNECTION</strong>, then ask something.</div>
+      </div>
+      <div class="composer">
+        <textarea id="chatInput" placeholder="Ask RATAN AI…" spellcheck="false"></textarea>
+        <button class="violet" id="sendChat">SEND</button>
+      </div>
+      <div class="hintline" id="chatNote">—</div>
+    </div>
+  </section>
+
+  <section class="card wide" id="settingsCard">
+    <div class="kicker">07 · SETTINGS</div>
+    <h2>Hosted agent &amp; transport</h2>
     <label class="field">
-      <span>AGENT ENDPOINT</span>
+      <span>HOSTED AGENT ENDPOINT</span>
       <input type="text" id="agentUrl" inputmode="url" autocapitalize="off" spellcheck="false"
              placeholder="https://your-agent.example/">
     </label>
     <div class="switch">
       <div><div class="t">LAN cleartext http</div>
-        <div class="s">Needed for lab bots on 192.168.x.x / 10.x.x.x</div></div>
+        <div class="s">Needed for lab bots and local model servers on 192.168.x.x / 10.x.x.x</div></div>
       <div class="toggle" id="tgLan"><i></i></div>
     </div>
     <div class="switch">
@@ -196,8 +327,8 @@
 </div>
 
 <footer>
-  RATAN AI AGENT 2.0 · Android 17 (API 37) build · framework-only, no telemetry<br>
-  Use the toolkit and the agent only against systems you own or are authorised to test.
+  RATAN AI AGENT 2.1 · bring-your-own-API · framework-only, no telemetry<br>
+  Keys are stored on this device only. Use keys and endpoints you own or are authorised to use.
 </footer>
 
 <script>
@@ -205,7 +336,7 @@
   "use strict";
   var BRIDGE = (typeof RatanBridge !== "undefined") ? RatanBridge
              : (typeof AirTBridge !== "undefined") ? AirTBridge : null;
-  var state = { info: {}, settings: {}, device: {}, permissions: {} };
+  var state = { info: {}, settings: {}, device: {}, permissions: {}, llm: {}, history: [], busy: false };
 
   function $(id) { return document.getElementById(id); }
   function text(id, value) { var el = $(id); if (el) el.textContent = value == null ? "—" : String(value); }
@@ -220,6 +351,12 @@
     return false;
   }
   function note(msg) { text("settingsNote", msg); }
+  function setHint(id, msg, kind) {
+    var el = $(id);
+    if (!el) return;
+    el.textContent = msg == null ? "" : String(msg);
+    el.className = "hintline" + (kind ? " " + kind : "");
+  }
 
   /* ---------------------------------------------------------------- boot */
   function boot() {
@@ -227,26 +364,39 @@
       text("subline", "BROWSER PREVIEW — NO NATIVE BRIDGE");
       $("chipVersion").textContent = "web preview";
       $("chipNet").textContent = navigator.onLine ? "online" : "offline";
-      state.settings = { agentUrl: "https://v1qmk5wx2361-d.space-z.ai/",
-        allowLanHttp: true, allowPublicHttp: false, connectTimeoutMs: 5000,
-        readTimeoutMs: 30000, maxResponseKb: 512, openExternal: true };
-      fillSettings();
-      renderDevice();
+      state.settings = { agentUrl: "https://v1qmk5wx2361-d.space-z.ai/", allowLanHttp: true,
+        allowPublicHttp: false, connectTimeoutMs: 5000, readTimeoutMs: 30000, maxResponseKb: 512,
+        openExternal: true };
+      state.llm = { mode: "hosted", provider: "openai", baseUrl: "", model: "", hasKey: false,
+        keyHint: "", temperature: 0.7, maxTokens: 1024, keystore: "unknown",
+        endpoint: "https://api.openai.com/v1/chat/completions" };
+      fillSettings(); fillLlm(); renderDevice();
+      setHint("providerNote", "Preview mode: provider calls need the app (native bridge).", "warn");
       return;
     }
     state.info = parse(BRIDGE.appInfo(), {});
     state.settings = parse(BRIDGE.getSettings(), {});
     state.device = parse(BRIDGE.deviceInfo(), {});
     state.permissions = state.device.permissions || {};
+    state.llm = parse(BRIDGE.llmInfo(), {});
 
-    var label = (state.info.app || "RATAN AI AGENT") + " v" + (state.info.version || "?");
-    text("subline", label.toUpperCase() + " · " + (state.info.buildType || "release").toUpperCase());
+    text("subline", ((state.info.app || "RATAN AI AGENT") + " v" + (state.info.version || "?"))
+      .toUpperCase() + " · " + (state.info.buildType || "release").toUpperCase());
     $("chipVersion").textContent = "v" + (state.info.version || "?");
     $("chipSdk").textContent = "android " + (state.info.android || "?") + " · api " + (state.info.sdkInt || "?");
     chipNetwork(state.device.network);
     fillSettings();
+    fillLlm();
     renderDevice();
     renderLan();
+    chipMode();
+  }
+
+  function chipMode() {
+    var custom = state.llm && state.llm.mode === "custom";
+    var chip = $("chipMode");
+    chip.textContent = custom ? "api: " + (state.llm.provider || "custom") : "api: hosted";
+    chip.className = "chip " + (custom ? "violet" : "mint");
   }
 
   function chipNetwork(network) {
@@ -256,6 +406,7 @@
     chip.className = "chip" + (value === "offline" ? " bad" : (value === "wifi" || value === "ethernet" ? " mint" : ""));
   }
 
+  /* ------------------------------------------------------------- settings */
   function fillSettings() {
     var s = state.settings || {};
     $("agentUrl").value = s.agentUrl || "";
@@ -274,6 +425,49 @@
   }
   function toggleState(id) { var el = $(id); return el && el.dataset.on === "1"; }
 
+  var PROVIDER_DEFAULTS = {
+    openai: "https://api.openai.com  →  /v1/chat/completions",
+    anthropic: "https://api.anthropic.com  →  /v1/messages",
+    ollama: "http://127.0.0.1:11434  →  /api/chat (use your machine's LAN IP from the phone)"
+  };
+
+  function fillLlm() {
+    var l = state.llm || {};
+    setToggle("tgCustomMode", l.mode === "custom");
+    document.querySelectorAll("#providerSeg button").forEach(function (b) {
+      b.classList.toggle("active", b.dataset.provider === (l.provider || "openai"));
+    });
+    $("llmBaseUrl").value = l.baseUrl || "";
+    $("llmModel").value = l.model || "";
+    $("llmPath").value = l.customPath || "";
+    $("llmCustomHeaders").value = l.customHeaders || "";
+    $("llmCustomBody").value = l.customBody || "";
+    $("llmResponsePath").value = l.responsePath || "";
+    $("llmSystem").value = l.systemPrompt || "";
+    $("llmTemperature").value = l.temperature != null ? l.temperature : 0.7;
+    $("llmMaxTokens").value = l.maxTokens || 1024;
+    $("llmKey").value = "";
+    $("customOnly").style.display = (l.provider === "custom") ? "block" : "none";
+    setHint("defaultUrlHint", PROVIDER_DEFAULTS[l.provider] || "private endpoint — describe it below");
+    if (l.hasKey) {
+      setHint("keyState", "key stored (" + (l.keyHint || "…") + ") · Android Keystore " + (l.keystore || "?"), "good");
+    } else {
+      setHint("keyState", "no key stored yet" + (l.keystore === "unavailable" ? " · Keystore unavailable on this device" : ""),
+        l.keystore === "unavailable" ? "bad" : "");
+    }
+    setHint("providerNote", l.note ? ("profile: " + l.note) : ("a chat would POST to " + (l.endpoint || "—")),
+      l.note ? "warn" : "good");
+    var enabled = l.mode === "custom";
+    ["llmBaseUrl", "llmModel", "saveProvider", "testProvider", "sendChat"].forEach(function (id) {
+      var el = $(id);
+      if (el) el.disabled = !enabled && id !== "saveProvider" && id !== "llmBaseUrl" && id !== "llmModel";
+    });
+    setHint("chatNote", enabled
+      ? "chat routes through your own provider — history stays on this device"
+      : "switch the toggle on to chat here; otherwise use OPEN AGENT above", enabled ? "" : "warn");
+  }
+
+  /* ------------------------------------------------------------- devices */
   function renderDevice() {
     var i = state.info || {};
     var d = state.device || {};
@@ -285,24 +479,23 @@
       ["android", (d.android || i.android || "?") + " (API " + (d.sdkInt || i.sdkInt || "?") + ")"],
       ["webview", d.webView || "—"],
       ["network", d.network || "—"],
+      ["keystore", (state.llm && state.llm.keystore) || "—"],
       ["signature", (i.signature || "—").slice(0, 32) + (i.signature && i.signature.length > 32 ? "…" : "")]
     ];
-    var host = $("deviceList");
-    host.innerHTML = rows.map(function (r) {
+    $("deviceList").innerHTML = rows.map(function (r) {
       return "<div class='item'><span class='k'>" + esc(r[0]) + "</span><span class='v'>" + esc(r[1]) + "</span></div>";
     }).join("");
   }
 
   function renderLan() {
     var p = state.permissions || {};
-    var host = $("lanAddresses");
     var addrs = (state.device && state.device.localAddresses) || [];
-    host.innerHTML = addrs.length
+    $("lanAddresses").innerHTML = addrs.length
       ? addrs.map(function (a) { return "<div class='item'><span class='k'>local ip</span><span class='v'>" + esc(a) + "</span></div>"; }).join("")
       : "<div class='item'><span class='k'>local ip</span><span class='v'>not detected</span></div>";
     var lan = $("lanState");
     if (p.localNetwork === false) {
-      lan.innerHTML = "<span style='color:var(--warn)'>Local-network permission is <strong>not granted</strong> — LAN targets will be refused.</span>";
+      lan.innerHTML = "<span style='color:var(--warn)'>Local-network permission is <strong>not granted</strong> — LAN targets and local model servers will be refused.</span>";
     } else {
       lan.innerHTML = "Local-network access: <span style='color:var(--good)'>granted</span> · mic "
         + (p.recordAudio ? "<span style='color:var(--good)'>allowed</span>" : "<span style='color:var(--warn)'>denied</span>")
@@ -324,6 +517,75 @@
     chipNetwork(state.device.network);
   }
 
+  /* -------------------------------------------------------------- chat */
+  function pushMessage(role, content, meta) {
+    var log = $("chatLog");
+    var div = document.createElement("div");
+    div.className = "msg " + role;
+    div.innerHTML = esc(content) + (meta ? "<span class='meta'>" + esc(meta) + "</span>" : "");
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    return div;
+  }
+
+  function sendChat() {
+    if (need()) return;
+    if (state.busy) return;
+    if (!state.llm || state.llm.mode !== "custom") {
+      setHint("chatNote", "switch the toggle on (My own API) first, or use OPEN AGENT above", "warn");
+      return;
+    }
+    var input = $("chatInput");
+    var prompt = (input.value || "").trim();
+    if (!prompt) return;
+    input.value = "";
+    pushMessage("user", prompt);
+    state.history.push({ role: "user", content: prompt });
+    if (state.history.length > 20) state.history.splice(0, state.history.length - 20);
+
+    var pending = pushMessage("pending", "thinking…");
+    state.busy = true;
+    $("sendChat").disabled = true;
+
+    var payload = JSON.stringify({
+      messages: state.history,
+      model: (state.llm && state.llm.model) || undefined
+    });
+    var id = "c" + Date.now();
+    window.__pendingChat = { id: id, node: pending, prompt: prompt };
+    try {
+      BRIDGE.llmChatAsync(id, payload);
+    } catch (e) {
+      state.busy = false;
+      $("sendChat").disabled = false;
+      pending.className = "msg error";
+      pending.textContent = "bridge error: " + e;
+    }
+  }
+
+  window.__llmCallback = function (id, raw) {
+    var pending = window.__pendingChat;
+    state.busy = false;
+    $("sendChat").disabled = false;
+    if (!pending || pending.id !== id || !pending.node) return;
+    var result = typeof raw === "string" ? parse(raw, {}) : (raw || {});
+    var node = pending.node;
+    window.__pendingChat = null;
+    if (result.ok) {
+      node.className = "msg assistant";
+      node.innerHTML = esc(result.text) +
+        "<span class='meta'>" + esc(result.provider + " · " + result.model + " · " + result.ms + " ms") + "</span>";
+      state.history.push({ role: "assistant", content: result.text });
+      setHint("chatNote", "ok · " + (result.usage && result.usage.total ? ("tokens " + result.usage.total) : "usage not reported"), "");
+    } else {
+      node.className = "msg error";
+      node.innerHTML = esc(result.error || "request failed") +
+        (result.hint ? "<span class='meta'>" + esc(result.hint) + "</span>" : "");
+      state.history.pop();   // do not keep a failed turn in the context
+      setHint("chatNote", result.hint || "request failed", "bad");
+    }
+  };
+
   /* ------------------------------------------------------ bridge events */
   window.__offlineNotice = function (message) {
     var banner = $("offlineBanner");
@@ -342,64 +604,52 @@
     if (payload.network) { state.device.network = payload.network; chipNetwork(payload.network); }
     if (payload.permissions) { state.permissions = payload.permissions; renderLan(); }
   };
-  window.__bridgeCallback = function () { /* reserved for async HTTP results */ };
+  window.__bridgeCallback = function () { /* reserved for generic async HTTP results */ };
 
   /* -------------------------------------------------------------- wiring */
   function on(id, handler) { var el = $(id); if (el) el.addEventListener("click", handler); }
 
-  on("openAgent", function () {
-    if (need()) return;
-    BRIDGE.openAgent();
-  });
+  on("openAgent", function () { if (!need()) BRIDGE.openAgent(); });
   on("openAgentExternal", function () {
     var url = (state.settings && state.settings.agentUrl) || "";
     if (!url) return;
     if (BRIDGE) BRIDGE.openExternal(url); else window.open(url, "_blank");
   });
-  on("openToolkit", function () {
-    if (need()) return;
-    BRIDGE.vibrate(20);
-    BRIDGE.openToolkit();
-  });
+  on("openToolkit", function () { if (!need()) { BRIDGE.vibrate(20); BRIDGE.openToolkit(); } });
   on("toolkitInfo", function () {
     note("Probe families: prompt-injection, jailbreak, system-prompt leak, data exfiltration, " +
          "harmful content, PII, tool/agent abuse, insecure code, hallucination, bias, indirect injection.");
   });
-  on("grantLan", function () {
-    if (need()) return;
-    BRIDGE.requestLocalNetworkPermission();
-  });
+  on("jumpChat", function () { $("chatCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  on("jumpSettings", function () { $("settingsCard").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  on("grantLan", function () { if (!need()) BRIDGE.requestLocalNetworkPermission(); });
   on("grantMic", function () {
     if (need()) return;
-    if (!BRIDGE.requestPermission("android.permission.RECORD_AUDIO")) {
-      note("Microphone request sent — answer the Android dialog.");
-    }
+    if (!BRIDGE.requestPermission("android.permission.RECORD_AUDIO")) note("Microphone request sent — answer the Android dialog.");
   });
   on("grantCam", function () {
     if (need()) return;
-    if (!BRIDGE.requestPermission("android.permission.CAMERA")) {
-      note("Camera request sent — answer the Android dialog.");
-    }
+    if (!BRIDGE.requestPermission("android.permission.CAMERA")) note("Camera request sent — answer the Android dialog.");
   });
   on("runSelfTest", runSelfTest);
   on("copyInfo", function () {
-    var blob = JSON.stringify({ info: state.info, device: state.device, settings: state.settings }, null, 2);
-    if (BRIDGE) { BRIDGE.copy("RATAN AI AGENT diagnostics", blob); } else { note(blob); }
+    var blob = JSON.stringify({ info: state.info, device: state.device, settings: state.settings,
+      provider: { mode: state.llm.mode, provider: state.llm.provider, model: state.llm.model,
+        hasKey: state.llm.hasKey, endpoint: state.llm.endpoint } }, null, 2);
+    if (BRIDGE) BRIDGE.copy("RATAN AI AGENT diagnostics", blob); else note(blob);
   });
   on("shareInfo", function () {
-    var report = "RATAN AI AGENT " + (state.info.version || "") + " · Android "
-      + (state.info.android || "") + " (API " + (state.info.sdkInt || "") + ") · "
-      + (state.device.device || "") + "\nagent: " + ((state.settings && state.settings.agentUrl) || "");
-    if (BRIDGE) { BRIDGE.share("RATAN AI AGENT build info", report); } else { note(report); }
+    var report = "RATAN AI AGENT " + (state.info.version || "") + " · Android " + (state.info.android || "")
+      + " (API " + (state.info.sdkInt || "") + ") · " + (state.device.device || "")
+      + "\nagent: " + ((state.settings && state.settings.agentUrl) || "")
+      + "\nprovider: " + ((state.llm && state.llm.provider) || "—") + " · model " + ((state.llm && state.llm.model) || "—");
+    if (BRIDGE) BRIDGE.share("RATAN AI AGENT build info", report); else note(report);
   });
   on("appSettings", function () { if (BRIDGE) BRIDGE.openAppSettings(); });
 
   ["tgLan", "tgPublic", "tgExternal"].forEach(function (id) {
     var el = $(id);
-    if (el) el.addEventListener("click", function () {
-      setToggle(id, !toggleState(id));
-      saveSettings(true);
-    });
+    if (el) el.addEventListener("click", function () { setToggle(id, !toggleState(id)); saveSettings(true); });
   });
 
   on("saveSettings", function () { saveSettings(false); });
@@ -414,7 +664,7 @@
   function saveSettings(silent) {
     if (need()) return;
     var url = $("agentUrl").value.trim();
-    if (url && !/^https?:\/\//i.test(url)) { url = "https://" + url; }
+    if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
     BRIDGE.setPref("agentUrl", url);
     BRIDGE.setPref("allowLanHttp", toggleState("tgLan") ? "true" : "false");
     BRIDGE.setPref("allowPublicHttp", toggleState("tgPublic") ? "true" : "false");
@@ -424,8 +674,98 @@
     BRIDGE.setPref("maxResponseKb", String(parseInt($("maxResponse").value, 10) || 512));
     state.settings = parse(BRIDGE.getSettings(), {});
     fillSettings();
-    if (!silent) note("Saved · endpoint " + (state.settings.agentUrl || ""));
+    if (!silent) note("Saved · hosted endpoint " + (state.settings.agentUrl || ""));
   }
+
+  /* --------------------------------------------------- provider wiring */
+  var el = $("tgCustomMode");
+  if (el) el.addEventListener("click", function () {
+    setToggle("tgCustomMode", !toggleState("tgCustomMode"));
+    saveProvider(true);
+  });
+
+  document.querySelectorAll("#providerSeg button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      state.llm.provider = button.dataset.provider;
+      document.querySelectorAll("#providerSeg button").forEach(function (b) {
+        b.classList.toggle("active", b === button);
+      });
+      $("customOnly").style.display = (button.dataset.provider === "custom") ? "block" : "none";
+      setHint("defaultUrlHint", PROVIDER_DEFAULTS[button.dataset.provider]
+        || "private endpoint — describe it below");
+      saveProvider(true);
+    });
+  });
+
+  on("saveProvider", function () { saveProvider(false); });
+
+  function saveProvider(silent) {
+    if (need()) return;
+    var config = {
+      llmMode: toggleState("tgCustomMode") ? "custom" : "hosted",
+      llmProvider: (state.llm && state.llm.provider) || "openai",
+      llmBaseUrl: $("llmBaseUrl").value.trim(),
+      llmModel: $("llmModel").value.trim(),
+      llmPath: $("llmPath").value.trim(),
+      llmCustomHeaders: $("llmCustomHeaders").value.trim(),
+      llmCustomBody: $("llmCustomBody").value.trim(),
+      llmResponsePath: $("llmResponsePath").value.trim(),
+      llmSystemPrompt: $("llmSystem").value,
+      llmTemperature: String(parseFloat($("llmTemperature").value) || 0.7),
+      llmMaxTokens: String(parseInt($("llmMaxTokens").value, 10) || 1024)
+    };
+    var saved = parse(BRIDGE.llmSaveConfig(JSON.stringify(config)), {});
+    state.llm = parse(BRIDGE.llmInfo(), {});
+    fillLlm();
+    chipMode();
+    if (!silent) setHint("providerNote", saved.note ? ("profile: " + saved.note) : "profile saved — press TEST CONNECTION", saved.note ? "warn" : "good");
+  }
+
+  on("saveKey", function () {
+    if (need()) return;
+    var value = $("llmKey").value;
+    if (!value) { setHint("keyState", "type or paste the key first", "warn"); return; }
+    var result = parse(BRIDGE.llmSetKey(value), {});
+    $("llmKey").value = "";
+    if (result.ok) {
+      state.llm = parse(BRIDGE.llmInfo(), {});
+      fillLlm();
+      setHint("keyState", "key stored in the Android Keystore (" + (result.hint || "…") + ") — it is never shown again", "good");
+    } else {
+      setHint("keyState", result.error || "could not store the key", "bad");
+    }
+  });
+
+  on("clearKey", function () {
+    if (need()) return;
+    parse(BRIDGE.llmClearKey(), {});
+    state.llm = parse(BRIDGE.llmInfo(), {});
+    fillLlm();
+    setHint("keyState", "key removed from this device", "warn");
+  });
+
+  on("testProvider", function () {
+    if (need()) return;
+    setHint("providerNote", "testing…", "");
+    var result = parse(BRIDGE.llmTest(), {});
+    if (result.ok) {
+      setHint("providerNote", "reachable · " + (result.provider || "") + " · " + (result.model || "")
+        + " · " + (result.ms || 0) + " ms · replied: " + (result.reply || "").slice(0, 60), "good");
+    } else {
+      setHint("providerNote", (result.error || "failed") + (result.hint ? " — " + result.hint : ""), "bad");
+    }
+  });
+
+  on("sendChat", sendChat);
+  on("clearChatTop", function () {
+    state.history = [];
+    $("chatLog").innerHTML = "<div class='msg assistant'>Chat cleared. Context on this device only.</div>";
+    setHint("chatNote", "history cleared", "");
+  });
+  var chatInput = $("chatInput");
+  if (chatInput) chatInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendChat(); }
+  });
 
   document.addEventListener("DOMContentLoaded", boot);
   if (document.readyState !== "loading") boot();

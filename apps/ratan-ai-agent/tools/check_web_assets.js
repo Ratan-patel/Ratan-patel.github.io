@@ -18,6 +18,8 @@ const REQUIREMENTS = {
   'home.html': [
     'RatanBridge', 'AirTBridge', '__offlineNotice', '__permissionResult', '__status',
     'openToolkit', 'openAgent', 'selfTest', 'setPref', 'requestLocalNetworkPermission',
+    'llmInfo', 'llmSetKey', 'llmClearKey', 'llmSaveConfig', 'llmTest', 'llmChatAsync',
+    '__llmCallback', '{{MESSAGES}}', '{{KEY}}',
   ],
   'toolkit.html': ['AirTBridge', 'AIRT', 'owasp', 'LLM01'],
 };

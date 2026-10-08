@@ -1,8 +1,8 @@
-# RATAN AI AGENT 2.0 — install & usage (Android)
+# RATAN AI AGENT 2.1 — install & usage (Android)
 
 Download link (open it **on the phone**):
 
-> **https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk**
+> **https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk**
 
 Alternative: the [Releases page](https://github.com/Ratan-patel/Ratan-patel.github.io/releases) or
 the workflow artifact `ratan-ai-agent-apk` if the direct link is blocked on your network.
@@ -30,7 +30,8 @@ The offline toolkit needs no network at all.
 | **Open RATAN AI AGENT** | The hosted assistant. If the network is down, the app falls back to the dashboard with an offline banner instead of an error page. |
 | **Red-team toolkit** | The bundled AIRT scanner. Works in aeroplane mode. |
 | **Diagnostics** | One-tap self-test: build, WebView engine, signature, permissions, endpoint reachability. Copy or share the result when reporting a problem. |
-| **Settings** | Endpoint URL, transport policy (LAN cleartext, public cleartext, external links), timeouts, response cap. |
+| **Chat — bring your own API** | Optional. Presets for OpenAI-compatible / Anthropic / Ollama / a private API, a write-only API-key field, and a chat window that talks to your provider from inside the app. |
+| **Settings** | Hosted endpoint URL, transport policy (LAN cleartext, public cleartext, external links), timeouts, response cap. |
 
 ## Talking to a lab target from the phone
 
@@ -65,6 +66,8 @@ The dashboard can also copy or share a diagnostics blob (build, device, permissi
 ## Trust and verification
 
 * Framework-only app: no Play Services, no analytics, no third-party runtime libraries.
+* Your API key (if you add one) is stored in the Android Keystore, is never shown back to the
+  page, and is only sent to the endpoint you configured.
 * Only bundled pages and the configured agent origin are allowed to render in-app; every other
   link opens in the browser.
 * Release APKs are signed with a stable, documented key so updates install in place. Verify a
@@ -87,6 +90,12 @@ The dashboard can also copy or share a diagnostics blob (build, device, permissi
 | LAN scan says permission required | Tap **Grant LAN access** on the dashboard and accept the Android dialog. |
 | Voice input does nothing | Dashboard → **Allow mic** (Android shows the permission dialog once). |
 | Download button does nothing | The toolkit falls back to the in-app saver; check **Downloads/** or the app's own folder on older Android. |
+| Chat says "mode is set to the hosted agent" | Flip **Use my own API for chat** on in section 06. |
+| `401`/`403` from the provider | The key was rejected — paste it again with **SAVE KEY**; check the key's scope allows the model you named. |
+| `404` from the provider | Wrong base URL / path. OpenAI-compatible servers usually want `/v1/chat/completions`; for a private API set the path yourself. |
+| `429` | Rate limit or no quota left on that key/model. |
+| "no API key saved" | Save the key again; if the dashboard says the Keystore is unavailable, that device cannot hold a key safely. |
+| Ollama on the same Wi-Fi unreachable | Use the laptop's LAN IP, not `localhost`, and grant local-network access (section 04). |
 
 ## Authorised testing only
 

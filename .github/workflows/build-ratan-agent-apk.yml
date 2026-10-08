@@ -19,7 +19,7 @@ permissions:
 
 env:
   PROJECT_DIR: apps/ratan-ai-agent/android
-  RELEASE_TAG: ratan-ai-agent-v2.0
+  RELEASE_TAG: ratan-ai-agent-v2.1
 
 jobs:
   build-apk:
@@ -174,9 +174,9 @@ jobs:
           set -e
           mkdir -p out
           cp "$PROJECT_DIR/app/build/outputs/apk/debug/app-debug.apk" \
-             out/Ratan-AI-Agent-2.0.0-debug.apk
+             out/Ratan-AI-Agent-2.1.0-debug.apk
           cp "$PROJECT_DIR/app/build/outputs/apk/release/app-release.apk" \
-             out/Ratan-AI-Agent-2.0.0-release.apk
+             out/Ratan-AI-Agent-2.1.0-release.apk
           ls -lh out
 
       - name: Verify the release APK (package, SDK levels, bundled pages)
@@ -184,20 +184,21 @@ jobs:
           set -e
           AAPT2=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | sort -V | tail -1)
           export AAPT2
-          python3 apps/ratan-ai-agent/tools/verify_apk.py out/Ratan-AI-Agent-2.0.0-release.apk
+          export RATAN_VERSION_CODE=210 RATAN_VERSION_NAME=2.1.0
+          python3 apps/ratan-ai-agent/tools/verify_apk.py out/Ratan-AI-Agent-2.1.0-release.apk
 
       - name: Sanity-check the debug APK
         run: |
           set -e
-          unzip -l out/Ratan-AI-Agent-2.0.0-debug.apk | grep -q "assets/toolkit.html"
-          unzip -l out/Ratan-AI-Agent-2.0.0-debug.apk | grep -q "classes.dex"
+          unzip -l out/Ratan-AI-Agent-2.1.0-debug.apk | grep -q "assets/toolkit.html"
+          unzip -l out/Ratan-AI-Agent-2.1.0-debug.apk | grep -q "classes.dex"
           echo "debug APK contains dex + bundled toolkit"
 
       - name: Print the signing certificate fingerprint
         run: |
           set -e
           APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
-          "$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.0.0-release.apk | head -8
+          "$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.1.0-release.apk | head -8
 
       - name: Upload APKs (workflow artifact)
         uses: actions/upload-artifact@v4
@@ -208,27 +209,27 @@ jobs:
           retention-days: 90
 
       # Permanent, phone-friendly link:
-      #   https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk
+      #   https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.1/Ratan-AI-Agent-2.1.0-release.apk
       - name: Publish to GitHub Releases
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ env.RELEASE_TAG }}
         run: |
           set -euo pipefail
-          TITLE="RATAN AI AGENT 2.0 (Android APK) · API ${RATAN_TARGET_SDK:-36}"
-          SHA_REL=$(sha256sum out/Ratan-AI-Agent-2.0.0-release.apk | cut -d' ' -f1)
-          SHA_DBG=$(sha256sum out/Ratan-AI-Agent-2.0.0-debug.apk | cut -d' ' -f1)
-          SIZE_REL=$(stat -c%s out/Ratan-AI-Agent-2.0.0-release.apk)
-          SIZE_DBG=$(stat -c%s out/Ratan-AI-Agent-2.0.0-debug.apk)
+          TITLE="RATAN AI AGENT 2.1 (Android APK) · API ${RATAN_TARGET_SDK:-36}"
+          SHA_REL=$(sha256sum out/Ratan-AI-Agent-2.1.0-release.apk | cut -d' ' -f1)
+          SHA_DBG=$(sha256sum out/Ratan-AI-Agent-2.1.0-debug.apk | cut -d' ' -f1)
+          SIZE_REL=$(stat -c%s out/Ratan-AI-Agent-2.1.0-release.apk)
+          SIZE_DBG=$(stat -c%s out/Ratan-AI-Agent-2.1.0-debug.apk)
           APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
-          CERT=$("$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.0.0-release.apk \
+          CERT=$("$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.1.0-release.apk \
                  | grep -i "SHA-256" | head -1 | tr -d ' ' | sed 's/.*://' || true)
 
           cat > "$RUNNER_TEMP/notes.md" <<EOF
-          ## RATAN AI AGENT 2.0 — rebuilt from source in this repository
+          ## RATAN AI AGENT 2.1 — bring your own API, or use the hosted agent
 
-          * \`Ratan-AI-Agent-2.0.0-release.apk\` — install this one (${SIZE_REL} bytes)
-          * \`Ratan-AI-Agent-2.0.0-debug.apk\` — same app with devtools plus user-CA trust (${SIZE_DBG} bytes)
+          * \`Ratan-AI-Agent-2.1.0-release.apk\` — install this one (${SIZE_REL} bytes)
+          * \`Ratan-AI-Agent-2.1.0-debug.apk\` — same app with devtools plus user-CA trust (${SIZE_DBG} bytes)
 
           | | |
           |---|---|
@@ -237,6 +238,19 @@ jobs:
           | signing certificate SHA-256 | \`${CERT}\` |
           | compiled against | API ${RATAN_COMPILE_SDK:-36} (\`targetSdk ${RATAN_TARGET_SDK:-36}\`) |
           | toolchain | AGP 9.4.0 · Gradle 9.6.0 · JDK 21 · build-tools 36+ |
+
+          ### New in 2.1 — optional bring-your-own-API
+          * **Chat with your own provider, inside the app**: OpenAI-compatible endpoints,
+            Anthropic, a local Ollama server, or any private JSON API you can describe (custom
+            path, headers, body template, response path). Leave it off and the hosted RATAN AI
+            agent works exactly as before.
+          * **Keys live in the Android Keystore** (AES-256-GCM, hardware-backed where the device
+            provides it). The key is written by the page but never read back to it — the dashboard
+            only ever shows a masked tail.
+          * **The destination is never chosen by the page**: URL building happens in native code
+            from your stored profile, so a page cannot point your credential at its own server.
+          * **TEST CONNECTION** runs a minimal completion and reports the provider's own error
+            text plus a plain-language hint (bad key, wrong model, rate limit, unreachable host).
 
           ### What is inside
           * **Hardened WebView shell** — only the bundled pages and the configured agent origin
@@ -275,7 +289,7 @@ jobs:
           else
             gh release create "$TAG" --title "$TITLE" --notes-file "$RUNNER_TEMP/notes.md" --latest
           fi
-          gh release upload "$TAG" out/Ratan-AI-Agent-2.0.0-release.apk out/Ratan-AI-Agent-2.0.0-debug.apk --clobber
+          gh release upload "$TAG" out/Ratan-AI-Agent-2.1.0-release.apk out/Ratan-AI-Agent-2.1.0-debug.apk --clobber
 
           echo "--- release assets ---"
           gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size) bytes"'
