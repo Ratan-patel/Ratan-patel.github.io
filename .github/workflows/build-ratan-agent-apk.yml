@@ -52,6 +52,11 @@ jobs:
 
           if [ -n "$CMDLINE" ]; then
             yes | "$CMDLINE/sdkmanager" --sdk_root="$SDK" --licenses >> "$SDK_LOG" 2>&1 || true
+            "$CMDLINE/sdkmanager" --sdk_root="$SDK" --install "cmdline-tools;latest" >> "$SDK_LOG" 2>&1 || true
+            if [ -x "$SDK/cmdline-tools/latest/bin/sdkmanager" ]; then
+              CMDLINE="$SDK/cmdline-tools/latest/bin"
+              echo "using refreshed cmdline-tools: $CMDLINE"
+            fi
             for package in "platforms;android-37" "platforms;android-36" \
                            "build-tools;37.0.0" "build-tools;36.0.0"; do
               echo "--- sdkmanager --install $package" | tee -a "$SDK_LOG"
@@ -201,48 +206,85 @@ jobs:
       # Permanent, phone-friendly link:
       #   https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratan-ai-agent-v2.0/Ratan-AI-Agent-2.0.0-release.apk
       - name: Publish to GitHub Releases
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          name: "RATAN AI AGENT 2.0 (Android APK)"
-          make_latest: true
-          body: |
-            ## RATAN AI AGENT 2.0 — rebuilt from source, targeting Android 17
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ env.RELEASE_TAG }}
+        run: |
+          set -euo pipefail
+          TITLE="RATAN AI AGENT 2.0 (Android APK) · API ${RATAN_TARGET_SDK:-36}"
+          SHA_REL=$(sha256sum out/Ratan-AI-Agent-2.0.0-release.apk | cut -d' ' -f1)
+          SHA_DBG=$(sha256sum out/Ratan-AI-Agent-2.0.0-debug.apk | cut -d' ' -f1)
+          SIZE_REL=$(stat -c%s out/Ratan-AI-Agent-2.0.0-release.apk)
+          SIZE_DBG=$(stat -c%s out/Ratan-AI-Agent-2.0.0-debug.apk)
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
+          CERT=$("$APKSIGNER" verify --print-certs out/Ratan-AI-Agent-2.0.0-release.apk \
+                 | grep -i "certificate SHA-256" | head -1 | cut -d: -f2- | tr -d ' ' || true)
 
-            * `Ratan-AI-Agent-2.0.0-release.apk` — install this one
-            * `Ratan-AI-Agent-2.0.0-debug.apk` — same app with devtools + user-CA trust
+          cat > "$RUNNER_TEMP/notes.md" <<EOF
+          ## RATAN AI AGENT 2.0 — rebuilt from source in this repository
 
-            ### What is inside
-            * **Android 17 (API 37)** target, `minSdk 24` (Android 7.0+), built with AGP 9.4 and
-              Gradle 9.6 on JDK 21 — the current stable toolchain, not a legacy one.
-            * **Local-network permission handled properly**: Android 17 refuses LAN access to
-              apps that have not been granted `ACCESS_LOCAL_NETWORK`; the app declares it and
-              walks you through the grant so lab targets stay reachable.
-            * **Hardened WebView shell**: only bundled pages and the configured agent origin ever
-              render in-app; every other link is handed to the browser. No file:// reads from
-              remote content, no mixed content, Safe Browsing on, third-party cookies off.
-            * **Native HTTP bridge** — no CORS, so the phone can test a bot on `192.168.x.x`,
-              a local model server, or your own staging endpoint. Per-hop redirect policy,
-              response caps, gzip, header-injection guards, and Authorization headers dropped
-              on cross-host redirects.
-            * **Bundled offline red-team toolkit**: 67 probes across 11 categories with 9 evasion
-              mutations, OWASP LLM Top-10 mapped — the same corpus as the CLI, and the same page
-              the standalone scanner ships.
-            * **Reports land in Downloads/**: JSON, standalone HTML and SARIF 2.1.0 for GitHub
-              code scanning.
-            * Signed with a stable release key (SHA-256 of the APK certificate is printed by the
-              build), so future updates install straight over this one.
+          * \`Ratan-AI-Agent-2.0.0-release.apk\` — install this one (${SIZE_REL} bytes)
+          * \`Ratan-AI-Agent-2.0.0-debug.apk\` — same app with devtools plus user-CA trust (${SIZE_DBG} bytes)
 
-            ### Install
-            1. Download the release APK on the phone (the debug one is for development).
-            2. Open it → allow "install unknown apps" for the browser when Android asks.
-            3. Launch → **Open RATAN AI AGENT**, or use **Red-team toolkit** with no network at all.
+          | | |
+          |---|---|
+          | release APK SHA-256 | \`${SHA_REL}\` |
+          | debug APK SHA-256 | \`${SHA_DBG}\` |
+          | signing certificate SHA-256 | \`${CERT}\` |
+          | compiled against | API ${RATAN_COMPILE_SDK:-36} (\`targetSdk ${RATAN_TARGET_SDK:-36}\`) |
+          | toolchain | AGP 9.4.0 · Gradle 9.6.0 · JDK 21 · build-tools 36+ |
 
-            If an older RATAN AI AGENT build is installed, uninstall it first — 2.0 is signed with
-            a different key than the 1.1 APK and Android refuses to replace across signatures.
+          ### What is inside
+          * **Hardened WebView shell** — only the bundled pages and the configured agent origin
+            render in-app; every other link leaves the app. No mixed content, no file:// reads for
+            remote content, Safe Browsing on, third-party cookies off.
+          * **Native HTTP bridge** — no CORS, so a bot on \`192.168.x.x\`, a local model server or a
+            staging endpoint is reachable from the phone. Per-hop redirect policy, response caps,
+            gzip, header-injection guards, credentials dropped on cross-host redirects.
+          * **Android 17 local-network readiness** — \`ACCESS_LOCAL_NETWORK\` is declared and the app
+            walks the operator through the grant; on Android 16 and older the permission does not
+            exist and nothing is asked.
+          * **Offline red-team toolkit** — the same 67-probe, 11-category, 9-mutation corpus with
+            OWASP LLM Top-10 mapping that the desktop CLI and the standalone scanner ship.
+          * **Reports to Downloads/** — JSON, standalone HTML and SARIF 2.1.0.
+          * Framework-only: no Play Services, no analytics, no third-party runtime.
 
-            ⚠️ Authorised testing only: run probes and LAN scans exclusively against systems you
-            own or have written permission to test.
+          Builds run from \`apps/ratan-ai-agent/\` via \`.github/workflows/build-ratan-agent-apk.yml\`
+          (regenerate corpus → bundle → syntax-check the bundled JS → build → verify package,
+          version, SDK levels and assets → publish). Stuck on API 36? The workflow prefers API 37
+          and falls back automatically when the public SDK channel does not offer it yet.
+
+          ### Install
+          1. Download the release APK on the phone. 2. Allow "install unknown apps" when Android
+          asks. 3. Launch and pick **Open RATAN AI AGENT** or the **Red-team toolkit** (works with
+          no network at all).
+
+          Uninstall any older RATAN AI AGENT build first: 2.0 is signed with a different key than
+          the 1.1 upload and Android refuses to replace across signatures.
+
+          ⚠️ Authorised testing only — run probes and LAN scans exclusively against systems you own
+          or have written permission to test.
+          EOF
+
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release edit "$TAG" --title "$TITLE" --notes-file "$RUNNER_TEMP/notes.md" --latest
+          else
+            gh release create "$TAG" --title "$TITLE" --notes-file "$RUNNER_TEMP/notes.md" --latest
+          fi
+          gh release upload "$TAG" out/Ratan-AI-Agent-2.0.0-release.apk out/Ratan-AI-Agent-2.0.0-debug.apk --clobber
+
+          echo "--- release assets ---"
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size) bytes"'
+          COUNT=$(gh release view "$TAG" --json assets --jq '.assets | length')
+          if [ "$COUNT" -lt 2 ]; then
+            echo "::error::release $TAG is missing APK assets ($COUNT uploaded)"
+            exit 1
+          fi
+
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" \
+            -f body="$(printf 'RATAN AI AGENT 2.0 published (targetSdk %s)\n\nrelease APK sha256: %s (%s bytes)\ndebug APK sha256: %s\nsigning cert sha256: %s\nassets: %s' \
+              "${RATAN_TARGET_SDK:-36}" "$SHA_REL" "$SIZE_REL" "$SHA_DBG" "$CERT" "$COUNT")" \
+            --jq '.html_url' || echo "could not post the commit comment"
 
       - name: Surface the build failure
         if: failure()
