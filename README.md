@@ -72,6 +72,12 @@ Both are framework-only WebView apps (no analytics, no third-party runtime), sig
 stable key so updates install in place, and both ship the same 67-probe AIRT corpus so the
 phone and the CLI can never disagree about what was tested.
 
+## Keeping the site in sync
+
+App and tool releases also touch the public pages. [docs/WEBSITE-SYNC.md](docs/WEBSITE-SYNC.md)
+is the checklist: what changes per build (APK hashes, sizes), what must never be hard-coded, and
+the definition of done for a release.
+
 ## Site technical
 
 - Pure HTML/CSS/JS, hosted on GitHub Pages

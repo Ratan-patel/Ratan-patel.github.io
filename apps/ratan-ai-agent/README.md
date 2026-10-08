@@ -114,6 +114,12 @@ apps/ratan-ai-agent/
     └── make_keystore.py              mint a PKCS#12 signing identity (no JDK required)
 ```
 
+## Shipping an update
+
+Releases touch several files at once (Gradle, workflow, the site, `sitemap.xml`, `llms.txt`,
+the READMEs). Work down [docs/WEBSITE-SYNC.md](../../docs/WEBSITE-SYNC.md) — it lists which facts
+change per build and which ones must never be hard-coded.
+
 ## Building it
 
 Everything happens on GitHub runners — no local Android SDK is required:
