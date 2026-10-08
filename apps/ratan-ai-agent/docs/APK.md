@@ -71,11 +71,11 @@ The dashboard can also copy or share a diagnostics blob (build, device, permissi
   download yourself:
 
   ```bash
-  sha256sum Ratan-AI-Agent-2.0.0-release.apk
-  # 2.0.0 (2026-10-08): fdf63bf0340d8e4d6ee57b6c7cc2fd4fa3242c7bfbb65f672d1b371843e9d370
+  sha256sum Ratan-AI-Agent-2.0.0-release.apk     # match the release notes, which quote the
+                                                 # hash of the exact asset they describe
   apksigner verify --print-certs Ratan-AI-Agent-2.0.0-release.apk | head -5
-  # signing certificate SHA-256: 79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83
-  # (the release notes always carry the current value)
+  # signing certificate SHA-256 (stable across builds):
+  #   79dce484cfafa35025c8df74880a17c374f20a0b23a982331e85f4022908ca83
   ```
 
 ## Troubleshooting

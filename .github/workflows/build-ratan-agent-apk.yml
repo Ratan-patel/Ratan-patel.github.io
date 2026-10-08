@@ -24,6 +24,10 @@ env:
 jobs:
   build-apk:
     name: Build installable APK
+    # Every build mints a new APK hash (zip timestamps), so a commit that only edits prose —
+    # e.g. quoting the hash of the current asset — can skip the rebuild with
+    # "[skip-agent-build]" in its message.
+    if: ${{ !contains(github.event.head_commit.message, '[skip-agent-build]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
