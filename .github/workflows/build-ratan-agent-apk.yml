@@ -272,8 +272,15 @@ jobs:
             fi
           done
 
+          DETAIL=$( { grep -n -A 30 "What went wrong" "$LOG" | head -40; \
+                      echo "--- caused by ---"; \
+                      grep -n "Caused by" "$LOG" | head -6; \
+                      echo "--- failed tasks ---"; \
+                      grep -n -E "> Task .* FAILED|error: |Error: " "$LOG" | head -12; \
+                      echo "--- tail ---"; \
+                      tail -25 "$LOG"; } | tr -d '\r' | head -c 6000 || true)
           BODY=$(printf 'RATAN AI AGENT build failure on `%s`\n\n```\n%s\n```' \
-            "${GITHUB_SHA:0:10}" "$(tail -60 "$LOG" | tr -d '\r')")
+            "${GITHUB_SHA:0:10}" "$DETAIL")
           if gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" -f body="$BODY" --jq '.html_url'; then
             echo "failure tail posted as a commit comment"
           else
