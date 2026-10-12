@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 · SIGNAL LOST | RATAN_PATEL.sec</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="vendor/fontawesome/all.min.css" onerror="this.onerror=null;this.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';">
+<style>
+  :root{--void:#04060a;--mint:#00ffc8;--cyan:#00d4ff;--violet:#7b5cff;--red:#ff2e5b;--amber:#ffc247;--txt:#dbe7ef;--dim:#8ba0b2}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--void);color:var(--txt);font-family:'JetBrains Mono',ui-monospace,monospace;min-height:100vh;display:grid;place-items:center;padding:24px;overflow:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(0,255,200,.08),transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(123,92,255,.1),transparent 60%);pointer-events:none}
+  .scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.22) 2px 4px);mix-blend-mode:multiply;z-index:1}
+  .box{position:relative;z-index:2;text-align:center;max-width:680px}
+  .code{font-size:clamp(90px,18vw,180px);font-weight:900;font-family:'Chakra Petch','Space Grotesk',system-ui,sans-serif;letter-spacing:-.04em;line-height:.9;background:linear-gradient(135deg,var(--mint),var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 80px rgba(0,255,200,.25)}
+  .tag{display:inline-block;border:1px solid rgba(255,46,91,.4);background:rgba(255,46,91,.1);color:var(--red);padding:5px 12px;border-radius:999px;font-size:11px;letter-spacing:.15em;margin-bottom:22px}
+  h1{font-family:'Chakra Petch','Space Grotesk',system-ui,sans-serif;font-size:clamp(22px,4vw,32px);margin-bottom:12px;color:var(--mint)}
+  p{color:var(--dim);font-size:15px;line-height:1.7;margin-bottom:28px}
+  .term{background:rgba(10,16,23,.8);border:1px solid rgba(0,255,200,.18);border-radius:12px;padding:18px 22px;text-align:left;font-size:13px;margin-bottom:28px}
+  .term .prompt{color:var(--mint)} .term .cmd{color:var(--cyan)} .term .err{color:var(--red)} .term .dim{color:var(--dim)}
+  .links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;border:1px solid rgba(0,255,200,.3);color:var(--mint);text-decoration:none;font-size:13px;transition:.25s;background:rgba(0,255,200,.05)}
+  .btn:hover{background:rgba(0,255,200,.14);border-color:var(--mint);box-shadow:0 0 22px rgba(0,255,200,.25);transform:translateY(-2px)}
+  .btn.alt{border-color:rgba(0,212,255,.3);color:var(--cyan);background:rgba(0,212,255,.05)}
+  .btn.alt:hover{background:rgba(0,212,255,.14);border-color:var(--cyan);box-shadow:0 0 22px rgba(0,212,255,.25)}
+  .cursor{display:inline-block;width:9px;height:16px;background:var(--mint);animation:blink 1s steps(2) infinite;vertical-align:middle;margin-left:2px}
+  @keyframes blink{50%{opacity:0}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="box">
+  <div class="tag"><i class="fas fa-exclamation-triangle"></i> &nbsp; PACKET LOSS · TARGET NOT IN SCOPE</div>
+  <div class="code">404</div>
+  <h1>// SIGNAL LOST</h1>
+  <p>The endpoint you requested does not exist on this host, or has been moved outside your current scope. Re-calibrate your navigation and return to authorized surfaces.</p>
+  <div class="term">
+    <div><span class="prompt">ratan@sec:~$</span> <span class="cmd">curl -I <span id="url"></span></span></div>
+    <div class="err">HTTP/1.1 404 Not Found</div>
+    <div class="dim">x-cause: target_out_of_scope · trace-id: 0x<span id="trace"></span></div>
+    <div><span class="prompt">ratan@sec:~$</span> <span class="cmd">cd /home<span class="cursor"></span></span></div>
+  </div>
+  <div class="links">
+    <a href="/" class="btn"><i class="fas fa-terminal"></i> Return to Terminal</a>
+    <a href="/lab.html" class="btn alt"><i class="fas fa-skull"></i> Red-Team Lab</a>
+    <a href="/ratan_patel_portfolio.html" class="btn alt"><i class="fas fa-user-secret"></i> Portfolio</a>
+  </div>
+</div>
+<script>
+  document.getElementById('url').textContent = window.location.pathname;
+  document.getElementById('trace').textContent = Math.random().toString(16).slice(2,10).toUpperCase();
+</script>
+</body>
+</html>
