@@ -41,6 +41,13 @@
               color:#d6dbe6; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
               max-height:420px; overflow-y:auto; }
   .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .filt { padding:4px 10px; border-radius:7px; border:1px solid #3a4560; background:#151a26;
+           color:#a8b1c2; font-size:12px; font-weight:600; cursor:pointer; }
+  .filt:hover { background:#1e2432; color:#e6e8ee; }
+  .filt.on { background:#3b82f6; border-color:#3b82f6; color:#fff; }
+  .sent { width:16px; height:16px; accent-color:#4ade80; cursor:pointer; flex:0 0 auto; }
+  .card.done { opacity:.55; border-color:#2f6b45; }
+  .card.done .co { text-decoration:line-through; }
   @media (max-width:640px) { .loc { margin-left:0; width:100%; } .btn { width:100%; text-align:center; } }
 </style>
 </head>
@@ -57,14 +64,28 @@
     <li>Click <b>Download CV</b>, then attach <code>Ratan_Kumar_Patel_CV.pdf</code> to the message. (The CV link is already in the email body too, so it works even if you skip this.)</li>
     <li>Hit send. Then tick it off below.</li>
   </ol>
-  <div style="margin-top:10px;color:#9aa3b2">Priority: <b style="color:#4ade80">A</b> = best fit ·
-  <b style="color:#60a5fa">B</b> = good fit · <b style="color:#fbbf24">C</b> = worth a shot. 23 applications total.</div>
+  <div style="margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span id="progress" style="font-weight:650;color:#e6e8ee">0 / 23 sent</span>
+    <div style="flex:1;min-width:160px;height:8px;background:#0f131c;border-radius:99px;overflow:hidden">
+      <div id="bar" style="height:100%;width:0%;background:#4ade80;transition:width .2s"></div>
+    </div>
+    <button class="filt on" onclick="filter('all',this)">All</button>
+    <button class="filt" onclick="filter('A',this)">A</button>
+    <button class="filt" onclick="filter('B',this)">B</button>
+    <button class="filt" onclick="filter('C',this)">C</button>
+    <button class="filt" onclick="filter('unsent',this)">Unsent</button>
+    <button class="filt" onclick="resetAll()">Reset</button>
+  </div>
+  <div style="margin-top:8px;color:#9aa3b2">Priority: <b style="color:#4ade80">A</b> = best fit ·
+  <b style="color:#60a5fa">B</b> = good fit · <b style="color:#fbbf24">C</b> = worth a shot · 23 applications.
+  Progress saves in this browser.</div>
 </div>
-<main>
+<main id="list">
 
     <details class="card pA" id="job1">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="1" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Hack The Box (HTB Academy)</span>
           <span class="role">Academy contract contributor / instructor</span>
@@ -120,6 +141,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job2">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="2" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">EC-Council (CEI Program)</span>
           <span class="role">Certified EC-Council Instructor (CEI) — teach CEH worldwide</span>
@@ -187,6 +209,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job3">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="3" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Koenig Solutions</span>
           <span class="role">Corporate Trainer — Security (ref. KS 369)</span>
@@ -242,6 +265,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job4">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="4" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">TryHackMe</span>
           <span class="role">Live Class Lead / Live Training Instructor / Room Builder</span>
@@ -297,6 +321,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job5">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="5" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Simplilearn</span>
           <span class="role">Cybersecurity Trainer / Subject Matter Expert</span>
@@ -346,6 +371,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job6">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="6" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Zync Group (recruiter)</span>
           <span class="role">Penetration Testing Project Lead — Freelance, €60/hr, worldwide remote</span>
@@ -397,6 +423,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job16">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="16" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Kratikal Tech</span>
           <span class="role">Manager – Security Testing / Security Analyst (AppSec)</span>
@@ -451,6 +478,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job17">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="17" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Allied Boston Consultants</span>
           <span class="role">Cyber Security Testing (CST) — consultant / trainer</span>
@@ -506,6 +534,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job18">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="18" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Cyber Defentech</span>
           <span class="role">Trainer — Penetration Tester / Red Team Analyst Trainer</span>
@@ -562,6 +591,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pA" id="job19">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="19" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pA">A</span>
           <span class="co">Qualysec Technologies</span>
           <span class="role">Senior Penetration Tester (web, mobile, cloud, IoT, network)</span>
@@ -617,6 +647,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job7">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="7" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Springboard</span>
           <span class="role">Mentor — Cyber Security Career Track (part-time, remote)</span>
@@ -664,6 +695,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job8">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="8" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Intellipaat</span>
           <span class="role">Cybersecurity Trainer (online bootcamps, 28-week cyber track)</span>
@@ -719,6 +751,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job9">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="9" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Imarticus Learning</span>
           <span class="role">Cyber Security faculty — live online bootcamps</span>
@@ -773,6 +806,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job10">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="10" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Educate 360 (TCM Security)</span>
           <span class="role">Cybersecurity Instructor — Ethical Hacker Bootcamp / Web Pentesting / SOC / AI Hacking</span>
@@ -834,6 +868,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job11">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="11" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">The Knowledge Academy</span>
           <span class="role">Trainer — Cybersecurity / Ethical Hacking</span>
@@ -883,6 +918,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job12">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="12" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Firebrand Training</span>
           <span class="role">Technical Instructor — Cybersecurity / Ethical Hacking</span>
@@ -932,6 +968,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job13">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="13" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Edureka</span>
           <span class="role">Freelance instructor — Cybersecurity / Ethical Hacking</span>
@@ -979,6 +1016,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job14">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="14" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Cybrary</span>
           <span class="role">Cybrary Live instructor — ethical hacking / pentesting</span>
@@ -1028,6 +1066,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job20">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="20" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">SecureLayer7</span>
           <span class="role">Security Consultant / Pentester / Engagement Lead</span>
@@ -1082,6 +1121,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job21">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="21" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">Payatu</span>
           <span class="role">Security Consultant (VAPT) / Security Trainer</span>
@@ -1137,6 +1177,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pB" id="job22">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="22" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pB">B</span>
           <span class="co">New Horizons (Educate 360)</span>
           <span class="role">Contract Instructor — cybersecurity / IT certification</span>
@@ -1187,6 +1228,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pC" id="job15">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="15" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pC">C</span>
           <span class="co">Red Arrow Security</span>
           <span class="role">Penetration Tester / VAPT consultant (senior)</span>
@@ -1240,6 +1282,7 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
     <details class="card pC" id="job23">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="23" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio pC">C</span>
           <span class="co">Trojan Hunt India</span>
           <span class="role">Security Consultant (VAPT)</span>
@@ -1291,5 +1334,50 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
       </div>
     </details>
 </main>
+<script>
+var KEY = 'rpatel_sent_jobs';
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+}
+function save(arr) { try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch (e) {} }
+function paint() {
+  var sent = load();
+  var boxes = document.querySelectorAll('.sent');
+  var total = boxes.length, done = 0;
+  boxes.forEach(function (b) {
+    var on = sent.indexOf(b.dataset.id) !== -1;
+    b.checked = on;
+    if (on) done++;
+    var card = b.closest('.card');
+    if (card) card.classList.toggle('done', on);
+  });
+  document.getElementById('progress').textContent = done + ' / ' + total + ' sent';
+  document.getElementById('bar').style.width = (total ? (done / total * 100) : 0) + '%';
+}
+function toggleSent(box) {
+  var sent = load(), i = sent.indexOf(box.dataset.id);
+  if (box.checked && i === -1) sent.push(box.dataset.id);
+  if (!box.checked && i !== -1) sent.splice(i, 1);
+  save(sent); paint();
+}
+function filter(mode, btn) {
+  document.querySelectorAll('.filt').forEach(function (b) { b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+  var sent = load();
+  document.querySelectorAll('#list .card').forEach(function (c) {
+    var id = c.querySelector('.sent').dataset.id;
+    var prio = c.querySelector('.prio').textContent.trim();
+    var isSent = sent.indexOf(id) !== -1;
+    var show = mode === 'all' ? true
+             : mode === 'unsent' ? !isSent
+             : prio === mode;
+    c.style.display = show ? '' : 'none';
+  });
+}
+function resetAll() {
+  if (confirm('Clear all sent marks?')) { save([]); paint(); filter('all', document.querySelector('.filt')); }
+}
+paint();
+</script>
 </body>
 </html>

@@ -759,6 +759,7 @@ def main():
     <details class="card p{j['prio']}" id="job{j['id']}">
       <summary>
         <div class="sum">
+          <input type="checkbox" class="sent" data-id="{j['id']}" onclick="event.stopPropagation();toggleSent(this)" title="Mark as sent">
           <span class="prio p{j['prio']}">{j['prio']}</span>
           <span class="co">{html.escape(j['company'])}</span>
           <span class="role">{html.escape(j['role'])}</span>
@@ -823,6 +824,13 @@ def main():
               color:#d6dbe6; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
               max-height:420px; overflow-y:auto; }}
   .actions {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }}
+  .filt {{ padding:4px 10px; border-radius:7px; border:1px solid #3a4560; background:#151a26;
+           color:#a8b1c2; font-size:12px; font-weight:600; cursor:pointer; }}
+  .filt:hover {{ background:#1e2432; color:#e6e8ee; }}
+  .filt.on {{ background:#3b82f6; border-color:#3b82f6; color:#fff; }}
+  .sent {{ width:16px; height:16px; accent-color:#4ade80; cursor:pointer; flex:0 0 auto; }}
+  .card.done {{ opacity:.55; border-color:#2f6b45; }}
+  .card.done .co {{ text-decoration:line-through; }}
   @media (max-width:640px) {{ .loc {{ margin-left:0; width:100%; }} .btn {{ width:100%; text-align:center; }} }}
 </style>
 </head>
@@ -839,12 +847,70 @@ def main():
     <li>Click <b>Download CV</b>, then attach <code>Ratan_Kumar_Patel_CV.pdf</code> to the message. (The CV link is already in the email body too, so it works even if you skip this.)</li>
     <li>Hit send. Then tick it off below.</li>
   </ol>
-  <div style="margin-top:10px;color:#9aa3b2">Priority: <b style="color:#4ade80">A</b> = best fit ·
-  <b style="color:#60a5fa">B</b> = good fit · <b style="color:#fbbf24">C</b> = worth a shot. {len(jobs)} applications total.</div>
+  <div style="margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span id="progress" style="font-weight:650;color:#e6e8ee">0 / {len(jobs)} sent</span>
+    <div style="flex:1;min-width:160px;height:8px;background:#0f131c;border-radius:99px;overflow:hidden">
+      <div id="bar" style="height:100%;width:0%;background:#4ade80;transition:width .2s"></div>
+    </div>
+    <button class="filt on" onclick="filter('all',this)">All</button>
+    <button class="filt" onclick="filter('A',this)">A</button>
+    <button class="filt" onclick="filter('B',this)">B</button>
+    <button class="filt" onclick="filter('C',this)">C</button>
+    <button class="filt" onclick="filter('unsent',this)">Unsent</button>
+    <button class="filt" onclick="resetAll()">Reset</button>
+  </div>
+  <div style="margin-top:8px;color:#9aa3b2">Priority: <b style="color:#4ade80">A</b> = best fit ·
+  <b style="color:#60a5fa">B</b> = good fit · <b style="color:#fbbf24">C</b> = worth a shot · {len(jobs)} applications.
+  Progress saves in this browser.</div>
 </div>
-<main>
+<main id="list">
 {''.join(cards)}
 </main>
+<script>
+var KEY = 'rpatel_sent_jobs';
+function load() {{
+  try {{ return JSON.parse(localStorage.getItem(KEY) || '[]'); }} catch (e) {{ return []; }}
+}}
+function save(arr) {{ try {{ localStorage.setItem(KEY, JSON.stringify(arr)); }} catch (e) {{}} }}
+function paint() {{
+  var sent = load();
+  var boxes = document.querySelectorAll('.sent');
+  var total = boxes.length, done = 0;
+  boxes.forEach(function (b) {{
+    var on = sent.indexOf(b.dataset.id) !== -1;
+    b.checked = on;
+    if (on) done++;
+    var card = b.closest('.card');
+    if (card) card.classList.toggle('done', on);
+  }});
+  document.getElementById('progress').textContent = done + ' / ' + total + ' sent';
+  document.getElementById('bar').style.width = (total ? (done / total * 100) : 0) + '%';
+}}
+function toggleSent(box) {{
+  var sent = load(), i = sent.indexOf(box.dataset.id);
+  if (box.checked && i === -1) sent.push(box.dataset.id);
+  if (!box.checked && i !== -1) sent.splice(i, 1);
+  save(sent); paint();
+}}
+function filter(mode, btn) {{
+  document.querySelectorAll('.filt').forEach(function (b) {{ b.classList.remove('on'); }});
+  if (btn) btn.classList.add('on');
+  var sent = load();
+  document.querySelectorAll('#list .card').forEach(function (c) {{
+    var id = c.querySelector('.sent').dataset.id;
+    var prio = c.querySelector('.prio').textContent.trim();
+    var isSent = sent.indexOf(id) !== -1;
+    var show = mode === 'all' ? true
+             : mode === 'unsent' ? !isSent
+             : prio === mode;
+    c.style.display = show ? '' : 'none';
+  }});
+}}
+function resetAll() {{
+  if (confirm('Clear all sent marks?')) {{ save([]); paint(); filter('all', document.querySelector('.filt')); }}
+}}
+paint();
+</script>
 </body>
 </html>"""
     out = "/home/user/Ratan-patel.github.io/job-applications/send.html"
