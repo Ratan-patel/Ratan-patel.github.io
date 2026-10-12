@@ -1,9 +1,8 @@
-# Ready-to-Send Application Emails — 15 applications
+# Ready-to-Send Application Emails
 
-Each email is tailored to the specific company and role. `send.html` turns every one of these
-into a one-click Gmail compose button.
+23 tailored emails. `send.html` turns each into a one-click Gmail compose button.
 
-**Attach:** `ratan_patel_cv.pdf` (download: https://ratan-patel.github.io/ratan_patel_cv.pdf)
+**Attach:** `ratan_patel_cv.pdf` (https://ratan-patel.github.io/ratan_patel_cv.pdf)
 
 **From:** patelratan460@gmail.com
 
@@ -272,6 +271,186 @@ Portfolio: https://ratan-patel.github.io/
 Lab build: https://ratan-patel.github.io/lab.html
 
 Day rate and timezone coverage (IST, EU/US overlap) are flexible. Happy to jump on a call.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 16. Kratikal Tech — resumes@kratikal.zohorecruitmail.com
+**Priority A** · Noida, Uttar Pradesh, India · Noida-based (same city) + PAN-India offices
+**Role:** Manager – Security Testing / Security Analyst (AppSec)
+**Source:** kratikal.zohorecruit.com — 'Share your resume to resumes@kratikal.zohorecruitmail.com'
+
+**Subject:** Application — Manager, Security Testing (Red Team / offensive security) — CEH v12, 6+ yrs, Noida based
+
+```
+Dear Kratikal Hiring Team,
+
+I'm applying for the Manager – Security Testing role (Noida, 5+ years) and any Security Analyst – Application Security openings. I live in Noida Sector 16, Uttar Pradesh, India, so the Noida location is a straightforward commute.
+
+About me — Ratan Kumar Patel
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I bring
+- Web, mobile and API security testing; VAPT across network, web and application layers
+- Red team / blue team exercise design and execution, plus CTF authoring
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- Team leadership: as Technical Security Manager at Appin Technology Lab I ran the
+  training delivery function, mentored junior analysts, and built the curriculum and lab
+  environments for offensive security programs
+- I build labs, not just run them: https://ratan-patel.github.io/lab.html
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to walk through a redacted sample report or run a practical assessment exercise.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 17. Allied Boston Consultants — info@alliedboston.com
+**Priority A** · Noida Sector 132, Uttar Pradesh, India · Noida-based (same city)
+**Role:** Cyber Security Testing (CST) — consultant / trainer
+**Source:** alliedboston.com (Noida) — public contact info@alliedboston.com; Chitranshu Jain heads CST
+
+**Subject:** Cyber Security Testing + training — CEH v12, 6+ yrs, Noida based (immediate joiner)
+
+```
+Dear Allied Boston Team,
+
+I'm writing about opportunities in your Cyber Security Testing (CST) practice. I'm based in Noida Sector 16, Uttar Pradesh, India — your office is at Express Trade Towers 2, Sector 132, so I'm effectively local, and available immediately.
+
+About me — Ratan Kumar Patel
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I can do for Allied Boston
+- VAPT delivery: web, mobile, API and network testing; SAST/DAST and source-code review;
+  clear, client-ready reporting
+- Training delivery: I understand Allied Boston is a consulting *and training*
+  organisation. Training is my core strength — 500+ learners, corporate workshops, and
+  I can own CEH, VAPT, web app security and red team tracks end to end
+- Curriculum and lab authoring — sample build: https://ratan-patel.github.io/lab.html
+- Tools: Burp Suite, Metasploit, Nessus, OWASP ZAP, sqlmap, Nmap, Wireshark, Kali Linux
+
+Open to full-time, contract, or a hybrid delivery-plus-training role.
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to come in for a face-to-face discussion given we're in the same city.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 18. Cyber Defentech — training@cyberdefentech.com
+**Priority A** · Rohini, Delhi, India · Delhi NCR — online + offline batches
+**Role:** Trainer — Penetration Tester / Red Team Analyst Trainer
+**Source:** cyberdefentech.in / .com — public contact; role 'Trainer - Penetration Tester' advertised
+
+**Subject:** Trainer application — Penetration Testing / Red Team Analyst (CEH v12, 6+ yrs, NCR based)
+
+```
+Dear Cyber Defentech Team,
+
+I'm writing to apply for the Trainer – Penetration Tester / Red Team Analyst Trainer role. I'm based in Noida Sector 16, Uttar Pradesh, India — Rohini is a straightforward commute for me, and I'm comfortable with both classroom and online batches.
+
+About me — Ratan Kumar Patel
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020) —
+  VAPT on client networks and web applications, mitigation strategies, reporting
+
+Courses I can own end to end
+- CEH (I hold CEH v12 — EC-Council, ECC92840, valid Jul 2024 – Jul 2027)
+- CPENT-aligned advanced enterprise penetration testing
+- Ethical hacking, VAPT, web application security (OWASP Top 10), SOC, and cloud security
+- Hands-on labs with Kali Linux, Nmap, Burp Suite, Wireshark, Metasploit, Nessus, OWASP
+  ZAP and sqlmap
+
+I run lab-first batches: every concept is demonstrated live, then the students break it themselves. I've designed CEH/OSCP-aligned curricula, run red team / blue team exercises and authored CTFs, plus a browser-based red-team simulator: https://ratan-patel.github.io/lab.html
+
+My batch delivery days over the last 12 months and course titles are available on request.
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Available immediately, and flexible on weekday/weekend and evening batches.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 19. Qualysec Technologies — career@qualysec.com
+**Priority A** · Bhubaneswar / Bengaluru, India · India (CREST-accredited, remote-friendly)
+**Role:** Senior Penetration Tester (web, mobile, cloud, IoT, network)
+**Source:** qualysec.com/career — 'For Career: career@qualysec.com'
+
+**Subject:** Senior Penetration Tester — CEH v12, 6+ yrs (web / network / cloud / API)
+
+```
+Dear Qualysec Hiring Team,
+
+I'm applying for the Senior Penetration Tester role. Qualysec's careers page lists career@qualysec.com as the contact, so I'm reaching out directly.
+
+About me — Ratan Kumar Patel, based in Noida Sector 16, Uttar Pradesh, India, remote-first.
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+Testing I deliver
+- Web application, API, mobile (Android/iOS), network (external + internal) and cloud
+  security assessments
+- Manual testing with Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap,
+  Wireshark, Mimikatz, Hydra, John the Ripper, Kali Linux
+- OWASP-aligned methodology; PTES-style scoping and reporting; clear remediation guidance
+- I also build lab environments and run offensive-security training (https://ratan-patel.github.io/lab.html) —
+  useful for internal enablement and for client-facing awareness sessions
+
+I hold CEH v12 (EC-Council, ECC92840, valid Jul 2024 – Jul 2027), which your posting lists among the required certifications, and an M.S. in Cybersecurity & Information Assurance (WGU).
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to complete a practical assessment or share a redacted sample report.
 
 Best regards,
 Ratan Kumar Patel
@@ -612,6 +791,135 @@ https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/R
 
 ---
 
+## 20. SecureLayer7 — job@securelayer7.net
+**Priority B** · Pune / Austin, TX, India / USA · Hybrid + remote
+**Role:** Security Consultant / Pentester / Engagement Lead
+**Source:** securelayer7.net/career — 'refer them to job@securelayer7.net'
+
+**Subject:** Offensive security role — CEH v12, 6+ yrs VAPT (remote / hybrid)
+
+```
+Hi SecureLayer7 Team,
+
+I'm applying for offensive security roles with SecureLayer7. Your careers page says applications can go to job@securelayer7.net, so I'm writing there.
+
+About me — Ratan Kumar Patel, based in Noida Sector 16, Uttar Pradesh, India. I'm in the India entity's hiring pool and am comfortable with hybrid or fully remote.
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I'd bring
+- Web, API, network and mobile VAPT; source-code review; threat modelling
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- I've run the delivery side too: as Technical Security Manager at Appin Technology Lab I
+  owned training delivery, mentored junior analysts, and built offensive-security
+  curriculum and labs — sample build: https://ratan-patel.github.io/lab.html
+
+To answer your process question up front: what I'd want to build at SecureLayer7 is a repeatable, well-documented offensive security practice — templated scoping, consistent evidence capture, and lab environments that let new consultants ramp fast.
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to go through a practical assessment.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 21. Payatu — info@payatu.com
+**Priority B** · Pune, Maharashtra, India · India — services + Security Trainings practice
+**Role:** Security Consultant (VAPT) / Security Trainer
+**Source:** payatu.com / LinkedIn — 'drop an email on info@payatu.com'
+
+**Subject:** Security Consultant + Security Trainer — CEH v12, 6+ yrs, 500+ learners trained
+
+```
+Dear Payatu Team,
+
+I'm writing about security consulting and — given that Payatu runs a Security Trainings practice — training roles.
+
+About me — Ratan Kumar Patel, based in Noida Sector 16, Uttar Pradesh, India, remote-first.
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I offer
+- VAPT delivery across web, network, mobile and API; secure code review; IoT and product
+  security testing exposure
+- Training delivery: 500+ learners, corporate bootcamps, CEH/OSCP-aligned curriculum
+  design, red team / blue team exercises, CTF authoring
+- Lab authoring — sample build: https://ratan-patel.github.io/lab.html
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+
+I've followed Payatu's fuzzing and IoT research work, and the combination of research, services and training is exactly the mix I've built my career around.
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to run a demo training session or complete a practical assessment.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 22. New Horizons (Educate 360) — info@newhorizons.com
+**Priority B** · Boston, MA, USA · Live online instructor-led
+**Role:** Contract Instructor — cybersecurity / IT certification
+**Source:** newhorizons.com — public contact info@newhorizons.com (Educate 360 brand)
+
+**Subject:** Contract Instructor application — cybersecurity & IT certification (live online)
+
+```
+Dear New Horizons Hiring Team,
+
+I'm applying as a contract instructor for New Horizons' live online instructor-led programs. Your site lists info@newhorizons.com as the contact, so I'm writing there directly.
+
+About me — Ratan Kumar Patel, based in Noida Sector 16, Uttar Pradesh, India, remote-first and available immediately for live online delivery.
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+I can deliver across the information security and certification catalogue: CEH, CompTIA Security+, ethical hacking, penetration testing, VAPT, web application security (OWASP Top 10), network and cloud security, and incident response — lab-first, with Metasploit, Burp Suite, Nmap, Wireshark, Nessus, OWASP ZAP and sqlmap.
+
+I've run 500+ learners through cohorts, built CEH/OSCP-aligned curricula, and authored hands-on labs including a browser-based red-team simulator: https://ratan-patel.github.io/lab.html
+
+I'm on IST and can cover US, EU and APAC delivery windows.
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Happy to run an audition session.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
 ## 15. Red Arrow Security — hello@redarrowsecurity.com
 **Priority C** · Lahore, Punjab, Pakistan · Remote
 **Role:** Penetration Tester / VAPT consultant (senior)
@@ -646,6 +954,49 @@ Portfolio: https://ratan-patel.github.io/
 Lab build: https://ratan-patel.github.io/lab.html
 
 Open to contract, part-time or retainer arrangements, and flexible on timezone overlap. Happy to share a sample redacted report.
+
+Best regards,
+Ratan Kumar Patel
++91-8700913645 (WhatsApp) · patelratan460@gmail.com
+https://www.linkedin.com/in/ratan-kumar-patel-032a43367/ · https://github.com/Ratan-patel
+```
+
+---
+
+## 23. Trojan Hunt India — v.tamanna@trojanhuntindia.com
+**Priority C** · India, India · Remote
+**Role:** Security Consultant (VAPT)
+**Source:** Public job listing — 'submit their resume to v.tamanna@trojanhuntindia.com'
+
+**Subject:** Security Consultant application — CEH v12, 6+ yrs VAPT, remote
+
+```
+Dear Trojan Hunt Team,
+
+I'm writing to apply for the Security Consultant role. The listing asks for resumes at v.tamanna@trojanhuntindia.com, so I'm sending mine there.
+
+About me — Ratan Kumar Patel, based in Noida Sector 16, Uttar Pradesh, India, set up for remote work (dedicated workspace, laptop, unlimited wired-grade connectivity).
+
+Credentials
+- Certified Ethical Hacker (CEH v12) — EC-Council, ECC92840, valid Jul 2024 – Jul 2027
+- M.S. Cybersecurity & Information Assurance — Western Governors University (2023)
+- 6+ years hands-on · 500+ students trained (Appin Technology Lab, 2020–2026)
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I deliver
+- VAPT across web, network, mobile and API; vulnerability assessment and prioritisation;
+  remediation guidance and retesting
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- OWASP-aligned reporting that a non-technical stakeholder can actually act on
+- I also build labs and run offensive-security training (https://ratan-patel.github.io/lab.html), which helps
+  when clients need enablement alongside the assessment
+
+CV: https://ratan-patel.github.io/ratan_patel_cv.pdf
+Portfolio: https://ratan-patel.github.io/
+Lab build: https://ratan-patel.github.io/lab.html
+
+Open to full-time or contract. Available immediately.
 
 Best regards,
 Ratan Kumar Patel

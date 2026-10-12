@@ -489,6 +489,257 @@ Open to contract, part-time or retainer arrangements, and flexible on timezone o
 ]
 
 
+JOBS += [
+    dict(id=16, prio="A",
+         company="Kratikal Tech", to="resumes@kratikal.zohorecruitmail.com",
+         city="Noida, Uttar Pradesh", country="India", remote="Noida-based (same city) + PAN-India offices",
+         role="Manager – Security Testing / Security Analyst (AppSec)",
+         subject="Application — Manager, Security Testing (Red Team / offensive security) — CEH v12, 6+ yrs, Noida based",
+         source="kratikal.zohorecruit.com — 'Share your resume to resumes@kratikal.zohorecruitmail.com'",
+         body=f"""Dear Kratikal Hiring Team,
+
+I'm applying for the Manager – Security Testing role (Noida, 5+ years) and any Security Analyst – Application Security openings. I live in {CANDIDATE['location']}, so the Noida location is a straightforward commute.
+
+About me — {CANDIDATE['name']}
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I bring
+- Web, mobile and API security testing; VAPT across network, web and application layers
+- Red team / blue team exercise design and execution, plus CTF authoring
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- Team leadership: as Technical Security Manager at Appin Technology Lab I ran the
+  training delivery function, mentored junior analysts, and built the curriculum and lab
+  environments for offensive security programs
+- I build labs, not just run them: {CANDIDATE['lab']}
+
+{LINKS}
+
+Happy to walk through a redacted sample report or run a practical assessment exercise.
+
+{SIG}"""),
+
+    dict(id=17, prio="A",
+         company="Allied Boston Consultants", to="info@alliedboston.com",
+         city="Noida Sector 132, Uttar Pradesh", country="India", remote="Noida-based (same city)",
+         role="Cyber Security Testing (CST) — consultant / trainer",
+         subject="Cyber Security Testing + training — CEH v12, 6+ yrs, Noida based (immediate joiner)",
+         source="alliedboston.com (Noida) — public contact info@alliedboston.com; Chitranshu Jain heads CST",
+         body=f"""Dear Allied Boston Team,
+
+I'm writing about opportunities in your Cyber Security Testing (CST) practice. I'm based in {CANDIDATE['location']} — your office is at Express Trade Towers 2, Sector 132, so I'm effectively local, and available immediately.
+
+About me — {CANDIDATE['name']}
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I can do for Allied Boston
+- VAPT delivery: web, mobile, API and network testing; SAST/DAST and source-code review;
+  clear, client-ready reporting
+- Training delivery: I understand Allied Boston is a consulting *and training*
+  organisation. Training is my core strength — 500+ learners, corporate workshops, and
+  I can own CEH, VAPT, web app security and red team tracks end to end
+- Curriculum and lab authoring — sample build: {CANDIDATE['lab']}
+- Tools: Burp Suite, Metasploit, Nessus, OWASP ZAP, sqlmap, Nmap, Wireshark, Kali Linux
+
+Open to full-time, contract, or a hybrid delivery-plus-training role.
+
+{LINKS}
+
+Happy to come in for a face-to-face discussion given we're in the same city.
+
+{SIG}"""),
+
+    dict(id=18, prio="A",
+         company="Cyber Defentech", to="training@cyberdefentech.com",
+         city="Rohini, Delhi", country="India", remote="Delhi NCR — online + offline batches",
+         role="Trainer — Penetration Tester / Red Team Analyst Trainer",
+         subject="Trainer application — Penetration Testing / Red Team Analyst (CEH v12, 6+ yrs, NCR based)",
+         source="cyberdefentech.in / .com — public contact; role 'Trainer - Penetration Tester' advertised",
+         body=f"""Dear Cyber Defentech Team,
+
+I'm writing to apply for the Trainer – Penetration Tester / Red Team Analyst Trainer role. I'm based in {CANDIDATE['location']} — Rohini is a straightforward commute for me, and I'm comfortable with both classroom and online batches.
+
+About me — {CANDIDATE['name']}
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020) —
+  VAPT on client networks and web applications, mitigation strategies, reporting
+
+Courses I can own end to end
+- CEH (I hold CEH v12 — EC-Council, ECC92840, valid Jul 2024 – Jul 2027)
+- CPENT-aligned advanced enterprise penetration testing
+- Ethical hacking, VAPT, web application security (OWASP Top 10), SOC, and cloud security
+- Hands-on labs with Kali Linux, Nmap, Burp Suite, Wireshark, Metasploit, Nessus, OWASP
+  ZAP and sqlmap
+
+I run lab-first batches: every concept is demonstrated live, then the students break it themselves. I've designed CEH/OSCP-aligned curricula, run red team / blue team exercises and authored CTFs, plus a browser-based red-team simulator: {CANDIDATE['lab']}
+
+My batch delivery days over the last 12 months and course titles are available on request.
+
+{LINKS}
+
+Available immediately, and flexible on weekday/weekend and evening batches.
+
+{SIG}"""),
+
+    dict(id=19, prio="A",
+         company="Qualysec Technologies", to="career@qualysec.com",
+         city="Bhubaneswar / Bengaluru", country="India", remote="India (CREST-accredited, remote-friendly)",
+         role="Senior Penetration Tester (web, mobile, cloud, IoT, network)",
+         subject="Senior Penetration Tester — CEH v12, 6+ yrs (web / network / cloud / API)",
+         source="qualysec.com/career — 'For Career: career@qualysec.com'",
+         body=f"""Dear Qualysec Hiring Team,
+
+I'm applying for the Senior Penetration Tester role. Qualysec's careers page lists career@qualysec.com as the contact, so I'm reaching out directly.
+
+About me — {CANDIDATE['name']}, based in {CANDIDATE['location']}, remote-first.
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+Testing I deliver
+- Web application, API, mobile (Android/iOS), network (external + internal) and cloud
+  security assessments
+- Manual testing with Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap,
+  Wireshark, Mimikatz, Hydra, John the Ripper, Kali Linux
+- OWASP-aligned methodology; PTES-style scoping and reporting; clear remediation guidance
+- I also build lab environments and run offensive-security training ({CANDIDATE['lab']}) —
+  useful for internal enablement and for client-facing awareness sessions
+
+I hold CEH v12 (EC-Council, ECC92840, valid Jul 2024 – Jul 2027), which your posting lists among the required certifications, and an M.S. in Cybersecurity & Information Assurance (WGU).
+
+{LINKS}
+
+Happy to complete a practical assessment or share a redacted sample report.
+
+{SIG}"""),
+
+    dict(id=20, prio="B",
+         company="SecureLayer7", to="job@securelayer7.net",
+         city="Pune / Austin, TX", country="India / USA", remote="Hybrid + remote",
+         role="Security Consultant / Pentester / Engagement Lead",
+         subject="Offensive security role — CEH v12, 6+ yrs VAPT (remote / hybrid)",
+         source="securelayer7.net/career — 'refer them to job@securelayer7.net'",
+         body=f"""Hi SecureLayer7 Team,
+
+I'm applying for offensive security roles with SecureLayer7. Your careers page says applications can go to job@securelayer7.net, so I'm writing there.
+
+About me — {CANDIDATE['name']}, based in {CANDIDATE['location']}. I'm in the India entity's hiring pool and am comfortable with hybrid or fully remote.
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I'd bring
+- Web, API, network and mobile VAPT; source-code review; threat modelling
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- I've run the delivery side too: as Technical Security Manager at Appin Technology Lab I
+  owned training delivery, mentored junior analysts, and built offensive-security
+  curriculum and labs — sample build: {CANDIDATE['lab']}
+
+To answer your process question up front: what I'd want to build at SecureLayer7 is a repeatable, well-documented offensive security practice — templated scoping, consistent evidence capture, and lab environments that let new consultants ramp fast.
+
+{LINKS}
+
+Happy to go through a practical assessment.
+
+{SIG}"""),
+
+    dict(id=21, prio="B",
+         company="Payatu", to="info@payatu.com",
+         city="Pune, Maharashtra", country="India", remote="India — services + Security Trainings practice",
+         role="Security Consultant (VAPT) / Security Trainer",
+         subject="Security Consultant + Security Trainer — CEH v12, 6+ yrs, 500+ learners trained",
+         source="payatu.com / LinkedIn — 'drop an email on info@payatu.com'",
+         body=f"""Dear Payatu Team,
+
+I'm writing about security consulting and — given that Payatu runs a Security Trainings practice — training roles.
+
+About me — {CANDIDATE['name']}, based in {CANDIDATE['location']}, remote-first.
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I offer
+- VAPT delivery across web, network, mobile and API; secure code review; IoT and product
+  security testing exposure
+- Training delivery: 500+ learners, corporate bootcamps, CEH/OSCP-aligned curriculum
+  design, red team / blue team exercises, CTF authoring
+- Lab authoring — sample build: {CANDIDATE['lab']}
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+
+I've followed Payatu's fuzzing and IoT research work, and the combination of research, services and training is exactly the mix I've built my career around.
+
+{LINKS}
+
+Happy to run a demo training session or complete a practical assessment.
+
+{SIG}"""),
+
+    dict(id=22, prio="B",
+         company="New Horizons (Educate 360)", to="info@newhorizons.com",
+         city="Boston, MA", country="USA", remote="Live online instructor-led",
+         role="Contract Instructor — cybersecurity / IT certification",
+         subject="Contract Instructor application — cybersecurity & IT certification (live online)",
+         source="newhorizons.com — public contact info@newhorizons.com (Educate 360 brand)",
+         body=f"""Dear New Horizons Hiring Team,
+
+I'm applying as a contract instructor for New Horizons' live online instructor-led programs. Your site lists info@newhorizons.com as the contact, so I'm writing there directly.
+
+About me — {CANDIDATE['name']}, based in {CANDIDATE['location']}, remote-first and available immediately for live online delivery.
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+I can deliver across the information security and certification catalogue: CEH, CompTIA Security+, ethical hacking, penetration testing, VAPT, web application security (OWASP Top 10), network and cloud security, and incident response — lab-first, with Metasploit, Burp Suite, Nmap, Wireshark, Nessus, OWASP ZAP and sqlmap.
+
+I've run 500+ learners through cohorts, built CEH/OSCP-aligned curricula, and authored hands-on labs including a browser-based red-team simulator: {CANDIDATE['lab']}
+
+I'm on IST and can cover US, EU and APAC delivery windows.
+
+{LINKS}
+
+Happy to run an audition session.
+
+{SIG}"""),
+
+    dict(id=23, prio="C",
+         company="Trojan Hunt India", to="v.tamanna@trojanhuntindia.com",
+         city="India", country="India", remote="Remote",
+         role="Security Consultant (VAPT)",
+         subject="Security Consultant application — CEH v12, 6+ yrs VAPT, remote",
+         source="Public job listing — 'submit their resume to v.tamanna@trojanhuntindia.com'",
+         body=f"""Dear Trojan Hunt Team,
+
+I'm writing to apply for the Security Consultant role. The listing asks for resumes at v.tamanna@trojanhuntindia.com, so I'm sending mine there.
+
+About me — {CANDIDATE['name']}, based in {CANDIDATE['location']}, set up for remote work (dedicated workspace, laptop, unlimited wired-grade connectivity).
+
+{CREDS}
+- Prior: Technical Security Executive, Silent Front & Software Solutions (2018–2020)
+
+What I deliver
+- VAPT across web, network, mobile and API; vulnerability assessment and prioritisation;
+  remediation guidance and retesting
+- Tools: Burp Suite, Metasploit, Nessus/OpenVAS, OWASP ZAP, sqlmap, Nmap, Wireshark,
+  Mimikatz, Hydra, John the Ripper, Kali Linux
+- OWASP-aligned reporting that a non-technical stakeholder can actually act on
+- I also build labs and run offensive-security training ({CANDIDATE['lab']}), which helps
+  when clients need enablement alongside the assessment
+
+{LINKS}
+
+Open to full-time or contract. Available immediately.
+
+{SIG}"""),
+]
+
+
 def gmail_link(to, subject, body):
     q = {"view": "cm", "fs": "1", "to": to,
          "su": subject, "body": body}
