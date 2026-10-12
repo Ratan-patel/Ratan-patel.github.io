@@ -1,9 +1,0 @@
-# Gradle / Android build output
-.gradle/
-build/
-local.properties
-*.iml
-.idea/
-captures/
-.externalNativeBuild/
-.cxx/
