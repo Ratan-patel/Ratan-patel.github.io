@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ratan-patel-sec
+    runtime: static
+    buildCommand: echo "Static site — no build needed"
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+    routes:
+      - type: redirect
+        source: /home
+        destination: /
+        status: 301
