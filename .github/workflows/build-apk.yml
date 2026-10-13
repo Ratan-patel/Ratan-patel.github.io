@@ -9,6 +9,9 @@ on:
       - 'android-app/**'
       - '.github/workflows/build-apk.yml'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,3 +43,13 @@ jobs:
           name: Sentinel-APK
           path: Sentinel.apk
           if-no-files-found: error
+
+      - name: Commit APK back to the repo
+        run: |
+          mkdir -p releases
+          cp Sentinel.apk releases/Sentinel.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add releases/Sentinel.apk
+          git commit -m "Build Sentinel.apk from Android workflow [skip ci]" || echo "APK unchanged, nothing to commit"
+          git push
