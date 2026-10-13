@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "my-engagement",
+  "authorization": {
+    "holder": "Your Name",
+    "reference": "SELF-OWNED-ASSETS",
+    "granted_by": "Your Name",
+    "issued": "2026-10-13",
+    "expires": "2026-11-12T23:59:59+00:00",
+    "notes": "List ONLY assets you own or hold written permission to test. For bug-bounty work, put the program name + URL in 'reference' and keep a copy of its scope page."
+  },
+  "domains": ["my-app.example.test"],
+  "hosts": ["localhost", "127.0.0.1"],
+  "networks": ["127.0.0.0/8"],
+  "urls": ["https://my-app.example.test"],
+  "model_endpoints": ["http://127.0.0.1:11434", "http://127.0.0.1:8000"],
+  "local_paths": ["."]
+}

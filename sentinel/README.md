@@ -1,0 +1,151 @@
+# Sentinel — terminal AI security-assessment agent
+
+**Model-agnostic, read-only, scope-enforced.** Point it at *any* model behind
+*any* API — a public provider, or your own private/self-hosted gateway — and it
+runs deterministic security audits on **assets you own or hold written
+permission to test**.
+
+```
+pip install -e .            # zero runtime dependencies, Python 3.10+
+sentinel doctor
+```
+
+> Sentinel cannot attack anything. It has no exploitation, brute-force,
+> credential, payload, persistence or denial-of-service capability — by design,
+> not by policy toggle. Every network-facing action re-checks an authorization
+> guard (`sentinel/authz.py`) that a prompt *and* a scope file cannot override
+> for protected target classes (see [Safety model](#safety-model)).
+
+---
+
+## Quick start
+
+```bash
+# 1. Create your authorization file (only assets you own / may test)
+sentinel scope init --holder "Your Name"
+sentinel scope add my-app.example.test --i-own-this
+sentinel scope add http://127.0.0.1:11434 --kind model --i-own-this
+
+# 2. Pick a model — any of these works
+sentinel config set model my-model                 # + env below
+#   …or go fully offline (tools only, no model calls):
+sentinel config use-offline
+
+# 3. Run
+sentinel scan https://my-app.example.test          # deterministic tools
+sentinel ask "audit my app's HTTP security and TLS, then prioritise fixes"
+sentinel chat                                      # interactive session
+```
+
+## Model / API providers
+
+Sentinel talks to **anything OpenAI-compatible**, plus Anthropic, Ollama, and
+an offline stub. A private API is just a `base_url` + key + model id:
+
+```bash
+export SENTINEL_PROVIDER=openai-compat
+export SENTINEL_BASE_URL=https://llm-gateway.internal.example/v1   # your gateway
+export SENTINEL_MODEL=whatever-it-serves
+export SENTINEL_API_KEY=...        # never stored on disk
+sentinel ask "check the TLS posture of my-app.example.test"
+```
+
+Works with OpenAI, Azure OpenAI, Groq, Together, OpenRouter, Fireworks,
+Cerebras, vLLM, TGI, llama.cpp server, LM Studio, LiteLLM, Kong/NGINX AI
+gateways, Ollama (`SENTINEL_PROVIDER=ollama`), Anthropic
+(`SENTINEL_PROVIDER=anthropic`) and `SENTINEL_PROVIDER=offline`.
+
+Models without native function-calling are handled automatically via a
+portable JSON text protocol (`SENTINEL_NO_NATIVE_TOOLS=1` forces it). A
+built-in circuit breaker stops a looping model from re-issuing identical
+requests against your target.
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `sentinel doctor` | Verify config, scope, guard and provider health |
+| `sentinel scope init/show/add/remove/validate` | Manage the authorization scope |
+| `sentinel config show/set/providers/use-offline` | Manage model configuration |
+| `sentinel scan <target>` | Run audit tools directly (no model needed) |
+| `sentinel ask "<goal>"` | One-shot natural-language assessment |
+| `sentinel chat` | Interactive session (`/scope`, `/tools`, `/report`) |
+| `sentinel llm-audit <endpoint> --model <id>` | OWASP-LLM safety probes for an endpoint **you operate** |
+| `sentinel tools` / `sentinel probes` / `sentinel rules` | Inspect capabilities and hard prohibitions |
+| `sentinel audit-log --denied-only` | Every authorization decision, allow & deny |
+
+Reports: `scan`/`ask`/`llm-audit` accept `--report <dir>` and write timestamped
+Markdown + JSON (schema `sentinel.report/v1`).
+
+## Tools (all read-only)
+
+| Tool | Scope kind | Checks |
+|---|---|---|
+| `http_audit` | url | Security headers (weighted 0–100 score), cookies, CORS, caching, version disclosure, TRACE |
+| `tls_audit` | host | Protocol/cipher strength, certificate validity, expiry, SANs, legacy-protocol refusal |
+| `dns_audit` | host | A/AAAA/NS/MX/TXT, SPF (incl. lookup-limit), DMARC, DKIM hints, CAA, DNSSEC — stdlib DNS client, no `dig` needed |
+| `surface_audit` | url | Exposed `.env`/`.git`/backups/debug paths **with catch-all baseline calibration** (no soft-404 false positives), robots.txt, security.txt, CT-log subdomains |
+| `secrets_audit` | path | 40+ credential patterns + entropy, redacted SHA-256 fingerprints (never the secret), optional git-history scan |
+| `deps_audit` | path | Lockfile/manifest parsing, OSV.dev advisory lookup, unpinned/conflicting deps |
+| `ports_audit` | host | Rate-limited TCP connect-only discovery — **requires `--active`**, protected ports always refused |
+| `llm_audit` | model | 19 benign-canary probes across the OWASP Top 10 for LLM Apps; never requests harmful content, never executes model output |
+
+## Safety model
+
+Three layers, in order — a later layer can never weaken an earlier one:
+
+1. **Hard prohibitions** (`authz.py`, not configurable): ICS/SCADA & medical
+   ports (Modbus 502, S7 102, OPC-UA 4840, BACnet 47808, DNP3 20000, …),
+   IPMI/RDP/VNC/Telnet/SMTP/NTP/SNMP/memcached/SSDP, military & government
+   TLDs, critical-infrastructure hostnames (satellite/ground-station, SCADA,
+   air-traffic, hospital, election, nuclear, rail…), reserved/CGNAT/multicast
+   ranges, and third-party provider domains (you cannot self-authorize
+   scanning Google/OpenAI/your cloud provider). Your own subdomain on shared
+   hosting (GitHub Pages, Vercel…) may be *passively* audited; active probing
+   of the platform's machines is refused.
+2. **Scope membership**: the target must be listed in a scope file carrying a
+   named authorization holder, reference, grantor and expiry. Expired or empty
+   scopes deny everything.
+3. **Tool-level gates**: active probing needs `--active`; redirects are
+   re-checked per hop; identical repeated model calls are replayed from cache,
+   not re-executed.
+
+Every decision is appended to a JSONL audit log
+(`~/.local/state/sentinel/audit.jsonl`) — the artifact you hand a client or a
+bug-bounty program to show exactly what was and was not touched. Tool output
+fed back to the model is wrapped in an explicit *untrusted-data* envelope, and
+since the guard — not the prompt — enforces authorization, an injected
+instruction inside a scanned page cannot escalate anything.
+
+**What Sentinel will never do:** exploit a vulnerability, brute-force or try
+credentials, send payloads, scan anything off-scope or protected, touch
+someone else's system "to test if it's vulnerable". For third-party systems
+use the owner's published bug-bounty/VDP program. In India, unauthorized
+access is an offence under IT Act 2000 §§43/66; in the US, under the CFAA.
+"Ethical" is defined by *authorization*, not intent.
+
+## Configuration
+
+Precedence: CLI flags → `SENTINEL_*` env → `~/.config/sentinel/config.json` →
+defaults. API keys come from the environment only and are never written to
+disk. See `scope.example.json` for the scope-file format.
+
+## Development
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
+.venv/bin/python -m pytest        # 208 tests: guard, tools, agent loop, E2E
+```
+
+Tests never touch the internet: HTTP/TLS integration uses a throwaway server
+on `127.0.0.1`, and the LLM paths use a scripted provider. Test fixtures build
+fake credentials at runtime by string concatenation, so no secret-shaped
+literal ever lives in this repository (GitHub push protection enforces the
+same rule).
+
+## Limitations
+
+Configuration & exposure review, not a penetration test. No authenticated
+testing, no business-logic analysis, no exploitation — absence of a finding is
+not evidence of absence. Wire `sentinel scan` into CI and re-run after every
+change.
