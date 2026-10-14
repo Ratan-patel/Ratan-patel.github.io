@@ -72,7 +72,31 @@ Isliye is project ka design yeh hai: **AI brain + control layer halka rakhna** (
 
 ---
 
-## 4. Quick start (Docker — recommended)
+## 4. Start kaise karun? (30 seconds)
+
+> Naya ho? Poora step-by-step guide: **[CHALANE_KA_TARIKA.md](CHALANE_KA_TARIKA.md)** (Windows, Kali, phone/Termux, cloud — sab ke liye, Hinglish me).
+
+**Linux / Kali / Ubuntu / macOS / Termux** (ek command):
+```bash
+cd ratansec-os
+./setup.sh --with-tools        # Python env + tools + config + server start
+# → browser: http://localhost:8000
+# band karne ke liye: Ctrl+C   |   dobara chalane ke liye: ./start.sh
+```
+
+**Windows:** `start-windows.bat` par double-click (Python installed hona chahiye). Asli tools ke saath chahiye to `wsl --install -d kali-linux` karke Kali terminal me `./setup.sh --with-tools`.
+
+Scripts kya karte hain:
+| Script | Kaam |
+|---|---|
+| `setup.sh` | Python check → `.venv` + dependencies → optional tools install → `.env` (password + key) → server start. Flags: `--with-tools`, `--no-tools`, `--no-start`, `--port`, `--password`, `--key` |
+| `start.sh` | Server start (URL + password screen par dikha deta hai). Roz bas yahi chalana hai. |
+| `scripts/install-tools.sh` | Missing tools install (apt ya Termux `pkg`), best-effort |
+| `start-windows.bat` | Windows par native Python se one-click start |
+
+---
+
+## 5. Docker se (Kali + saare tools pre-installed)
 
 ```bash
 cd ratansec-os
@@ -84,10 +108,12 @@ docker compose up -d --build
 
 Pehli build ~5–10 min lagti hai (Kali packages download hote hain). Iske baad seconds me start.
 
-**Bina Docker (VPS/local, Debian/Ubuntu/Kali):**
+> PaaS/Render par bhaari Kali image slow ho sakti hai — wahan `Dockerfile.slim` (Debian, ~800 MB, non-root) use hoti hai, jo `render.yaml` me already set hai.
+
+**Bina Docker, manual (agar script nahi chalani):**
 
 ```bash
-sudo apt-get update && sudo apt-get install -y python3-venv nmap nikto whatweb gobuster ffuf nuclei sqlmap hydra whois dnsutils curl
+sudo apt-get update && sudo apt-get install -y python3-venv python3-pip nmap nikto whatweb gobuster ffuf sqlmap hydra whois dnsutils curl
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 cp .env.example .env         # values bharo
 .venv/bin/python -m app.webui        # → http://localhost:8000
@@ -102,7 +128,7 @@ python cli.py --url https://your-app.onrender.com --token "$APP_PASSWORD" status
 
 ---
 
-## 5. Render par deploy (tumhara plan: PaaS)
+## 6. Render par deploy (tumhara plan: PaaS)
 
 1. Repo GitHub par push karo (yeh folder included).
 2. Render → **New → Blueprint** → repo select → Blueprint path `ratansec-os/render.yaml`.
@@ -120,7 +146,7 @@ python cli.py --url https://your-app.onrender.com --token "$APP_PASSWORD" status
 
 ---
 
-## 6. Dashboard kaise use karo
+## 7. Dashboard kaise use karo
 
 | Tab | Kaam |
 |---|---|
@@ -144,7 +170,7 @@ Approve karne par scan chalta hai aur AI result aage analyze karke chat me jawab
 
 ---
 
-## 7. Scan profiles
+## 8. Scan profiles
 
 | Profile | Kya karta hai | Approx time |
 |---|---|---|
@@ -157,7 +183,7 @@ Approve karne par scan chalta hai aur AI result aage analyze karke chat me jawab
 
 ---
 
-## 8. CLI cheat-sheet
+## 9. CLI cheat-sheet
 
 ```bash
 export RATANSEC_URL=https://your-app.onrender.com
@@ -179,7 +205,7 @@ python cli.py audit --limit 50
 
 ---
 
-## 9. REST API (apne app me integrate karo)
+## 10. REST API (apne app me integrate karo)
 
 ```bash
 # login (cookie) — ya `Authorization: Bearer $APP_PASSWORD` use karo
@@ -213,7 +239,7 @@ Full interactive docs: `/api/docs` (Swagger UI).
 
 ---
 
-## 10. Environment variables
+## 11. Environment variables
 
 | Variable | Default | Matlab |
 |---|---|---|
@@ -236,7 +262,7 @@ Poori list: [`.env.example`](.env.example).
 
 ---
 
-## 11. AI setup (tumhari API key)
+## 12. AI setup (tumhari API key)
 
 1. [openrouter.ai/keys](https://openrouter.ai/keys) → key banao (`sk-or-v1-...`).
 2. `OPENROUTER_API_KEY=...` env me daalo (Render/VPS/docker-compose).
@@ -254,7 +280,7 @@ Poori list: [`.env.example`](.env.example).
 
 ---
 
-## 12. Security design (kyun yeh safe hai)
+## 13. Security design (kyun yeh safe hai)
 
 1. **No shell** — har command argv list ke roop me chalti hai (`shell=False`), isliye `; rm -rf /` jaisa injection impossible.
 2. **Target validation** — host/IP/CIDR parse hota hai, forbidden characters reject, `-` se shuru hone wale values block.
@@ -268,7 +294,7 @@ Poori list: [`.env.example`](.env.example).
 
 ---
 
-## 13. Project structure
+## 14. Project structure
 
 ```
 ratansec-os/
@@ -294,7 +320,7 @@ ratansec-os/
 
 ---
 
-## 14. Test karo
+## 15. Test karo
 
 ```bash
 python3 tests/smoke_test.py                                  # 53 local checks
@@ -303,7 +329,7 @@ python3 tests/smoke_test.py --url http://localhost:8000 --token "$APP_PASSWORD" 
 
 ---
 
-## 15. Troubleshooting
+## 16. Troubleshooting
 
 | Problem | Fix |
 |---|---|
@@ -317,7 +343,7 @@ python3 tests/smoke_test.py --url http://localhost:8000 --token "$APP_PASSWORD" 
 
 ---
 
-## 16. Roadmap
+## 17. Roadmap
 
 - **Plan A (25 MB core)** — `app/` + `cli.py` akele bhi chalte hain: local machine/phone (Termux) par AI + tool orchestration, tools on-demand install. Yani chhota core + cloud brain ka combo.
 - **Plan B** — Alpine-based bootable mini ISO (~400–500 MB): real "remix OS" feel, USB/VM boot.
@@ -327,7 +353,7 @@ Aage ke ideas: scheduled scans (cron), Slack/Telegram alerts, PDF reports, multi
 
 ---
 
-## 17. Legal
+## 18. Legal
 
 RatanSec OS ek **authorized security testing** tool hai: apne systems, lab VMs, ya jinke paas likhit permission ho (bug bounty scope, client contract, CTF) — sirf unhi par chalayo. Scope allowlist aur approval gates ko seriously use karo. Galat use ki zimmedari user ki hai.
 

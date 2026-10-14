@@ -6,6 +6,7 @@ possible nahi. Har tool ka apna arg-builder hai jo target ko validate karta hai.
 
 from __future__ import annotations
 
+import os
 import shlex
 import shutil
 import subprocess
@@ -58,6 +59,32 @@ class ToolSpec:
         return [target.host]
 
 
+def _can_use_raw_sockets() -> bool:
+    """Root + NET_RAW hone par SYN scan, warna TCP connect scan (-sT)."""
+    if os.environ.get("NMAP_FORCE_CONNECT", "").strip().lower() in ("1", "true", "yes", "on"):
+        return False
+    import socket
+
+    try:
+        probe = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+        probe.close()
+        return True
+    except OSError:
+        return False
+
+
+RAW_SOCKETS_AVAILABLE = _can_use_raw_sockets()
+
+
+def nmap_flags() -> list[str]:
+    """nmap base flags — Render/free container me connect scan, root+NET_RAW par SYN."""
+    return [] if RAW_SOCKETS_AVAILABLE else ["-sT"]
+
+
+def _nmap_base() -> list[str]:
+    return ["-T4", "-Pn"] + nmap_flags()
+
+
 # --------------------------------------------------------------------------
 # Registry — Kali apt packages
 # --------------------------------------------------------------------------
@@ -77,7 +104,7 @@ TOOLS: dict[str, ToolSpec] = {
         name="nmap", binary="nmap", package="nmap",
         description="Port scan + service/version detection (industry standard)",
         category="Scanning", profiles=["quick", "web", "network", "vuln", "full"],
-        default_args=["-T4", "-Pn", "-F", "--open", "-sV", "--version-light"],
+        default_args=_nmap_base() + ["-F", "--open", "-sV", "--version-light"],
     ),
     "whatweb": ToolSpec(
         name="whatweb", binary="whatweb", package="whatweb",
@@ -247,14 +274,14 @@ def _quick(t: ParsedTarget) -> list[Step]:
         Step("dig", ["+short", t.host, "A"], f"DNS A record — {t.host}", timeout=30),
         Step("dig", ["+short", t.host, "NS"], f"DNS NS record — {t.host}", timeout=30),
         Step("curl", ["-sSI", "--max-time", "15", t.url], f"HTTP headers — {t.url}", timeout=40),
-        Step("nmap", ["-T4", "-Pn", "-F", "--open", "-sV", "--version-light", t.host], f"Nmap top-100 ports — {t.host}", timeout=210),
+        Step("nmap", _nmap_base() + ["-F", "--open", "-sV", "--version-light", t.host], f"Nmap top-100 ports — {t.host}", timeout=210),
     ]
 
 
 def _web(t: ParsedTarget) -> list[Step]:
     steps = [
         Step("whatweb", ["-q", "--no-errors", t.url], f"WhatWeb fingerprint — {t.url}", timeout=90),
-        Step("nmap", ["-T4", "-Pn", "--open", "-p", "80,443,8000,8080,8443", "--script", "http-title,http-headers", t.host],
+        Step("nmap", _nmap_base() + ["--open", "-p", "80,443,8000,8080,8443", "--script", "http-title,http-headers", t.host],
              f"Nmap HTTP scripts — {t.host}", timeout=150),
         Step("nikto", ["-h", t.url, "-maxtime", "120s", "-nointeractive", "-ask", "no"], f"Nikto scan — {t.url}", timeout=200),
     ]
@@ -268,7 +295,7 @@ def _web(t: ParsedTarget) -> list[Step]:
 
 def _network(t: ParsedTarget) -> list[Step]:
     return [
-        Step("nmap", ["-T4", "-Pn", "-sC", "-sV", "--top-ports", "1000", "--open", t.host],
+        Step("nmap", _nmap_base() + ["-sC", "-sV", "--top-ports", "1000", "--open", t.host],
              f"Nmap top-1000 + default scripts — {t.host}", timeout=420),
     ]
 
@@ -276,7 +303,7 @@ def _network(t: ParsedTarget) -> list[Step]:
 def _vuln(t: ParsedTarget) -> list[Step]:
     wl = None
     steps = [
-        Step("nmap", ["-T4", "-Pn", "--open", "--script", "vuln", "--top-ports", "200", t.host],
+        Step("nmap", _nmap_base() + ["--open", "--script", "vuln", "--top-ports", "200", t.host],
              f"Nmap vuln scripts — {t.host}", timeout=420),
     ]
     if TOOLS["nuclei"].installed():

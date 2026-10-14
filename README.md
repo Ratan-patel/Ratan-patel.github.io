@@ -44,7 +44,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 ## Projects in this repo
 
 - **Portfolio website** — pure HTML/CSS/JS at the repo root (GitHub Pages).
-- **[RatanSec OS](ratansec-os/README.md)** — Kali-based AI pentesting environment: AI copilot (OpenRouter tool-calling), 6 scan profiles (nmap/nikto/nuclei/sqlmap/gobuster...), web dashboard, CLI, human-in-the-loop approvals, scope allowlist, AI reports aur audit log. Docker + Render deploy ready.
+- **[RatanSec OS](ratansec-os/README.md)** — Kali-based AI pentesting environment: AI copilot (OpenRouter tool-calling), 6 scan profiles (nmap/nikto/nuclei/sqlmap/gobuster...), web dashboard, CLI, human-in-the-loop approvals, scope allowlist, AI reports aur audit log. Docker + Render deploy ready. **Start karna hai?** → [CHALANE_KA_TARIKA.md](ratansec-os/CHALANE_KA_TARIKA.md) (Windows/Kali/phone/cloud, ek-command setup).
 
 ## Site technical
 
