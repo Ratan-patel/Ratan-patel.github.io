@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RatanSec OS — AI Pentest Dashboard</title>
+<meta name="description" content="RatanSec OS — Kali-based AI pentesting environment: AI copilot, scan profiles, reports aur audit log." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login-overlay" class="overlay hidden">
+  <form class="login-card" id="login-form">
+    <div class="login-logo">🛡️</div>
+    <h1>RatanSec <span>OS</span></h1>
+    <p class="muted">Dashboard locked hai — password daalo.</p>
+    <input type="password" id="login-password" placeholder="APP_PASSWORD" autocomplete="current-password" required />
+    <button class="btn primary" type="submit">Unlock</button>
+    <p class="hint">Password wahi hai jo deploy me <code>APP_PASSWORD</code> env me set kiya tha.</p>
+  </form>
+</div>
+
+<!-- ================= TOPBAR ================= -->
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">🛡️</span>
+    <div>
+      <div class="brand-name">RatanSec <em>OS</em></div>
+      <div class="brand-sub" id="brand-sub">AI pentest environment</div>
+    </div>
+  </div>
+
+  <div class="chips">
+    <span class="chip" id="chip-ai" title="OpenRouter AI status">AI: —</span>
+    <span class="chip" id="chip-mode" title="Approval mode">Mode: —</span>
+    <span class="chip" id="chip-tools" title="Installed tools">Tools: —</span>
+    <span class="chip" id="chip-runs" title="Active scans">Scans: 0</span>
+    <span class="chip warn hidden" id="chip-approvals" title="Pending approvals">Approvals: 0</span>
+    <span class="chip" id="chip-os" title="Environment">OS: —</span>
+  </div>
+
+  <div class="top-actions">
+    <button class="btn ghost" id="btn-api-docs" title="OpenAPI docs">API</button>
+    <button class="btn ghost hidden" id="btn-logout">Logout</button>
+  </div>
+</header>
+
+<div id="banners"></div>
+
+<!-- ================= MAIN ================= -->
+<main class="layout">
+  <nav class="tabs">
+    <button class="tab active" data-tab="chat">🧠 AI Chat</button>
+    <button class="tab" data-tab="scan">🎯 Scan</button>
+    <button class="tab" data-tab="runs">📡 Runs</button>
+    <button class="tab" data-tab="reports">📄 Reports</button>
+    <button class="tab" data-tab="tools">🧰 Tools</button>
+    <button class="tab" data-tab="audit">🔍 Audit</button>
+  </nav>
+
+  <!-- ---------- CHAT ---------- -->
+  <section class="panel tab-panel active" id="tab-chat">
+    <div class="panel-head">
+      <h2>AI Copilot</h2>
+      <div class="head-actions">
+        <input id="model-input" class="select" list="model-list" placeholder="default model" title="OpenRouter model id" style="min-width:210px" />
+        <datalist id="model-list">
+          <option value="openai/gpt-4o-mini"></option>
+          <option value="openai/gpt-4o"></option>
+          <option value="anthropic/claude-3.5-sonnet"></option>
+          <option value="google/gemini-flash-1.5"></option>
+          <option value="meta-llama/llama-3.3-70b-instruct"></option>
+          <option value="deepseek/deepseek-chat"></option>
+          <option value="qwen/qwen-2.5-72b-instruct"></option>
+          <option value="mistralai/mistral-small-24b-instruct"></option>
+        </datalist>
+        <button class="btn ghost" id="btn-clear-chat">Clear</button>
+      </div>
+    </div>
+
+    <div class="chat-log" id="chat-log">
+      <div class="msg assistant">
+        <div class="msg-body">
+          <p><strong>Namaste! Main RatanSec OS ka AI copilot hoon.</strong></p>
+          <p class="muted">Authorized target ka naam do — main recon, port scan, web scan, vulnerability check chala kar findings samjha dunga. Neeche ke quick prompts bhi try kar sakte ho.</p>
+          <p class="hint">⚠️ Sirf un targets par jinke liye tumhare paas likhit permission hai.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-chips" id="quick-chips">
+      <button class="chip-btn">example.com ka quick recon karo</button>
+      <button class="chip-btn">Kaunse tools installed hain? list karo</button>
+      <button class="chip-btn">Website ke open ports aur services check karo</button>
+      <button class="chip-btn">Nikto se web server misconfig dhundho</button>
+      <button class="chip-btn">Mile findings ka report banao</button>
+    </div>
+
+    <form class="composer" id="chat-form">
+      <textarea id="chat-input" rows="2" placeholder="Target ya sawaal likho… (Enter = send, Shift+Enter = new line)"></textarea>
+      <button class="btn primary" type="submit" id="btn-send">Send</button>
+    </form>
+  </section>
+
+  <!-- ---------- SCAN ---------- -->
+  <section class="panel tab-panel" id="tab-scan">
+    <div class="panel-head">
+      <h2>Direct Scan</h2>
+      <span class="muted small">AI ke bina, seedha profile chalao</span>
+    </div>
+
+    <form id="scan-form" class="scan-form">
+      <label class="field">
+        <span>Target (domain / IP / URL)</span>
+        <input type="text" id="scan-target" placeholder="example.com ya https://example.com" required />
+      </label>
+
+      <div class="field">
+        <span>Scan profile</span>
+        <div class="profile-grid" id="profile-grid"></div>
+      </div>
+
+      <div class="scan-actions">
+        <button class="btn primary" type="submit">▶ Start scan</button>
+        <span class="hint" id="scan-hint"></span>
+      </div>
+    </form>
+
+    <div id="scan-approval"></div>
+    <div id="scan-output" class="run-output"></div>
+  </section>
+
+  <!-- ---------- RUNS ---------- -->
+  <section class="panel tab-panel" id="tab-runs">
+    <div class="panel-head">
+      <h2>Scans / Runs</h2>
+      <div class="head-actions">
+        <button class="btn ghost" id="btn-refresh-runs">Refresh</button>
+      </div>
+    </div>
+    <div class="split">
+      <div class="list" id="runs-list"></div>
+      <div class="detail" id="run-detail"><p class="muted">Koi run select karo…</p></div>
+    </div>
+  </section>
+
+  <!-- ---------- REPORTS ---------- -->
+  <section class="panel tab-panel" id="tab-reports">
+    <div class="panel-head">
+      <h2>Reports</h2>
+      <div class="head-actions"><button class="btn ghost" id="btn-refresh-reports">Refresh</button></div>
+    </div>
+    <div class="split">
+      <div class="list" id="reports-list"></div>
+      <div class="detail" id="report-detail"><p class="muted">Report select karo…</p></div>
+    </div>
+  </section>
+
+  <!-- ---------- TOOLS ---------- -->
+  <section class="panel tab-panel" id="tab-tools">
+    <div class="panel-head">
+      <h2>Tool Arsenal</h2>
+      <div class="head-actions">
+        <button class="btn ghost" id="btn-refresh-tools">Re-check</button>
+        <button class="btn ghost hidden" id="btn-install-missing">Install missing</button>
+      </div>
+    </div>
+    <div id="tools-summary" class="muted small"></div>
+    <div class="table-wrap"><table class="table" id="tools-table">
+      <thead><tr><th>Tool</th><th>Category</th><th>Status</th><th>Version</th><th>Install / Note</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <!-- ---------- AUDIT ---------- -->
+  <section class="panel tab-panel" id="tab-audit">
+    <div class="panel-head">
+      <h2>Audit Log</h2>
+      <div class="head-actions"><button class="btn ghost" id="btn-refresh-audit">Refresh</button></div>
+    </div>
+    <p class="muted small">Har command, scan aur approval yahan record hota hai (data/audit.jsonl) — evidence + accountability ke liye.</p>
+    <div class="table-wrap"><table class="table" id="audit-table">
+      <thead><tr><th>Time</th><th>Event</th><th>Details</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <span><strong>RatanSec OS</strong> — Kali-based AI pentest environment.</span>
+  <span class="muted">Sirf authorized security testing ke liye. Bina permission scan karna illegal hai.</span>
+</footer>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

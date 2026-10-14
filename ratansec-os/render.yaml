@@ -1,0 +1,47 @@
+# RatanSec OS — Render deploy config (Docker)
+#
+# Render par deploy karne ka tarika:
+#   1) Yeh repo GitHub par push karo
+#   2) Render → New → Blueprint → repo select karo (root me render.yaml na ho to
+#      Blueprint path: ratansec-os/render.yaml)
+#   3) Secrets (APP_PASSWORD, OPENROUTER_API_KEY, ALLOWED_TARGETS) dashboard me daalo
+#
+# NOTE: Free/starter plan par filesystem ephemeral hota hai — reports restart par
+# ud sakti hain. Chahiye to paid plan + disk add karo (neeche commented block).
+
+services:
+  - type: web
+    name: ratansec-os
+    runtime: docker
+    plan: starter            # free bhi chalega, par free par 512MB RAM / no persistent disk
+    region: singapore        # India ke sabse paas
+    dockerfilePath: ./ratansec-os/Dockerfile
+    dockerContext: ./ratansec-os
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: APP_PASSWORD
+        sync: false          # Render dashboard me daalo (public deploy ke liye MUST)
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: MODEL
+        value: openai/gpt-4o-mini
+      - key: ALLOWED_TARGETS
+        sync: false          # jaise: example.com,*.yourdomain.com
+      - key: ALLOW_ANY_TARGET
+        value: "1"
+      - key: MAX_CONCURRENT_SCANS
+        value: "2"
+      - key: MAX_SCAN_SECONDS
+        value: "420"
+      - key: ALLOW_INSTALL
+        value: "0"
+      - key: AI_MAX_STEPS
+        value: "4"
+      - key: LOG_LEVEL
+        value: info
+    # Persistent disk (paid plan chahiye) — reports/audit bachane ke liye:
+    # disk:
+    #   name: ratansec-data
+    #   mountPath: /app/data
+    #   sizeGB: 1
