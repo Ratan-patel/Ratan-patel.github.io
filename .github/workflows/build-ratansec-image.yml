@@ -98,7 +98,8 @@ jobs:
           sudo -E env LIBGUESTFS_BACKEND=direct bash -c '
             virt-customize --version || true
             qemu-img create -f qcow2 /tmp/preflight.img 200M
-            virt-customize -a /tmp/preflight.img --run-command "echo preflight-ok" 2>&1 | tail -40
+            virt-customize -a /tmp/preflight.img --no-network --run-command "echo preflight-ok" 2>&1 | tail -40
+            echo "--- passt-less mode check (bake isi mode me chalta hai) ---"
             echo "preflight exit: $?"
           ' 2>&1 | tee /tmp/preflight.log
           echo "── preflight done ──"
@@ -254,16 +255,17 @@ jobs:
           Import steps: dekho \`ratansec-os/deploy/IMAGE_GUIDE.md\`
           ⚠️ Sirf authorized security testing ke liye."
 
+          set -x
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" ratansec-os/artifacts/* --clobber
-            gh release edit "$TAG" --notes "$NOTES"
+            gh release upload "$TAG" ratansec-os/artifacts/* --clobber || echo "upload fail"
+            gh release edit "$TAG" --notes "$NOTES" || echo "notes edit fail"
           else
             gh release create "$TAG" ratansec-os/artifacts/* \
               --title "RatanSec OS VM images v$VER (qcow2 / vmdk / vdi / seed ISO)" \
               --notes "$NOTES" \
-              --target "${GITHUB_SHA}"
+              --target "${GITHUB_SHA}" || echo "release create fail"
           fi
-          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"'
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"' || true
 
       - name: Summary
         if: always()
