@@ -43,6 +43,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: ratansec-image-${{ github.ref }}
@@ -176,6 +177,30 @@ jobs:
             gh pr comment "$PR" --body-file /tmp/comment.md || echo "PR comment fail"
           else
             echo "PR nahi mili — comment skip"
+          fi
+
+          # 3) diagnostics file repo me commit karo (logs blob API block ho to bhi readable)
+          {
+            echo "# RatanSec image build diagnostics"
+            echo ""
+            echo "Run: ${{ github.run_id }} · $(date -Is) · ref: ${{ github.ref_name }}"
+            echo ""
+            for f in /tmp/preflight.log /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
+              [ -s "$f" ] || continue
+              echo "## $(basename "$f")"
+              echo '```'
+              tail -100 "$f"
+              echo '```'
+              echo
+            done
+          } > ratansec-os/deploy/artifacts/BUILD-DIAGNOSTICS.md
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ratansec-os/deploy/artifacts/BUILD-DIAGNOSTICS.md
+          if git commit -m "ci: ratansec image build diagnostics (run ${{ github.run_id }}) [skip ci]" >/dev/null 2>&1; then
+            git push origin "HEAD:${{ github.ref_name }}" || echo "diagnostics push fail"
+          else
+            echo "commit ke liye kuch nahi tha"
           fi
           exit 1
 
