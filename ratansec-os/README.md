@@ -74,7 +74,8 @@ Isliye is project ka design yeh hai: **AI brain + control layer halka rakhna** (
 
 ## 4. Start kaise karun? (30 seconds)
 
-> Naya ho? Poora step-by-step guide: **[CHALANE_KA_TARIKA.md](CHALANE_KA_TARIKA.md)** (Windows, Kali, phone/Termux, cloud — sab ke liye, Hinglish me).
+> Naya ho? **ZERO se shuru karo: [SHURU_SE_GUIDE.md](SHURU_SE_GUIDE.md)** — ek-ek cheez, ek-ek click, "kya dikhega" checkpoints + browser-only rasta (kuch install nahi).
+> Short version: **[CHALANE_KA_TARIKA.md](CHALANE_KA_TARIKA.md)** (Windows, Kali, phone/Termux, cloud).
 
 **Linux / Kali / Ubuntu / macOS / Termux** (ek command):
 ```bash

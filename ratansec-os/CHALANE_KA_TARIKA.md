@@ -1,5 +1,7 @@
 # 🚀 RatanSec OS — Aaunga kaise, chalaunga kaise (poora guide)
 
+> 🆕 **Bilkul shuru se (zero se) sikhana hai?** → **[SHURU_SE_GUIDE.md](SHURU_SE_GUIDE.md)** — har cheez ek-ek step me, "kya dikhega" checkpoints ke saath, aur ek rasta jisme kuch install bhi nahi karna padta (browser-only).
+
 Bhai, tension mat le. Neeche **4 tarike** diye hain. Apna wala choose kar aur bas copy-paste kar de. Har step me likha hai kya type karna hai.
 
 ## Pehle: tujhe sirf 3 cheezein chahiye

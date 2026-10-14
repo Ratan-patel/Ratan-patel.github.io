@@ -1,0 +1,23 @@
+{
+  "name": "RatanSec OS (AI pentest environment)",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "bash ratansec-os/scripts/install-tools.sh || true",
+  "postStartCommand": "bash ratansec-os/scripts/codespace-start.sh",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "RatanSec OS Dashboard",
+      "onAutoForward": "openPreview",
+      "visibility": "private"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.cwd": "${containerWorkspaceFolder}/ratansec-os"
+      },
+      "extensions": []
+    }
+  },
+  "remoteUser": "vscode"
+}
