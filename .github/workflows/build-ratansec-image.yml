@@ -1,0 +1,147 @@
+name: Build RatanSec OS VM images (qcow2 / vmdk / vdi / seed ISO)
+
+# ═══════════════════════════════════════════════════════════════════════
+#  Ye workflow GitHub ke cloud runner par RatanSec OS ki asli VM image banata hai:
+#     • ratansec-os-<ver>-amd64.qcow2  → KVM / Proxmox / Oracle Cloud custom image
+#     • ratansec-os-<ver>-amd64.vmdk   → VMware / ESXi / VirtualBox
+#     • ratansec-os-<ver>-amd64.vdi    → VirtualBox (direct attach)
+#     • ratansec-seed.iso              → cloud-init config (2nd drive me lagao)
+#     • SHA256SUMS.txt
+#
+#  File kahan milegi: repo ke "Releases" page par (tag: ratansec-os-image-v1.0.0)
+#  Manual run:  Actions → "Build RatanSec OS VM images" → Run workflow
+# ═══════════════════════════════════════════════════════════════════════
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: "CPU arch (amd64 = x86 VMs, arm64 = Oracle Ampere free / ARM VMs)"
+        type: choice
+        options: [amd64, arm64]
+        default: amd64
+      distro:
+        description: "Ubuntu base"
+        type: choice
+        options: [noble, jammy]
+        default: noble
+      stock_only:
+        description: "Sirf stock Ubuntu image + seed ISO (bake skip — fast)"
+        type: boolean
+        default: false
+      make_release:
+        description: "GitHub Release me attach karo"
+        type: boolean
+        default: true
+  push:
+    branches: [main, "arena/**"]
+    paths:
+      - ".github/workflows/build-ratansec-image.yml"
+      - "ratansec-os/deploy/build-image.sh"
+      - "ratansec-os/deploy/build-seed-iso.sh"
+      - "ratansec-os/deploy/cloud-init/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ratansec-image-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  disk-images:
+    name: Build disk images (${{ github.event.inputs.arch || 'amd64' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space (runner me jagah banano)
+        run: |
+          echo "before:"; df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL \
+                      /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" 2>/dev/null || true
+          sudo apt-get clean
+          echo "after:"; df -h / | tail -1
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools curl rsync python3-pip
+          python3 -m pip install --quiet --break-system-packages pycdlib || pip3 install --quiet pycdlib
+          qemu-img --version | head -1
+          virt-customize --version | head -1 || true
+
+      - name: Build images
+        env:
+          LIBGUESTFS_BACKEND: direct
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+          STOCK_ONLY: ${{ github.event.inputs.stock_only && '1' || '0' }}
+        run: |
+          set -x
+          FLAGS="--arch $ARCH --distro $DISTRO --types qcow2,vmdk,vdi"
+          if [ "$STOCK_ONLY" = "1" ]; then FLAGS="$FLAGS --stock-only"; fi
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh $FLAGS
+          ls -lh ratansec-os/artifacts/
+
+      - name: Upload as workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratansec-os-images-${{ github.event.inputs.arch || 'amd64' }}
+          path: ratansec-os/artifacts/*
+          retention-days: 30
+          compression-level: 0
+
+      - name: Publish to GitHub Release
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.make_release != 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ratansec-os-image-v1.0.0
+        run: |
+          VER=$(grep -E '^VERSION' ratansec-os/app/config.py | head -1 | sed 's/.*"\(.*\)".*/\1/')
+          NOTES="RatanSec OS v$VER — ready-to-import VM images
+
+          | File | Kahan use hota hai |
+          |---|---|
+          | \`*.qcow2\` | KVM / libvirt / Proxmox / **Oracle Cloud custom image import** |
+          | \`*.vmdk\` | VMware Workstation / ESXi / VirtualBox |
+          | \`*.vdi\` | VirtualBox (direct) |
+          | \`*.img\` | raw disk (cloud providers) |
+          | \`ratansec-seed.iso\` | cloud-init config — VM me 2nd CD-ROM me attach karo (first boot par auto install) |
+
+          **Pehla boot:** image boot karte hi RatanSec OS khud install ho jata hai (tools + service, 4-6 min).
+          Dashboard: \`http://<VM-IP>:8000\` · password VM ke andar \`/root/ratansec-credentials.txt\` me hai.
+
+          **Credentials badalna:** VM me \`sudo nano /opt/ratansec-os/.env\` → \`ratansec restart\`
+
+          Import steps: dekho \`ratansec-os/deploy/IMAGE_GUIDE.md\`
+          ⚠️ Sirf authorized security testing ke liye."
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" ratansec-os/artifacts/* --clobber
+            gh release edit "$TAG" --notes "$NOTES"
+          else
+            gh release create "$TAG" ratansec-os/artifacts/* \
+              --title "RatanSec OS VM images v$VER (qcow2 / vmdk / vdi / seed ISO)" \
+              --notes "$NOTES" \
+              --target "${GITHUB_SHA}"
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"'
+
+      - name: Summary
+        run: |
+          {
+            echo "## RatanSec OS images ready ✅"
+            echo ""
+            echo "| File | Size |"
+            echo "|---|---|"
+            for f in ratansec-os/artifacts/*; do
+              echo "| \`$(basename "$f")\` | $(du -h "$f" | cut -f1) |"
+            done
+            echo ""
+            echo "Download: **Actions → is run ke artifacts**, ya Releases page (tag \`ratansec-os-image-v1.0.0\`)."
+          } >> "$GITHUB_STEP_SUMMARY"
