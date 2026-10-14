@@ -74,35 +74,90 @@ jobs:
           qemu-img --version | head -1
           virt-customize --version | head -1 || true
 
-      - name: Build images
+      - name: "Stage 1/5: download Ubuntu cloud image"
+        env:
+          LIBGUESTFS_BACKEND: direct
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          set -o pipefail
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" --only download --keep-work \
+            2>&1 | tee /tmp/stage-download.log
+        # (pipefail + tee: fail hone par exit code sahi rehta hai)
+
+      - name: "Stage 2/5: bake app (virt-customize)"
         env:
           LIBGUESTFS_BACKEND: direct
           ARCH: ${{ github.event.inputs.arch || 'amd64' }}
           DISTRO: ${{ github.event.inputs.distro || 'noble' }}
           STOCK_ONLY: ${{ github.event.inputs.stock_only && '1' || '0' }}
         run: |
-          set -x
-          FLAGS="--arch $ARCH --distro $DISTRO --types qcow2,vmdk,vdi"
+          FLAGS="--arch $ARCH --distro $DISTRO --only bake --keep-work"
           if [ "$STOCK_ONLY" = "1" ]; then FLAGS="$FLAGS --stock-only"; fi
           sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
-            bash ratansec-os/deploy/build-image.sh $FLAGS
+            bash ratansec-os/deploy/build-image.sh $FLAGS 2>&1 | tee /tmp/stage-bake.log
+          test -s /tmp/imgbuild/ratansec-os-*-build.img || true
+
+      - name: "Stage 3/5: convert (qcow2/vmdk/vdi)"
+        env:
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
+            --types qcow2,vmdk,vdi --only convert --keep-work 2>&1 | tee /tmp/stage-convert.log
+
+      - name: "Stage 4/5: seed ISO (cloud-init)"
+        env:
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
+            --only seed --keep-work 2>&1 | tee /tmp/stage-seed.log
+
+      - name: "Stage 5/5: checksums + listing"
+        run: |
+          WORK_DIR=/tmp/imgbuild bash ratansec-os/deploy/build-image.sh --only sums --keep-work || true
           ls -lh ratansec-os/artifacts/
+          df -h / | tail -1
+
+      - name: "On failure — log tail (annotations me dikhega)"
+        if: failure()
+        run: |
+          for f in /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
+            if [ -s "$f" ]; then
+              echo "::error::──── $f (last 25 lines) ────"
+              tail -25 "$f" | sed 's/^/::error::/'
+            fi
+          done
+          echo "::error::build fail — upar ke annotations me exact error hai"
+          exit 1
 
       - name: Upload as workflow artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ratansec-os-images-${{ github.event.inputs.arch || 'amd64' }}
           path: ratansec-os/artifacts/*
+          if-no-files-found: warn
           retention-days: 30
           compression-level: 0
 
       - name: Publish to GitHub Release
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.make_release != 'false'
+        if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ratansec-os-image-v1.0.0
         run: |
-          VER=$(grep -E '^VERSION' ratansec-os/app/config.py | head -1 | sed 's/.*"\(.*\)".*/\1/')
+          shopt -s nullglob
+          files=(ratansec-os/artifacts/*)
+          if [ ${#files[@]} -eq 0 ]; then echo "koi artifact nahi bana — release skip"; exit 0; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.make_release }}" = "false" ]; then
+            echo "make_release=false — release skip"; exit 0
+          fi
+          VER=$(sed -n 's/^VERSION = "\(.*\)"/\1/p' ratansec-os/app/config.py | sed -n '1p')
           NOTES="RatanSec OS v$VER — ready-to-import VM images
 
           | File | Kahan use hota hai |
@@ -133,6 +188,7 @@ jobs:
           gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"'
 
       - name: Summary
+        if: always()
         run: |
           {
             echo "## RatanSec OS images ready ✅"
