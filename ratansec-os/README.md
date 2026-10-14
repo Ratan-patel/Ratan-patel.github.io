@@ -95,6 +95,8 @@ Scripts kya karte hain:
 | `start.sh` | Server start (URL + password screen par dikha deta hai). Roz bas yahi chalana hai. |
 | `scripts/install-tools.sh` | Missing tools install (apt ya Termux `pkg`), best-effort |
 | `start-windows.bat` | Windows par native Python se one-click start |
+| `deploy/vps-install.sh` | **VM/Cloud (Oracle free, GCP, Vultr, Hetzner, DO, koi bhi Ubuntu/Debian VM)** par ek command me: tools + env + .env + **systemd service (24x7 auto-start)** + firewall + health check. Guide: **[VPS_DEPLOY.md](VPS_DEPLOY.md)** |
+| `deploy/cloudflared-tunnel.sh` | Free public HTTPS URL (bina domain, bina port kholne) |
 
 ---
 
