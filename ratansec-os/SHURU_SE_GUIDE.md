@@ -98,6 +98,8 @@ Free hai: **https://github.com/signup** → username, email, password → verify
 
 ## 🅰️ RASTA A — Bina kuch install karo, sirf browser (5 min) ⭐ recommended for start
 
+> 📗 **Isi raste ka poora screen-by-screen version:** **[CODESPACES_GUIDE.md](CODESPACES_GUIDE.md)** (har screen par kya dikhega, kya click karna hai — beginner ke liye).
+
 Isme tumhara "server" GitHub ke free cloud computer par chalega. Tumhare computer par **kuch bhi install nahi** hoga.
 
 ### A1. GitHub account banao
