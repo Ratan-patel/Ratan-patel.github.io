@@ -89,6 +89,19 @@ jobs:
             2>&1 | tee /tmp/stage-download.log
         # (pipefail + tee: fail hone par exit code sahi rehta hai)
 
+      - name: "Preflight: libguestfs/qemu test"
+        env:
+          LIBGUESTFS_BACKEND: direct
+        run: |
+          set -x
+          sudo -E env LIBGUESTFS_BACKEND=direct bash -c '
+            virt-customize --version || true
+            qemu-img create -f qcow2 /tmp/preflight.img 200M
+            virt-customize -a /tmp/preflight.img --run-command "echo preflight-ok" 2>&1 | tail -40
+            echo "preflight exit: $?"
+          ' 2>&1 | tee /tmp/preflight.log
+          echo "── preflight done ──"
+
       - name: "Stage 2/5: bake app (virt-customize)"
         env:
           LIBGUESTFS_BACKEND: direct
@@ -129,16 +142,41 @@ jobs:
           ls -lh ratansec-os/artifacts/
           df -h / | tail -1
 
-      - name: "On failure — log tail (annotations me dikhega)"
+      - name: "On failure — diagnostics (PR comment + annotations)"
         if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for f in /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
-            if [ -s "$f" ]; then
-              echo "::error::──── $f (last 25 lines) ────"
-              tail -25 "$f" | sed 's/^/::error::/'
-            fi
-          done
-          echo "::error::build fail — upar ke annotations me exact error hai"
+          DIAG=/tmp/diagnostics.txt
+          {
+            echo "RatanSec image build FAILED — run ${{ github.run_id }} ($(date -Is))"
+            echo
+            for f in /tmp/preflight.log /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
+              [ -s "$f" ] || continue
+              echo "══════ $f ══════"
+              tail -60 "$f"
+              echo
+            done
+          } > "$DIAG"
+
+          # 1) annotations (gh run view me dikhte hain)
+          grep -iE "error|fail|✗|cannot|unable|not found|no such|denied|quota|space" "$DIAG" | tail -20 | sed 's/^/::error::/' || true
+          echo "::error::build fail — pura log PR comment me bheja gaya hai"
+
+          # 2) PR comment (logs/artifacts download block hone par bhi readable)
+          PR=$(gh pr list --head "${{ github.ref_name }}" --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$PR" ]; then
+            {
+              echo "### 🔧 RatanSec image build diagnostics (run ${{ github.run_id }})"
+              echo ""
+              echo '```'
+              tail -120 "$DIAG"
+              echo '```'
+            } > /tmp/comment.md
+            gh pr comment "$PR" --body-file /tmp/comment.md || echo "PR comment fail"
+          else
+            echo "PR nahi mili — comment skip"
+          fi
           exit 1
 
       - name: Upload as workflow artifacts
