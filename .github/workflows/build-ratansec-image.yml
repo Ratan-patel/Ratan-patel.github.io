@@ -69,7 +69,10 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools curl rsync python3-pip linux-image-virtual 2>/dev/null || \
           sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools curl rsync python3-pip
+          ls /boot/vmlinuz* 2>/dev/null | head -3 || echo "warn: /boot me kernel nahi (libguestfs ko dikkat ho sakti hai)"
+          echo "LIBGUESTFS_MEMSIZE=1024" >> "$GITHUB_ENV"
           python3 -m pip install --quiet --break-system-packages pycdlib || pip3 install --quiet pycdlib
           qemu-img --version | head -1
           virt-customize --version | head -1 || true
@@ -93,6 +96,7 @@ jobs:
           DISTRO: ${{ github.event.inputs.distro || 'noble' }}
           STOCK_ONLY: ${{ github.event.inputs.stock_only && '1' || '0' }}
         run: |
+          set -o pipefail
           FLAGS="--arch $ARCH --distro $DISTRO --only bake --keep-work"
           if [ "$STOCK_ONLY" = "1" ]; then FLAGS="$FLAGS --stock-only"; fi
           sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
@@ -104,6 +108,7 @@ jobs:
           ARCH: ${{ github.event.inputs.arch || 'amd64' }}
           DISTRO: ${{ github.event.inputs.distro || 'noble' }}
         run: |
+          set -o pipefail
           sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
             bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
             --types qcow2,vmdk,vdi --only convert --keep-work 2>&1 | tee /tmp/stage-convert.log
@@ -113,6 +118,7 @@ jobs:
           ARCH: ${{ github.event.inputs.arch || 'amd64' }}
           DISTRO: ${{ github.event.inputs.distro || 'noble' }}
         run: |
+          set -o pipefail
           sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
             bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
             --only seed --keep-work 2>&1 | tee /tmp/stage-seed.log
@@ -144,6 +150,15 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
           compression-level: 0
+
+      - name: Upload build logs (debug ke liye)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_id }}
+          path: /tmp/stage-*.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Publish to GitHub Release
         if: always()

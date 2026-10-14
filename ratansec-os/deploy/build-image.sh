@@ -184,21 +184,36 @@ FIRSTBOOT_EOF
     chmod +x "$FIRSTBOOT"
     ok "firstboot script ready"
 
-    info "virt-customize chal raha hai (files inject + firstboot unit) — 2-5 min…"
+    info "virt-customize #1: app source inject (/opt/ratansec-os)…"
     virt-customize -a "$BUILD_IMG" --no-network \
       --hostname ratansec-os \
+      --mkdir /opt \
       --copy-in "$STAGE/ratansec-os:/opt" \
-      --copy-in "$FIRSTBOOT:/usr/local/bin" \
-      --run-command 'mv -f /usr/local/bin/firstboot.sh /usr/local/bin/ratansec-firstboot.sh; chmod 755 /usr/local/bin/ratansec-firstboot.sh; mkdir -p /etc/motd.d' \
+      --run-command 'mkdir -p /etc/motd.d /opt/ratansec-os' \
       --write '/etc/motd.d/ratansec:RatanSec OS image — pehle boot par apne aap install hoga (4-6 min). Dashboard: http://<VM-IP>:8000' \
-      --firstboot /usr/local/bin/ratansec-firstboot.sh \
-      2>&1 | tail -25 \
-      || die "virt-customize fail hua (libguestfs). VM/libguestfs backend check karo."
+      || die "virt-customize copy-in fail (libguestfs)"
+
+    info "virt-customize #2: first-boot unit install (--firstboot = HOST file path)…"
+    virt-customize -a "$BUILD_IMG" --no-network \
+      --firstboot "$FIRSTBOOT" \
+      || die "virt-customize --firstboot fail (libguestfs)"
+
     ok "image bake ho gayi: $BUILD_IMG"
-    # sanity: guest me file pahunchi?
+    # sanity: guest ke andar sab cheezein pahunchi?
     if command -v virt-ls >/dev/null 2>&1; then
-      virt-ls -a "$BUILD_IMG" -m /dev/sda1 /opt >/dev/null 2>&1 \
-        && ok "guest check: /opt readable" || warn "virt-ls se verify nahi hua (koi baat nahi)"
+      MOUNT="$(virt-filesystems -a "$BUILD_IMG" --mountpoints --filesystems 2>/dev/null | sed -n 's|^\(/dev/[^ ]*\).*|\1|p' | sed -n '1p')"
+      if [ -n "$MOUNT" ]; then
+        if virt-ls -a "$BUILD_IMG" -m "$MOUNT" /opt 2>/dev/null | grep -q ratansec-os; then
+          ok "guest verify ✓ /opt/ratansec-os maujood hai"
+        else
+          die "guest verify fail: /opt/ratansec-os image ke andar nahi mila"
+        fi
+        virt-ls -a "$BUILD_IMG" -m "$MOUNT" /opt/ratansec-os/deploy 2>/dev/null | grep -q vps-install.sh \
+          && ok "guest verify ✓ installer maujood hai" \
+          || warn "guest verify: vps-install.sh list nahi hua (check karo)"
+      else
+        warn "virt-filesystems se mountpoint nahi mila — verify skip"
+      fi
     fi
   fi
 fi
