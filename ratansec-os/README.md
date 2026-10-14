@@ -97,6 +97,9 @@ Scripts kya karte hain:
 | `start-windows.bat` | Windows par native Python se one-click start |
 | `deploy/vps-install.sh` | **VM/Cloud (Oracle free, GCP, Vultr, Hetzner, DO, koi bhi Ubuntu/Debian VM)** par ek command me: tools + env + .env + **systemd service (24x7 auto-start)** + firewall + health check. Guide: **[VPS_DEPLOY.md](VPS_DEPLOY.md)** |
 | `deploy/cloudflared-tunnel.sh` | Free public HTTPS URL (bina domain, bina port kholne) |
+| `deploy/build-image.sh` | **qcow2/vmdk/vdi VM images** banata hai (Ubuntu cloud image + app bake) |
+| `deploy/build-seed-iso.sh` | cloud-init **seed ISO** (40 KB) — VM me 2nd drive laga do, first boot par auto-install |
+| `deploy/IMAGE_GUIDE.md` | **Ready-made images** (Release me) + Oracle/Proxmox/VirtualBox/VMware/GCP import steps |
 
 ---
 

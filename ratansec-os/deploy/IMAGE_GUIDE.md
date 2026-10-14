@@ -1,5 +1,22 @@
 # 📦 ISO vs QCOW2 vs VMDK vs VDI — kya chahiye, kahan use hota hai
 
+## 🎯 Ready files (aaj hi download karo) — GitHub Release
+**Link:** https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratansec-os-image-v1.0.0
+
+| File | Size | Kis VM ke liye |
+|---|---|---|
+| `ratansec-os-1.0.0-amd64.qcow2` | ~597 MB | **Oracle Cloud custom image import** · Proxmox · KVM/libvirt · GCP |
+| `ratansec-os-1.0.0-amd64.vmdk` | ~568 MB | VMware / ESXi / VirtualBox |
+| `ratansec-os-1.0.0-amd64.vdi` | ~1.8 GB | VirtualBox (direct attach) |
+| `ratansec-seed.iso` | 40 KB | cloud-init config (kisi bhi Ubuntu cloud VM me 2nd drive) |
+| `SHA256SUMS.txt` | — | checksum verify |
+
+> **ARM VM (Oracle Ampere free tier) chahiye?** GitHub → Actions → *"Build RatanSec OS VM images"* → **Run workflow** → `arch: arm64` → 20 min me ARM image release me aa jayegi.
+
+**Image ke andar kya hai:** RatanSec OS ka poora code + installer (baked). Pehla boot par khud install hota hai (tools + systemd service, 4-6 min), phir `http://<VM-IP>:8000` par dashboard. Password: VM me `/root/ratansec-credentials.txt`.
+
+---
+
 Bhai simple mein: **yeh sab "VM ki file" ke different formats hain.** Har VM platform apna format maangta hai. Neeche table dekh ke apna chuno.
 
 | Format | Kya hai | Kahan chalta hai |
@@ -16,18 +33,10 @@ Bhai simple mein: **yeh sab "VM ki file" ke different formats hain.** Har VM pla
 
 ---
 
-## 📥 File kahan se milegi (2 tarike)
+## 📥 File dobara banao (agar chahiye ho)
 
-### Tarika 1 — GitHub Release se download (recommended)
-Repo → **Releases** → tag **`ratansec-os-image-v1.0.0`** → ye files:
-```
-ratansec-os-1.0.0-amd64.qcow2     ← Oracle/Proxmox/KVM
-ratansec-os-1.0.0-amd64.vmdk      ← VMware/VirtualBox
-ratansec-os-1.0.0-amd64.vdi       ← VirtualBox
-ratansec-seed.iso                 ← cloud-init (2nd drive)
-SHA256SUMS.txt                    ← checksum (verify karne ke liye)
-```
-> Release nahi dikh rahi? GitHub → **Actions** → "Build RatanSec OS VM images" → **Run workflow** → 20-30 min me release ban jayegi.
+**GitHub Actions se (kuch install nahi):** repo → **Actions** → *"Build RatanSec OS VM images"* → **Run workflow** → arch/distro chuno → 20-30 min → nayi release/artifact ready.
+**Apne Linux box par:**
 
 ### Tarika 2 — apne Linux/VM par khud banao
 ```bash
