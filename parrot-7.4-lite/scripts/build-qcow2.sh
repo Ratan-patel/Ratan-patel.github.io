@@ -104,7 +104,11 @@ fi
 export LIBGUESTFS_BACKEND="${LIBGUESTFS_BACKEND:-direct}"
 export LIBGUESTFS_MEMSIZE="${LIBGUESTFS_MEMSIZE:-2048}"
 printf 'Removing security/office apps and installing XFCE...\n'
-virt-customize --add "$BASE_QCOW2" --network --run "$ROOT/scripts/customize-guest.sh"
+GUEST_CUSTOMIZER=/tmp/parrot-lite-customize-guest.sh
+virt-customize --add "$BASE_QCOW2" --network \
+    --upload "$ROOT/scripts/customize-guest.sh:$GUEST_CUSTOMIZER" \
+    --run-command "bash $GUEST_CUSTOMIZER" \
+    --delete "$GUEST_CUSTOMIZER"
 
 printf 'Sparsifying and compressing virtual disk...\n'
 # The source image is disposable, so sparsify it in place and then write a

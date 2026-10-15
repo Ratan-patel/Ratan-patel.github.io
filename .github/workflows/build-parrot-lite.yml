@@ -52,6 +52,7 @@ jobs:
             dpkg --compare-versions "$live_build_version" ge "1:20151215"
             sudo mkdir -p /usr/share/live/build/data/debian-cd
             sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
+            sudo ln -sfn sid /usr/share/debootstrap/scripts/echo
             parrot_key="$RUNNER_TEMP/parrot-archive-keyring.gpg"
             curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
               --silent --show-error \
