@@ -19,3 +19,9 @@ ratansec-os/data/
 ratansec-os/.venv/
 ratansec-os/**/__pycache__/
 ratansec-os/*.log
+
+# Large custom Parrot OS build outputs (download from Actions artifacts)
+parrot-7.4-lite/artifacts/*.iso
+parrot-7.4-lite/artifacts/*.qcow2
+parrot-7.4-lite/artifacts/*.xz
+parrot-7.4-lite/artifacts/SHA256SUMS.txt

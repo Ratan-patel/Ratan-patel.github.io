@@ -1,0 +1,106 @@
+name: Build Parrot 7.4 Minimal XFCE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["arena/**"]
+    paths:
+      - ".github/workflows/build-parrot-lite.yml"
+      - "parrot-7.4-lite/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: parrot-7.4-lite-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  iso:
+    name: Build bootable ISO (AMD64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free runner disk space
+        run: |
+          echo 'Before cleanup:'; df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost 2>/dev/null || true
+          sudo apt-get clean
+          echo 'After cleanup:'; df -h / | tail -1
+
+      - name: Install ISO build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            live-build debootstrap squashfs-tools xorriso rsync apt-utils \
+            gnupg dctrl-tools curl wget git cpio mtools dosfstools \
+            grub-pc-bin grub-efi-amd64-bin isolinux syslinux-common
+          sudo mkdir -p /usr/share/live/build/data/debian-cd
+          sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
+
+      - name: Build and verify ISO
+        env:
+          LIBGUESTFS_BACKEND: direct
+        run: |
+          sudo -E env PATH="$PATH" OUTPUT_DIR="$RUNNER_TEMP/parrot-iso" \
+            PARROT_VERSION=7.4 PARROT_SUITE=echo PARROT_ARCH=amd64 \
+            bash parrot-7.4-lite/scripts/build-iso.sh
+          ls -lh "$RUNNER_TEMP/parrot-iso"
+          df -h / | tail -1
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Parrot-7.4-Minimal-XFCE-ISO-amd64
+          path: ${{ runner.temp }}/parrot-iso/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+  qcow2:
+    name: Build preinstalled QCOW2 (AMD64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free runner disk space
+        run: |
+          echo 'Before cleanup:'; df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost 2>/dev/null || true
+          sudo apt-get clean
+          echo 'After cleanup:'; df -h / | tail -1
+
+      - name: Install QCOW2 build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual
+          echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
+          echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
+          df -h / | tail -1
+
+      - name: Customize, verify and compress QCOW2
+        run: |
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct \
+            LIBGUESTFS_MEMSIZE=2048 OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
+            WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \
+            PARROT_VERSION=7.4 PARROT_ARCH=amd64 PARROT_SOURCE_EDITION=security \
+            bash parrot-7.4-lite/scripts/build-qcow2.sh
+          ls -lh "$RUNNER_TEMP/parrot-qcow2"
+          df -h / | tail -1
+
+      - name: Upload QCOW2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Parrot-7.4-Minimal-XFCE-QCOW2-amd64
+          path: ${{ runner.temp }}/parrot-qcow2/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

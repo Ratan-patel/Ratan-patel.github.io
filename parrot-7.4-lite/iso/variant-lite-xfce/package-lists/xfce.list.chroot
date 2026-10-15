@@ -1,0 +1,11 @@
+# Minimal Parrot 7.4 desktop. Deliberately does not install the
+# parrot-tools-full or other security-tool metapackages.
+parrot-core
+parrot-drivers
+calamares
+calamares-settings-parrot
+parrot-interface
+parrot-desktop-xfce
+task-xfce-desktop
+firefox-esr
+parrot-updater
