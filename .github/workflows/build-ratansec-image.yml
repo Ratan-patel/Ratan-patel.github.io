@@ -118,7 +118,10 @@ jobs:
             bash ratansec-os/deploy/build-image.sh $FLAGS 2>&1 | tee /tmp/stage-bake.log
           test -s /tmp/imgbuild/ratansec-os-*-build.img || true
 
-      - name: "Stage 3/5: convert (qcow2/vmdk/vdi)"
+      - name: "Disk space check"
+        run: df -h / /tmp | sed -n '1,4p'
+
+      - name: "Stage 3/5: convert (qcow2/vmdk/vdi/img.gz)"
         env:
           ARCH: ${{ github.event.inputs.arch || 'amd64' }}
           DISTRO: ${{ github.event.inputs.distro || 'noble' }}
@@ -126,7 +129,7 @@ jobs:
           set -o pipefail
           sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
             bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
-            --types qcow2,vmdk,vdi --only convert --keep-work 2>&1 | tee /tmp/stage-convert.log
+            --types qcow2,vmdk,vdi,img --only convert --keep-work 2>&1 | tee /tmp/stage-convert.log
 
       - name: "Stage 4/5: seed ISO (cloud-init)"
         env:
@@ -244,7 +247,7 @@ jobs:
           | \`*.qcow2\` | KVM / libvirt / Proxmox / **Oracle Cloud custom image import** |
           | \`*.vmdk\` | VMware Workstation / ESXi / VirtualBox |
           | \`*.vdi\` | VirtualBox (direct) |
-          | \`*.img\` | raw disk (cloud providers) |
+          | \`*.img.gz\` | **raw disk** (jo providers raw maangte hain) — \`gzip -d\` karke \`.img\` banao |
           | \`ratansec-seed.iso\` | cloud-init config — VM me 2nd CD-ROM me attach karo (first boot par auto install) |
 
           **Pehla boot:** image boot karte hi RatanSec OS khud install ho jata hai (tools + service, 4-6 min).

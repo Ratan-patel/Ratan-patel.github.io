@@ -32,7 +32,7 @@ OUT_DIR="$ROOT/artifacts"
 
 DISTRO="noble"          # noble = 24.04 LTS · jammy = 22.04 LTS
 ARCH="amd64"
-TYPES="qcow2,vmdk,vdi"
+TYPES="qcow2,vmdk,vdi,img"
 ONLY="download,bake,convert,seed,sums"
 BRANCH="arena/f71ea5d9-ratan-patel-github-io"
 API_KEY=""
@@ -247,10 +247,27 @@ if want convert; then
         qemu-img convert -p -O vdi "$SRC_IMG" "$OUT_DIR/${BASE_NAME}.vdi" || die "vdi convert fail"
         ok "vdi: $(du -h "$OUT_DIR/${BASE_NAME}.vdi" | cut -f1)"
         ;;
-      raw|img)
-        info "raw img convert…"
-        qemu-img convert -p -O raw "$SRC_IMG" "$OUT_DIR/${BASE_NAME}.img" || die "raw convert fail"
-        ok "raw: $(du -h "$OUT_DIR/${BASE_NAME}.img" | cut -f1)"
+      img|raw|img.gz)
+        info "raw .img convert (uncompressed disk)…"
+        RAW_OUT="$OUT_DIR/${BASE_NAME}.img"
+        qemu-img convert -p -O raw "$SRC_IMG" "$RAW_OUT" || die "raw convert fail"
+        ok "raw img: $(du -h "$RAW_OUT" | cut -f1)"
+        # GitHub release asset limit 2 GiB hai → gzip karke rakhna zaroori hai
+        if [ "$fmt" != "raw" ]; then
+          info "gzip kar raha hoon (.img.gz)…"
+          if command -v pigz >/dev/null 2>&1; then
+            pigz -6 -f "$RAW_OUT" || die "pigz fail"
+          else
+            gzip -6 -f "$RAW_OUT" || die "gzip fail"
+          fi
+          ok "img.gz: $(du -h "$RAW_OUT.gz" | cut -f1)  (unzip: gzip -d ${BASE_NAME}.img.gz)"
+        fi
+        ;;
+      vhd|vhdx)
+        info "vhd/vhdx (Hyper-V) convert…"
+        SUBFMT="dynamic"; [ "$fmt" = "vhdx" ] && SUBFMT="fixed"
+        qemu-img convert -p -O vpc -o subformat="$SUBFMT" "$SRC_IMG" "$OUT_DIR/${BASE_NAME}.vhd" || die "vhd convert fail"
+        ok "vhd: $(du -h "$OUT_DIR/${BASE_NAME}.vhd" | cut -f1)"
         ;;
       *) warn "unknown format skip: $fmt" ;;
     esac
@@ -273,7 +290,7 @@ fi
 # ─── stage: sums ──────────────────────────────────────────────────────
 if want sums; then
   step "Stage: sums — SHA256 checksums"
-  ( cd "$OUT_DIR" && sha256sum ./*.qcow2 ./*.vmdk ./*.vdi ./*.iso ./*.img 2>/dev/null | sed 's|\./||' > SHA256SUMS.txt ) || true
+  ( cd "$OUT_DIR" && sha256sum ./*.qcow2 ./*.vmdk ./*.vdi ./*.img.gz ./*.img ./*.iso ./*.vhd 2>/dev/null | sed 's|\./||' > SHA256SUMS.txt ) || true
   if [ -s "$OUT_DIR/SHA256SUMS.txt" ]; then
     ok "SHA256SUMS.txt ($(wc -l < "$OUT_DIR/SHA256SUMS.txt") files)"
   else
