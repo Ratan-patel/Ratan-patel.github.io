@@ -148,6 +148,9 @@ jobs:
               libslirp0 passt apparmor apparmor-utils
             # Ubuntu 24.04's passt AppArmor profile denies libguestfs temp PID/socket files.
             sudo aa-teardown || true
+            for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
+              [ -e "$kernel" ] && sudo chmod a+r "$kernel"
+            done
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
             echo 'Using passt for libguestfs networking; image build runs unprivileged.'
