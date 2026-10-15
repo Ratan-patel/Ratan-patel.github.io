@@ -3,13 +3,24 @@
 ## 🎯 Ready files (aaj hi download karo) — GitHub Release
 **Link:** https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratansec-os-image-v1.0.0
 
-| File | Size | Kis VM ke liye |
-|---|---|---|
-| `ratansec-os-1.0.0-amd64.qcow2` | ~597 MB | **Oracle Cloud custom image import** · Proxmox · KVM/libvirt · GCP |
-| `ratansec-os-1.0.0-amd64.vmdk` | ~568 MB | VMware / ESXi / VirtualBox |
-| `ratansec-os-1.0.0-amd64.vdi` | ~1.8 GB | VirtualBox (direct attach) |
-| `ratansec-seed.iso` | 40 KB | cloud-init config (kisi bhi Ubuntu cloud VM me 2nd drive) |
-| `SHA256SUMS.txt` | — | checksum verify |
+### 📥 Direct download links (click karo, seedha download shuru)
+
+| # | File | Size | Kis VM ke liye | Download |
+|---|---|---|---|---|
+| 1 | **`ratansec-os-1.0.0-amd64.qcow2`** | 597 MB | **Oracle Cloud custom image import** · Proxmox · KVM/libvirt · GCP | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.qcow2) |
+| 2 | **`ratansec-os-1.0.0-amd64.img.gz`** | 548 MB | **raw disk** — providers jo `raw .img` maangte hain (AWS/GCP import, kuch VPS). Pehle unzip: `gzip -d ratansec-os-1.0.0-amd64.img.gz` | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.img.gz) |
+| 3 | `ratansec-os-1.0.0-amd64.vmdk` | 568 MB | VMware Workstation/ESXi · VirtualBox | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.vmdk) |
+| 4 | `ratansec-os-1.0.0-amd64.vdi` | 1.8 GB | VirtualBox (seedha attach, convert nahi karna padta) | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.vdi) |
+| 5 | `ratansec-seed.iso` | 40 KB | **cloud-init config** — kisi bhi Ubuntu cloud VM me 2nd CD-ROM me lagao (first boot par auto-install) | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-seed.iso) |
+| 6 | `SHA256SUMS.txt` | 1 KB | checksum verify (`sha256sum -c SHA256SUMS.txt`) | [⬇ Download](https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/SHA256SUMS.txt) |
+
+**Release page (sab ek jagah):** https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratansec-os-image-v1.0.0
+
+> **qcow2 vs img.gz — kya farq?**
+> `.qcow2` = compressed, **import-friendly** (Oracle custom image, Proxmox `qm importdisk`, GCP import). Ye zyadatar logon ke liye sahi hai.
+> `.img.gz` = **raw disk** (unzip karne par ~3.5 GB). Un providers/tools ke liye jo `raw` format maangte hain. Kabhi kabhi `dd` se bhi use hota hai.
+
+> **ISO vs image:** `.iso` (seed ISO) koi OS nahi hai — wo 40 KB ka **config disc** hai jo kisi bhi Ubuntu VM ko batata hai ki first boot par kya install karna hai. Poora OS **qcow2/vmdk/vdi/img** images ke andar hai.
 
 > **ARM VM (Oracle Ampere free tier) chahiye?** GitHub → Actions → *"Build RatanSec OS VM images"* → **Run workflow** → `arch: arm64` → 20 min me ARM image release me aa jayegi.
 

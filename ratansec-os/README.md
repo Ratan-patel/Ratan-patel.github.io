@@ -99,7 +99,7 @@ Scripts kya karte hain:
 | `deploy/cloudflared-tunnel.sh` | Free public HTTPS URL (bina domain, bina port kholne) |
 | `deploy/build-image.sh` | **qcow2/vmdk/vdi VM images** banata hai (Ubuntu cloud image + app bake) |
 | `deploy/build-seed-iso.sh` | cloud-init **seed ISO** (40 KB) — VM me 2nd drive laga do, first boot par auto-install |
-| `deploy/IMAGE_GUIDE.md` | **Ready-made images** (Release me) + Oracle/Proxmox/VirtualBox/VMware/GCP import steps |
+| `deploy/IMAGE_GUIDE.md` | **Ready-made images** (Release me — qcow2 597 MB · img.gz 548 MB · vmdk · vdi · seed ISO) + Oracle/Proxmox/VirtualBox/VMware/GCP import steps |
 
 ---
 
