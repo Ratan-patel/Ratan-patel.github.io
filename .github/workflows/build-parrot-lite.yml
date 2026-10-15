@@ -144,25 +144,18 @@ jobs:
           {
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends \
-              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual libslirp0
-            if dpkg-query -W -f='${Status}' passt 2>/dev/null | grep -q 'install ok installed'; then
-              sudo apt-get purge -y passt
-            fi
-            if command -v passt >/dev/null 2>&1; then
-              echo 'passt is still present; libguestfs would select the failing passt backend.' >&2
-              exit 1
-            fi
+              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual libslirp0 passt
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
-            echo 'Using libslirp for libguestfs networking (passt removed).'
+            echo 'Using passt for libguestfs networking; image build runs unprivileged.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
       - name: Customize, verify and compress QCOW2
         run: |
           set -o pipefail
-          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct \
-            LIBGUESTFS_MEMSIZE=2048 OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
+          env LIBGUESTFS_BACKEND=direct LIBGUESTFS_MEMSIZE=2048 \
+            OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
             WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \
             PARROT_VERSION=7.4 PARROT_ARCH=amd64 PARROT_SOURCE_EDITION=security \
             bash -x parrot-7.4-lite/scripts/build-qcow2.sh 2>&1 \

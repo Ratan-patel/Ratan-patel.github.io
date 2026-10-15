@@ -10,9 +10,8 @@ OUTPUT_DIR="${OUTPUT_DIR:-$ROOT/artifacts}"
 WORK_BASE="${WORK_DIR:-${TMPDIR:-/tmp}}"
 EXPECTED_FINGERPRINT="B711822346552E4D92DA02DF7A8286AF0E81EE4A"
 
-if [[ "$(id -u)" -ne 0 ]]; then
-    echo "Run this builder as root (for example: sudo bash $0)." >&2
-    exit 1
+if [[ "$(id -u)" -eq 0 ]]; then
+    echo "Warning: running virt-customize as an unprivileged user is recommended for passt networking." >&2
 fi
 if [[ "$VERSION" != "7.4" || "$ARCH" != "amd64" ]]; then
     echo "This verified image recipe is pinned to Parrot 7.4 AMD64." >&2

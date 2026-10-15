@@ -76,6 +76,20 @@ if count != 1:
 path.write_text(text)
 PY
 
+# Parrot 7.4's parrot-core bootstrap requires dnsutils, which the pinned
+# upstream auto/config did not include in its initial debootstrap package set.
+python3 - "$BUILDER_DIR/auto/config" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+needle = "--include=gnupg2,base-files,parrot-core,ca-certificates"
+if text.count(needle) != 1:
+    raise SystemExit("Could not safely add dnsutils to the Parrot bootstrap include list")
+path.write_text(text.replace(needle, needle + ",dnsutils", 1))
+PY
+
 mkdir -p /usr/share/live/build/data/debian-cd
 ln -sfn sid "/usr/share/live/build/data/debian-cd/$SUITE"
 rm -f "$OUTPUT_FILE"

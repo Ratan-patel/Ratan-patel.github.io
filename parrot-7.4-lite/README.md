@@ -50,11 +50,11 @@ QCOW2 prerequisites:
 sudo apt-get install -y qemu-utils libguestfs-tools xz-utils curl gnupg
 ```
 
-Build either image:
+Build either image (run the QCOW2 builder as an unprivileged user so libguestfs networking can use `passt`):
 
 ```bash
 sudo bash parrot-7.4-lite/scripts/build-iso.sh
-sudo bash parrot-7.4-lite/scripts/build-qcow2.sh
+bash parrot-7.4-lite/scripts/build-qcow2.sh
 ```
 
 Outputs and `SHA256SUMS.txt` are written to `parrot-7.4-lite/artifacts/` (ignored by Git). You can change `OUTPUT_DIR` and use `WORK_DIR` as the temporary-work parent directory. The release recipe is pinned to version `7.4` and architecture `amd64`; the QCOW2 source can be selected with `PARROT_SOURCE_EDITION=security` or `home`.
