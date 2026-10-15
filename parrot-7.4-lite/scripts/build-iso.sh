@@ -90,6 +90,20 @@ if text.count(needle) != 1:
 path.write_text(text.replace(needle, needle + ",bind9-dnsutils,rsync,eatmydata", 1))
 PY
 
+# The pinned upstream standard package list names packages removed from Echo.
+python3 - "$BUILDER_DIR/templates/common/package-lists/standard.list.chroot" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+obsolete = {"neofetch", "hfsutils", "reiser4progs"}
+lines = path.read_text().splitlines()
+present = {line.strip() for line in lines if line.strip() in obsolete}
+if present != obsolete:
+    raise SystemExit(f"Expected obsolete package entries {sorted(obsolete)}, found {sorted(present)}")
+path.write_text("\n".join(line for line in lines if line.strip() not in obsolete) + "\n")
+PY
+
 mkdir -p /usr/share/live/build/data/debian-cd
 ln -sfn sid "/usr/share/live/build/data/debian-cd/$SUITE"
 rm -f "$OUTPUT_FILE"
