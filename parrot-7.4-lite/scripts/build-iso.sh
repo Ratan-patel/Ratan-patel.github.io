@@ -86,8 +86,8 @@ path = Path(sys.argv[1])
 text = path.read_text()
 needle = "--include=gnupg2,base-files,parrot-core,ca-certificates"
 if text.count(needle) != 1:
-    raise SystemExit("Could not safely add bind9-dnsutils to the Parrot bootstrap include list")
-path.write_text(text.replace(needle, needle + ",bind9-dnsutils", 1))
+    raise SystemExit("Could not safely extend the Parrot bootstrap include list")
+path.write_text(text.replace(needle, needle + ",bind9-dnsutils,rsync,eatmydata", 1))
 PY
 
 mkdir -p /usr/share/live/build/data/debian-cd
