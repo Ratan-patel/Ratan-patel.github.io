@@ -1,0 +1,61 @@
+# RatanSec OS — SLIM image (Debian based)
+#
+# Kyun? Render / Railway / free PaaS par Kali image (~3 GB) build karna bhaari padta hai.
+# Yeh image ~700-900 MB hoti hai, 512 MB RAM par bhi chal jaati hai, aur non-root user par
+# chalti hai (isliye nmap automatically TCP connect scan use karta hai — NET_RAW ki zarurat nahi).
+#
+# Build:  docker build -f Dockerfile.slim -t ratansec-os:slim .
+# Run:    docker run --rm -p 8000:8000 --env-file .env ratansec-os:slim
+#
+# Deep scans (SYN/OS detection) chahiye to full Kali image use karo:
+#         docker build -t ratansec-os . && docker run --cap-add=NET_RAW --cap-add=NET_ADMIN …
+
+FROM debian:bookworm-slim
+
+LABEL org.opencontainers.image.title="RatanSec OS (slim)" \
+      org.opencontainers.image.description="AI pentest environment — Debian slim, PaaS/free-tier friendly" \
+      org.opencontainers.image.source="https://github.com/Ratan-patel/Ratan-patel.github.io"
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    HOST=0.0.0.0 \
+    PORT=8000 \
+    DATA_DIR=/app/data \
+    NMAP_FORCE_CONNECT=1 \
+    PATH="/opt/venv/bin:$PATH"
+
+# ---------- 1) Core + stable security tools (Debian repos) ----------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      python3 python3-venv python3-pip \
+      ca-certificates curl dnsutils whois netcat-openbsd \
+      nmap nikto whatweb sqlmap hydra dirb \
+ && (apt-get install -y --no-install-recommends gobuster ffuf \
+      || echo "[ratansec] gobuster/ffuf skip (repo me nahi) — baaki tools ready hain") \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# ---------- 2) Python app (non-root user) ----------
+RUN useradd -m -u 10001 ratan \
+ && mkdir -p /app/data/reports /opt/venv \
+ && chown -R ratan:ratan /app /opt/venv
+
+RUN python3 -m venv /opt/venv
+COPY requirements.txt /tmp/requirements.txt
+RUN /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
+ && /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt \
+ && chown -R ratan:ratan /opt/venv
+
+WORKDIR /app
+COPY --chown=ratan:ratan app ./app
+COPY --chown=ratan:ratan cli.py ./cli.py
+COPY --chown=ratan:ratan scripts ./scripts
+RUN chmod +x /app/scripts/*.sh
+
+USER ratan
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -fsS "http://127.0.0.1:${PORT}/api/health" || exit 1
+
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+CMD ["python", "-m", "app.webui"]

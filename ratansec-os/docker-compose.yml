@@ -1,0 +1,34 @@
+# RatanSec OS — local / VPS ke liye docker compose
+#
+#   1) .env banao:      cp .env.example .env  (aur values bharo)
+#   2) chalao:          docker compose up -d --build
+#   3) dashboard:       http://localhost:8000
+#
+# NET_RAW / NET_ADMIN nmap ke raw scans ke liye chahiye.
+
+services:
+  ratansec:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ratansec-os:latest
+    container_name: ratansec-os
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      DATA_DIR: /app/data
+    volumes:
+      - ratansec-data:/app/data
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:false
+
+volumes:
+  ratansec-data:

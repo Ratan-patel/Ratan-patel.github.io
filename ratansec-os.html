@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RatanSec OS — AI-Powered Pentest Environment | Kali Tools + AI Copilot | Ratan Kumar Patel</title>
+<meta name="description" content="RatanSec OS — Kali-based AI pentesting environment: OpenRouter AI copilot jo khud tools chalata hai (nmap, nikto, nuclei, sqlmap), web dashboard, CLI + REST API, human-in-the-loop approvals, scope allowlist, AI reports aur audit log. Free VM images (qcow2 / img / vmdk / vdi) + cloud-init seed ISO.">
+<meta name="author" content="Ratan Kumar Patel">
+<meta name="theme-color" content="#04060a">
+<meta name="keywords" content="RatanSec OS, AI pentest environment, Kali Linux AI, OpenRouter pentest, AI copilot hacking, qcow2 pentest VM, ethical hacking tools, VAPT automation, Ratan Kumar Patel">
+<meta property="og:title" content="RatanSec OS — AI-Powered Pentest Environment">
+<meta property="og:description" content="Kali tools + AI copilot + dashboard + CLI. Free VM images (qcow2/raw) aur cloud-init seed ISO. Sirf authorized testing ke liye.">
+<meta property="og:image" content="https://ratan-patel.github.io/assets/profile-photo.jpg">
+<meta property="og:url" content="https://ratan-patel.github.io/ratansec-os.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RatanSec OS",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Linux (Kali / Ubuntu / Debian — x86_64 & ARM64)",
+  "softwareVersion": "1.0.0",
+  "description": "Kali-based AI pentest environment with an OpenRouter-powered AI copilot that executes open-source security tooling (nmap, nikto, nuclei, sqlmap, gobuster, ffuf, hydra), a web dashboard, CLI + REST API, human-in-the-loop approvals, scope allowlist, AI reports and an audit log. Distributed as free VM images (qcow2, raw .img, vmdk, vdi) and a cloud-init seed ISO.",
+  "url": "https://ratan-patel.github.io/ratansec-os.html",
+  "downloadUrl": "https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratansec-os-image-v1.0.0",
+  "license": "https://github.com/Ratan-patel/Ratan-patel.github.io/blob/main/ratansec-os/README.md",
+  "author": {
+    "@type": "Person",
+    "name": "Ratan Kumar Patel",
+    "jobTitle": "Cyber Security Trainer & Offensive Security Practitioner",
+    "url": "https://ratan-patel.github.io/"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+}
+</script>
+<style>
+:root{
+  --void:#04060a;--abyss:#070b11;--panel:#0a1017;--line:rgba(0,255,200,.14);
+  --mint:#00ffc8;--cyan:#00d4ff;--violet:#7b5cff;--amber:#ffc247;--red:#ff2e5b;
+  --txt:#dbe7ef;--dim:#8ba0b2;--faint:#5b6b7a;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--body:'Space Grotesk',system-ui,sans-serif;--disp:'Chakra Petch','Space Grotesk',sans-serif;
+  --maxw:1320px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--txt);font-family:var(--body);line-height:1.62;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(900px 520px at 12% -6%,rgba(0,255,200,.10),transparent 60%),
+  radial-gradient(800px 480px at 92% 4%,rgba(0,212,255,.09),transparent 58%),
+  linear-gradient(180deg,var(--void),var(--abyss));}
+a{color:var(--mint);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--maxw);margin:auto;padding:0 26px}
+.mono{font-family:var(--mono)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(4,6,10,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.navin{max-width:var(--maxw);margin:auto;padding:13px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;letter-spacing:.4px;font-size:17px;color:var(--txt)}
+.brand em{color:var(--mint);font-style:normal}
+.navlinks{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
+.navlinks a{font-family:var(--mono);font-size:11.5px;letter-spacing:.6px;padding:8px 12px;border-radius:999px;border:1px solid rgba(0,255,200,.22);color:var(--dim)}
+.navlinks a:hover{color:var(--mint);border-color:var(--mint);text-decoration:none}
+
+/* hero */
+header.hero{padding:74px 0 40px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:30px}}
+.flag{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;color:var(--mint);border:1px solid rgba(0,255,200,.3);background:rgba(0,255,200,.06);padding:6px 11px;border-radius:999px;margin-bottom:18px}
+h1{font-family:var(--disp);font-size:clamp(38px,6.4vw,68px);line-height:1.04;letter-spacing:-1.6px;font-weight:700}
+h1 em{color:var(--mint);font-style:normal}
+.verline{font-family:var(--mono);font-size:12px;letter-spacing:1.6px;color:var(--faint);margin:12px 0 18px}
+.lede{color:var(--dim);font-size:16px;max-width:640px}
+.lede strong{color:var(--txt)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 24px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.7px;color:var(--dim);border:1px solid var(--line);background:rgba(10,16,23,.8);padding:6px 10px;border-radius:7px}
+.chip.hot{color:var(--mint);border-color:rgba(0,255,200,.34)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.5px;padding:13px 18px;border-radius:11px;border:1px solid rgba(0,255,200,.34);color:var(--txt);background:rgba(0,255,200,.05);transition:.18s}
+.btn:hover{background:rgba(0,255,200,.14);border-color:var(--mint);box-shadow:0 0 34px -6px rgba(0,255,200,.5);transform:translateY(-2px);text-decoration:none}
+.btn.solid{background:linear-gradient(100deg,var(--mint),var(--cyan));color:#02110d;border-color:transparent;font-weight:700}
+.btn.solid:hover{box-shadow:0 12px 40px -10px rgba(0,255,200,.7)}
+.btn.ghost{color:var(--dim);border-color:rgba(139,160,178,.25);background:transparent}
+.btn.ghost:hover{color:var(--txt);border-color:var(--dim);box-shadow:none}
+
+/* terminal / dashboard mock */
+.term{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#080d13,#05080d);overflow:hidden;box-shadow:0 30px 90px -40px rgba(0,255,200,.35)}
+.term .tbar{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--line);background:rgba(0,255,200,.04);font-family:var(--mono);font-size:11px;color:var(--faint)}
+.tbar i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.tbar i.r{background:#ff5f57}.tbar i.y{background:#febc2e}.tbar i.g{background:#28c840}
+.tbody{padding:14px 15px;font-family:var(--mono);font-size:11.8px;line-height:1.75;color:#9fb3c4}
+.tbody .ok{color:var(--mint)}.tbody .hd{color:var(--cyan)}.tbody .wr{color:var(--amber)}.tbody .dim{color:var(--faint)}
+.tbody .msg{margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(0,255,200,.03)}
+.tbody .me{border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05)}
+.tbody .b{padding:1px 6px;border-radius:6px;font-size:10.5px}
+.tbody .b.done{color:var(--mint);border:1px solid rgba(0,255,200,.3)}
+.tbody .b.run{color:var(--cyan);border:1px solid rgba(0,212,255,.3)}
+.tbody .b.app{color:var(--amber);border:1px solid rgba(255,194,71,.35)}
+
+/* sections */
+section{padding:56px 0}
+h2{font-family:var(--disp);font-size:clamp(25px,3.6vw,40px);letter-spacing:-.8px;font-weight:700}
+h2 em{color:var(--mint);font-style:normal}
+.sub{color:var(--dim);max-width:720px;margin-top:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+@media(max-width:980px){.grid3,.grid2,.grid4{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(10,16,23,.9),rgba(7,11,17,.9));border-radius:13px;padding:18px}
+.card h3{font-family:var(--disp);font-size:16.5px;margin-bottom:7px}
+.card p{color:var(--dim);font-size:14px}
+.card .ico{font-family:var(--mono);color:var(--mint);font-size:12px;letter-spacing:1px}
+.card:hover{border-color:rgba(0,255,200,.34);transform:translateY(-2px);transition:.18s}
+
+/* architecture */
+.arch{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.layer{border:1px dashed rgba(0,255,200,.3);border-radius:12px;padding:13px 15px;font-family:var(--mono);font-size:12px;color:var(--dim);background:rgba(0,255,200,.03)}
+.layer b{color:var(--txt);font-family:var(--disp);font-size:13.5px;letter-spacing:.3px}
+.arrow{text-align:center;color:var(--mint);font-family:var(--mono);font-size:13px}
+
+/* table */
+.tbl{margin-top:24px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.tbl table{width:100%;border-collapse:collapse;font-size:13.6px}
+.tbl th,.tbl td{padding:11px 13px;text-align:left;border-bottom:1px solid rgba(0,255,200,.09)}
+.tbl th{font-family:var(--mono);font-size:10.5px;letter-spacing:1.2px;color:var(--faint);background:rgba(0,255,200,.03)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(0,255,200,.035)}
+.tbl .path{font-family:var(--mono);font-size:12.2px;color:var(--mint)}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.6px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+
+/* code */
+pre{background:#04070b;border:1px solid var(--line);border-radius:12px;padding:15px;overflow-x:auto;font-family:var(--mono);font-size:12.4px;line-height:1.7;color:#b9cbd9;margin-top:14px}
+pre .c{color:var(--faint)}
+pre .k{color:var(--mint)}
+code{font-family:var(--mono);font-size:12.5px;background:rgba(0,255,200,.07);border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--txt)}
+
+/* faq */
+details{border:1px solid var(--line);border-radius:12px;background:rgba(10,16,23,.7);padding:14px 16px;margin-top:11px}
+details summary{cursor:pointer;font-weight:600;font-size:14.6px;color:var(--txt);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary:before{content:'▸ ';color:var(--mint)}
+details[open] summary:before{content:'▾ '}
+details p{color:var(--dim);font-size:14px;margin-top:9px}
+
+/* legal + footer */
+.note{border:1px solid rgba(255,46,91,.32);background:rgba(255,46,91,.06);border-radius:12px;padding:15px 16px;color:#eab9c6;font-size:14px;margin-top:24px}
+footer{border-top:1px solid var(--line);margin-top:60px;padding:34px 0 46px;color:var(--faint);font-size:12.6px}
+.fgrid{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.term,.card,pre{scroll-margin-top:80px}
+</style>
+</head><body>
+
+<nav><div class="navin">
+  <a class="brand" href="./index.html" style="text-decoration:none">🛡️ RatanSec <em>OS</em></a>
+  <div class="navlinks">
+    <a href="./index.html">← PORTFOLIO</a>
+    <a href="#downloads">⤓ DOWNLOADS</a>
+    <a href="#run">HOW TO RUN</a>
+    <a href="#features">FEATURES</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/arena/f71ea5d9-ratan-patel-github-io/ratansec-os" target="_blank" rel="noopener">GITHUB</a>
+  </div>
+</div></nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero"><div class="wrap"><div class="hero-grid">
+  <div>
+    <div class="flag">★ FLAGSHIP RELEASE · SELF-ENGINEERED · v1.0.0</div>
+    <h1>RatanSec <em>OS</em></h1>
+    <div class="verline">AI PENTEST ENVIRONMENT · KALI TOOLCHAIN · OPENROUTER AI COPILOT · x86_64 &amp; ARM64</div>
+    <p class="lede">Ek <strong>AI-driven penetration testing environment</strong> — Kali ke tools (nmap, nikto, whatweb, gobuster, ffuf, nuclei, sqlmap, hydra) + <strong>AI copilot jo tumhari bhasha samajhta hai</strong> aur khud tools chalata hai. Web dashboard, CLI, REST API, <strong>human approvals</strong>, scope allowlist aur AI reports — sab ek jagah. Free VM images ke roop me download karo aur 5 minute me operational ho jao.</p>
+    <div class="chips">
+      <span class="chip hot">AI_COPILOT</span><span class="chip">KALI_TOOLCHAIN</span><span class="chip">WEB_DASHBOARD</span>
+      <span class="chip">CLI + REST_API</span><span class="chip hot">HUMAN_APPROVALS</span><span class="chip">SCOPE_ALLOWLIST</span>
+      <span class="chip">AI_REPORTS</span><span class="chip">AUDIT_LOG</span><span class="chip">DOCKER_READY</span>
+    </div>
+    <div class="btns">
+      <a class="btn solid" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.qcow2">⤓ QCOW2 · 597 MB</a>
+      <a class="btn" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.img.gz">⤓ RAW IMG · 548 MB</a>
+      <a class="btn ghost" href="#run">▶ HOW TO RUN</a>
+      <a class="btn ghost" href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/arena/f71ea5d9-ratan-patel-github-io/ratansec-os" target="_blank" rel="noopener">◈ SOURCE CODE</a>
+    </div>
+  </div>
+
+  <div class="term">
+    <div class="tbar"><i class="r"></i><i class="y"></i><i class="g"></i><span>ratansec-os · dashboard · http://&lt;vm-ip&gt;:8000</span></div>
+    <div class="tbody">
+      <div>[ 0.9s] <span class="ok">Kali toolchain loaded</span> — nmap · nikto · nuclei · sqlmap · gobuster · ffuf · hydra</div>
+      <div>[ 1.4s] <span class="ok">AI copilot online</span> — OpenRouter (apni API key)</div>
+      <div>[ 1.6s] <span class="ok">scope allowlist armed</span> — metadata IPs hard-blocked</div>
+      <div>[ 2.0s] <span class="hd">dashboard ready</span> → http://&lt;vm-ip&gt;:8000 · <span class="dim">services: ratansecos</span></div>
+      <div class="msg me"><span class="dim">you ▸</span> example lab target ka quick recon karo</div>
+      <div class="msg"><span class="hd">ai ▸</span> Scope check ✓ target authorized list me hai. Main quick profile chala raha hoon: whois, DNS, HTTP headers, nmap top-100.</div>
+      <div style="margin-top:8px">
+        <span class="b run">RUNNING</span> nmap -T4 -Pn -sT -F --open -sV &nbsp;<span class="dim">(12s)</span><br>
+        <span class="b done">DONE</span> curl -sSI · allow: GET · server: nginx<br>
+        <span class="b app">APPROVAL</span> sqlmap (level 1) ke liye dashboard me confirm karo
+      </div>
+      <div class="msg"><span class="hd">ai ▸</span> 3 findings mile: 2 informational, 1 medium (missing HSTS). Report generate karke Reports tab me save kar diya — download kar sakte ho.</div>
+    </div>
+  </div>
+</div></div></header>
+
+<!-- ============ WHAT / ARCHITECTURE ============ -->
+<section id="about"><div class="wrap">
+  <h2>Yeh kya hai <em>exactly?</em></h2>
+  <p class="sub">RatanSec OS ek "cockpit" hai — niche Kali ke real tools chalte hain, upar ek AI layer jo tumhare instruction samajh kar sahi tool, sahi flags aur sahi analysis deta hai. Har command dashboard + audit log me record hoti hai, aur intrusive steps ke liye tumhari approval maangta hai.</p>
+
+  <div class="arch">
+    <div class="layer"><b>◈ Interface</b> — Web dashboard (chat · scans · runs · reports · tools · audit) · CLI (<span class="path">cli.py</span>) · REST API (<span class="path">/api/docs</span>)</div>
+    <div class="arrow">▲ ▼</div>
+    <div class="layer"><b>◈ AI Agent</b> — OpenRouter tool-calling loop · scope check · approval gates · report writer · Hinglish + English</div>
+    <div class="arrow">▲ ▼</div>
+    <div class="layer"><b>◈ Core</b> — argv-only executor (shell = off) · timeouts + output caps · rate limits · audit log (<span class="path">data/audit.jsonl</span>) · auth (cookie + Bearer)</div>
+    <div class="arrow">▲ ▼</div>
+    <div class="layer"><b>◈ Kali Toolchain</b> — nmap · nikto · whatweb · gobuster · ffuf · nuclei · sqlmap · hydra · whois · dig · curl · netcat</div>
+  </div>
+</div></section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features"><div class="wrap">
+  <h2>Features — <em>asli, chalne wale</em></h2>
+  <div class="grid3">
+    <div class="card"><div class="ico">// AI</div><h3>AI Copilot (tool-calling)</h3><p>Hinglish/English instruction do — AI khud <code>run_scan</code>, <code>run_command</code>, <code>generate_report</code> jaise tools call karta hai, output analyze karta hai aur next steps suggest karta hai. Koi bhi OpenRouter model (GPT-4o, Claude, Gemini, Llama, DeepSeek, free models bhi).</p></div>
+    <div class="card"><div class="ico">// SCAN</div><h3>6 Professional Profiles</h3><p><code>quick</code> recon · <code>web</code> (WhatWeb + Nikto + gobuster) · <code>network</code> top-1000 ports + scripts · <code>vuln</code> (nmap vuln + Nuclei CVE templates) · <code>webapp</code> (sqlmap + ffuf) · <code>full</code> sab kuch.</p></div>
+    <div class="card"><div class="ico">// SAFETY</div><h3>Human-in-the-Loop</h3><p>sqlmap/hydra jaise intrusive tools aur scope ke bahar wale targets par dashboard me <b>Approve / Deny</b> card aata hai. Approve karne par wahi scan chalta hai aur AI result aage analyze kar deta hai.</p></div>
+    <div class="card"><div class="ico">// SCOPE</div><h3>Scope Allowlist</h3><p><code>ALLOWED_TARGETS</code> me apne domains/wildcards/CIDR daalo — bahar ka kuch bhi scan nahi hoga. Cloud metadata IPs (169.254.x.x) hard-blocked — SSRF-style abuse impossible.</p></div>
+    <div class="card"><div class="ico">// EXEC</div><h3>Injection-Proof Execution</h3><p>Har command <b>argv list</b> ke roop me chalti hai (<code>shell=False</code>) — <code>; rm -rf /</code> jaisa injection impossible. Per-step timeout, output caps, cancel support, background runs.</p></div>
+    <div class="card"><div class="ico">// REPORT</div><h3>AI Reports + Audit Log</h3><p>Ek click me Markdown report jisme AI ka analysis hota hai (findings, risk, next steps). Saath me <code>audit.jsonl</code> — kaun, kab, kya chalaya — evidence ke liye.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ DOWNLOADS ============ -->
+<section id="downloads"><div class="wrap">
+  <h2>Downloads — <em>free, ready to import</em></h2>
+  <p class="sub">GitHub Release se seedha download. Har image me poora RatanSec OS baked hai — boot karte hi khud install ho jata hai (tools + service, 4–6 min), phir <code>http://&lt;VM-IP&gt;:8000</code> par dashboard. Password VM ke andar <code>/root/ratansec-credentials.txt</code> me milta hai.</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>File</th><th>Size</th><th>Kis VM ke liye</th><th>Download</th></tr></thead>
+    <tbody>
+      <tr><td class="path">ratansec-os-1.0.0-amd64.qcow2</td><td>597 MB</td><td>Oracle Cloud custom image · Proxmox · KVM/libvirt · GCP import</td><td><a class="btn solid" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.qcow2">⤓ QCOW2</a></td></tr>
+      <tr><td class="path">ratansec-os-1.0.0-amd64.img.gz</td><td>548 MB</td><td>Raw disk — jo providers <code>raw .img</code> maangte hain (<code>gzip -d</code> karke unzip)</td><td><a class="btn" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.img.gz">⤓ RAW IMG</a></td></tr>
+      <tr><td class="path">ratansec-os-1.0.0-amd64.vmdk</td><td>568 MB</td><td>VMware Workstation / ESXi / VirtualBox</td><td><a class="btn ghost" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.vmdk">⤓ VMDK</a></td></tr>
+      <tr><td class="path">ratansec-os-1.0.0-amd64.vdi</td><td>1.8 GB</td><td>VirtualBox (direct attach — convert nahi karna padta)</td><td><a class="btn ghost" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-os-1.0.0-amd64.vdi">⤓ VDI</a></td></tr>
+      <tr><td class="path">ratansec-seed.iso</td><td>40 KB</td><td>cloud-init config — kisi bhi Ubuntu cloud VM me 2nd CD-ROM me lagao, sab auto-install</td><td><a class="btn ghost" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/ratansec-seed.iso">⤓ SEED ISO</a></td></tr>
+      <tr><td class="path">SHA256SUMS.txt</td><td>1 KB</td><td>Checksum verify: <code>sha256sum -c SHA256SUMS.txt</code></td><td><a class="btn ghost" style="padding:9px 13px" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases/download/ratansec-os-image-v1.0.0/SHA256SUMS.txt">⤓ SUMS</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="grid2">
+    <div class="card"><div class="ico">// NOTE</div><h3>QCOW2 vs RAW IMG</h3><p><b>QCOW2</b> = compressed + import-friendly (Oracle Custom Image, Proxmox <code>qm importdisk</code>, GCP). <b>RAW IMG</b> = unzip karne par ~3.5 GB ka plain disk — un tools/providers ke liye jo raw maangte hain.</p></div>
+    <div class="card"><div class="ico">// NOTE</div><h3>ISO OS nahi hai</h3><p><code>ratansec-seed.iso</code> sirf <b>40 KB ka config disc</b> hai (cloud-init user-data). Poora OS <b>VM images</b> (qcow2/vmdk/vdi/img) ke andar hai. Seed ISO us VM ke liye hai jisme tum stock Ubuntu 24.04 cloud image use kar rahe ho.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ HOW TO RUN ============ -->
+<section id="run"><div class="wrap">
+  <h2>Chalane ke <em>4 raste</em> — apna chuno</h2>
+
+  <div class="grid2">
+    <div class="card"><div class="ico">// RASTA 1</div><h3>VM image import (recommended)</h3><p>QCOW2 download karo → cloud/VM me import → boot → 4–6 min baad dashboard live. Oracle Cloud free tier ARM (Ampere) par ARM64 image, x86 VM par amd64.</p>
+      <pre><span class="c"># Oracle Cloud (steps)</span>
+Storage → Buckets → qcow2 upload
+Compute → Custom Images → Import image <span class="k">(OS: Ubuntu 24.04)</span>
+Custom image → Create Instance → SSH key
+Security List → Ingress: <span class="k">TCP 8000 · 0.0.0.0/0</span>
+
+<span class="c"># Proxmox</span>
+qm importdisk 900 ratansec-os-1.0.0-amd64.qcow2 local-lvm
+qm set 900 --scsi0 local-lvm:vm-900-disk-0 --ide2 local-lvm:cloudinit</pre></div>
+
+    <div class="card"><div class="ico">// RASTA 2</div><h3>Seed ISO (kuch bhi platform)</h3><p>Koi bhi Ubuntu 24.04 cloud VM chalao → <code>ratansec-seed.iso</code> ko <b>2nd CD-ROM</b> me attach karo → boot. Cloud-init baaki sab kar dega.</p>
+      <pre><span class="c"># Multipass (laptop par fastest)</span>
+multipass launch 24.04 --name ratansec --memory 4G --disk 20G \
+  --cloud-init ratansec-os/deploy/cloud-init/user-data
+multipass exec ratansec -- sudo cat /root/ratansec-credentials.txt</pre></div>
+
+    <div class="card"><div class="ico">// RASTA 3</div><h3>VPS installer (ek command)</h3><p>Kisi bhi Ubuntu/Debian VM (Oracle/GCP/Vultr/Hetzner/DO) ke SSH me:</p>
+      <pre>sudo apt update &amp;&amp; sudo apt install -y git
+git clone https://github.com/Ratan-patel/Ratan-patel.github.io.git
+cd Ratan-patel.github.io
+sudo bash ratansec-os/deploy/vps-install.sh \
+  <span class="k">--key sk-or-v1-TUMHARI-KEY</span> \
+  <span class="k">--scope "tera-domain.com"</span> --port 8000
+
+<span class="c"># ban gaya: http://&lt;VM-IP&gt;:8000  · 24x7 systemd service</span>
+ratansec status | logs -f | restart | password</pre></div>
+
+    <div class="card"><div class="ico">// RASTA 4</div><h3>Docker / local script</h3><p>Kali image (saare tools pre-installed) ya halka Debian slim — dono me compose file hai.</p>
+      <pre>cd ratansec-os &amp;&amp; cp .env.example .env
+nano .env   <span class="c"># APP_PASSWORD + OPENROUTER_API_KEY</span>
+
+docker compose up -d --build     <span class="c"># full Kali (~3 GB)</span>
+<span class="c"># ya halka:</span>
+docker build -f Dockerfile.slim -t ratansec-os:slim .
+
+./setup.sh --with-tools          <span class="c"># Linux/Kali/macOS/Termux</span>
+start-windows.bat                <span class="c"># Windows</span></pre></div>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Rasta</th><th>Kis ke liye</th><th>Time</th><th>Tools</th></tr></thead>
+    <tbody>
+      <tr><td><b>VM image (qcow2)</b></td><td>Cloud VM, Proxmox, KVM — 24x7 chalanay ke liye</td><td>~10 min</td><td>Sab (pre-baked)</td></tr>
+      <tr><td><b>Seed ISO</b></td><td>Koi bhi Ubuntu cloud VM — Oracle/GCP/AWS/Multipass</td><td>~8 min</td><td>Sab (auto-install)</td></tr>
+      <tr><td><b>VPS script</b></td><td>Jaldi setup, systemd service, ek command</td><td>~6 min</td><td>Sab (apt se)</td></tr>
+      <tr><td><b>Docker</b></td><td>Isolation pasand ho / Kali full image</td><td>~10 min</td><td>Sab (image me)</td></tr>
+      <tr><td><b>Local script</b></td><td>Laptop, phone (Termux), Windows</td><td>~3 min</td><td>Jo installed hain</td></tr>
+      <tr><td><b>GitHub Codespaces</b></td><td>Kuch install nahi — sirf browser</td><td>~5 min</td><td>Sab (auto)</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- ============ CLI / API ============ -->
+<section id="cli"><div class="wrap">
+  <h2>CLI &amp; <em>REST API</em></h2>
+  <p class="sub">Dashboard ke saath-saath poora control terminal aur API se bhi — apni website/app me integrate karna ho to <code>/api/docs</code> par Swagger ready hai.</p>
+  <div class="grid2">
+    <div class="card"><div class="ico">// CLI</div>
+      <pre>export RATANSEC_URL=http://localhost:8000
+export RATANSEC_PASSWORD='tera-password'
+
+python cli.py status
+python cli.py tools
+python cli.py scan --target example.com <span class="k">--profile quick --wait</span>
+python cli.py scan --target example.com <span class="k">--profile full --wait --report</span>
+python cli.py chat "example.com ke open ports check karo"
+python cli.py approve &lt;approval_id&gt;
+python cli.py audit --limit 50</pre></div>
+    <div class="card"><div class="ico">// API</div>
+      <pre>curl -X POST http://localhost:8000/api/chat \
+  -H "Authorization: Bearer $APP_PASSWORD" \
+  -H 'Content-Type: application/json' \
+  -d '{"messages":[{"role":"user",
+       "content":"example.com ka recon karo"}],
+       "conversation_id":"c1"}'
+
+<span class="c"># Endpoints: /api/scan /api/runs /api/reports</span>
+<span class="c">#            /api/approvals /api/audit /api/tools</span>
+<span class="c"># Interactive docs → /api/docs</span></pre></div>
+  </div>
+</div></section>
+
+<!-- ============ SAFETY ============ -->
+<section id="safety"><div class="wrap">
+  <h2>Safety <em>by design</em></h2>
+  <div class="grid4">
+    <div class="card"><div class="ico">01</div><h3>Scope allowlist</h3><p>Sirf tumhare likhe targets par scan — baaki sab rejected.</p></div>
+    <div class="card"><div class="ico">02</div><h3>Approval gates</h3><p>Intrusive tools aur scope-less mode me human confirmation lazmi.</p></div>
+    <div class="card"><div class="ico">03</div><h3>No shell</h3><p>argv-only execution — command injection ka koi rasta nahi.</p></div>
+    <div class="card"><div class="ico">04</div><h3>Audit trail</h3><p>Har command <code>audit.jsonl</code> me — evidence + accountability.</p></div>
+  </div>
+  <div class="note"><b>⚠️ Legal:</b> RatanSec OS sirf <b>authorized security testing</b> ke liye hai — apne systems, lab VMs, bug-bounty scope ya written client contract. Bina permission kisi bhi system ko scan karna illegal hai (India: IT Act 2000 ke under). Scope allowlist aur approval gates ko seriously use karo; galat use ki zimmedari user ki hai.</div>
+</div></section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq"><div class="wrap">
+  <h2>FAQ — <em>jo sab poochhte hain</em></h2>
+  <details open><summary>Kya yeh 25 MB me aa sakta hai?</summary><p>Nahi — aur koi bhi OS + hacking tools 25 MB me nahi aate (Kali ISO khud ~4.5 GB hai, Metasploit ~400 MB, ek chhota AI model 300 MB+). RatanSec OS ka core code sirf ~500 KB hai, par tools aur VM image bade rehte hain. Isi liye design aisa hai: <b>AI layer halka</b> (tumhari API key se chalti hai) aur <b>tools cloud VM me</b> (on-demand).</p></details>
+  <details><summary>AI key kiski? Paisa kitna lagega?</summary><p>AI sim ki <b>apni OpenRouter key</b> (free account + free models possible). Software aur VM images <b>free</b> hain. Paid models par ek scan+analysis ≈ ₹0.2–1; roz 20 scans ≈ ₹150–600/mahina. Server: Oracle Cloud Always Free (4 ARM CPU/24 GB RAM) par ₹0, ya $5–6/mo VPS.</p></details>
+  <details><summary>Kaunse tools andar hain?</summary><p>nmap · nikto · whatweb · gobuster · ffuf · nuclei · sqlmap · hydra · whois · dig · curl · netcat — aur registry extend karna ek JSON block jitna aasan hai. Missing tools ke install commands dashboard ke Tools tab me dikhte hain.</p></details>
+  <details><summary>Mobile par chal sakta hai?</summary><p>Haan — do tarike: (1) Termux me <code>./setup.sh</code> (nmap/curl/whois chalte hain), (2) cloud par deploy karke phone ke browser se dashboard use karo (recommended).</p></details>
+  <details><summary>Kya yeh Kali ko replace karta hai?</summary><p>Yeh Kali/Pentest distro ko replace nahi karta — yeh unke <b>upar AI layer + orchestration</b> deta hai. Tumhare tools wahi rahte hain, bas ek copilot unhe chala kar samjhata hai, aur poora kaam dashboard + audit log me organised rehta hai.</p></details>
+  <details><summary>Source code kahan hai? Kya main modify kar sakta hoon?</summary><p>Poora source GitHub par hai — <code>ratansec-os/</code> folder (FastAPI backend, agent loop, tool registry, dashboard, CLI, CI builders). Customise karo: naya tool add karo, apni profiles banao, apna model/endpoint lagao.</p></details>
+</div></section>
+
+<footer><div class="wrap"><div class="fgrid">
+  <div>🛡️ <b>RatanSec OS</b> v1.0.0 — AI pentest environment · engineered by <a href="./index.html">Ratan Kumar Patel</a></div>
+  <div class="mono">PatelRatan460@Gmail.Com · +91 8700913645 · New Delhi, India</div>
+</div></div></footer>
+
+</body></html>

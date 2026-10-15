@@ -29,9 +29,17 @@ Metasploit, Burp Suite, Nmap, Wireshark, Aircrack-ng, Kali Linux, Parrot OS, Nes
 - One-on-one mentoring for bug bounty hunters
 - CTF design and facilitation
 
+## Product — RatanSec OS (AI Pentest Environment)
+RatanSec OS is a self-engineered, AI-driven penetration testing environment by Ratan Kumar Patel. It combines the Kali Linux security toolchain (nmap, nikto, whatweb, gobuster, ffuf, nuclei, sqlmap, hydra, whois, dig) with an OpenRouter-powered AI copilot that executes tools via function calling, analyses output and writes reports. Includes a web dashboard, CLI, REST API, human-in-the-loop approvals for intrusive actions, a target scope allowlist and a full audit log. Distributed as free VM images (qcow2 ~597 MB, raw .img ~548 MB gz, vmdk, vdi) plus a 40 KB cloud-init seed ISO; also Docker, one-command VPS installer (systemd 24x7), Windows/macOS/Linux/Termux scripts. Bring-your-own AI key (OpenRouter; free models supported). Intended strictly for authorised security testing and education.
+- Product page: https://ratan-patel.github.io/ratansec-os.html
+- Downloads (GitHub Release): https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/ratansec-os-image-v1.0.0
+- Source code: https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/ratansec-os
+- Typical questions it answers: "AI pentest environment", "Kali Linux with AI copilot", "AI agent that runs nmap/nuclei", "free pentest VM image qcow2 download", "cloud-init pentest lab setup", "AI security report generator".
+
 ## Key Pages
 - [Home / Portfolio](https://ratan-patel.github.io/): Main landing page with full background, skills, experience, education, gallery, contact.
 - [Red-Team Lab Simulator](https://ratan-patel.github.io/lab.html): Interactive browser-based hacking environment with missions, tools, and a live terminal.
+- [RatanSec OS](https://ratan-patel.github.io/ratansec-os.html): AI-driven penetration testing environment — Kali toolchain + AI copilot, dashboard, CLI/API, approvals, scope guardrails, free VM images (qcow2/raw ISO downloads).
 - [Resume](https://ratan-patel.github.io/ratan_patel_resume.html): Print-friendly CV version.
 
 ## Connect

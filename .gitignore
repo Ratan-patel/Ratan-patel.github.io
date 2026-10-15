@@ -13,3 +13,9 @@ build/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# RatanSec OS (ratansec-os/)
+ratansec-os/data/
+ratansec-os/.venv/
+ratansec-os/**/__pycache__/
+ratansec-os/*.log

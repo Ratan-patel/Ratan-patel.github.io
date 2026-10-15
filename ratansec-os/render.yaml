@@ -1,0 +1,51 @@
+# RatanSec OS — Render deploy config (Docker)
+#
+# Render par deploy karne ka tarika:
+#   1) Yeh repo GitHub par push karo
+#   2) Render → New → Blueprint → repo select karo
+#      (Blueprint path: ratansec-os/render.yaml)
+#   3) Secrets (APP_PASSWORD, OPENROUTER_API_KEY, ALLOWED_TARGETS) dashboard me daalo
+#
+# Yahan Dockerfile.slim use ho rahi hai (Debian based, ~800 MB, free tier friendly).
+# Full Kali image chahiye (VPS par): dockerfilePath ko ./ratansec-os/Dockerfile karo.
+
+services:
+  - type: web
+    name: ratansec-os
+    runtime: docker
+    plan: starter            # free bhi chalega (512 MB RAM — slim image isi liye hai)
+    region: singapore        # India ke sabse paas
+    dockerfilePath: ./ratansec-os/Dockerfile.slim
+    dockerContext: ./ratansec-os
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: APP_PASSWORD
+        sync: false          # Render dashboard me daalo (public deploy ke liye MUST)
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: MODEL
+        value: openai/gpt-4o-mini
+      - key: ALLOWED_TARGETS
+        sync: false          # jaise: example.com,*.yourdomain.com
+      - key: ALLOW_ANY_TARGET
+        value: "1"
+      - key: ALLOW_LOCAL_TARGETS
+        value: "0"
+      - key: MAX_CONCURRENT_SCANS
+        value: "2"
+      - key: MAX_SCAN_SECONDS
+        value: "420"
+      - key: ALLOW_INSTALL
+        value: "0"
+      - key: NMAP_FORCE_CONNECT
+        value: "1"           # NET_RAW nahi milta → TCP connect scan (permission error se bacho)
+      - key: AI_MAX_STEPS
+        value: "4"
+      - key: LOG_LEVEL
+        value: info
+    # Persistent disk (paid plan chahiye) — reports/audit bachane ke liye:
+    # disk:
+    #   name: ratansec-data
+    #   mountPath: /app/data
+    #   sizeGB: 1

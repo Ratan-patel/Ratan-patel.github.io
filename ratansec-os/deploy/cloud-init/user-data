@@ -1,0 +1,117 @@
+#cloud-config
+# ═══════════════════════════════════════════════════════════════════════
+#  RatanSec OS — cloud-init config (VM ka first boot auto-setup)
+#
+#  Isse kaise use karo:
+#   1) Ye ISO banao:   bash ratansec-os/deploy/build-seed-iso.sh --key sk-or-v1-... --scope "tera-domain.com"
+#   2) VM banao kisi bhi Ubuntu/Debian cloud image se (Oracle/GCP/AWS/Proxmox/Multipass)
+#   3) Us VM me ye ISO ko **second drive / CD-ROM** me attach karo
+#   4) VM boot karo — cloud-init khud RatanSec OS install kar dega (~4-6 min)
+#   5) Dashboard:  http://<VM-IP>:8000   ·  password: /root/ratansec-password.txt me milega
+#
+#  ⚠️ Ye file template hai — build-seed-iso.sh iske placeholders (__RATANSEC_*__)
+#     replace karke final ISO banata hai. Placeholder waise hi chhod do to bhi chalega
+#     (password first boot par khud generate hoga, AI key khaali rahegi).
+# ═══════════════════════════════════════════════════════════════════════
+hostname: ratansec-os
+manage_etc_hosts: true
+package_update: true
+package_upgrade: false
+packages:
+  - git
+  - curl
+  - ca-certificates
+  - python3
+  - python3-venv
+  - python3-pip
+
+write_files:
+  - path: /usr/local/bin/ratansec-firstboot.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+      #!/usr/bin/env bash
+      # RatanSec OS first-boot installer (cloud-init se chalta hai)
+      set -uo pipefail
+      LOG=/var/log/ratansec-firstboot.log
+      exec > >(tee -a "$LOG") 2>&1
+
+      echo "═══ RatanSec OS first boot $(date -Is) ═══"
+
+      # 1) helper: console par bhi likho (cloud serial console me dikhega)
+      say() {
+        echo "$*"
+        { echo "$*"; } > /dev/console 2>/dev/null || true
+      }
+
+      # 2) code laao (private repo ho to git URL me token daal dena)
+      BRANCH="__RATANSEC_BRANCH__"
+      SRC_DIR="/opt/ratansec-src"
+      if [ -d "$SRC_DIR/.git" ]; then
+        git -C "$SRC_DIR" fetch --depth 1 origin "$BRANCH" && git -C "$SRC_DIR" checkout FETCH_HEAD
+      else
+        rm -rf "$SRC_DIR"
+        say "[ratansec] code clone kar raha hoon (branch: $BRANCH)…"
+        git clone --depth 1 --branch "$BRANCH" \
+          https://github.com/Ratan-patel/Ratan-patel.github.io.git "$SRC_DIR" \
+          || say "[ratansec] ⚠️ clone fail — repo URL/branch check karo"
+      fi
+
+      if [ ! -f "$SRC_DIR/ratansec-os/deploy/vps-install.sh" ]; then
+        say "[ratansec] ✗ installer nahi mila — yahan hai: $SRC_DIR"
+        say "[ratansec] check karo branch me ratansec-os/ folder maujood hai"
+        exit 1
+      fi
+
+      # 3) installer chalao (idempotent hai — dobara chalane par password preserve karta hai)
+      API_KEY="__RATANSEC_API_KEY__"
+      SCOPE="__RATANSEC_SCOPE__"
+      MODEL="__RATANSEC_MODEL__"
+      PORT="__RATANSEC_PORT__"
+      EXTRA="__RATANSEC_EXTRA_FLAGS__"
+
+      say "[ratansec] installer chala raha hoon (tools install honge, 3-6 min)…"
+      # shellcheck disable=SC2086
+      bash "$SRC_DIR/ratansec-os/deploy/vps-install.sh" \
+        --key "$API_KEY" --scope "$SCOPE" --model "$MODEL" --port "$PORT" $EXTRA || true
+
+      # 4) password nikaal ke safe jagah rakho + console par dikhao
+      if [ -f /opt/ratansec-os/.env ]; then
+        PASS="$(grep -E '^APP_PASSWORD=' /opt/ratansec-os/.env | cut -d= -f2-)"
+        IP="$(curl -s -m 5 ifconfig.me || hostname -I | awk '{print $1}')"
+        {
+          echo "RatanSec OS — dashboard credentials"
+          echo "URL:      http://${IP}:${PORT}"
+          echo "Local:    http://127.0.0.1:${PORT}"
+          echo "Password: ${PASS}"
+          echo "(badalna ho: sudo nano /opt/ratansec-os/.env  →  ratansec restart)"
+        } > /root/ratansec-credentials.txt
+        chmod 600 /root/ratansec-credentials.txt
+
+        say "════════════════════════════════════════════════"
+        say "  ✅ RatanSec OS READY"
+        say "  Dashboard: http://${IP}:${PORT}"
+        say "  Password:  ${PASS}"
+        say "  (details: /root/ratansec-credentials.txt)"
+        say "════════════════════════════════════════════════"
+      else
+        say "[ratansec] ⚠️ .env nahi bana — /var/log/ratansec-firstboot.log dekho"
+      fi
+
+      # 5) cloud firewall ke bahar bhi andar wala firewall khol do
+      if command -v ufw >/dev/null 2>&1; then
+        ufw allow "${PORT}/tcp" >/dev/null 2>&1 || true
+      fi
+      if command -v firewall-cmd >/dev/null 2>&1; then
+        firewall-cmd --add-port="${PORT}/tcp" --permanent >/dev/null 2>&1 || true
+        firewall-cmd --reload >/dev/null 2>&1 || true
+      fi
+
+      # 6) source copy ki zarurat nahi rahi
+      rm -rf "$SRC_DIR"
+      echo "═══ first boot done $(date -Is) ═══"
+
+runcmd:
+  - [bash, -lc, "/usr/local/bin/ratansec-firstboot.sh"]
+
+final_message: "RatanSec OS cloud-init complete. Dashboard: http://<VM-IP>:8000 — password: /root/ratansec-credentials.txt"

@@ -1,0 +1,286 @@
+name: Build RatanSec OS VM images (qcow2 / vmdk / vdi / seed ISO)
+
+# ═══════════════════════════════════════════════════════════════════════
+#  Ye workflow GitHub ke cloud runner par RatanSec OS ki asli VM image banata hai:
+#     • ratansec-os-<ver>-amd64.qcow2  → KVM / Proxmox / Oracle Cloud custom image
+#     • ratansec-os-<ver>-amd64.vmdk   → VMware / ESXi / VirtualBox
+#     • ratansec-os-<ver>-amd64.vdi    → VirtualBox (direct attach)
+#     • ratansec-seed.iso              → cloud-init config (2nd drive me lagao)
+#     • SHA256SUMS.txt
+#
+#  File kahan milegi: repo ke "Releases" page par (tag: ratansec-os-image-v1.0.0)
+#  Manual run:  Actions → "Build RatanSec OS VM images" → Run workflow
+# ═══════════════════════════════════════════════════════════════════════
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: "CPU arch (amd64 = x86 VMs, arm64 = Oracle Ampere free / ARM VMs)"
+        type: choice
+        options: [amd64, arm64]
+        default: amd64
+      distro:
+        description: "Ubuntu base"
+        type: choice
+        options: [noble, jammy]
+        default: noble
+      stock_only:
+        description: "Sirf stock Ubuntu image + seed ISO (bake skip — fast)"
+        type: boolean
+        default: false
+      make_release:
+        description: "GitHub Release me attach karo"
+        type: boolean
+        default: true
+  push:
+    branches: [main, "arena/**"]
+    paths:
+      - ".github/workflows/build-ratansec-image.yml"
+      - "ratansec-os/deploy/build-image.sh"
+      - "ratansec-os/deploy/build-seed-iso.sh"
+      - "ratansec-os/deploy/cloud-init/**"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ratansec-image-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  disk-images:
+    name: Build disk images (${{ github.event.inputs.arch || 'amd64' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space (runner me jagah banano)
+        run: |
+          echo "before:"; df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL \
+                      /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" 2>/dev/null || true
+          sudo apt-get clean
+          echo "after:"; df -h / | tail -1
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools curl rsync python3-pip linux-image-virtual 2>/dev/null || \
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools curl rsync python3-pip
+          ls /boot/vmlinuz* 2>/dev/null | head -3 || echo "warn: /boot me kernel nahi (libguestfs ko dikkat ho sakti hai)"
+          echo "LIBGUESTFS_MEMSIZE=1024" >> "$GITHUB_ENV"
+          python3 -m pip install --quiet --break-system-packages pycdlib || pip3 install --quiet pycdlib
+          qemu-img --version | head -1
+          virt-customize --version | head -1 || true
+
+      - name: "Stage 1/5: download Ubuntu cloud image"
+        env:
+          LIBGUESTFS_BACKEND: direct
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          set -o pipefail
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" --only download --keep-work \
+            2>&1 | tee /tmp/stage-download.log
+        # (pipefail + tee: fail hone par exit code sahi rehta hai)
+
+      - name: "Preflight: libguestfs/qemu test"
+        env:
+          LIBGUESTFS_BACKEND: direct
+        run: |
+          set -x
+          sudo -E env LIBGUESTFS_BACKEND=direct bash -c '
+            virt-customize --version || true
+            qemu-img create -f qcow2 /tmp/preflight.img 200M
+            virt-customize -a /tmp/preflight.img --no-network --run-command "echo preflight-ok" 2>&1 | tail -40
+            echo "--- passt-less mode check (bake isi mode me chalta hai) ---"
+            echo "preflight exit: $?"
+          ' 2>&1 | tee /tmp/preflight.log
+          echo "── preflight done ──"
+
+      - name: "Stage 2/5: bake app (virt-customize)"
+        env:
+          LIBGUESTFS_BACKEND: direct
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+          STOCK_ONLY: ${{ github.event.inputs.stock_only && '1' || '0' }}
+        run: |
+          set -o pipefail
+          FLAGS="--arch $ARCH --distro $DISTRO --only bake --keep-work"
+          if [ "$STOCK_ONLY" = "1" ]; then FLAGS="$FLAGS --stock-only"; fi
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh $FLAGS 2>&1 | tee /tmp/stage-bake.log
+          test -s /tmp/imgbuild/ratansec-os-*-build.img || true
+
+      - name: "Disk space check"
+        run: df -h / /tmp | sed -n '1,4p'
+
+      - name: "Stage 3/5: convert (qcow2/vmdk/vdi/img.gz)"
+        env:
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          set -o pipefail
+          sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
+            --types qcow2,vmdk,vdi,img --only convert --keep-work 2>&1 | tee /tmp/stage-convert.log
+
+      - name: "Stage 4/5: seed ISO (cloud-init)"
+        env:
+          ARCH: ${{ github.event.inputs.arch || 'amd64' }}
+          DISTRO: ${{ github.event.inputs.distro || 'noble' }}
+        run: |
+          set -o pipefail
+          sudo -E env PATH="$PATH" WORK_DIR=/tmp/imgbuild \
+            bash ratansec-os/deploy/build-image.sh --arch "$ARCH" --distro "$DISTRO" \
+            --only seed --keep-work 2>&1 | tee /tmp/stage-seed.log
+
+      - name: "Stage 5/5: checksums + listing"
+        run: |
+          WORK_DIR=/tmp/imgbuild bash ratansec-os/deploy/build-image.sh --only sums --keep-work || true
+          ls -lh ratansec-os/artifacts/
+          df -h / | tail -1
+
+      - name: "On failure — diagnostics (PR comment + annotations)"
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DIAG=/tmp/diagnostics.txt
+          {
+            echo "RatanSec image build FAILED — run ${{ github.run_id }} ($(date -Is))"
+            echo
+            for f in /tmp/preflight.log /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
+              [ -s "$f" ] || continue
+              echo "══════ $f ══════"
+              tail -60 "$f"
+              echo
+            done
+          } > "$DIAG"
+
+          # 1) annotations (gh run view me dikhte hain)
+          grep -iE "error|fail|✗|cannot|unable|not found|no such|denied|quota|space" "$DIAG" | tail -20 | sed 's/^/::error::/' || true
+          echo "::error::build fail — pura log PR comment me bheja gaya hai"
+
+          # 2) PR comment (logs/artifacts download block hone par bhi readable)
+          PR=$(gh pr list --head "${{ github.ref_name }}" --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$PR" ]; then
+            {
+              echo "### 🔧 RatanSec image build diagnostics (run ${{ github.run_id }})"
+              echo ""
+              echo '```'
+              tail -120 "$DIAG"
+              echo '```'
+            } > /tmp/comment.md
+            gh pr comment "$PR" --body-file /tmp/comment.md || echo "PR comment fail"
+          else
+            echo "PR nahi mili — comment skip"
+          fi
+
+          # 3) diagnostics file repo me commit karo (logs blob API block ho to bhi readable)
+          {
+            echo "# RatanSec image build diagnostics"
+            echo ""
+            echo "Run: ${{ github.run_id }} · $(date -Is) · ref: ${{ github.ref_name }}"
+            echo ""
+            for f in /tmp/preflight.log /tmp/stage-download.log /tmp/stage-bake.log /tmp/stage-convert.log /tmp/stage-seed.log; do
+              [ -s "$f" ] || continue
+              echo "## $(basename "$f")"
+              echo '```'
+              tail -100 "$f"
+              echo '```'
+              echo
+            done
+          } > ratansec-os/deploy/artifacts/BUILD-DIAGNOSTICS.md
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ratansec-os/deploy/artifacts/BUILD-DIAGNOSTICS.md
+          if git commit -m "ci: ratansec image build diagnostics (run ${{ github.run_id }}) [skip ci]" >/dev/null 2>&1; then
+            git push origin "HEAD:${{ github.ref_name }}" || echo "diagnostics push fail"
+          else
+            echo "commit ke liye kuch nahi tha"
+          fi
+          exit 1
+
+      - name: Upload as workflow artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratansec-os-images-${{ github.event.inputs.arch || 'amd64' }}
+          path: ratansec-os/artifacts/*
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload build logs (debug ke liye)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_id }}
+          path: /tmp/stage-*.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Publish to GitHub Release
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ratansec-os-image-v1.0.0
+        run: |
+          shopt -s nullglob
+          files=(ratansec-os/artifacts/*)
+          if [ ${#files[@]} -eq 0 ]; then echo "koi artifact nahi bana — release skip"; exit 0; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.make_release }}" = "false" ]; then
+            echo "make_release=false — release skip"; exit 0
+          fi
+          VER=$(sed -n 's/^VERSION = "\(.*\)"/\1/p' ratansec-os/app/config.py | sed -n '1p')
+          NOTES="RatanSec OS v$VER — ready-to-import VM images
+
+          | File | Kahan use hota hai |
+          |---|---|
+          | \`*.qcow2\` | KVM / libvirt / Proxmox / **Oracle Cloud custom image import** |
+          | \`*.vmdk\` | VMware Workstation / ESXi / VirtualBox |
+          | \`*.vdi\` | VirtualBox (direct) |
+          | \`*.img.gz\` | **raw disk** (jo providers raw maangte hain) — \`gzip -d\` karke \`.img\` banao |
+          | \`ratansec-seed.iso\` | cloud-init config — VM me 2nd CD-ROM me attach karo (first boot par auto install) |
+
+          **Pehla boot:** image boot karte hi RatanSec OS khud install ho jata hai (tools + service, 4-6 min).
+          Dashboard: \`http://<VM-IP>:8000\` · password VM ke andar \`/root/ratansec-credentials.txt\` me hai.
+
+          **Credentials badalna:** VM me \`sudo nano /opt/ratansec-os/.env\` → \`ratansec restart\`
+
+          Import steps: dekho \`ratansec-os/deploy/IMAGE_GUIDE.md\`
+          ⚠️ Sirf authorized security testing ke liye."
+
+          set -x
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" ratansec-os/artifacts/* --clobber || echo "upload fail"
+            gh release edit "$TAG" --notes "$NOTES" || echo "notes edit fail"
+          else
+            gh release create "$TAG" ratansec-os/artifacts/* \
+              --title "RatanSec OS VM images v$VER (qcow2 / vmdk / vdi / seed ISO)" \
+              --notes "$NOTES" \
+              --target "${GITHUB_SHA}" || echo "release create fail"
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"' || true
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## RatanSec OS images ready ✅"
+            echo ""
+            echo "| File | Size |"
+            echo "|---|---|"
+            for f in ratansec-os/artifacts/*; do
+              echo "| \`$(basename "$f")\` | $(du -h "$f" | cut -f1) |"
+            done
+            echo ""
+            echo "Download: **Actions → is run ke artifacts**, ya Releases page (tag \`ratansec-os-image-v1.0.0\`)."
+          } >> "$GITHUB_STEP_SUMMARY"
