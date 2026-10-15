@@ -53,17 +53,24 @@ jobs:
             sudo mkdir -p /usr/share/live/build/data/debian-cd
             sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
             sudo ln -sfn sid /usr/share/debootstrap/scripts/echo
-            parrot_key="$RUNNER_TEMP/parrot-archive-keyring.gpg"
+            parrot_key_source="$RUNNER_TEMP/parrotsec.gpg"
+            parrot_keyring="$RUNNER_TEMP/parrot-archive-keyring.gpg"
+            parrot_key_home="$RUNNER_TEMP/parrot-key-home"
+            parrot_fingerprint='B711822346552E4D92DA02DF7A8286AF0E81EE4A'
+            install -d -m 0700 "$parrot_key_home"
             curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
               --silent --show-error \
-              https://deb.parrot.sh/parrot/misc/parrotsec.gpg -o "$parrot_key"
-            if ! gpg --batch --show-keys --with-colons "$parrot_key" \
-              | awk -F: -v expected='B711822346552E4D92DA02DF7A8286AF0E81EE4A' \
+              https://deb.parrot.sh/parrot/misc/parrotsec.gpg -o "$parrot_key_source"
+            gpg --homedir "$parrot_key_home" --batch --import "$parrot_key_source"
+            if ! gpg --homedir "$parrot_key_home" --batch --with-colons --list-keys \
+              | awk -F: -v expected="$parrot_fingerprint" \
                   '$1 == "fpr" && toupper($10) == expected { found = 1 } END { exit found ? 0 : 1 }'; then
               echo 'Downloaded Parrot archive key has an unexpected fingerprint.' >&2
               exit 1
             fi
-            sudo install -m 0644 "$parrot_key" /usr/share/keyrings/parrot-archive-keyring.gpg
+            gpg --homedir "$parrot_key_home" --batch --export "$parrot_fingerprint" > "$parrot_keyring"
+            sudo install -m 0644 "$parrot_keyring" /usr/share/keyrings/parrot-archive-keyring.gpg
+            rm -rf "$parrot_key_home" "$parrot_key_source" "$parrot_keyring"
           } 2>&1 | tee "$RUNNER_TEMP/parrot-iso-deps.log"
 
       - name: Build and verify ISO

@@ -5,6 +5,21 @@ export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 export LC_ALL=C
 
+retry_apt() {
+    local attempt=1
+    local max_attempts=5
+    until apt-get -o Acquire::Retries=3 "$@"; do
+        if ((attempt >= max_attempts)); then
+            printf 'apt-get %s failed after %d attempts.\n' "$*" "$attempt" >&2
+            return 1
+        fi
+        printf 'apt-get %s failed (attempt %d/%d); retrying in 8 seconds.\n' \
+            "$*" "$attempt" "$max_attempts" >&2
+        sleep 8
+        attempt=$((attempt + 1))
+    done
+}
+
 purge_matching() {
     local regex="$1"
     local exclude="${2:-}"
@@ -15,11 +30,11 @@ purge_matching() {
     )
     if ((${#packages[@]})); then
         printf 'Purging packages: %s\n' "${packages[*]}"
-        apt-get purge -y "${packages[@]}"
+        retry_apt purge -y "${packages[@]}"
     fi
 }
 
-apt-get update
+retry_apt update
 
 # Keep the OS core and user-facing essentials manual while removing the
 # automatically-installed dependencies of the Security tool metapackages.
@@ -32,7 +47,7 @@ purge_matching '^(calamares|calamares-settings-parrot)(:.*)?$'
 purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
 printf 'lightdm shared/default-x-display-manager select lightdm\n' | debconf-set-selections
-apt-get install -y \
+retry_apt install -y \
     parrot-desktop-xfce task-xfce-desktop lightdm lightdm-gtk-greeter \
     firefox-esr parrot-updater
 apt-mark manual parrot-core parrot-drivers parrot-updater firefox-esr \
@@ -42,7 +57,7 @@ apt-mark manual parrot-core parrot-drivers parrot-updater firefox-esr \
 purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|gnumeric)(:.*)?$'
 purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privacy|crypto|security|pentest|full))(:.*)?$' '^parrot-tools-base(:.*)?$'
 purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
-apt-get autoremove --purge -y
+retry_apt autoremove --purge -y
 
 # Make XFCE/LightDM the selected graphical session.
 printf '/usr/sbin/lightdm\n' > /etc/X11/default-display-manager
