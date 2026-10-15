@@ -52,6 +52,17 @@ jobs:
             dpkg --compare-versions "$live_build_version" ge "1:20151215"
             sudo mkdir -p /usr/share/live/build/data/debian-cd
             sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
+            parrot_key="$RUNNER_TEMP/parrot-archive-keyring.gpg"
+            curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
+              --silent --show-error \
+              https://deb.parrot.sh/parrot/misc/parrotsec.gpg -o "$parrot_key"
+            if ! gpg --batch --show-keys --with-colons "$parrot_key" \
+              | awk -F: -v expected='B711822346552E4D92DA02DF7A8286AF0E81EE4A' \
+                  '$1 == "fpr" && toupper($10) == expected { found = 1 } END { exit found ? 0 : 1 }'; then
+              echo 'Downloaded Parrot archive key has an unexpected fingerprint.' >&2
+              exit 1
+            fi
+            sudo install -m 0644 "$parrot_key" /usr/share/keyrings/parrot-archive-keyring.gpg
           } 2>&1 | tee "$RUNNER_TEMP/parrot-iso-deps.log"
 
       - name: Build and verify ISO
@@ -121,12 +132,23 @@ jobs:
 
       - name: Install QCOW2 build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual
-          echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
-          echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
-          df -h / | tail -1
+          set -o pipefail
+          {
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends \
+              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual libslirp0
+            if dpkg-query -W -f='${Status}' passt 2>/dev/null | grep -q 'install ok installed'; then
+              sudo apt-get purge -y passt
+            fi
+            if command -v passt >/dev/null 2>&1; then
+              echo 'passt is still present; libguestfs would select the failing passt backend.' >&2
+              exit 1
+            fi
+            echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
+            echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
+            echo 'Using libslirp for libguestfs networking (passt removed).'
+            df -h / | tail -1
+          } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
       - name: Customize, verify and compress QCOW2
         run: |
@@ -153,22 +175,26 @@ jobs:
       - name: QCOW2 build diagnostics
         if: always()
         run: |
+          log="$RUNNER_TEMP/parrot-qcow2-build.log"
+          [ -s "$log" ] || log="$RUNNER_TEMP/parrot-qcow2-deps.log"
           {
             echo '### QCOW2 build diagnostics'
             echo ''
-            if [ -s "$RUNNER_TEMP/parrot-qcow2-build.log" ]; then
+            if [ -s "$log" ]; then
               echo '```text'
-              tail -n 120 "$RUNNER_TEMP/parrot-qcow2-build.log"
+              tail -n 120 "$log"
               echo '```'
             else
-              echo 'No QCOW2 build log was created.'
+              echo 'No QCOW2 build or dependency log was created.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: QCOW2 failure annotations
         if: failure()
         run: |
-          if [ -s "$RUNNER_TEMP/parrot-qcow2-build.log" ]; then
-            detail="$(tail -n 30 "$RUNNER_TEMP/parrot-qcow2-build.log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
+          log="$RUNNER_TEMP/parrot-qcow2-build.log"
+          [ -s "$log" ] || log="$RUNNER_TEMP/parrot-qcow2-deps.log"
+          if [ -s "$log" ]; then
+            detail="$(tail -n 30 "$log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
             printf '::error title=QCOW2 build log::%s\n' "$detail"
           fi
