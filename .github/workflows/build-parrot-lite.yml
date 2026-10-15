@@ -145,12 +145,9 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends \
               qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual \
-              libslirp0 passt apparmor
-            for profile in /etc/apparmor.d/usr.bin.passt /etc/apparmor.d/passt; do
-              if [ -f "$profile" ] && command -v apparmor_parser >/dev/null 2>&1; then
-                sudo apparmor_parser -R "$profile" || true
-              fi
-            done
+              libslirp0 passt apparmor apparmor-utils
+            # Ubuntu 24.04's passt AppArmor profile denies libguestfs temp PID/socket files.
+            sudo aa-teardown || true
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
             echo 'Using passt for libguestfs networking; image build runs unprivileged.'
