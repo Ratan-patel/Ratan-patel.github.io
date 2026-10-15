@@ -79,6 +79,16 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: ISO failure annotations
+        if: failure()
+        run: |
+          if [ -s "$RUNNER_TEMP/parrot-iso-build.log" ]; then
+            while IFS= read -r line; do
+              line="${line//'%'/'%25'}"
+              echo "::error title=ISO build log::$line"
+            done < <(tail -n 35 "$RUNNER_TEMP/parrot-iso-build.log")
+          fi
+
   qcow2:
     name: Build preinstalled QCOW2 (AMD64)
     runs-on: ubuntu-24.04
@@ -140,3 +150,13 @@ jobs:
               echo 'No QCOW2 build log was created.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: QCOW2 failure annotations
+        if: failure()
+        run: |
+          if [ -s "$RUNNER_TEMP/parrot-qcow2-build.log" ]; then
+            while IFS= read -r line; do
+              line="${line//'%'/'%25'}"
+              echo "::error title=QCOW2 build log::$line"
+            done < <(tail -n 35 "$RUNNER_TEMP/parrot-qcow2-build.log")
+          fi
