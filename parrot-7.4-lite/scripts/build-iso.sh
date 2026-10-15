@@ -76,8 +76,8 @@ if count != 1:
 path.write_text(text)
 PY
 
-# Parrot 7.4's parrot-core bootstrap requires dnsutils, which the pinned
-# upstream auto/config did not include in its initial debootstrap package set.
+# Parrot 7.4's parrot-core bootstrap requires dnsutils. On the Echo suite,
+# bind9-dnsutils provides it; the old dnsutils package name is no longer shipped.
 python3 - "$BUILDER_DIR/auto/config" <<'PY'
 from pathlib import Path
 import sys
@@ -86,8 +86,8 @@ path = Path(sys.argv[1])
 text = path.read_text()
 needle = "--include=gnupg2,base-files,parrot-core,ca-certificates"
 if text.count(needle) != 1:
-    raise SystemExit("Could not safely add dnsutils to the Parrot bootstrap include list")
-path.write_text(text.replace(needle, needle + ",dnsutils", 1))
+    raise SystemExit("Could not safely add bind9-dnsutils to the Parrot bootstrap include list")
+path.write_text(text.replace(needle, needle + ",bind9-dnsutils", 1))
 PY
 
 mkdir -p /usr/share/live/build/data/debian-cd

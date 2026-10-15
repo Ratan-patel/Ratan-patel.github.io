@@ -154,7 +154,8 @@ jobs:
       - name: Customize, verify and compress QCOW2
         run: |
           set -o pipefail
-          env LIBGUESTFS_BACKEND=direct LIBGUESTFS_MEMSIZE=2048 \
+          sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct \
+            LIBGUESTFS_MEMSIZE=2048 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
             OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
             WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \
             PARROT_VERSION=7.4 PARROT_ARCH=amd64 PARROT_SOURCE_EDITION=security \
