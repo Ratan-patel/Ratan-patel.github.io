@@ -40,6 +40,8 @@ jobs:
             sudo apt-get install -y --no-install-recommends debian-archive-keyring
             echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/debian-archive-keyring.gpg] https://deb.debian.org/debian trixie main' \
               | sudo tee /etc/apt/sources.list.d/debian-trixie.list
+            printf 'Package: *\nPin: release n=trixie\nPin-Priority: 100\n\nPackage: live-build\nPin: release n=trixie\nPin-Priority: 1001\n' \
+              | sudo tee /etc/apt/preferences.d/parrot-live-build
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends live-build/trixie \
               debootstrap squashfs-tools xorriso rsync apt-utils \

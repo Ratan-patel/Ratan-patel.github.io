@@ -56,9 +56,9 @@ cleanup() {
 trap cleanup EXIT
 
 printf 'Fetching Parrot signing key and %s hash list...\n' "$VERSION"
-curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
+curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 --silent --show-error \
     "$MIRROR/misc/parrotsec.gpg" -o "$PARROT_KEY"
-curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
+curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 --silent --show-error \
     "$MIRROR/iso/$VERSION/signed-hashes.txt" -o "$SIGNED_HASHES"
 gpg --homedir "$GNUPGHOME" --batch --import "$PARROT_KEY"
 if ! gpg --homedir "$GNUPGHOME" --batch --with-colons --list-keys \
@@ -86,7 +86,7 @@ if (( ${#EXPECTED_SHA512} != 128 )) || [[ ! "$EXPECTED_SHA512" =~ ^[[:xdigit:]]{
 fi
 
 printf 'Downloading official Parrot %s QCOW2 source...\n' "$EDITION"
-curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
+curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 --silent --show-error \
     --output "$COMPRESSED_SOURCE" "$SOURCE_URL"
 printf '%s  %s\n' "$EXPECTED_SHA512" "$COMPRESSED_SOURCE" | sha512sum --check --status \
     || { echo "Official source image checksum mismatch." >&2; exit 1; }
@@ -95,7 +95,11 @@ rm -f "$BASE_QCOW2" "$OUTPUT_FILE"
 printf 'Decompressing verified source image...\n'
 xz --threads=0 --decompress --keep -- "$COMPRESSED_SOURCE"
 rm -f "$COMPRESSED_SOURCE"
-qemu-img check "$BASE_QCOW2"
+if ! qemu-img check "$BASE_QCOW2"; then
+    echo "Official source QCOW2 integrity check failed; image metadata follows:" >&2
+    qemu-img info "$BASE_QCOW2" >&2 || true
+    exit 1
+fi
 
 export LIBGUESTFS_BACKEND="${LIBGUESTFS_BACKEND:-direct}"
 export LIBGUESTFS_MEMSIZE="${LIBGUESTFS_MEMSIZE:-2048}"
@@ -107,7 +111,11 @@ printf 'Sparsifying and compressing virtual disk...\n'
 # compressed QCOW2 copy; this avoids virt-sparsify's larger temporary copy.
 virt-sparsify --in-place "$BASE_QCOW2"
 qemu-img convert -p -c -O qcow2 "$BASE_QCOW2" "$OUTPUT_FILE"
-qemu-img check "$OUTPUT_FILE"
+if ! qemu-img check "$OUTPUT_FILE"; then
+    echo "Customized QCOW2 integrity check failed; image metadata follows:" >&2
+    qemu-img info "$OUTPUT_FILE" >&2 || true
+    exit 1
+fi
 qemu-img info "$OUTPUT_FILE"
 chmod 0644 "$OUTPUT_FILE"
 (
