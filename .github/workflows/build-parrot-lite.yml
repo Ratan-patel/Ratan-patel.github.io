@@ -148,6 +148,10 @@ jobs:
               libslirp0 passt apparmor apparmor-utils
             # Ubuntu 24.04's passt AppArmor profile denies libguestfs temp PID/socket files.
             sudo aa-teardown || true
+            # AppArmor also restricts unprivileged user namespaces, which passt needs.
+            if sysctl -n kernel.apparmor_restrict_unprivileged_userns >/dev/null 2>&1; then
+              sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+            fi
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
