@@ -34,13 +34,23 @@ jobs:
 
       - name: Install ISO build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            live-build debootstrap squashfs-tools xorriso rsync apt-utils \
-            gnupg dctrl-tools curl wget git cpio mtools dosfstools \
-            grub-pc-bin grub-efi-amd64-bin isolinux syslinux-common
-          sudo mkdir -p /usr/share/live/build/data/debian-cd
-          sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
+          set -o pipefail
+          {
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends debian-archive-keyring
+            echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/debian-archive-keyring.gpg] https://deb.debian.org/debian trixie main' \
+              | sudo tee /etc/apt/sources.list.d/debian-trixie.list
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends live-build/trixie \
+              debootstrap squashfs-tools xorriso rsync apt-utils \
+              gnupg dctrl-tools curl wget git cpio mtools dosfstools \
+              grub-pc-bin grub-efi-amd64-bin isolinux syslinux-common
+            live_build_version="$(dpkg-query -W -f='${Version}' live-build)"
+            echo "Using live-build $live_build_version"
+            dpkg --compare-versions "$live_build_version" ge "1:20151215"
+            sudo mkdir -p /usr/share/live/build/data/debian-cd
+            sudo ln -sfn sid /usr/share/live/build/data/debian-cd/echo
+          } 2>&1 | tee "$RUNNER_TEMP/parrot-iso-deps.log"
 
       - name: Build and verify ISO
         env:
@@ -67,26 +77,28 @@ jobs:
       - name: ISO build diagnostics
         if: always()
         run: |
+          log="$RUNNER_TEMP/parrot-iso-build.log"
+          [ -s "$log" ] || log="$RUNNER_TEMP/parrot-iso-deps.log"
           {
             echo '### ISO build diagnostics'
             echo ''
-            if [ -s "$RUNNER_TEMP/parrot-iso-build.log" ]; then
+            if [ -s "$log" ]; then
               echo '```text'
-              tail -n 120 "$RUNNER_TEMP/parrot-iso-build.log"
+              tail -n 120 "$log"
               echo '```'
             else
-              echo 'No ISO build log was created.'
+              echo 'No ISO build or dependency log was created.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: ISO failure annotations
         if: failure()
         run: |
-          if [ -s "$RUNNER_TEMP/parrot-iso-build.log" ]; then
-            while IFS= read -r line; do
-              line="${line//'%'/'%25'}"
-              echo "::error title=ISO build log::$line"
-            done < <(tail -n 35 "$RUNNER_TEMP/parrot-iso-build.log")
+          log="$RUNNER_TEMP/parrot-iso-build.log"
+          [ -s "$log" ] || log="$RUNNER_TEMP/parrot-iso-deps.log"
+          if [ -s "$log" ]; then
+            detail="$(tail -n 30 "$log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
+            printf '::error title=ISO build log::%s\n' "$detail"
           fi
 
   qcow2:
@@ -155,8 +167,6 @@ jobs:
         if: failure()
         run: |
           if [ -s "$RUNNER_TEMP/parrot-qcow2-build.log" ]; then
-            while IFS= read -r line; do
-              line="${line//'%'/'%25'}"
-              echo "::error title=QCOW2 build log::$line"
-            done < <(tail -n 35 "$RUNNER_TEMP/parrot-qcow2-build.log")
+            detail="$(tail -n 30 "$RUNNER_TEMP/parrot-qcow2-build.log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
+            printf '::error title=QCOW2 build log::%s\n' "$detail"
           fi

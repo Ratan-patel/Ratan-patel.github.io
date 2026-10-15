@@ -78,9 +78,10 @@ EXPECTED_SHA512="$(awk -v filename="$SOURCE_NAME" '
     $0 == "sha512" { in_sha512 = 1; next }
     /^-----BEGIN PGP SIGNATURE-----/ { exit }
     in_sha512 && $2 == filename { print $1; exit }
-' "$SIGNED_HASHES")"
-if [[ ! "$EXPECTED_SHA512" =~ ^[[:xdigit:]]{128}$ ]]; then
-    echo "No SHA-512 entry found for $SOURCE_NAME in the signed Parrot hash list." >&2
+' "$SIGNED_HASHES" | tr -d '[:space:]')"
+if (( ${#EXPECTED_SHA512} != 128 )) || [[ ! "$EXPECTED_SHA512" =~ ^[[:xdigit:]]{128}$ ]]; then
+    printf 'No valid SHA-512 entry found for %s (length=%d, value=%q).\n' \
+        "$SOURCE_NAME" "${#EXPECTED_SHA512}" "$EXPECTED_SHA512" >&2
     exit 1
 fi
 
