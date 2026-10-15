@@ -5,6 +5,20 @@ export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 export LC_ALL=C
 
+HOSTS_BACKUP="$(mktemp)"
+cp -p /etc/hosts "$HOSTS_BACKUP"
+restore_hosts() {
+    cp -p "$HOSTS_BACKUP" /etc/hosts 2>/dev/null || true
+    rm -f "$HOSTS_BACKUP"
+}
+trap restore_hosts EXIT
+if [[ -n "${PARROT_MIRROR_HOST:-}" && -n "${PARROT_MIRROR_IP:-}" ]]; then
+    printf '%s %s\n' "$PARROT_MIRROR_IP" "$PARROT_MIRROR_HOST" >> /etc/hosts
+    printf 'Using temporary Parrot mirror host mapping: %s -> %s\n' \
+        "$PARROT_MIRROR_HOST" "$PARROT_MIRROR_IP"
+    getent ahostsv4 "$PARROT_MIRROR_HOST" || true
+fi
+
 retry_apt() {
     local attempt=1
     local max_attempts=5

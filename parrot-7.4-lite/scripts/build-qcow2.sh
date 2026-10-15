@@ -103,11 +103,20 @@ fi
 
 export LIBGUESTFS_BACKEND="${LIBGUESTFS_BACKEND:-direct}"
 export LIBGUESTFS_MEMSIZE="${LIBGUESTFS_MEMSIZE:-2048}"
-printf 'Removing security/office apps and installing XFCE...\n'
+MIRROR_HOST="${MIRROR#*://}"
+MIRROR_HOST="${MIRROR_HOST%%/*}"
+MIRROR_HOST="${MIRROR_HOST%%:*}"
+MIRROR_IP="$(getent ahostsv4 "$MIRROR_HOST" | awk 'NR == 1 { print $1; exit }')"
+if [[ -z "$MIRROR_IP" ]]; then
+    echo "Could not resolve the Parrot mirror on the host: $MIRROR_HOST" >&2
+    exit 1
+fi
+printf 'Removing security/office apps and installing XFCE (mirror %s -> %s)...\n' \
+    "$MIRROR_HOST" "$MIRROR_IP"
 GUEST_CUSTOMIZER=/tmp/parrot-lite-customize-guest.sh
 virt-customize --add "$BASE_QCOW2" --network \
     --upload "$ROOT/scripts/customize-guest.sh:$GUEST_CUSTOMIZER" \
-    --run-command "bash $GUEST_CUSTOMIZER" \
+    --run-command "PARROT_MIRROR_HOST=$MIRROR_HOST PARROT_MIRROR_IP=$MIRROR_IP bash $GUEST_CUSTOMIZER" \
     --delete "$GUEST_CUSTOMIZER"
 
 printf 'Sparsifying and compressing virtual disk...\n'

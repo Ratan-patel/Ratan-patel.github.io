@@ -89,6 +89,10 @@ if ! (
         echo 'Last 120 lines of the upstream build log:' >&2
         tail -120 "$BUILDER_DIR/build.log" >&2
     fi
+    if [[ -f "$BUILDER_DIR/chroot/debootstrap/debootstrap.log" ]]; then
+        echo 'Last 120 lines of the debootstrap log:' >&2
+        tail -120 "$BUILDER_DIR/chroot/debootstrap/debootstrap.log" >&2
+    fi
     exit 1
 fi
 
