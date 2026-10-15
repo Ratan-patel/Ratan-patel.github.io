@@ -46,13 +46,16 @@ jobs:
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
+          set -o pipefail
           sudo -E env PATH="$PATH" OUTPUT_DIR="$RUNNER_TEMP/parrot-iso" \
             PARROT_VERSION=7.4 PARROT_SUITE=echo PARROT_ARCH=amd64 \
-            bash parrot-7.4-lite/scripts/build-iso.sh
+            bash parrot-7.4-lite/scripts/build-iso.sh 2>&1 \
+            | tee "$RUNNER_TEMP/parrot-iso-build.log"
           ls -lh "$RUNNER_TEMP/parrot-iso"
           df -h / | tail -1
 
       - name: Upload ISO artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Parrot-7.4-Minimal-XFCE-ISO-amd64
@@ -60,6 +63,21 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           compression-level: 0
+
+      - name: ISO build diagnostics
+        if: always()
+        run: |
+          {
+            echo '### ISO build diagnostics'
+            echo ''
+            if [ -s "$RUNNER_TEMP/parrot-iso-build.log" ]; then
+              echo '```text'
+              tail -n 120 "$RUNNER_TEMP/parrot-iso-build.log"
+              echo '```'
+            else
+              echo 'No ISO build log was created.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
   qcow2:
     name: Build preinstalled QCOW2 (AMD64)
@@ -88,15 +106,18 @@ jobs:
 
       - name: Customize, verify and compress QCOW2
         run: |
+          set -o pipefail
           sudo -E env PATH="$PATH" LIBGUESTFS_BACKEND=direct \
             LIBGUESTFS_MEMSIZE=2048 OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
             WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \
             PARROT_VERSION=7.4 PARROT_ARCH=amd64 PARROT_SOURCE_EDITION=security \
-            bash parrot-7.4-lite/scripts/build-qcow2.sh
+            bash -x parrot-7.4-lite/scripts/build-qcow2.sh 2>&1 \
+            | tee "$RUNNER_TEMP/parrot-qcow2-build.log"
           ls -lh "$RUNNER_TEMP/parrot-qcow2"
           df -h / | tail -1
 
       - name: Upload QCOW2 artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Parrot-7.4-Minimal-XFCE-QCOW2-amd64
@@ -104,3 +125,18 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           compression-level: 0
+
+      - name: QCOW2 build diagnostics
+        if: always()
+        run: |
+          {
+            echo '### QCOW2 build diagnostics'
+            echo ''
+            if [ -s "$RUNNER_TEMP/parrot-qcow2-build.log" ]; then
+              echo '```text'
+              tail -n 120 "$RUNNER_TEMP/parrot-qcow2-build.log"
+              echo '```'
+            else
+              echo 'No QCOW2 build log was created.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
