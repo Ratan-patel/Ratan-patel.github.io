@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-512.png">
+<title>VAJRA — AI Hacking Agent</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#111823; --card:#141d2b; --line:#1f2c3f;
+  --txt:#dbe7f3; --dim:#7d8fa3; --acc:#00ff9d; --acc2:#00d4ff;
+  --warn:#ffb020; --bad:#ff5470; --radius:14px;
+  font-size:15px;
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent}
+body{
+  background:var(--bg); color:var(--txt);
+  font-family:-apple-system,'Segoe UI',Roboto,system-ui,sans-serif;
+  min-height:100dvh; display:flex; flex-direction:column;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%, #0e233855, transparent);
+}
+header{
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  padding-top:calc(10px + env(safe-area-inset-top));
+  border-bottom:1px solid var(--line); background:#0d131bee; position:sticky; top:0; z-index:50;
+  backdrop-filter:blur(8px);
+}
+header img{width:34px; height:34px; border-radius:9px}
+header .t{flex:1}
+header h1{font-size:1.05rem; letter-spacing:2px; color:var(--acc)}
+header small{color:var(--dim); font-size:.68rem; display:block}
+#backendChip{
+  font-size:.62rem; color:var(--acc2); border:1px solid var(--line);
+  padding:3px 8px; border-radius:20px; white-space:nowrap;
+}
+nav{display:flex; border-bottom:1px solid var(--line); background:var(--bg2); position:sticky; top:56px; z-index:49}
+nav button{
+  flex:1; padding:11px 4px; background:none; border:none; color:var(--dim);
+  font-size:.8rem; font-weight:600; border-bottom:2px solid transparent; cursor:pointer;
+}
+nav button.on{color:var(--acc); border-bottom-color:var(--acc)}
+main{flex:1; display:none; flex-direction:column; overflow:hidden}
+main.on{display:flex}
+/* ---------- CHAT ---------- */
+#chat{padding:12px; overflow-y:auto; flex:1; padding-bottom:6px}
+.msg{max-width:92%; margin-bottom:10px; padding:10px 13px; border-radius:var(--radius);
+     line-height:1.45; font-size:.92rem; white-space:pre-wrap; word-wrap:break-word; animation:pop .18s ease}
+@keyframes pop{from{opacity:0; transform:translateY(6px)} to{opacity:1}}
+.msg.user{margin-left:auto; background:#123527; border:1px solid #1d5c40}
+.msg.bot{background:var(--card); border:1px solid var(--line)}
+.msg.bot b{color:var(--acc)} .msg.bot code{color:var(--acc2)}
+.note{max-width:92%; margin:0 auto 10px; font-size:.78rem; color:var(--warn); text-align:center}
+.err{max-width:92%; margin:0 auto 10px; font-size:.8rem; color:var(--bad); text-align:center; white-space:pre-wrap}
+.toolcard{max-width:94%; margin:8px auto; border:1px solid #2b4a3c; border-radius:var(--radius); overflow:hidden; background:#0f1a15}
+.toolcard .hd{padding:8px 12px; font-size:.7rem; color:var(--warn); display:flex; gap:6px; align-items:center}
+.toolcard .cmd{padding:10px 12px; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.78rem;
+  color:var(--acc); background:#0a120d; white-space:pre-wrap; word-break:break-all}
+.toolcard .btns{display:flex; gap:8px; padding:10px 12px}
+.toolcard button{flex:1; padding:11px; border:none; border-radius:10px; font-weight:700; font-size:.85rem; cursor:pointer}
+.btn-run{background:var(--acc); color:#04170e}
+.btn-no{background:#2a1520; color:var(--bad); border:1px solid #54202f !important}
+.out{max-width:94%; margin:8px auto; border:1px solid var(--line); border-radius:var(--radius); background:#0a0e13; overflow:hidden}
+.out .hd{padding:7px 12px; font-size:.68rem; color:var(--dim); display:flex; justify-content:space-between}
+.out pre{padding:10px 12px; max-height:280px; overflow:auto; font-size:.68rem; line-height:1.5;
+  color:#9fb8cc; font-family:ui-monospace,Menlo,Consolas,monospace; white-space:pre-wrap; word-break:break-all}
+.typing{color:var(--acc); animation:blink 1s infinite; font-size:.85rem}
+@keyframes blink{50%{opacity:.25}}
+/* ---------- INPUT ---------- */
+#inputbar{display:flex; gap:8px; padding:10px 12px; padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line); background:var(--bg2)}
+#inp{flex:1; background:var(--card); border:1px solid var(--line); color:var(--txt);
+  border-radius:22px; padding:12px 16px; font-size:.95rem; outline:none}
+#inp:focus{border-color:var(--acc)}
+#send{width:46px; height:46px; border-radius:50%; border:none; background:var(--acc);
+  color:#04170e; font-size:1.15rem; cursor:pointer; font-weight:900}
+#send:disabled{opacity:.4}
+/* ---------- TOOLS ---------- */
+#tools{padding:14px; overflow-y:auto; flex:1}
+.search{width:100%; background:var(--card); border:1px solid var(--line); color:var(--txt);
+  border-radius:12px; padding:12px 14px; font-size:.9rem; outline:none; margin-bottom:14px}
+.cat{margin-bottom:16px}
+.cat h3{font-size:.85rem; color:var(--acc2); margin-bottom:8px; display:flex; gap:8px; align-items:center}
+.cat h3 span.n{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  font-size:.62rem; padding:2px 8px; color:var(--dim)}
+.tcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:12px; margin-bottom:8px}
+.tcard .row{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
+.tcard .nm{font-weight:700; font-size:.92rem; color:var(--txt); font-family:ui-monospace,monospace}
+.badge{font-size:.62rem; padding:3px 9px; border-radius:12px; font-weight:700}
+.badge.ok{background:#0d2b1c; color:var(--acc); border:1px solid #1d5c40}
+.badge.no{background:#2b1420; color:var(--bad); border:1px solid #54202f}
+.tcard .ds{font-size:.76rem; color:var(--dim); margin-bottom:8px; line-height:1.4}
+.tcard code{display:block; background:#0a0e13; border:1px solid var(--line); border-radius:8px;
+  padding:8px 10px; font-size:.68rem; color:var(--acc2); font-family:ui-monospace,monospace;
+  white-space:pre-wrap; word-break:break-all; margin-bottom:6px}
+.tcard .cp{font-size:.65rem; color:var(--dim); background:none; border:1px solid var(--line);
+  border-radius:8px; padding:5px 10px; color:var(--acc2); cursor:pointer}
+/* ---------- SETUP ---------- */
+#setup{padding:14px; overflow-y:auto; flex:1}
+.panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin-bottom:14px}
+.panel h3{font-size:.85rem; color:var(--acc2); margin-bottom:10px}
+.panel label{font-size:.72rem; color:var(--dim); display:block; margin:10px 0 5px}
+.pills{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.pill{border:1px solid var(--line); background:var(--bg2); color:var(--txt); border-radius:10px;
+  padding:10px; font-size:.72rem; cursor:pointer; text-align:center; line-height:1.35}
+.pill.on{border-color:var(--acc); background:#0d2b1c; color:var(--acc)}
+.panel input{width:100%; background:var(--bg2); border:1px solid var(--line); color:var(--txt);
+  border-radius:10px; padding:11px 12px; font-size:.88rem; outline:none}
+.panel input:focus{border-color:var(--acc)}
+.hint{font-size:.66rem; color:var(--dim); margin-top:5px; line-height:1.4}
+.hint a{color:var(--acc2)}
+.abtn{width:100%; margin-top:12px; padding:13px; border:none; border-radius:12px;
+  background:var(--acc); color:#04170e; font-weight:800; font-size:.9rem; cursor:pointer}
+.abtn.ghost{background:var(--bg2); color:var(--acc2); border:1px solid var(--line)}
+#testResult{font-size:.75rem; margin-top:8px; white-space:pre-wrap}
+.scopeitem{display:flex; justify-content:space-between; align-items:center; background:var(--bg2);
+  border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:6px; font-size:.82rem}
+.scopeitem button{background:none; border:none; color:var(--bad); font-size:1rem; cursor:pointer}
+.addrow{display:flex; gap:8px}
+.addrow input{flex:1}
+.addrow button{padding:0 18px; border:none; border-radius:10px; background:var(--acc2); color:#04202b; font-weight:800; cursor:pointer}
+.disclaimer{font-size:.65rem; color:var(--dim); line-height:1.5; padding:4px 2px}
+#installBanner{display:none; background:#0d2b1c; border:1px solid #1d5c40; border-radius:var(--radius);
+  padding:12px; margin-bottom:12px; font-size:.75rem; line-height:1.5}
+#installBanner button{margin-top:8px; width:100%; padding:11px; border:none; border-radius:10px;
+  background:var(--acc); color:#04170e; font-weight:800; cursor:pointer}
+.empty{color:var(--dim); text-align:center; padding:40px 20px; font-size:.85rem; line-height:1.7}
+kbd{background:#0a0e13;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.7rem;color:var(--acc2)}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="/icon-512.png" alt="VAJRA">
+  <div class="t"><h1>VAJRA</h1><small>AI Ethical Hacking Agent — Termux</small></div>
+  <span id="backendChip">…</span>
+</header>
+
+<nav>
+  <button data-tab="chat" class="on">💬 Chat</button>
+  <button data-tab="tools">🧰 Tools</button>
+  <button data-tab="setup">⚙️ Setup</button>
+</nav>
+
+<!-- ================= CHAT ================= -->
+<main id="m-chat" class="on">
+  <div id="chat">
+    <div class="msg bot">⚡ <b>Namaste!</b> Main VAJRA hoon — tumhara AI hacking assistant.
+
+Bolo kya karna hai — jaise:
+• "example.com ka passive recon karo"
+• "192.168.1.1 ka full port scan chalao"
+• "yeh URL par SQLi check karo: ..."
+
+⚠️ Sirf <b>authorized</b> targets (labs/CTF/own assets). Scope add karne ke liye Setup tab dekho.</div>
+  </div>
+  <div id="inputbar">
+    <input id="inp" placeholder="Hinglish mein bolo… jaise: nmap scan karo" autocomplete="off">
+    <button id="send">➤</button>
+  </div>
+</main>
+
+<!-- ================= TOOLS ================= -->
+<main id="m-tools">
+  <div id="tools">
+    <input class="search" id="toolSearch" placeholder="🔍 tool dhoondho (jaise: nmap, sqlmap…)">
+    <div id="toolList"><div class="empty">Tools load ho rahe hain…</div></div>
+  </div>
+</main>
+
+<!-- ================= SETUP ================= -->
+<main id="m-setup">
+  <div id="setup">
+    <div id="installBanner">
+      📲 <b>App bana lo:</b> isi page ko Home Screen par add karo — icon ke saath
+      full-screen app jaisa chalega (offline bhi).
+      <button id="installBtn">📲 Install App</button>
+    </div>
+
+    <div class="panel">
+      <h3>🤖 AI Backend</h3>
+      <div class="pills" id="backendPills"></div>
+      <label>API Key <span id="keyState" style="color:var(--acc)"></span></label>
+      <input id="apiKey" type="password" placeholder="sk-… / gsk_… (paste karo)">
+      <div class="hint" id="keyHint"></div>
+      <label>Model</label>
+      <input id="model" placeholder="default: auto">
+      <button class="abtn" id="saveBtn">💾 Save + Test</button>
+      <div id="testResult"></div>
+    </div>
+
+    <div class="panel">
+      <h3>🎯 Authorized Scope</h3>
+      <div class="hint" style="margin:0 0 10px">Jin targets par tumhe test karne ki <b>permission</b> hai (apna lab, CTF box, bug-bounty in-scope domain). Inke bahar ke targets par agent warning dega.</div>
+      <div id="scopeList"></div>
+      <div class="addrow" style="margin-top:8px">
+        <input id="scopeInput" placeholder="example.com ya 10.10.14.22">
+        <button id="scopeAdd">＋ Add</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>🧾 Report & Session</h3>
+      <button class="abtn ghost" id="reportBtn">📄 Pentest Report Download</button>
+      <button class="abtn ghost" id="resetBtn" style="margin-top:8px">🗑️ Chat Reset</button>
+    </div>
+
+    <div class="disclaimer">
+      ⚖️ <b>Legal:</b> Yeh agent sirf <b>authorized</b> security testing (labs, CTFs, apne assets,
+      written permission wale engagements) ke liye hai. Bina permission kisi system ka test
+      karna India mein IT Act 2000 (Sec 43/66) ke under criminal offence hai.
+      Har command audit log mein save hoti hai (~/.vajra/audit.log).
+    </div>
+  </div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const chatEl = $('#chat'), inp = $('#inp'), sendBtn = $('#send');
+
+/* ---------------- tabs ---------------- */
+document.querySelectorAll('nav button').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('main').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); $('#m-'+b.dataset.tab).classList.add('on');
+    if (b.dataset.tab==='tools') loadTools();
+    if (b.dataset.tab==='setup') loadConfig();
+  };
+});
+
+/* ---------------- SSE helper ---------------- */
+async function sse(url, body, onEvent){
+  const res = await fetch(url, {method:'POST',
+    headers:{'Content-Type':'application/json'}, body:JSON.stringify(body||{})});
+  const reader = res.body.getReader(); const dec = new TextDecoder(); let buf='';
+  while(true){
+    const {done, value} = await reader.read(); if(done) break;
+    buf += dec.decode(value, {stream:true});
+    let i;
+    while((i = buf.indexOf('\n\n')) >= 0){
+      const chunk = buf.slice(0,i); buf = buf.slice(i+2);
+      for(const line of chunk.split('\n')){
+        if(line.startsWith('data:')){
+          const d = line.slice(5).trim();
+          if(d && d !== '[DONE]'){ try{ onEvent(JSON.parse(d)); }catch(e){} }
+        }
+      }
+    }
+  }
+}
+
+/* ---------------- chat rendering ---------------- */
+let busy = false;
+function addMsg(cls, text){
+  const d = document.createElement('div'); d.className = 'msg '+cls;
+  d.textContent = text; chatEl.appendChild(d); scroll(); return d;
+}
+function scroll(){ chatEl.scrollTop = chatEl.scrollHeight; }
+
+function handleEvent(ev, botEl){
+  if(ev.t==='delta'){
+    if(!botEl){ botEl = addMsg('bot',''); botEl._raw=''; }
+    botEl._raw += ev.text; botEl.textContent = botEl._raw; scroll();
+  }
+  else if(ev.t==='note'){ const n=document.createElement('div'); n.className='note'; n.textContent=ev.text; chatEl.appendChild(n); scroll(); }
+  else if(ev.t==='error'){ const n=document.createElement('div'); n.className='err'; n.textContent='✗ '+ev.message; chatEl.appendChild(n); scroll(); }
+  else if(ev.t==='tool_run'){
+    const card = document.createElement('div'); card.className='out';
+    card.innerHTML = `<div class="hd"><span>⚡ ${esc(ev.purpose||'chal raha hai')}</span><span></span></div><pre></pre>`;
+    card._pre = card.querySelector('pre'); card._t0 = Date.now();
+    card.querySelector('.hd span:last-child').id = 'dur'+Date.now();
+    chatEl.appendChild(card); scroll();
+    window._activeOut = card;
+  }
+  else if(ev.t==='output'){
+    const card = window._activeOut;
+    if(card){ card._pre.textContent += ev.line + '\n';
+      card.querySelector('.hd span:last-child').textContent = ((Date.now()-card._t0)/1000).toFixed(0)+'s';
+      scroll(); }
+  }
+  else if(ev.t==='meta'){
+    if(ev.latency && window._activeOut){}
+  }
+  else if(ev.t==='confirm'){
+    const card = document.createElement('div'); card.className='toolcard';
+    card.innerHTML = `
+      <div class="hd">⚠️ ${ev.note ? 'CONFIRM + '+esc(ev.note) : 'CONFIRM karo'}</div>
+      <div class="cmd">${esc(ev.command)}</div>
+      ${ev.purpose ? `<div class="hd" style="color:var(--dim)">→ ${esc(ev.purpose)}</div>`:''}
+      <div class="btns">
+        <button class="btn-run">▶ Chalao</button>
+        <button class="btn-no">✖ Rok do</button>
+      </div>`;
+    card.querySelector('.btn-run').onclick = () => { card.remove(); decision(ev.id, true); };
+    card.querySelector('.btn-no').onclick  = () => { card.remove(); decision(ev.id, false); };
+    chatEl.appendChild(card); scroll();
+  }
+}
+function esc(s){ return (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function send(text){
+  if(busy) return; busy=true; sendBtn.disabled=true;
+  addMsg('user', text);
+  let botEl=null;
+  await sse('/api/chat', {text}, ev=>{
+    if(ev.t==='delta' && !botEl){ botEl=addMsg('bot',''); botEl._raw=''; }
+    handleEvent(ev, botEl);
+  });
+  busy=false; sendBtn.disabled=false; inp.focus();
+}
+async function decision(id, approve){
+  if(busy) return; busy=true;
+  let botEl=null;
+  await sse('/api/decision', {id, approve}, ev=>{
+    if(ev.t==='delta' && !botEl){ botEl=addMsg('bot',''); botEl._raw=''; }
+    handleEvent(ev, botEl);
+  });
+  busy=false;
+}
+sendBtn.onclick = ()=>{ const t=inp.value.trim(); if(t){ inp.value=''; send(t); } };
+inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); sendBtn.click(); } });
+
+/* ---------------- tools ---------------- */
+let TOOLS_DATA=null;
+async function loadTools(){
+  if(TOOLS_DATA){ renderTools(); return; }
+  const r = await fetch('/api/tools'); TOOLS_DATA = await r.json(); renderTools();
+}
+function renderTools(){
+  const q = ($('#toolSearch').value||'').toLowerCase();
+  const box = $('#toolList'); box.innerHTML='';
+  let total=0, ok=0;
+  TOOLS_DATA.categories.forEach(cat=>{
+    const tools = TOOLS_DATA.tools.filter(t=>t.cat===cat.id &&
+      (!q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)));
+    if(!tools.length) return;
+    const div=document.createElement('div'); div.className='cat';
+    const inst = TOOLS_DATA.tools.filter(t=>t.cat===cat.id && t.installed).length;
+    const all = TOOLS_DATA.tools.filter(t=>t.cat===cat.id).length;
+    div.innerHTML = `<h3>${cat.emoji} ${cat.name} <span class="n">${inst}/${all} installed</span></h3>`;
+    tools.forEach(t=>{
+      total++; if(t.installed) ok++;
+      const c=document.createElement('div'); c.className='tcard';
+      c.innerHTML = `
+        <div class="row"><span class="nm">${t.name}</span>
+          <span class="badge ${t.installed?'ok':'no'}">${t.installed?'✓ INSTALLED':'✗ missing'}</span></div>
+        <div class="ds">${t.desc}</div>
+        <code>${esc(t.examples[0])}</code>
+        <button class="cp">📋 Copy</button>`;
+      c.querySelector('.cp').onclick = (e)=>{
+        navigator.clipboard.writeText(t.examples[0]); e.target.textContent='✓ Copied!';
+        setTimeout(()=>e.target.textContent='📋 Copy',1200);
+      };
+      div.appendChild(c);
+    });
+    box.appendChild(div);
+  });
+  if(!box.children.length) box.innerHTML='<div class="empty">Kuch nahi mila 🤷</div>';
+}
+$('#toolSearch').oninput = renderTools;
+
+/* ---------------- setup ---------------- */
+let CFG=null;
+async function loadConfig(){
+  const r = await fetch('/api/config'); CFG = await r.json();
+  const pills=$('#backendPills'); pills.innerHTML='';
+  Object.entries(CFG.defaults).forEach(([k,v])=>{
+    const b=document.createElement('button'); b.className='pill'+(CFG.backend===k?' on':'');
+    b.innerHTML = v.label.replace(/\s*—.*/,'') + `<br><span style="font-size:.6rem;color:var(--dim)">${v.needs_key?'🔑 key':'📴 offline'}</span>`;
+    b.onclick=()=>{ CFG.backend=k; CFG.model=v.model;
+      $('#keyHint').textContent = v.needs_key ? 'Free key: '+v.hint : v.hint;
+      $('#model').placeholder = v.model; loadConfig(); };
+    pills.appendChild(b);
+  });
+  $('#keyState').textContent = CFG.has_key ? '(✓ saved)' : '';
+  $('#model').value=''; $('#model').placeholder = CFG.model;
+  $('#backendChip').textContent = (CFG.backend||'?')+' · '+CFG.model;
+  $('#keyHint').textContent = CFG.defaults[CFG.backend]?.hint || '';
+  const sr = await fetch('/api/scope'); renderScope((await sr.json()).scope);
+}
+function renderScope(items){
+  const box=$('#scopeList'); box.innerHTML='';
+  if(!items.length){ box.innerHTML='<div class="hint">⚠️ Scope khali hai — pehla out-of-scope target par agent rok dega.</div>'; return; }
+  items.forEach(t=>{
+    const d=document.createElement('div'); d.className='scopeitem';
+    d.innerHTML=`<span>🎯 ${esc(t)}</span><button>✖</button>`;
+    d.querySelector('button').onclick=async()=>{
+      await fetch('/api/scope',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'remove',value:t})});
+      loadConfig();
+    };
+    box.appendChild(d);
+  });
+}
+$('#scopeAdd').onclick=async()=>{
+  const v=$('#scopeInput').value.trim(); if(!v) return;
+  await fetch('/api/scope',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'add',value:v})});
+  $('#scopeInput').value=''; loadConfig();
+};
+$('#saveBtn').onclick=async()=>{
+  const tr=$('#testResult'); tr.textContent='⏳ Testing…';
+  const body={backend:CFG.backend, model:$('#model').value.trim()};
+  const key=$('#apiKey').value.trim(); if(key) body.api_key=key;
+  await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)});
+  const r=await fetch('/api/test'); const j=await r.json();
+  tr.innerHTML = j.ok
+    ? `<span style="color:var(--acc)">✓ Online! ${j.latency}s — "${esc(j.reply)}"</span>`
+    : `<span style="color:var(--bad)">✗ ${esc(j.error)}</span>`;
+  loadConfig();
+};
+$('#reportBtn').onclick=async()=>{
+  const r=await fetch('/api/report'); const j=await r.json();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([j.content],{type:'text/markdown'}));
+  a.download='VAJRA_report.md'; a.click();
+};
+$('#resetBtn').onclick=async()=>{ await fetch('/api/reset',{method:'POST'}); loadConfig(); };
+
+/* ---------------- PWA install ---------------- */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault(); deferredPrompt=e; $('#installBanner').style.display='block';
+});
+$('#installBtn').onclick=()=>{ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; } };
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+if(isIOS && !navigator.standalone){
+  const b=$('#installBanner'); b.style.display='block';
+  b.innerHTML='📲 <b>App bana lo:</b> Safari mein <kbd>Share</kbd> → <kbd>Add to Home Screen</kbd> karo — full-screen app jaisa chalega.';
+}
+
+/* first paint */
+loadConfig().catch(()=>{});
+inp.focus();
+</script>
+</body>
+</html>
