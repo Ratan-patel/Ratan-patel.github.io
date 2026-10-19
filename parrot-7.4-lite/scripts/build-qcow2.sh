@@ -10,10 +10,12 @@ OUTPUT_DIR="${OUTPUT_DIR:-$ROOT/artifacts}"
 WORK_BASE="${WORK_DIR:-${TMPDIR:-/tmp}}"
 EXPECTED_FINGERPRINT="B711822346552E4D92DA02DF7A8286AF0E81EE4A"
 
-if [[ "$(id -u)" -eq 0 && "${LIBGUESTFS_BACKEND:-direct}" == "libvirt" ]]; then
-    echo "Using the system libvirt backend for guest networking."
-elif [[ "$(id -u)" -eq 0 ]]; then
-    echo "Warning: running as root with the direct backend is not recommended." >&2
+if [[ "$(id -u)" -eq 0 ]]; then
+    case "${LIBGUESTFS_BACKEND:-direct}" in
+        libvirt*) echo "Using libguestfs libvirt backend: ${LIBGUESTFS_BACKEND}." ;;
+        direct) echo "Using the direct libguestfs backend." ;;
+        *) echo "Using libguestfs backend: ${LIBGUESTFS_BACKEND}." ;;
+    esac
 fi
 if [[ "$VERSION" != "7.4" || "$ARCH" != "amd64" ]]; then
     echo "This verified image recipe is pinned to Parrot 7.4 AMD64." >&2
