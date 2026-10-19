@@ -146,8 +146,7 @@ jobs:
             sudo apt-get install -y --no-install-recommends \
               qemu-utils qemu-system-x86 libguestfs-tools xz-utils curl gnupg \
               linux-image-virtual libvirt-daemon-system libvirt-clients \
-              libvirt-daemon-driver-qemu libvirt-daemon-driver-network \
-              libvirt-daemon-config-network
+              libvirt-daemon-driver-qemu libvirt-daemon-config-network
             sudo systemctl start libvirtd
             if ! sudo virsh net-info default >/dev/null 2>&1; then
               sudo virsh net-define /usr/share/libvirt/networks/default.xml
