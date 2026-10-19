@@ -159,7 +159,7 @@ jobs:
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
-            echo 'LIBGUESTFS_BACKEND=libvirt' >> "$GITHUB_ENV"
+            echo 'LIBGUESTFS_BACKEND=libvirt:qemu:///system' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_BACKEND_SETTINGS=force_tcg:network_bridge=virbr0' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
             echo 'Using the system libvirt NAT network on virbr0.'
@@ -170,7 +170,7 @@ jobs:
         run: |
           set -o pipefail
           sudo -E env PATH="$PATH" \
-            LIBGUESTFS_BACKEND=libvirt \
+            LIBGUESTFS_BACKEND=libvirt:qemu:///system \
             LIBGUESTFS_BACKEND_SETTINGS=force_tcg:network_bridge=virbr0 \
             LIBGUESTFS_MEMSIZE=4096 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
             OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
