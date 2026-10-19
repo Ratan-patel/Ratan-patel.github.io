@@ -58,7 +58,7 @@ purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privac
 purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|gnumeric)(:.*)?$'
 purge_matching '^(parrot-desktop-kde|kde-plasma-desktop|kde-standard|kde-full|kde-[^:]+|plasma-[^:]+|sddm|sddm-[^:]+|systemsettings|dolphin|konsole|kate|ark|okular|kcalc|discover|korganizer|kmail|kontact|akonadi-[^:]+)(:.*)?$'
 purge_matching '^(calamares|calamares-settings-parrot)(:.*)?$'
-purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip[^:]*|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
 printf 'lightdm shared/default-x-display-manager select lightdm\n' | debconf-set-selections
 retry_apt install -y \
@@ -70,7 +70,7 @@ apt-mark manual parrot-core parrot-drivers parrot-updater firefox-esr \
 # Remove optional apps again in case the desktop task selected any as recommends.
 purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|gnumeric)(:.*)?$'
 purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privacy|crypto|security|pentest|full))(:.*)?$' '^parrot-tools-base(:.*)?$'
-purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip[^:]*|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 retry_apt autoremove --purge -y
 
 # Make XFCE/LightDM the selected graphical session.
@@ -90,7 +90,7 @@ rm -f /var/lib/dbus/machine-id
 
 # Fail the image build rather than silently shipping unwanted software.
 unwanted="$(dpkg-query -W -f='${db:Status-Abbrev} ${binary:Package}\n' 2>/dev/null \
-    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk|openjdk-|python3-pip|git|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')"
+    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk|openjdk-|python3-pip[^:]*|git|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')"
 if [[ -n "$unwanted" ]]; then
     printf 'Unexpected heavy/security package remains: %s\n' "$unwanted" >&2
     exit 1
