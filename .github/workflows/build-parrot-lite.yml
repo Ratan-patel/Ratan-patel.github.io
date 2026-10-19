@@ -158,14 +158,15 @@ jobs:
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_BACKEND_SETTINGS=force_tcg' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
-            echo 'Using direct libguestfs with IPv4-only passt.'
+            echo 'Using the runner user with direct libguestfs and IPv4-only passt.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
       - name: Customize, verify and compress QCOW2
         run: |
           set -o pipefail
-          sudo -E env PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+          test "$(id -u)" -ne 0
+          env PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             LIBGUESTFS_BACKEND=direct \
             LIBGUESTFS_BACKEND_SETTINGS=force_tcg \
             LIBGUESTFS_MEMSIZE=4096 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
