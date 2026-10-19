@@ -144,20 +144,22 @@ jobs:
           {
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends \
-              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual \
-              libslirp0 passt apparmor apparmor-utils
-            # Ubuntu 24.04's passt AppArmor profile denies libguestfs temp PID/socket files.
-            sudo aa-teardown || true
-            # AppArmor also restricts unprivileged user namespaces, which passt needs.
-            if sysctl -n kernel.apparmor_restrict_unprivileged_userns >/dev/null 2>&1; then
-              sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual libslirp0
+            # libguestfs prefers passt when available, but hosted-runner passt starts
+            # without a working guest route. Force its QEMU SLIRP fallback instead.
+            if dpkg-query -W -f='${db:Status-Abbrev}' passt 2>/dev/null | grep -q '^ii'; then
+              sudo apt-get purge -y passt
+            fi
+            if command -v passt >/dev/null 2>&1; then
+              echo 'passt is still installed; refusing to build with its broken runner route.' >&2
+              exit 1
             fi
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
-            echo 'Using passt for libguestfs networking; image build runs unprivileged.'
+            echo 'Using QEMU SLIRP networking; image build runs unprivileged.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
