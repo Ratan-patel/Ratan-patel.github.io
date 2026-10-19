@@ -125,7 +125,8 @@ jobs:
 
   qcow2:
     name: Build preinstalled QCOW2 (AMD64)
-    runs-on: ubuntu-24.04
+    # Ubuntu 22.04's QEMU SLIRP path works on hosted runners without the 24.04 passt/user-namespace restrictions.
+    runs-on: ubuntu-22.04
     timeout-minutes: 180
     steps:
       - name: Checkout
@@ -146,27 +147,21 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends \
               qemu-utils qemu-system-x86 libguestfs-tools xz-utils curl gnupg \
-              linux-image-virtual passt
-            sudo install -D -m 0755 /usr/bin/passt /usr/local/libexec/parrot-passt
-            if [ -f /etc/apparmor.d/usr.bin.passt ]; then
-              command -v apparmor_parser >/dev/null 2>&1
-              sudo apparmor_parser -R /etc/apparmor.d/usr.bin.passt || true
+              linux-image-virtual libslirp0
+            if dpkg-query -W -f='${db:Status-Abbrev}' passt 2>/dev/null | grep -q '^ii'; then
+              sudo apt-get purge -y passt
             fi
-            sudo install -m 0755 parrot-7.4-lite/scripts/passt-ipv4-wrapper.sh \
-              /usr/bin/passt
-            sudo install -m 0755 parrot-7.4-lite/scripts/passt-ipv4-wrapper.sh \
-              /usr/local/bin/passt
-            resolved_passt="$(PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin command -v passt)"
-            test "$resolved_passt" = /usr/local/bin/passt
-            test -x /usr/local/libexec/parrot-passt
-            grep -Fq 'exec /usr/local/libexec/parrot-passt --ipv4-only "$@"' /usr/bin/passt
+            if command -v passt >/dev/null 2>&1; then
+              echo 'Passt is still present; QEMU SLIRP must be selected on this runner.' >&2
+              exit 1
+            fi
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_BACKEND_SETTINGS=force_tcg' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
-            echo 'Using the runner user with direct libguestfs and IPv4-only passt.'
+            echo 'Using the runner user with direct libguestfs and QEMU SLIRP.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
