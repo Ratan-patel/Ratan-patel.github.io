@@ -156,7 +156,7 @@ jobs:
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
             echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
-            echo 'LIBGUESTFS_MEMSIZE=2048' >> "$GITHUB_ENV"
+            echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
             echo 'Using passt for libguestfs networking; image build runs unprivileged.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
@@ -165,7 +165,7 @@ jobs:
         run: |
           set -o pipefail
           env LIBGUESTFS_BACKEND=direct LIBGUESTFS_BACKEND_SETTINGS=force_tcg \
-            LIBGUESTFS_MEMSIZE=2048 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
+            LIBGUESTFS_MEMSIZE=4096 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
             OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
             WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \
             PARROT_VERSION=7.4 PARROT_ARCH=amd64 PARROT_SOURCE_EDITION=security \
@@ -207,6 +207,18 @@ jobs:
           log="$RUNNER_TEMP/parrot-qcow2-build.log"
           [ -s "$log" ] || log="$RUNNER_TEMP/parrot-qcow2-deps.log"
           if [ -s "$log" ]; then
-            detail="$(tail -n 30 "$log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
+            detail="$(tail -n 80 "$log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
             printf '::error title=QCOW2 build log::%s\n' "$detail"
           fi
+
+      - name: Upload QCOW2 failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Parrot-7.4-QCOW2-diagnostics
+          path: |
+            ${{ runner.temp }}/parrot-qcow2-build.log
+            ${{ runner.temp }}/parrot-qcow2-deps.log
+          if-no-files-found: warn
+          retention-days: 7
+          compression-level: 6
