@@ -144,29 +144,35 @@ jobs:
           {
             sudo apt-get update
             sudo apt-get install -y --no-install-recommends \
-              qemu-utils libguestfs-tools xz-utils curl gnupg linux-image-virtual libslirp0
-            # libguestfs prefers passt when available, but hosted-runner passt starts
-            # without a working guest route. Force its QEMU SLIRP fallback instead.
-            if dpkg-query -W -f='${db:Status-Abbrev}' passt 2>/dev/null | grep -q '^ii'; then
-              sudo apt-get purge -y passt
+              qemu-utils qemu-system-x86 libguestfs-tools xz-utils curl gnupg \
+              linux-image-virtual libvirt-daemon-system libvirt-clients \
+              libvirt-daemon-driver-qemu libvirt-daemon-driver-network \
+              libvirt-daemon-config-network
+            sudo systemctl start libvirtd
+            if ! sudo virsh net-info default >/dev/null 2>&1; then
+              sudo virsh net-define /usr/share/libvirt/networks/default.xml
             fi
-            if command -v passt >/dev/null 2>&1; then
-              echo 'passt is still installed; refusing to build with its broken runner route.' >&2
-              exit 1
+            sudo virsh net-autostart default
+            if ! sudo virsh net-info default | grep -q 'Active:.*yes'; then
+              sudo virsh net-start default
             fi
+            sudo virsh net-info default
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
-            echo 'LIBGUESTFS_BACKEND=direct' >> "$GITHUB_ENV"
+            echo 'LIBGUESTFS_BACKEND=libvirt' >> "$GITHUB_ENV"
+            echo 'LIBGUESTFS_BACKEND_SETTINGS=force_tcg:network_bridge=virbr0' >> "$GITHUB_ENV"
             echo 'LIBGUESTFS_MEMSIZE=4096' >> "$GITHUB_ENV"
-            echo 'Using QEMU SLIRP networking; image build runs unprivileged.'
+            echo 'Using the system libvirt NAT network on virbr0.'
             df -h / | tail -1
           } 2>&1 | tee "$RUNNER_TEMP/parrot-qcow2-deps.log"
 
       - name: Customize, verify and compress QCOW2
         run: |
           set -o pipefail
-          env LIBGUESTFS_BACKEND=direct LIBGUESTFS_BACKEND_SETTINGS=force_tcg \
+          sudo -E env PATH="$PATH" \
+            LIBGUESTFS_BACKEND=libvirt \
+            LIBGUESTFS_BACKEND_SETTINGS=force_tcg:network_bridge=virbr0 \
             LIBGUESTFS_MEMSIZE=4096 LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 \
             OUTPUT_DIR="$RUNNER_TEMP/parrot-qcow2" \
             WORK_DIR="$RUNNER_TEMP/parrot-qcow2-work" \

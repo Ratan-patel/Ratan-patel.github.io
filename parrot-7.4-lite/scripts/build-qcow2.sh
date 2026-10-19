@@ -10,8 +10,10 @@ OUTPUT_DIR="${OUTPUT_DIR:-$ROOT/artifacts}"
 WORK_BASE="${WORK_DIR:-${TMPDIR:-/tmp}}"
 EXPECTED_FINGERPRINT="B711822346552E4D92DA02DF7A8286AF0E81EE4A"
 
-if [[ "$(id -u)" -eq 0 ]]; then
-    echo "Warning: running virt-customize as an unprivileged user is recommended for passt networking." >&2
+if [[ "$(id -u)" -eq 0 && "${LIBGUESTFS_BACKEND:-direct}" == "libvirt" ]]; then
+    echo "Using the system libvirt backend for guest networking."
+elif [[ "$(id -u)" -eq 0 ]]; then
+    echo "Warning: running as root with the direct backend is not recommended." >&2
 fi
 if [[ "$VERSION" != "7.4" || "$ARCH" != "amd64" ]]; then
     echo "This verified image recipe is pinned to Parrot 7.4 AMD64." >&2
@@ -34,7 +36,8 @@ SOURCE_URL="$MIRROR/iso/$VERSION/$SOURCE_NAME"
 mkdir -p "$OUTPUT_DIR" "$WORK_BASE"
 [[ "$WORK_BASE" != "/" ]] || { echo "WORK_DIR must not be /" >&2; exit 1; }
 WORK_DIR="$(mktemp -d "${WORK_BASE%/}/parrot-${VERSION}-${ARCH}-qcow2-XXXXXX")"
-chmod 700 "$WORK_DIR"
+# libvirt's QEMU service user must be able to traverse the temporary image path.
+chmod 0755 "$WORK_DIR"
 GNUPGHOME="$WORK_DIR/gnupg"
 mkdir -p "$GNUPGHOME"
 chmod 700 "$GNUPGHOME"
