@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 set -eu
 
-exec /usr/bin/passt --ipv4-only "$@"
+exec /usr/local/libexec/parrot-passt --ipv4-only "$@"

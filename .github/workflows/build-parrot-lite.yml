@@ -147,11 +147,19 @@ jobs:
             sudo apt-get install -y --no-install-recommends \
               qemu-utils qemu-system-x86 libguestfs-tools xz-utils curl gnupg \
               linux-image-virtual passt
+            sudo install -D -m 0755 /usr/bin/passt /usr/local/libexec/parrot-passt
+            if [ -f /etc/apparmor.d/usr.bin.passt ]; then
+              command -v apparmor_parser >/dev/null 2>&1
+              sudo apparmor_parser -R /etc/apparmor.d/usr.bin.passt || true
+            fi
+            sudo install -m 0755 parrot-7.4-lite/scripts/passt-ipv4-wrapper.sh \
+              /usr/bin/passt
             sudo install -m 0755 parrot-7.4-lite/scripts/passt-ipv4-wrapper.sh \
               /usr/local/bin/passt
             resolved_passt="$(PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin command -v passt)"
             test "$resolved_passt" = /usr/local/bin/passt
-            test -x /usr/bin/passt
+            test -x /usr/local/libexec/parrot-passt
+            grep -Fq 'exec /usr/local/libexec/parrot-passt --ipv4-only "$@"' /usr/bin/passt
             for kernel in /boot/vmlinuz-* /boot/initrd.img-*; do
               [ -e "$kernel" ] && sudo chmod a+r "$kernel"
             done
