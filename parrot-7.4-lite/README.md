@@ -21,7 +21,7 @@ It is an **unofficial community remaster**, not an official ParrotOS release.
 
 | Section | Tools |
 | --- | --- |
-| Reconnaissance and service discovery | Nmap, Masscan, DNSRecon, theHarvester |
+| Reconnaissance and service discovery | Nmap, Masscan, DNSRecon, DNSenum |
 | Web application assessment | OWASP ZAP, sqlmap, ffuf, Nikto |
 | Vulnerability validation and controlled access testing | Nuclei, WPScan, Metasploit Framework, Hydra |
 | Post-access and AD assessment | Impacket scripts, NetExec, SMBMap, Hashcat |
