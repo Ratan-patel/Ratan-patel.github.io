@@ -5,6 +5,13 @@ export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 export LC_ALL=C
 
+CURATED_TOOLS=(
+    nmap masscan dnsrecon dnsenum
+    zaproxy sqlmap ffuf nikto
+    nuclei wpscan metasploit-framework hydra
+    impacket-scripts netexec smbmap hashcat
+)
+
 HOSTS_BACKUP="$(mktemp)"
 cp -p /etc/hosts "$HOSTS_BACKUP"
 restore_hosts() {
@@ -58,7 +65,7 @@ purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privac
 purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|gnumeric)(:.*)?$'
 purge_matching '^(parrot-desktop-kde|kde-plasma-desktop|kde-standard|kde-full|kde-[^:]+|plasma-[^:]+|sddm|sddm-[^:]+|systemsettings|dolphin|konsole|kate|ark|okular|kcalc|discover|korganizer|kmail|kontact|akonadi-[^:]+)(:.*)?$'
 purge_matching '^(calamares|calamares-settings-parrot)(:.*)?$'
-purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip[^:]*|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git(-man)?|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
 printf 'lightdm shared/default-x-display-manager select lightdm\n' | debconf-set-selections
 retry_apt install -y \
@@ -70,7 +77,12 @@ apt-mark manual parrot-core parrot-drivers parrot-updater firefox-esr \
 # Remove optional apps again in case the desktop task selected any as recommends.
 purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|gnumeric)(:.*)?$'
 purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privacy|crypto|security|pentest|full))(:.*)?$' '^parrot-tools-base(:.*)?$'
-purge_matching '^(codium|golang-go|nodejs|npm|default-jdk|openjdk-[^:]+|python3-pip[^:]*|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git(-man)?|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+
+# Install the same four curated groups as the ISO, after purging the full suites.
+printf 'Installing %d curated security tools for authorized assessments...\n' "${#CURATED_TOOLS[@]}"
+retry_apt install -y --no-install-recommends "${CURATED_TOOLS[@]}"
+apt-mark manual "${CURATED_TOOLS[@]}" >/dev/null
 retry_apt autoremove --purge -y
 
 # Make XFCE/LightDM the selected graphical session.
@@ -88,13 +100,21 @@ find /home -maxdepth 2 -name .bash_history -type f -delete 2>/dev/null || true
 : > /etc/machine-id
 rm -f /var/lib/dbus/machine-id
 
-# Fail the image build rather than silently shipping unwanted software.
+# Fail the image build rather than silently shipping unwanted software or
+# omitting a requested tool.
 unwanted="$(dpkg-query -W -f='${db:Status-Abbrev} ${binary:Package}\n' 2>/dev/null \
-    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk|openjdk-|python3-pip[^:]*|git|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')"
+    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')"
 if [[ -n "$unwanted" ]]; then
     printf 'Unexpected heavy/security package remains: %s\n' "$unwanted" >&2
     exit 1
 fi
+
+for package in "${CURATED_TOOLS[@]}"; do
+    dpkg-query -W -f='${db:Status-Abbrev}\n' "$package" 2>/dev/null | grep -q '^ii' || {
+        printf 'Requested curated security tool is missing: %s\n' "$package" >&2
+        exit 1
+    }
+done
 
 dpkg-query -W -f='${db:Status-Abbrev}\n' parrot-desktop-xfce 2>/dev/null | grep -q '^ii' || {
     echo 'XFCE desktop metapackage was not installed' >&2

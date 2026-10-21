@@ -115,7 +115,7 @@ if [[ -z "$MIRROR_IP" ]]; then
     echo "Could not resolve the Parrot mirror on the host: $MIRROR_HOST" >&2
     exit 1
 fi
-printf 'Removing security/office apps and installing XFCE (mirror %s -> %s)...\n' \
+printf 'Pruning full suites, installing XFCE and curated tools (mirror %s -> %s)...\n' \
     "$MIRROR_HOST" "$MIRROR_IP"
 GUEST_CUSTOMIZER=/tmp/parrot-lite-customize-guest.sh
 virt-customize --add "$BASE_QCOW2" --network \
