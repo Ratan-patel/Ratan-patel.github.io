@@ -45,7 +45,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 
 - **Portfolio website** — pure HTML/CSS/JS at the repo root (GitHub Pages).
 - **[RatanSec OS](ratansec-os/README.md)** — Kali-based AI pentesting environment: AI copilot (OpenRouter tool-calling), 6 scan profiles (nmap/nikto/nuclei/sqlmap/gobuster...), web dashboard, CLI, human-in-the-loop approvals, scope allowlist, AI reports aur audit log. Docker + Render deploy ready. **Start karna hai?** → [CHALANE_KA_TARIKA.md](ratansec-os/CHALANE_KA_TARIKA.md) (Windows/Kali/phone/cloud, ek-command setup).
-- **[Parrot 7.4 Minimal XFCE](parrot-7.4-lite/README.md)** — unofficial build recipe for a minimal XFCE ISO and QCOW2; strips the security-tool metapackages and office suite. GitHub Actions builds downloadable artifacts.
+- **[Parrot 7.4 XFCE](parrot-7.4-lite/README.md)** — unofficial build recipe for an XFCE ISO with a curated 16-tool security-assessment pack, plus a slim QCOW2; omits the full security-tool suites and office software. GitHub Actions builds downloadable artifacts.
 
 ## Site technical
 

@@ -1,4 +1,4 @@
-# Parrot 7.4 Minimal XFCE — unofficial custom build
+# Parrot 7.4 XFCE — curated security-tool build
 
 This folder builds two AMD64 images from Parrot OS 7.4:
 
@@ -7,22 +7,34 @@ This folder builds two AMD64 images from Parrot OS 7.4:
 
 It is an **unofficial community remaster**, not an official ParrotOS release.
 
-## Requested configuration
+## Configuration
 
 - XFCE desktop instead of KDE Plasma
-- remove the full pentesting/security-tool metapackages (including `parrot-tools-full`)
-- remove the LibreOffice suite (Writer, Calc, Impress, Math), plus Calligra, AbiWord and Gnumeric if present
-- remove optional developer/container/monitoring apps inherited from the full Security image
-- keep core Parrot packages, drivers, browser, updater, XFCE and the basic desktop; the ISO retains Calamares for installation, while the preinstalled QCOW2 drops the installer
+- The ISO includes four curated security-testing sections with four individual tools each; it does **not** install Parrot's full security-tool metapackages
+- Remove the LibreOffice suite (Writer, Calc, Impress, Math), plus Calligra, AbiWord and Gnumeric if present
+- Remove optional developer/container/monitoring apps inherited from the full Security image
+- Keep core Parrot packages, drivers, browser, updater, XFCE and Calamares on the ISO
+- The QCOW2 remains a smaller XFCE image without the curated pentest pack or installer
 - AMD64/x86_64 only; WSL is not part of this build
 
-The images are kept out of Git. The GitHub Actions workflow builds them and uploads separate downloadable artifacts (retained for 30 days). Run it from **Actions → Build Parrot 7.4 Minimal XFCE → Run workflow**.
+## Curated ISO tool sections
+
+| Section | Tools |
+| --- | --- |
+| Reconnaissance and service discovery | Nmap, Masscan, DNSRecon, theHarvester |
+| Web application assessment | OWASP ZAP, sqlmap, ffuf, Nikto |
+| Vulnerability validation and controlled access testing | Nuclei, WPScan, Metasploit Framework, Hydra |
+| Post-access and AD assessment | Impacket scripts, NetExec, SMBMap, Hashcat |
+
+The post-access tools are for authorized lab and assessment work. Covert persistence implants and backdoor toolkits are intentionally excluded. Use these tools only on systems you own or have explicit permission to test.
+
+The images are kept out of Git. The GitHub Actions workflow builds them and uploads separate downloadable artifacts (retained for 30 days). Run it from **Actions → Build Parrot 7.4 Minimal XFCE → Run workflow**. The ISO-only workflow path skips the QCOW2 job; QCOW2-only runs can likewise skip the ISO job.
 
 ## Size and source
 
-Parrot's official 7.4 Security ISO is about 8.68 GB and its compressed Security QCOW2 is about 9.08 GB. Those include the full security-tool collection. This build removes that package set and uses XFCE, but exact output sizes depend on the rolling package repository and image compression; the build does not promise a fixed 4–5 GB size.
+Parrot's official 7.4 Security ISO is about 8.68 GB and its compressed Security QCOW2 is about 9.08 GB. The ISO in this build retains only the curated tool list above, uses XFCE, and omits office apps; the QCOW2 remains tool-free. Exact output sizes depend on the rolling package repository and compression, so the build does not promise a fixed 4–5 GB size.
 
-The QCOW2 build starts from Parrot's official 7.4 Security QCOW2, verifies the upstream signed checksum list, removes the security/office packages, installs XFCE, then sparsifies and compresses the virtual disk. The ISO is generated from ParrotSec's live-build configuration using a minimal XFCE package list.
+The QCOW2 build starts from Parrot's official 7.4 Security QCOW2, verifies the upstream signed checksum list, removes the security/office packages, installs XFCE, then sparsifies and compresses the virtual disk. The ISO is generated from ParrotSec's live-build configuration with a minimal XFCE package list plus the selected tools above.
 
 Official sources:
 
@@ -61,7 +73,7 @@ Outputs and `SHA256SUMS.txt` are written to `parrot-7.4-lite/artifacts/` (ignore
 
 ## Use
 
-- **ISO:** boot from the ISO and use the installer to install to a VM or computer. Double-check the target disk before installation.
+- **ISO:** boot from the ISO and use the installer to install to a VM or computer. Double-check the target disk before installation. The curated tools are for authorized testing only.
 - **QCOW2:** import/attach it as an existing disk in QEMU/KVM, virt-manager or Proxmox. Set RAM/CPU/disk to suit the host. The image is derived from Parrot's official VM image, so review its first-boot/login behavior and change the account password immediately.
 
 Verify a downloaded custom artifact with:
@@ -71,4 +83,4 @@ sha256sum -c SHA256SUMS.txt
 qemu-img check Parrot-7.4-Minimal-XFCE-amd64.qcow2
 ```
 
-This is not an official Security Edition after removing its security-tool suite. It is a small, XFCE-based Parrot remaster. Use it only on systems you own or are authorized to administer.
+This is not the full Parrot Security Edition: the ISO has a deliberately curated subset of tools and the QCOW2 remains a small XFCE build. Use it only on systems you own or are authorized to administer.
