@@ -80,6 +80,7 @@ jobs:
         run: |
           set -o pipefail
           sudo -E env PATH="$PATH" OUTPUT_DIR="$RUNNER_TEMP/parrot-iso" \
+            PARROT_BUILD_LOG="$RUNNER_TEMP/parrot-iso-build.log" \
             PARROT_VERSION=7.4 PARROT_SUITE=echo PARROT_ARCH=amd64 \
             bash parrot-7.4-lite/scripts/build-iso.sh 2>&1 \
             | tee "$RUNNER_TEMP/parrot-iso-build.log"

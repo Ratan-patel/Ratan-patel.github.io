@@ -108,11 +108,39 @@ mkdir -p /usr/share/live/build/data/debian-cd
 ln -sfn sid "/usr/share/live/build/data/debian-cd/$SUITE"
 rm -f "$OUTPUT_FILE"
 printf 'Building custom live ISO; this can take a while...\n'
-if ! (
-    cd "$BUILDER_DIR"
-    ./build.sh --distribution "$SUITE" --version "$VERSION" \
-        --variant lite-xfce --arch "$ARCH"
-); then
+has_transient_mirror_error() {
+    local log
+    for log in "$BUILDER_DIR/build.log" "${PARROT_BUILD_LOG:-}"; do
+        [[ -n "$log" && -f "$log" ]] || continue
+        if grep -Eiq 'File has unexpected size|Mirror sync in progress|Hash Sum mismatch|Temporary failure resolving|Could not connect|Connection timed out' "$log"; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+build_attempt=1
+max_build_attempts=3
+build_succeeded=0
+while ((build_attempt <= max_build_attempts)); do
+    printf 'ISO build attempt %d/%d...\n' "$build_attempt" "$max_build_attempts"
+    if (
+        cd "$BUILDER_DIR"
+        ./build.sh --distribution "$SUITE" --version "$VERSION" \
+            --variant lite-xfce --arch "$ARCH"
+    ); then
+        build_succeeded=1
+        break
+    fi
+    if ((build_attempt >= max_build_attempts)) || ! has_transient_mirror_error; then
+        break
+    fi
+    printf 'Parrot mirror appears to be syncing; retrying in 45 seconds.\n' >&2
+    sleep 45
+    build_attempt=$((build_attempt + 1))
+done
+
+if ((build_succeeded == 0)); then
     if [[ -f "$BUILDER_DIR/build.log" ]]; then
         echo 'Last 120 lines of the upstream build log:' >&2
         tail -120 "$BUILDER_DIR/build.log" >&2
