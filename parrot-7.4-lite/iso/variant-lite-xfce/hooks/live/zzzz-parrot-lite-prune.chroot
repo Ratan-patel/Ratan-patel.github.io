@@ -3,6 +3,8 @@ set -eu
 
 export DEBIAN_FRONTEND=noninteractive
 
+tool_packages='nmap masscan dnsrecon dnsenum zaproxy sqlmap ffuf nikto nuclei wpscan metasploit-framework hydra impacket-scripts netexec smbmap hashcat'
+
 purge_matching() {
     regex="$1"
     exclude="${2:-}"
@@ -13,6 +15,16 @@ purge_matching() {
         printf '%s\n' "$packages" | xargs -r apt-get purge -y
     fi
 }
+
+# Mark the selected tools manual before removing Parrot metapackages. Otherwise,
+# apt may consider a curated tool to be an unused metapackage dependency.
+for package in $tool_packages; do
+    if ! dpkg-query -W -f='${db:Status-Abbrev}\n' "$package" 2>/dev/null | grep -q '^ii'; then
+        printf 'Requested curated security tool was not installed: %s\n' "$package" >&2
+        exit 1
+    fi
+    apt-mark manual "$package" >/dev/null
+done
 
 # Drop the full upstream security suites; the explicit package list keeps only
 # the curated tools requested for this image.
@@ -26,18 +38,15 @@ purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|
 # packages because OWASP ZAP needs one; remove only the JDK/toolchain.
 purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
-# Protect every requested command-line tool from autoremove and fail closed if
-# an upstream package-list change or dependency cleanup dropped one.
-tool_packages='nmap masscan dnsrecon dnsenum zaproxy sqlmap ffuf nikto nuclei wpscan metasploit-framework hydra impacket-scripts netexec smbmap hashcat'
+apt-get autoremove --purge -y
+
+# Fail closed if a pruning rule or an upstream package change dropped a tool.
 for package in $tool_packages; do
     if ! dpkg-query -W -f='${db:Status-Abbrev}\n' "$package" 2>/dev/null | grep -q '^ii'; then
-        printf 'Requested curated security tool is missing: %s\n' "$package" >&2
+        printf 'Requested curated security tool was removed during cleanup: %s\n' "$package" >&2
         exit 1
     fi
-    apt-mark manual "$package" >/dev/null
 done
-
-apt-get autoremove --purge -y
 
 unwanted=$(dpkg-query -W -f='${db:Status-Abbrev} ${binary:Package}\n' 2>/dev/null \
     | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')
