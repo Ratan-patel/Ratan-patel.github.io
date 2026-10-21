@@ -12,7 +12,7 @@ It is an **unofficial community remaster**, not an official ParrotOS release.
 - XFCE desktop instead of KDE Plasma
 - The ISO includes four curated security-testing sections with four individual tools each; it does **not** install Parrot's full security-tool metapackages
 - Remove the LibreOffice suite (Writer, Calc, Impress, Math), plus Calligra, AbiWord and Gnumeric if present
-- Remove optional developer/container/monitoring apps inherited from the full Security image
+- Remove optional developer/container/monitoring apps inherited from the full Security image unless a curated tool requires them (for example, Git may remain as a dependency)
 - Keep core Parrot packages, drivers, browser, updater, XFCE and Calamares on the ISO
 - The QCOW2 remains a smaller XFCE image without the curated pentest pack or installer
 - AMD64/x86_64 only; WSL is not part of this build

@@ -24,7 +24,7 @@ purge_matching '^(libreoffice|libreoffice-[^:]+|calligra|calligra-[^:]+|abiword|
 # Drop optional development, container, monitoring and remote-desktop apps
 # inherited from a full security-oriented package selection. Keep Java runtime
 # packages because OWASP ZAP needs one; remove only the JDK/toolchain.
-purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git(-man)?|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
+purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
 printf 'Reinstalling the curated ISO security tools after suite cleanup...\n'
 apt-get install --no-install-recommends -y "$@"
@@ -40,7 +40,7 @@ for package do
 done
 
 unwanted=$(dpkg-query -W -f='${db:Status-Abbrev} ${binary:Package}\n' 2>/dev/null \
-    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git(-man)?|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')
+    | awk 'substr($1, 1, 2) == "ii" && ($2 ~ /^(libreoffice|calligra|abiword|gnumeric|codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|podman|flatpak|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)/ || ($2 ~ /^parrot-tools-/ && $2 !~ /^parrot-tools-base/) || $2 ~ /^parrot-meta-(devel|privacy|crypto|security|pentest|full)(:.*)?$/) { print $2 }')
 if [ -n "$unwanted" ]; then
     printf 'Unexpected heavy/security package remains: %s\n' "$unwanted" >&2
     exit 1
