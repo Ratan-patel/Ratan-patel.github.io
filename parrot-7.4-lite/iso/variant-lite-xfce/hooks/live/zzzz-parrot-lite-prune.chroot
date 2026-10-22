@@ -28,7 +28,17 @@ purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0
 
 printf 'Reinstalling the curated ISO security tools after suite cleanup...\n'
 apt-get install --no-install-recommends -y "$@"
-apt-mark manual "$@" >/dev/null
+apt-mark manual "$@" sudo python3 python3-pexpect >/dev/null
+
+if [ ! -x /usr/share/parrot-ai/install-guest-agent.sh ]; then
+    echo 'Parrot AI installer was not staged in the ISO includes.' >&2
+    exit 1
+fi
+/usr/share/parrot-ai/install-guest-agent.sh \
+    /usr/share/parrot-ai/parrot-ai \
+    /usr/share/parrot-ai/parrot-ai.desktop
+rm -rf /usr/share/parrot-ai
+
 apt-get autoremove --purge -y
 
 # Fail closed if a pruning rule or upstream package change dropped a tool.
@@ -45,6 +55,21 @@ if [ -n "$unwanted" ]; then
     printf 'Unexpected heavy/security package remains: %s\n' "$unwanted" >&2
     exit 1
 fi
+
+test -x /usr/local/bin/parrot-ai || {
+    echo 'Parrot AI terminal command is missing' >&2
+    exit 1
+}
+test -f /usr/share/applications/parrot-ai.desktop || {
+    echo 'Parrot AI desktop entry is missing' >&2
+    exit 1
+}
+for package in python3 python3-pexpect sudo; do
+    if ! dpkg-query -W -f='${db:Status-Abbrev}\n' "$package" 2>/dev/null | grep -q '^ii'; then
+        printf 'Parrot AI runtime package is missing: %s\n' "$package" >&2
+        exit 1
+    fi
+done
 
 apt-get clean
 rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb

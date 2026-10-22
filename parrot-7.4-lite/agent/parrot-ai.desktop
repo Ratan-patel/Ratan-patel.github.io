@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Parrot AI Terminal Agent
+Comment=Multi-provider AI assistant that operates the local Parrot terminal
+Exec=parrot-ai
+Terminal=true
+Categories=System;Security;
+Keywords=Parrot;AI;Terminal;Security;Gemini;OpenRouter;

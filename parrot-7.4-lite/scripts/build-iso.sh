@@ -52,6 +52,13 @@ mkdir -p "$BUILDER_DIR/templates/variant-lite-xfce"
 cp -a "$ROOT/iso/variant-lite-xfce/." "$BUILDER_DIR/templates/variant-lite-xfce/"
 chmod 0755 "$BUILDER_DIR/templates/variant-lite-xfce/hooks/live/zzzz-parrot-lite-prune.chroot"
 
+# Add the same provider-switchable Parrot AI client to the ISO filesystem.
+AGENT_INCLUDE_DIR="$BUILDER_DIR/templates/variant-lite-xfce/includes.chroot/usr/share/parrot-ai"
+mkdir -p "$AGENT_INCLUDE_DIR"
+install -m 0755 "$ROOT/agent/parrot-ai" "$AGENT_INCLUDE_DIR/parrot-ai"
+install -m 0644 "$ROOT/agent/parrot-ai.desktop" "$AGENT_INCLUDE_DIR/parrot-ai.desktop"
+install -m 0755 "$ROOT/agent/install-guest-agent.sh" "$AGENT_INCLUDE_DIR/install-guest-agent.sh"
+
 # The pinned upstream template still contains an old lory-backports upgrade.
 # Skip that release-specific block for the Parrot 7.4 Echo build.
 python3 - "$BUILDER_DIR/templates/common/hooks/live/parrot-hooks.chroot" <<'PY'

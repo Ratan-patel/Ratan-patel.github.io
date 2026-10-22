@@ -16,8 +16,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  agent-tests:
+    name: Test Parrot AI provider and terminal loops
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install agent test dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3-pexpect
+
+      - name: Run unit and shell syntax tests
+        run: |
+          python3 -m py_compile parrot-7.4-lite/agent/parrot-ai parrot-7.4-lite/agent/tests/test_parrot_ai.py
+          parrot-7.4-lite/agent/parrot-ai --version
+          python3 -m unittest discover -s parrot-7.4-lite/agent/tests -v
+          bash -n parrot-7.4-lite/scripts/build-iso.sh parrot-7.4-lite/scripts/build-qcow2.sh parrot-7.4-lite/scripts/customize-guest.sh
+          sh -n parrot-7.4-lite/agent/install-guest-agent.sh parrot-7.4-lite/iso/variant-lite-xfce/hooks/live/zzzz-parrot-lite-prune.chroot
+          git diff --check
+
   iso:
     name: Build bootable ISO (AMD64)
+    needs: agent-tests
     if: ${{ !contains(github.event.head_commit.message || '', '[qcow2-only]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 240
@@ -126,6 +148,7 @@ jobs:
 
   qcow2:
     name: Build preinstalled QCOW2 (AMD64)
+    needs: agent-tests
     if: ${{ !contains(github.event.head_commit.message || '', '[iso-only]') }}
     # Ubuntu 22.04's QEMU SLIRP path works on hosted runners without the 24.04 passt/user-namespace restrictions.
     runs-on: ubuntu-22.04

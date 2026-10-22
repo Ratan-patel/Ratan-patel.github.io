@@ -75,6 +75,23 @@ Outputs and `SHA256SUMS.txt` are written to `parrot-7.4-lite/artifacts/` (ignore
 - **ISO:** boot from the ISO and use the installer to install to a VM or computer. Double-check the target disk before installation. The curated tools are for authorized testing only.
 - **QCOW2:** import/attach it as an existing disk in QEMU/KVM, virt-manager or Proxmox. Set RAM/CPU/disk to suit the host. It includes the same curated tools for authorized testing. Review its first-boot/login behavior and change the account password immediately.
 
+## Multi-provider AI terminal agent
+
+Both images include the open-source `parrot-ai` client, available from the XFCE applications menu or a terminal. It can call a model, run the returned `parrot_terminal` tool call in a persistent Bash session inside the Parrot guest, send the command output back, and continue through multiple steps. Start it with `parrot-ai`; run `parrot-ai --setup` to choose or change a provider.
+
+Provider choices:
+
+1. **Google Gemini API** — choose a Gemini model ID; inference is hosted by Google. Uses the [Gemini Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview).
+2. **Google Antigravity managed agent (preview)** — uses Google's [managed agent API](https://ai.google.dev/gemini-api/docs/antigravity-agent), with only the custom Parrot terminal function exposed by this client. That function is executed by the local Parrot app; Google's default remote code-execution tool is not enabled here.
+3. **OpenRouter** — one OpenRouter API key plus a `provider/model` ID; choose a model that supports function/tool calling. Example model IDs can change over time. See [OpenRouter's API docs](https://openrouter.ai/docs/api_reference/overview).
+4. **Custom OpenAI-compatible API** — for another hosted endpoint or a self-hosted open-weight model server.
+
+The client/harness is open source; Gemini and Antigravity are Google-hosted services, not bundled open-source model weights. OpenRouter is a gateway, not a model itself. Model availability, tool-calling support, provider refusals, quotas and charges depend on the selected service. Switching to OpenRouter does not guarantee that a model will accept every request.
+
+API keys are entered with hidden terminal input and stored in `~/.config/parrot-ai/config.json` with owner-only permissions (mode `600`); they are not put in Git or baked into the ISO/QCOW2. They are plain text at rest, so protect the guest account. Prompts **and terminal output** are sent to the selected provider; the API does the reasoning, while commands execute inside the Parrot guest. Internet access and your own provider credentials are required.
+
+The agent runs commands without per-command approval prompts, as requested. It uses the existing guest sudo policy non-interactively (`sudo -n`); it does not obtain or store a sudo password, and a command requiring an unavailable sudo grant will fail rather than wait for a password. Destructive commands can still run with the guest user's permissions. Keep the VM isolated and use security tools only on systems you own or have explicit authorization to test.
+
 Verify a downloaded custom artifact with:
 
 ```bash

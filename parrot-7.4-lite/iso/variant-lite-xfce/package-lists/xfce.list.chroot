@@ -9,3 +9,6 @@ parrot-desktop-xfce
 task-xfce-desktop
 firefox-esr
 parrot-updater
+sudo
+python3
+python3-pexpect

@@ -115,13 +115,20 @@ if [[ -z "$MIRROR_IP" ]]; then
     echo "Could not resolve the Parrot mirror on the host: $MIRROR_HOST" >&2
     exit 1
 fi
-printf 'Pruning full suites, installing XFCE and curated tools (mirror %s -> %s)...\n' \
+printf 'Pruning full suites, installing XFCE, curated tools and AI runtime (mirror %s -> %s)...\n' \
     "$MIRROR_HOST" "$MIRROR_IP"
 GUEST_CUSTOMIZER=/tmp/parrot-lite-customize-guest.sh
 virt-customize --add "$BASE_QCOW2" --network \
     --upload "$ROOT/scripts/customize-guest.sh:$GUEST_CUSTOMIZER" \
+    --upload "$ROOT/agent/parrot-ai:/tmp/parrot-ai" \
+    --upload "$ROOT/agent/parrot-ai.desktop:/tmp/parrot-ai.desktop" \
+    --upload "$ROOT/agent/install-guest-agent.sh:/tmp/install-parrot-ai.sh" \
     --run-command "PARROT_MIRROR_HOST=$MIRROR_HOST PARROT_MIRROR_IP=$MIRROR_IP bash $GUEST_CUSTOMIZER" \
-    --delete "$GUEST_CUSTOMIZER"
+    --run-command "bash /tmp/install-parrot-ai.sh /tmp/parrot-ai /tmp/parrot-ai.desktop" \
+    --delete "$GUEST_CUSTOMIZER" \
+    --delete /tmp/parrot-ai \
+    --delete /tmp/parrot-ai.desktop \
+    --delete /tmp/install-parrot-ai.sh
 
 printf 'Sparsifying and compressing virtual disk...\n'
 # The source image is disposable, so sparsify it in place and then write a

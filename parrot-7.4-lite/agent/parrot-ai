@@ -1,0 +1,716 @@
+#!/usr/bin/env python3
+"""Multi-provider, local-terminal AI agent for the Parrot 7.4 images.
+
+The model provider supplies reasoning/tool calls; this client executes the
+requested shell commands in the Parrot guest, never on the provider's host.
+"""
+from __future__ import annotations
+
+import argparse
+import getpass
+import json
+import os
+import re
+import sys
+import urllib.error
+import urllib.request
+import uuid
+from pathlib import Path
+from typing import Any
+
+try:
+    import pexpect
+except ImportError:  # pragma: no cover - exercised only on an incomplete install
+    pexpect = None
+
+VERSION = "0.1.0"
+INTERACTIONS_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
+FUNCTION_NAME = "parrot_terminal"
+MAX_TOOL_ROUNDS = 16
+COMMAND_TIMEOUT = 900
+HTTP_TIMEOUT = 300
+MAX_COMMAND_CHARS = 24_000
+MAX_TOOL_OUTPUT_CHARS = 24_000
+
+SYSTEM_INSTRUCTION = """You are Parrot AI, a terminal agent running inside the user's Parrot 7.4 guest VM.
+You can use the parrot_terminal tool to run Bash commands in that guest. Plan
+multi-step work, run a command, inspect its real output, then decide what to do
+next. Never claim a command ran unless the tool returned its output. The user
+has explicitly selected no per-command approval prompts, including for
+privileged or destructive actions: do not ask for an extra confirmation before
+calling the terminal tool. Commands execute with the guest user's permissions;
+use sudo -n when elevation is needed so a missing sudo grant fails immediately
+instead of waiting for a password. The guest's sudo policy still applies.
+Only perform security testing on systems the user owns or has explicit written
+authorization to assess. Keep all shell execution inside this Parrot guest; do
+not claim that a command runs in Google/OpenRouter cloud. Do not read, print,
+or transmit API keys, passwords, tokens, private keys, or unrelated personal
+files. Explain uncertainty and summarize useful results clearly, in the user's
+language where practical."""
+
+FUNCTION_PARAMETERS: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "command": {
+            "type": "string",
+            "description": "One Bash command to execute in the local Parrot guest terminal.",
+        }
+    },
+    "required": ["command"],
+}
+INTERACTIONS_FUNCTION = {
+    "type": "function",
+    "name": FUNCTION_NAME,
+    "description": (
+        "Execute a Bash command inside the user's local Parrot 7.4 virtual machine. "
+        "The command runs in the guest, not in the model provider's cloud. "
+        "Use it for authorized lab/assessment tasks and inspect the returned output."
+    ),
+    "parameters": FUNCTION_PARAMETERS,
+}
+
+PROVIDER_CHOICES = {
+    "1": "gemini",
+    "2": "antigravity",
+    "3": "openrouter",
+    "4": "compatible",
+}
+PROVIDER_LABELS = {
+    "gemini": "Google Gemini API (model + local Parrot terminal)",
+    "antigravity": "Google Antigravity managed agent (preview + local terminal tool)",
+    "openrouter": "OpenRouter (choose a model from its catalog)",
+    "compatible": "Custom OpenAI-compatible endpoint",
+}
+
+
+class AgentError(RuntimeError):
+    """A user-facing provider or agent error."""
+
+
+def config_path(override: str | None = None) -> Path:
+    if override:
+        return Path(override).expanduser()
+    base = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+    return base / "parrot-ai" / "config.json"
+
+
+def save_config(path: Path, config: dict[str, Any]) -> None:
+    """Write user credentials privately; the file is deliberately not encrypted."""
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    try:
+        path.parent.chmod(0o700)
+    except OSError:
+        pass
+    data = json.dumps(config, ensure_ascii=False, indent=2) + "\n"
+    temp = path.with_name(path.name + f".{os.getpid()}.tmp")
+    fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as output:
+            output.write(data)
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temp, path)
+        path.chmod(0o600)
+    finally:
+        try:
+            temp.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def load_config(path: Path) -> dict[str, Any] | None:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AgentError(f"Cannot read config {path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise AgentError(f"Invalid config in {path}; run `parrot-ai --setup`.")
+    return value
+
+
+def _ask(prompt: str, default: str = "") -> str:
+    suffix = f" [{default}]" if default else ""
+    value = input(f"{prompt}{suffix}: ").strip()
+    return value or default
+
+
+def _ask_secret(prompt: str, env_name: str) -> str:
+    for name in ("PARROT_AI_API_KEY", env_name):
+        value = os.environ.get(name, "").strip()
+        if value:
+            print(f"Using {name} from the environment (not displaying it).")
+            return value
+    while True:
+        value = getpass.getpass(f"{prompt} (input hidden): ").strip()
+        if value:
+            return value
+        print("A key is required for this provider. You can press Ctrl+C to exit setup.")
+
+
+def _ask_optional_secret(prompt: str, env_name: str) -> str:
+    names = tuple(dict.fromkeys(("PARROT_AI_API_KEY", env_name, "OPENAI_API_KEY")))
+    for name in names:
+        value = os.environ.get(name, "").strip()
+        if value:
+            print(f"Using {name} from the environment (not displaying it).")
+            return value
+    return getpass.getpass(f"{prompt} (input hidden; Enter if not required): ").strip()
+
+
+def setup_wizard(path: Path) -> dict[str, Any]:
+    print("\nParrot AI provider setup")
+    print("Choose where the reasoning/API calls should go:")
+    for number, provider in PROVIDER_CHOICES.items():
+        print(f"  {number}. {PROVIDER_LABELS[provider]}")
+    print("\nKeys are saved locally with owner-only file permissions; they are not baked into the image.")
+    print("Prompts and terminal output are sent to the selected provider for model processing.\n")
+    while True:
+        choice = input("Provider [1-4]: ").strip()
+        if choice in PROVIDER_CHOICES:
+            break
+        print("Choose 1, 2, 3, or 4.")
+
+    provider = PROVIDER_CHOICES[choice]
+    config: dict[str, Any] = {"provider": provider}
+    if provider in ("gemini", "antigravity"):
+        config["api_key"] = _ask_secret("Google Gemini API key", "GEMINI_API_KEY")
+        if provider == "gemini":
+            config["model"] = _ask("Gemini model ID", "gemini-4-argon")
+        else:
+            config["agent_id"] = _ask("Antigravity agent ID", "antigravity-preview-09-2026")
+            config["model"] = _ask("Underlying Gemini model ID", "gemini-4-argon")
+            config["max_total_tokens"] = 50_000
+    elif provider == "openrouter":
+        config["api_key"] = _ask_secret("OpenRouter API key", "OPENROUTER_API_KEY")
+        config["model"] = _ask(
+            "OpenRouter model ID (provider/model; must support tool calling)",
+            "google/gemini-4-argon",
+        )
+        config["base_url"] = "https://openrouter.ai/api/v1"
+    else:
+        config["api_key"] = _ask_optional_secret("API key (if your endpoint requires one)", "PARROT_AI_API_KEY")
+        config["base_url"] = _ask("OpenAI-compatible API base URL", "https://api.openai.com/v1").rstrip("/")
+        config["model"] = _ask("Model ID", "")
+        if not config["model"]:
+            raise AgentError("A model ID is required for the custom endpoint.")
+
+    save_config(path, config)
+    print(f"Saved provider settings to {path} (mode 600). The key is not encrypted at rest.\n")
+    return config
+
+
+def _secret_for(config: dict[str, Any]) -> str:
+    provider = config.get("provider", "")
+    env_candidates = {
+        "gemini": ("PARROT_AI_API_KEY", "GEMINI_API_KEY"),
+        "google": ("PARROT_AI_API_KEY", "GEMINI_API_KEY"),
+        "antigravity": ("PARROT_AI_API_KEY", "GEMINI_API_KEY"),
+        "google-antigravity": ("PARROT_AI_API_KEY", "GEMINI_API_KEY"),
+        "openrouter": ("PARROT_AI_API_KEY", "OPENROUTER_API_KEY"),
+        "compatible": ("PARROT_AI_API_KEY", "OPENAI_API_KEY"),
+        "openai-compatible": ("PARROT_AI_API_KEY", "OPENAI_API_KEY"),
+    }.get(provider, ("PARROT_AI_API_KEY",))
+    for name in env_candidates:
+        value = os.environ.get(name, "").strip()
+        if value:
+            return value
+    return str(config.get("api_key", "")).strip()
+
+
+def _http_json(
+    url: str,
+    payload: dict[str, Any] | None,
+    headers: dict[str, str],
+    timeout: int = HTTP_TIMEOUT,
+    method: str = "POST",
+) -> dict[str, Any]:
+    data = None if payload is None else json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    request = urllib.request.Request(url, data=data, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as exc:
+        raw = exc.read().decode("utf-8", errors="replace")
+        try:
+            detail_obj = json.loads(raw)
+            detail = detail_obj.get("error", {}).get("message") or detail_obj.get("message") or raw
+        except (json.JSONDecodeError, AttributeError):
+            detail = raw
+        detail = str(detail).replace("\n", " ").strip()
+        if len(detail) > 900:
+            detail = detail[:900] + "…"
+        raise AgentError(f"Provider returned HTTP {exc.code}: {detail or exc.reason}") from exc
+    except urllib.error.URLError as exc:
+        raise AgentError(f"Cannot reach provider: {exc.reason}") from exc
+    except TimeoutError as exc:
+        raise AgentError("Provider request timed out.") from exc
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise AgentError(f"Provider returned invalid JSON: {raw[:400]}") from exc
+    if not isinstance(value, dict):
+        raise AgentError("Provider returned an unexpected response format.")
+    return value
+
+
+def _parse_arguments(value: Any) -> dict[str, Any]:
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise AgentError(f"Model returned invalid tool arguments: {exc}") from exc
+        if isinstance(parsed, dict):
+            return parsed
+    raise AgentError("Model returned tool arguments in an unsupported format.")
+
+
+def _clip_output(text: str, limit: int = MAX_TOOL_OUTPUT_CHARS) -> tuple[str, bool]:
+    if len(text) <= limit:
+        return text, False
+    return "[Earlier output truncated]\n" + text[-limit:], True
+
+
+class LocalShell:
+    """A persistent PTY-backed Bash session in the current Parrot guest."""
+
+    def __init__(self, secrets: list[str] | None = None) -> None:
+        if pexpect is None:
+            raise AgentError("python3-pexpect is missing; install it with sudo apt install python3-pexpect.")
+        self.secrets = [secret for secret in (secrets or []) if secret]
+        env = self._shell_environment()
+        try:
+            self.child = pexpect.spawn(
+                "/bin/bash",
+                ["--noprofile", "--norc", "-i"],
+                encoding="utf-8",
+                echo=False,
+                timeout=COMMAND_TIMEOUT,
+                env=env,
+            )
+        except Exception as exc:  # pragma: no cover - OS launch failures
+            raise AgentError(f"Could not start the local Bash terminal: {exc}") from exc
+        self.child.delaybeforesend = 0.03
+        # Keep the shell alive between calls (cd/env state persists). sudo is
+        # explicitly non-interactive: the guest sudo policy decides whether it
+        # may run, and the agent will not hang waiting for a password prompt.
+        self.child.sendline("unset PROMPT_COMMAND; PS1=''; function sudo(){ command sudo -n \"$@\"; }; export -f sudo")
+
+    def _shell_environment(self) -> dict[str, str]:
+        env = os.environ.copy()
+        # The model's command shell should not inherit the credentials used by
+        # the agent process. Output redaction below is an additional safeguard.
+        for name in ("PARROT_AI_API_KEY", "GEMINI_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):
+            env.pop(name, None)
+        env.update({"PS1": "", "PROMPT_COMMAND": "", "HISTFILE": "/dev/null", "TERM": "dumb"})
+        return env
+
+    def _redact(self, text: str) -> str:
+        for secret in self.secrets:
+            text = text.replace(secret, "[REDACTED API KEY]")
+        return text
+
+    def run(self, command: str) -> dict[str, Any]:
+        command = command.strip()
+        if not command:
+            return {"exit_code": 2, "output": "Empty command."}
+        if len(command) > MAX_COMMAND_CHARS:
+            return {"exit_code": 2, "output": f"Command exceeds {MAX_COMMAND_CHARS} characters."}
+        marker = "__PARROT_AI_DONE_" + uuid.uuid4().hex + "__"
+        pattern = re.compile(re.escape(marker) + r":(-?\d+)")
+        print(f"\n[parrot-ai] Running in Parrot guest (no approval prompt):\n$ {self._redact(command)}\n", flush=True)
+        try:
+            self.child.sendline(command)
+            self.child.sendline(f'__parrot_ai_status=$?; printf "\\n{marker}:%s\\n" "$__parrot_ai_status"')
+            self.child.expect(pattern, timeout=COMMAND_TIMEOUT)
+            output = self.child.before or ""
+            exit_code = int(self.child.match.group(1)) if self.child.match else 1
+        except pexpect.TIMEOUT:
+            try:
+                self.child.sendcontrol("c")
+                recovery_marker = "__PARROT_AI_RECOVER_" + uuid.uuid4().hex + "__"
+                self.child.sendline(f'printf "\\n{recovery_marker}:130\\n"')
+                self.child.expect(re.compile(re.escape(recovery_marker) + r":(-?\d+)"), timeout=5)
+            except Exception:
+                self._restart()
+            output = "Command exceeded the 15-minute limit and was interrupted."
+            exit_code = 124
+        except (pexpect.EOF, OSError):
+            output = "The shell session ended unexpectedly; it has been restarted."
+            exit_code = 125
+            self._restart()
+        output = self._redact(output.replace("\r", ""))
+        output, truncated = _clip_output(output)
+        if truncated:
+            print("[parrot-ai] Tool output was truncated before sending it to the model.", flush=True)
+        if output:
+            print(output, end="" if output.endswith("\n") else "\n", flush=True)
+        return {"exit_code": exit_code, "output": output, "truncated": truncated}
+
+    def _restart(self) -> None:
+        try:
+            self.child.close(force=True)
+        except Exception:
+            pass
+        env = self._shell_environment()
+        self.child = pexpect.spawn(
+            "/bin/bash", ["--noprofile", "--norc", "-i"],
+            encoding="utf-8", echo=False, timeout=COMMAND_TIMEOUT, env=env,
+        )
+        self.child.delaybeforesend = 0.03
+        self.child.sendline("unset PROMPT_COMMAND; PS1=''; function sudo(){ command sudo -n \"$@\"; }; export -f sudo")
+
+    def close(self) -> None:
+        try:
+            self.child.close(force=True)
+        except Exception:
+            pass
+
+
+def _run_local_tool(shell: LocalShell, name: str, arguments: Any) -> dict[str, Any]:
+    if name != FUNCTION_NAME:
+        return {"exit_code": 2, "output": f"Unknown tool: {name}"}
+    args = _parse_arguments(arguments)
+    command = args.get("command")
+    if not isinstance(command, str):
+        return {"exit_code": 2, "output": "Tool argument 'command' must be a string."}
+    return shell.run(command)
+
+
+class GeminiInteractions:
+    """Direct Gemini model API using the Interactions API and local function calls."""
+
+    def __init__(self, config: dict[str, Any], shell: LocalShell) -> None:
+        self.config = config
+        self.shell = shell
+        self.api_key = _secret_for(config)
+        self.model = str(config.get("model", "gemini-4-argon"))
+        self.previous_id: str | None = None
+
+    def _create(self, user_input: Any, previous_id: str | None = None) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "input": user_input,
+            "system_instruction": SYSTEM_INSTRUCTION,
+            "tools": [INTERACTIONS_FUNCTION],
+        }
+        if previous_id:
+            payload["previous_interaction_id"] = previous_id
+        return _http_json(
+            INTERACTIONS_URL,
+            payload,
+            {"Content-Type": "application/json", "x-goog-api-key": self.api_key, "Api-Revision": "2026-05-20"},
+        )
+
+    def ask(self, prompt: str) -> str:
+        response = self._create(prompt, self.previous_id)
+        return self._finish_tool_loop(response, antigravity=False)
+
+    def _finish_tool_loop(self, response: dict[str, Any], antigravity: bool) -> str:
+        for _ in range(MAX_TOOL_ROUNDS):
+            interaction_id = response.get("id") or self.previous_id
+            if interaction_id:
+                self.previous_id = str(interaction_id)
+            steps = response.get("steps") or []
+            status = str(response.get("status", "")).lower()
+            if status in ("failed", "cancelled", "canceled", "incomplete"):
+                detail = response.get("error") or response.get("incomplete_details") or status
+                raise AgentError(f"Google interaction ended with status {status}: {detail}")
+            executed = {
+                str(step.get("call_id"))
+                for step in steps
+                if isinstance(step, dict) and step.get("type") == "function_result" and step.get("call_id")
+            }
+            pending = [
+                step for step in steps
+                if isinstance(step, dict)
+                and step.get("type") == "function_call"
+                and str(step.get("id", "")) not in executed
+            ]
+            if not pending:
+                text = _interaction_text(response)
+                if text:
+                    return text
+                if status == "requires_action":
+                    raise AgentError("Google requested an unsupported action instead of the local terminal tool.")
+                return "(Provider returned no text.)"
+
+            function_results: list[dict[str, Any]] = []
+            for step in pending:
+                name = str(step.get("name", ""))
+                try:
+                    result = _run_local_tool(self.shell, name, step.get("arguments", {}))
+                except AgentError as exc:
+                    result = {"exit_code": 2, "output": str(exc)}
+                if antigravity:
+                    function_results.append({
+                        "type": "function_result",
+                        "name": name,
+                        "call_id": step.get("id"),
+                        "result": result,
+                    })
+                else:
+                    function_results.append({
+                        "type": "function_result",
+                        "name": name,
+                        "call_id": step.get("id"),
+                        "result": [{"type": "text", "text": json.dumps(result, ensure_ascii=False)}],
+                    })
+            response = self._create(function_results, self.previous_id)
+        raise AgentError(f"Google agent reached the {MAX_TOOL_ROUNDS}-round tool limit.")
+
+
+class AntigravityAgent(GeminiInteractions):
+    """Google's managed Antigravity agent, with only a client-side Parrot tool exposed."""
+
+    def __init__(self, config: dict[str, Any], shell: LocalShell) -> None:
+        super().__init__(config, shell)
+        self.agent_id = str(config.get("agent_id", "antigravity-preview-09-2026"))
+        self.environment_id: str | None = None
+
+    def _create(self, user_input: Any, previous_id: str | None = None) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "agent": self.agent_id,
+            "input": user_input,
+            "environment": self.environment_id or "remote",
+            "agent_config": {
+                "type": "antigravity",
+                "model": self.model,
+                "max_total_tokens": int(self.config.get("max_total_tokens", 50_000)),
+            },
+            # Deliberately expose only the client-side terminal callback. The
+            # Google-hosted code_execution/search tools are not included; the
+            # command itself is executed by this Parrot client.
+            "tools": [INTERACTIONS_FUNCTION],
+        }
+        if previous_id:
+            payload["previous_interaction_id"] = previous_id
+        response = _http_json(
+            INTERACTIONS_URL,
+            payload,
+            {"Content-Type": "application/json", "x-goog-api-key": self.api_key, "Api-Revision": "2026-05-20"},
+        )
+        if response.get("environment_id"):
+            self.environment_id = str(response["environment_id"])
+        return response
+
+    def ask(self, prompt: str) -> str:
+        if not self.previous_id:
+            prompt = (
+                "Parrot AI session instructions (follow throughout this conversation):"
+                + chr(10)
+                + SYSTEM_INSTRUCTION
+                + chr(10) * 2
+                + "User request:"
+                + chr(10)
+                + prompt
+            )
+        response = self._create(prompt, self.previous_id)
+        return self._finish_tool_loop(response, antigravity=True)
+
+
+def _openrouter_tool() -> dict[str, Any]:
+    return {
+        "type": "function",
+        "function": {
+            "name": FUNCTION_NAME,
+            "description": INTERACTIONS_FUNCTION["description"],
+            "parameters": FUNCTION_PARAMETERS,
+        },
+    }
+
+
+class OpenAICompatibleAgent:
+    """OpenRouter or any user-supplied OpenAI-compatible tool-calling API."""
+
+    def __init__(self, config: dict[str, Any], shell: LocalShell, provider: str) -> None:
+        self.config = config
+        self.shell = shell
+        self.provider = provider
+        self.api_key = _secret_for(config)
+        self.model = str(config.get("model", ""))
+        if provider == "openrouter":
+            self.base_url = str(config.get("base_url", "https://openrouter.ai/api/v1")).rstrip("/")
+        else:
+            self.base_url = str(config.get("base_url", "")).rstrip("/")
+        self.messages: list[dict[str, Any]] = [{"role": "system", "content": SYSTEM_INSTRUCTION}]
+
+    def ask(self, prompt: str) -> str:
+        self.messages.append({"role": "user", "content": prompt})
+        for _ in range(MAX_TOOL_ROUNDS):
+            payload = {
+                "model": self.model,
+                "messages": self.messages,
+                "tools": [_openrouter_tool()],
+                "tool_choice": "auto",
+                "temperature": 0.2,
+                "stream": False,
+            }
+            headers = {"Content-Type": "application/json"}
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
+            if self.provider == "openrouter":
+                headers["X-OpenRouter-Title"] = "Parrot AI Terminal Agent"
+            response = _http_json(f"{self.base_url}/chat/completions", payload, headers)
+            choices = response.get("choices") or []
+            if not choices or not isinstance(choices[0], dict):
+                raise AgentError("OpenAI-compatible endpoint returned no choices.")
+            message = choices[0].get("message") or {}
+            assistant_message: dict[str, Any] = {
+                "role": "assistant",
+                "content": message.get("content"),
+            }
+            # Some reasoning models require provider-issued reasoning blocks to
+            # be sent back unchanged during a tool-call continuation.
+            for field in ("tool_calls", "reasoning_details", "reasoning", "refusal"):
+                if field in message:
+                    assistant_message[field] = message[field]
+            tool_calls = message.get("tool_calls") or []
+            self.messages.append(assistant_message)
+            if not tool_calls:
+                text = _message_text(message.get("content"))
+                return text or "(Provider returned no text.)"
+
+            for call in tool_calls:
+                call_id = str(call.get("id", ""))
+                function = call.get("function") or {}
+                name = str(function.get("name", ""))
+                try:
+                    arguments = _parse_arguments(function.get("arguments", "{}"))
+                    result = _run_local_tool(self.shell, name, arguments)
+                except AgentError as exc:
+                    result = {"exit_code": 2, "output": str(exc)}
+                self.messages.append({
+                    "role": "tool",
+                    "tool_call_id": call_id,
+                    "content": json.dumps(result, ensure_ascii=False),
+                })
+            # Bound local history to keep costs/context predictable. Keep the
+            # system instruction and the latest user/tool turns.
+            if len(self.messages) > 41:
+                self.messages = [self.messages[0]] + self.messages[-40:]
+        raise AgentError(f"Model reached the {MAX_TOOL_ROUNDS}-round tool limit.")
+
+
+def _message_text(content: Any) -> str:
+    if isinstance(content, str):
+        return content.strip()
+    if isinstance(content, list):
+        parts = []
+        for item in content:
+            if isinstance(item, dict) and isinstance(item.get("text"), str):
+                parts.append(item["text"])
+        return "\n".join(parts).strip()
+    return ""
+
+
+def _interaction_text(response: dict[str, Any]) -> str:
+    text = response.get("output_text")
+    if isinstance(text, str) and text.strip():
+        return text.strip()
+    collected: list[str] = []
+    for step in response.get("steps") or []:
+        if not isinstance(step, dict) or step.get("type") not in ("model_output", "text"):
+            continue
+        content = step.get("content")
+        if isinstance(content, str):
+            collected.append(content)
+        elif isinstance(content, list):
+            for item in content:
+                if isinstance(item, dict) and isinstance(item.get("text"), str):
+                    collected.append(item["text"])
+    return "\n".join(part for part in collected if part).strip()
+
+
+def make_agent(config: dict[str, Any], shell: LocalShell) -> Any:
+    provider = str(config.get("provider", ""))
+    if provider in ("gemini", "google"):
+        return GeminiInteractions(config, shell)
+    if provider in ("antigravity", "google-antigravity"):
+        return AntigravityAgent(config, shell)
+    if provider == "openrouter":
+        return OpenAICompatibleAgent(config, shell, provider)
+    if provider in ("compatible", "openai-compatible"):
+        return OpenAICompatibleAgent(config, shell, "compatible")
+    raise AgentError(f"Unknown provider {provider!r}; run `parrot-ai --setup`.")
+
+
+def _validate_config(config: dict[str, Any]) -> None:
+    provider = str(config.get("provider", ""))
+    if provider not in {"gemini", "google", "antigravity", "google-antigravity", "openrouter", "compatible", "openai-compatible"}:
+        raise AgentError("Provider is missing or invalid; run `parrot-ai --setup`.")
+    if provider not in ("compatible", "openai-compatible") and not _secret_for(config):
+        raise AgentError("No API key found. Run `parrot-ai --setup` or set the provider's API-key environment variable.")
+    if provider in ("openrouter", "compatible", "openai-compatible") and not str(config.get("model", "")).strip():
+        raise AgentError("Model ID is missing; run `parrot-ai --setup`.")
+    if provider in ("compatible", "openai-compatible") and not str(config.get("base_url", "")).startswith(("https://", "http://")):
+        raise AgentError("Custom endpoint must be an http(s) URL; run `parrot-ai --setup`.")
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="parrot-ai",
+        description="Multi-provider AI agent that executes tool calls in the local Parrot guest terminal.",
+    )
+    parser.add_argument("--setup", action="store_true", help="choose/switch provider and save an API key locally")
+    parser.add_argument("--config", help=argparse.SUPPRESS)
+    parser.add_argument("--version", action="version", version=f"parrot-ai {VERSION}")
+    args = parser.parse_args(argv)
+    path = config_path(args.config)
+    try:
+        config = setup_wizard(path) if args.setup else load_config(path)
+        if config is None:
+            print("No provider is configured yet; starting first-run setup.")
+            config = setup_wizard(path)
+        _validate_config(config)
+        provider = str(config.get("provider"))
+        print(f"Parrot AI — {PROVIDER_LABELS.get(provider, provider)}")
+        print("No per-command approval prompts are enabled. Commands run in this Parrot guest.")
+        print("Prompts and command output are sent to the selected API provider.")
+        print("Use only authorized lab targets. `:quit` exits; `:reset` starts a fresh model conversation.\n")
+        active_key = _secret_for(config)
+        shell = LocalShell(secrets=[active_key] if active_key else [])
+        try:
+            agent = make_agent(config, shell)
+            while True:
+                try:
+                    prompt = input("parrot-ai> ").strip()
+                except EOFError:
+                    print()
+                    break
+                except KeyboardInterrupt:
+                    print("\nLeaving Parrot AI.")
+                    break
+                if not prompt:
+                    continue
+                if prompt.lower() in {":q", ":quit", ":exit", "exit"}:
+                    break
+                if prompt.lower() == ":reset":
+                    agent = make_agent(config, shell)
+                    print("Model conversation reset. Local shell state is unchanged.\n")
+                    continue
+                if prompt.lower() == ":setup":
+                    print("Run `parrot-ai --setup` in another terminal after exiting.\n")
+                    continue
+                try:
+                    answer = agent.ask(prompt)
+                    if answer:
+                        print(f"\n{answer}\n")
+                except AgentError as exc:
+                    print(f"\n[parrot-ai] {exc}\n", file=sys.stderr)
+        finally:
+            shell.close()
+        return 0
+    except (AgentError, KeyboardInterrupt) as exc:
+        if isinstance(exc, KeyboardInterrupt):
+            print("\nSetup cancelled.", file=sys.stderr)
+            return 130
+        print(f"parrot-ai: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -11,6 +11,7 @@ CURATED_TOOLS=(
     nuclei wpscan metasploit-framework hydra
     impacket-scripts netexec smbmap hashcat
 )
+AGENT_PACKAGES=(sudo python3 python3-pexpect)
 
 HOSTS_BACKUP="$(mktemp)"
 cp -p /etc/hosts "$HOSTS_BACKUP"
@@ -80,9 +81,9 @@ purge_matching '^(parrot-tools-full|parrot-tools-[^:]+|parrot-meta-(devel|privac
 purge_matching '^(codium|golang-go|nodejs|npm|default-jdk(-headless)?|openjdk-[0-9]+-jdk(-headless)?|python3-pip[^:]*|git(-man)?|podman|podman-docker|flatpak|flatpak-xdg-utils|remmina|gufw|thunderbird|wine|wine64|neovim|inxi|neofetch|htop|nload|iftop)(:.*)?$'
 
 # Install the same four curated groups as the ISO, after purging the full suites.
-printf 'Installing %d curated security tools for authorized assessments...\n' "${#CURATED_TOOLS[@]}"
-retry_apt install -y --no-install-recommends "${CURATED_TOOLS[@]}"
-apt-mark manual "${CURATED_TOOLS[@]}" >/dev/null
+printf 'Installing %d curated security tools and Parrot AI runtime packages...\n' "${#CURATED_TOOLS[@]}"
+retry_apt install -y --no-install-recommends "${CURATED_TOOLS[@]}" "${AGENT_PACKAGES[@]}"
+apt-mark manual "${CURATED_TOOLS[@]}" "${AGENT_PACKAGES[@]}" >/dev/null
 retry_apt autoremove --purge -y
 
 # Make XFCE/LightDM the selected graphical session.

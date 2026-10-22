@@ -25,3 +25,4 @@ parrot-7.4-lite/artifacts/*.iso
 parrot-7.4-lite/artifacts/*.qcow2
 parrot-7.4-lite/artifacts/*.xz
 parrot-7.4-lite/artifacts/SHA256SUMS.txt
+parrot-7.4-lite/**/__pycache__/
