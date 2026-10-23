@@ -28,22 +28,25 @@ matching works.
 6. Verify each address on the company's own careers page at send time — HR inboxes change.
 
 ## Status (as of 23 Oct 2026)
-- **20 mails sent** — 14 training institutes/university/security roles + 6 new NCR colleges & institutes
+- **31 mails sent on 23 Oct** — trainer/faculty roles across NCR colleges & institutes + security/VAPT roles
 - **11 companies already applied to earlier** (Sep–Oct 2026) — deliberately not re-mailed
 - Tracker: `applications.csv` (Status column), live at `/portfolio.html` → Applications
 
-## Target mix (31)
-- 23 training institutes / colleges / universities — trainer, faculty, SME roles
-- 8 security consultancies / product firms — VAPT, AppSec, red-team roles
+## Target mix (42)
+- 30 training institutes / colleges / universities — trainer, faculty, SME roles
+- 12 security consultancies / product firms — VAPT, AppSec, red-team roles
 
 ### Trainer / teaching targets sent on 23 Oct
 CETPA (Noida) · NIIT (Gurugram) · Amity University (Noida) · Bennett University (Greater Noida) ·
 Sharda University (Greater Noida) · Manav Rachna (Faridabad) · Jetking (Delhi) · Recon Cyber Security (Delhi) ·
 Galgotias University (Greater Noida) · IIMT (Greater Noida) · GNIOT (Greater Noida) ·
-Noida International University · Cyberyaan (Tilak Nagar) · Cryptus Cyber Security (Shakarpur)
+Noida International University · Cyberyaan (Tilak Nagar) · Cryptus Cyber Security (Shakarpur) ·
+K.R. Mangalam (Gurugram) · SGT University (Gurugram) · C-DAC Noida · NIELIT Delhi (Janakpuri) ·
+Amity Gurugram · Amity Greater Noida · Appin Technology Lab (Delhi)
 
 ### Security / VAPT targets sent on 23 Oct
-Certcube Labs · TAC Security · Sveltetech (Gurugram) · Innefu Labs · Torrid Networks (Noida) · CyberSRC (Noida)
+Certcube Labs · TAC Security · Sveltetech (Gurugram) · Innefu Labs · Torrid Networks (Noida) · CyberSRC (Noida) ·
+CyberX Infosystem (Noida) · V Patrol AI (Gurugram) · CyberCube Services (Gurugram) · Antihak AI (Noida)
 
 Locations covered: New Delhi (South Ex, Saket, Laxmi Nagar, Pitampura, Janakpuri, Burari,
 Kalkaji, Aerocity, Netaji Subhash Place), Noida (Sectors 1, 2, 16, 62, 63, 68), Greater Noida,
