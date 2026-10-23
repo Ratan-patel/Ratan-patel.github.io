@@ -30,6 +30,12 @@ Send in batches of 8–10, morning 10:00–11:30 IST (Tue–Thu perform best). D
 | 23 | Bennett University | TechZone II, Greater Noida | Assistant Professor / Professor of Practice — Cyber Security | `career@bennett.edu.in` | recruitment.cse@bennett.edu.in |
 | 24 | Sharda University | Knowledge Park III, Greater Noida | Faculty / Industry Trainer — Cyber Security | `hr@sharda.ac.in` | recruitment@sharda.ac.in |
 | 25 | Manav Rachna University | Faridabad (Delhi NCR) | Faculty / Industry Trainer — Cyber Security | `careers.mrei@mrei.ac.in` | info@mru.edu.in |
+| 26 | Galgotias University | Greater Noida | Industry Faculty / Trainer — Cyber Security | `recruitments.trainer@galgotiasuniversity.edu.in` | hr@galgotiasuniversity.edu.in; recruitments@galgotiasuniversity.edu.in |
+| 27 | IIMT Group of Colleges | Knowledge Park III, Greater Noida | Faculty / Technical Trainer — Cyber Security | `hr_gn@iimtindia.net` | contact_gn@iimtindia.net |
+| 28 | GNIOT Group of Institutions | Knowledge Park II, Greater Noida | Assistant Professor / Technical Trainer — Cyber Security | `recruitment@gniot.net.in` | gniot@gniot.net.in |
+| 29 | Noida International University | Sector 17A, Greater Noida | Assistant Professor / Industry Faculty — Cyber Security | `careers@niu.edu.in` | registrar.office@niu.edu.in |
+| 30 | Cyberyaan | Tilak Nagar, New Delhi | Cyber Security / Ethical Hacking Trainer | `training@cyberyaan.com` | pankaj@cyberyaan.com |
+| 31 | Cryptus Cyber Security | Shakarpur, Delhi + NCR branches | Cyber Security / CEH Trainer | `info@cryptus.in` | — |
 
 ---
 
@@ -694,6 +700,167 @@ I am applying for the Faculty / Industry Trainer — Cyber Security role at Mana
 Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
 
 Why I am writing to Manav Rachna University specifically: Manav Rachna runs security electives inside its CSE programmes, and a practicing CEH trainer can deliver those as lab-based, industry-aligned modules.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 26. Galgotias University
+**To:** recruitments.trainer@galgotiasuniversity.edu.in  
+**Also try (second mail from a different day):** hr@galgotiasuniversity.edu.in; recruitments@galgotiasuniversity.edu.in  
+**Subject:** Application: Industry Faculty / Trainer — Cyber Security — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** galgotiasuniversity.edu.in/p/current-openings  
+
+```text
+Respected HR Team,
+
+I am applying for the Industry Faculty / Trainer — Cyber Security role at Galgotias University (Greater Noida).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to Galgotias University specifically: your careers page invites trainer and industry-faculty profiles, and I can deliver CSE cyber security electives as lab-based modules with a ready CTF platform from day one.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 27. IIMT Group of Colleges
+**To:** hr_gn@iimtindia.net  
+**Also try (second mail from a different day):** contact_gn@iimtindia.net  
+**Subject:** Application: Faculty / Technical Trainer — Cyber Security — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** iimtindia.net/contact-us + faculty recruitment notices  
+
+```text
+Respected HR Team,
+
+I am applying for the Faculty / Technical Trainer — Cyber Security role at IIMT Group of Colleges (Knowledge Park III, Greater Noida).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to IIMT Group of Colleges specifically: IIMT's Knowledge Park campus recruits technical trainers for CSE and IT streams, and I can take ethical hacking and VAPT subjects with practical labs rather than theory-only delivery.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 28. GNIOT Group of Institutions
+**To:** recruitment@gniot.net.in  
+**Also try (second mail from a different day):** gniot@gniot.net.in  
+**Subject:** Application: Assistant Professor / Technical Trainer — Cyber Security — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** faculty recruitment notices (recruitment@gniot.net.in)  
+
+```text
+Respected HR Team,
+
+I am applying for the Assistant Professor / Technical Trainer — Cyber Security role at GNIOT Group of Institutions (Knowledge Park II, Greater Noida).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to GNIOT Group of Institutions specifically: your department list includes Cyber Security among the CSE specialisations and you also recruit technical trainers, so a practising CEH trainer who can run hands-on labs fits both tracks.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 29. Noida International University
+**To:** careers@niu.edu.in  
+**Also try (second mail from a different day):** registrar.office@niu.edu.in  
+**Subject:** Application: Assistant Professor / Industry Faculty — Cyber Security — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** niu.edu.in/careers + 2026 recruitment notices  
+
+```text
+Respected HR Team,
+
+I am applying for the Assistant Professor / Industry Faculty — Cyber Security role at Noida International University (Sector 17A, Greater Noida).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to Noida International University specifically: your 2026 recruitment cycle invites faculty applications at careers@niu.edu.in, and a practitioner who can run hands-on security labs would complement the CSE teaching team.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 30. Cyberyaan
+**To:** training@cyberyaan.com  
+**Also try (second mail from a different day):** pankaj@cyberyaan.com  
+**Subject:** Application: Cyber Security / Ethical Hacking Trainer — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** cyberyaan.com/contact-us  
+
+```text
+Respected HR Team,
+
+I am applying for the Cyber Security / Ethical Hacking Trainer role at Cyberyaan (Tilak Nagar, New Delhi).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to Cyberyaan specifically: your Delhi batches cover ethical hacking, Linux and cyber security diploma tracks in both Hindi and English, which is exactly how I have taught for six years, and I can add CEH-depth plus ready CTF labs.
+
+I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
+
+Request: if the role is currently closed, I would be grateful if you could keep my profile on file or forward it to the relevant hiring manager. A 10-minute call at your convenience is enough for me to show how I would handle the first 30 days.
+
+Thank you for your time.
+
+Regards,
+Ratan Kumar Patel
++91 87009 13645 | patelratan460@gmail.com
+linkedin.com/in/ratan-kumar-patel-032a43367 | ratan-patel.github.io
+```
+
+## 31. Cryptus Cyber Security
+**To:** info@cryptus.in  
+**Subject:** Application: Cyber Security / CEH Trainer — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner  
+**Where this contact came from:** cryptus.in/contact-us  
+
+```text
+Respected HR Team,
+
+I am applying for the Cyber Security / CEH Trainer role at Cryptus Cyber Security (Shakarpur, Delhi + NCR branches).
+
+Quick profile: CEH v12 certified (EC-Council, valid to Jul 2027), MS in Cybersecurity & Information Assurance (WGU, 2023), 6+ years across VAPT, red-team simulation, web/API and network security, and corporate ethical hacking training. I have trained 500+ students and working professionals at Appin Technology Lab (2020-2026) and delivered VAPT engagements at Silent Front & Software Solutions (2018-2020). I also built RatanSec OS, an AI-driven pentest environment (Kali toolchain + AI copilot, scope allowlist, audit log), which is public at ratan-patel.github.io/ratansec-os.html.
+
+Why I am writing to Cryptus Cyber Security specifically: Cryptus runs CEH and ethical hacking batches across Delhi, Noida, Greater Noida and Faridabad, and I can take those tracks in Hindi or English with hands-on labs and CTF exercises.
 
 I am based in South Extension, New Delhi, available immediately, and open to on-site Delhi NCR, hybrid or remote. My CV is attached (one page, text-based, ATS-friendly).
 

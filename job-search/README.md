@@ -27,9 +27,23 @@ matching works.
 5. Where a company also has a portal (Kratikal, Aujas, TAC, Amity, Bennett, Sharda), do both.
 6. Verify each address on the company's own careers page at send time — HR inboxes change.
 
-## Target mix (25)
-- 17 training institutes / universities — trainer, faculty, SME roles
+## Status (as of 23 Oct 2026)
+- **20 mails sent** — 14 training institutes/university/security roles + 6 new NCR colleges & institutes
+- **11 companies already applied to earlier** (Sep–Oct 2026) — deliberately not re-mailed
+- Tracker: `applications.csv` (Status column), live at `/portfolio.html` → Applications
+
+## Target mix (31)
+- 23 training institutes / colleges / universities — trainer, faculty, SME roles
 - 8 security consultancies / product firms — VAPT, AppSec, red-team roles
+
+### Trainer / teaching targets sent on 23 Oct
+CETPA (Noida) · NIIT (Gurugram) · Amity University (Noida) · Bennett University (Greater Noida) ·
+Sharda University (Greater Noida) · Manav Rachna (Faridabad) · Jetking (Delhi) · Recon Cyber Security (Delhi) ·
+Galgotias University (Greater Noida) · IIMT (Greater Noida) · GNIOT (Greater Noida) ·
+Noida International University · Cyberyaan (Tilak Nagar) · Cryptus Cyber Security (Shakarpur)
+
+### Security / VAPT targets sent on 23 Oct
+Certcube Labs · TAC Security · Sveltetech (Gurugram) · Innefu Labs · Torrid Networks (Noida) · CyberSRC (Noida)
 
 Locations covered: New Delhi (South Ex, Saket, Laxmi Nagar, Pitampura, Janakpuri, Burari,
 Kalkaji, Aerocity, Netaji Subhash Place), Noida (Sectors 1, 2, 16, 62, 63, 68), Greater Noida,

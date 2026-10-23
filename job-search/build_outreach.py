@@ -286,7 +286,98 @@ COMPANIES = [
         hook="Manav Rachna runs security electives inside its CSE programmes, and a practicing CEH trainer can deliver those as lab-based, industry-aligned modules.",
         source="mru.edu.in / manavrachna.edu.in contact pages",
     ),
+    dict(
+        name="Galgotias University",
+        city="Greater Noida",
+        kind="trainer",
+        role="Industry Faculty / Trainer — Cyber Security",
+        email="recruitments.trainer@galgotiasuniversity.edu.in",
+        alt="hr@galgotiasuniversity.edu.in; recruitments@galgotiasuniversity.edu.in",
+        hook="your careers page invites trainer and industry-faculty profiles, and I can deliver CSE cyber security electives as lab-based modules with a ready CTF platform from day one.",
+        source="galgotiasuniversity.edu.in/p/current-openings",
+    ),
+    dict(
+        name="IIMT Group of Colleges",
+        city="Knowledge Park III, Greater Noida",
+        kind="trainer",
+        role="Faculty / Technical Trainer — Cyber Security",
+        email="hr_gn@iimtindia.net",
+        alt="contact_gn@iimtindia.net",
+        hook="IIMT's Knowledge Park campus recruits technical trainers for CSE and IT streams, and I can take ethical hacking and VAPT subjects with practical labs rather than theory-only delivery.",
+        source="iimtindia.net/contact-us + faculty recruitment notices",
+    ),
+    dict(
+        name="GNIOT Group of Institutions",
+        city="Knowledge Park II, Greater Noida",
+        kind="trainer",
+        role="Assistant Professor / Technical Trainer — Cyber Security",
+        email="recruitment@gniot.net.in",
+        alt="gniot@gniot.net.in",
+        hook="your department list includes Cyber Security among the CSE specialisations and you also recruit technical trainers, so a practising CEH trainer who can run hands-on labs fits both tracks.",
+        source="faculty recruitment notices (recruitment@gniot.net.in)",
+    ),
+    dict(
+        name="Noida International University",
+        city="Sector 17A, Greater Noida",
+        kind="trainer",
+        role="Assistant Professor / Industry Faculty — Cyber Security",
+        email="careers@niu.edu.in",
+        alt="registrar.office@niu.edu.in",
+        hook="your 2026 recruitment cycle invites faculty applications at careers@niu.edu.in, and a practitioner who can run hands-on security labs would complement the CSE teaching team.",
+        source="niu.edu.in/careers + 2026 recruitment notices",
+    ),
+    dict(
+        name="Cyberyaan",
+        city="Tilak Nagar, New Delhi",
+        kind="trainer",
+        role="Cyber Security / Ethical Hacking Trainer",
+        email="training@cyberyaan.com",
+        alt="pankaj@cyberyaan.com",
+        hook="your Delhi batches cover ethical hacking, Linux and cyber security diploma tracks in both Hindi and English, which is exactly how I have taught for six years, and I can add CEH-depth plus ready CTF labs.",
+        source="cyberyaan.com/contact-us",
+    ),
+    dict(
+        name="Cryptus Cyber Security",
+        city="Shakarpur, Delhi + NCR branches",
+        kind="trainer",
+        role="Cyber Security / CEH Trainer",
+        email="info@cryptus.in",
+        alt="",
+        hook="Cryptus runs CEH and ethical hacking batches across Delhi, Noida, Greater Noida and Faridabad, and I can take those tracks in Hindi or English with hands-on labs and CTF exercises.",
+        source="cryptus.in/contact-us",
+    ),
 ]
+
+# ---------------------------------------------------------------------------
+# Application status
+#   SENT_TODAY  -> emails sent on 2026-10-23 in this campaign
+#   EARLIER     -> already applied before this campaign (Sep-Oct 2026), so no duplicate mail
+# ---------------------------------------------------------------------------
+SENT_TODAY = {
+    "career@cetpainfotech.com", "consulting@certcube.com", "info@tacsecurity.com",
+    "info@niit.com", "careers@sveltetech.com", "jobs@innefu.com",
+    "careers@torridnetworks.com", "careers@amity.edu", "career@bennett.edu.in",
+    "hr@sharda.ac.in", "careers.mrei@mrei.ac.in", "training@reconcybersecurity.com",
+    "info@jetking.com", "pooja@cybersrcc.com",
+    "recruitments.trainer@galgotiasuniversity.edu.in", "hr_gn@iimtindia.net",
+    "recruitment@gniot.net.in", "careers@niu.edu.in", "training@cyberyaan.com",
+    "info@cryptus.in",
+}
+EARLIER = {
+    "hr@ducatindia.com", "hr@craw.in", "ops@infosectrain.com",
+    "resumes@kratikal.zohorecruitmail.com", "hr@securiumsolutions.com",
+    "info@prakharaiinstitute.com", "info@gicseh.com", "hr@niitfoundation.org",
+    "joinus@esecforte.com", "careers@aujas.com", "info@netrika.com",
+}
+
+
+def status_of(email):
+    if email in SENT_TODAY:
+        return "Sent (23 Oct)"
+    if email in EARLIER:
+        return "Applied earlier"
+    return "Ready to send"
+
 
 SUBJECT = "Application: {role} — Ratan Kumar Patel, CEH v12 | 6+ yrs | 500+ trained | Delhi NCR | Immediate joiner"
 
@@ -349,8 +440,11 @@ def write_csv():
         w.writerow(["#", "Company", "Location", "Role", "Email", "Alternate email",
                     "Source", "Status", "Sent on", "Follow-up on"])
         for i, c in enumerate(COMPANIES, 1):
+            st = status_of(c["email"])
             w.writerow([i, c["name"], c["city"], c["role"], c["email"], c["alt"],
-                        c["source"], "Ready to send", "", ""])
+                        c["source"], st,
+                        "2026-10-23" if st.startswith("Sent") else "",
+                        "2026-10-29" if st.startswith("Sent") else ""])
     return path
 
 
@@ -369,11 +463,13 @@ def write_portfolio_table():
             '<td>{role}</td>'
             '<td><a href="mailto:{email}?subject={subj}">{email}</a>'
             '{alt_html}</td>'
-            '<td><span class="status">Ready to send</span></td>'
+            '<td><span class="status{sent_cls}">{status}</span></td>'
             '</tr>'.format(
                 i=i, name=c["name"], city=c["city"], role=c["role"], email=c["email"],
                 subj=SUBJECT.format(role=c["role"], name=c["name"]).replace(" ", "%20").replace("|", "%7C"),
                 alt_html=('<span class="alt">%s</span>' % c["alt"]) if c["alt"] else "",
+                sent_cls=" sent" if status_of(c["email"]).startswith("Sent") else "",
+                status=status_of(c["email"]),
             )
         )
     block = "\n".join(rows)
