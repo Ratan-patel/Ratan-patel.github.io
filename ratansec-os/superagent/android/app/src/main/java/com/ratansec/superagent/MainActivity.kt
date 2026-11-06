@@ -23,7 +23,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.webkit.WebViewAssetLoader
 
 /**
  * RatanSec Super Agent — Android shell.
@@ -37,7 +36,7 @@ import androidx.webkit.WebViewAssetLoader
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private lateinit var progress: ProgressBar
+    private lateinit var loadingBar: ProgressBar
     private val prefs by lazy { getSharedPreferences("superagent", MODE_PRIVATE) }
     private val localOrigin = "https://appassets.androidplatform.net"
     private val localConsole = "$localOrigin/assets/web/mobile.html"
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             layoutParams = ViewGroup.LayoutParams(MATCH, MATCH)
         }
 
-        progress = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+        loadingBar = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
             isIndeterminate = true
             visibility = android.view.View.GONE
         }
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
-                    progress.visibility = android.view.View.GONE
+                    loadingBar.visibility = android.view.View.GONE
                 }
 
                 override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
@@ -97,13 +96,13 @@ class MainActivity : AppCompatActivity() {
             }
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, newProgress: Int) {
-                    progress.progress = newProgress
-                    progress.visibility = if (newProgress in 1..99) android.view.View.VISIBLE else android.view.View.GONE
+                    loadingBar.progress = newProgress
+                    loadingBar.visibility = if (newProgress in 1..99) android.view.View.VISIBLE else android.view.View.GONE
                 }
             }
         }
 
-        root.addView(progress)
+        root.addView(loadingBar)
         root.addView(webView)
         setContentView(root)
 
