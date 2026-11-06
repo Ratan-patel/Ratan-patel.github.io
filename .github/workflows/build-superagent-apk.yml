@@ -94,8 +94,12 @@ jobs:
       - name: Fail if debug build failed
         if: steps.build_debug.outcome != 'success'
         run: |
-          echo "::error::debug APK build failed"
-          tail -60 debug-build.log || true
+          echo "::error title=gradle::debug APK build failed — error lines neeche"
+          grep -nE "^e: |error:|What went wrong|Caused by:|FAILURE:|Could not|Execution failed" -A2 debug-build.log \
+            | head -80 | while IFS= read -r line; do
+                safe=$(printf '%s' "$line" | tr '\n' ' ' | cut -c1-400)
+                echo "::error title=gradle::$safe"
+              done
           exit 1
 
       - name: Build release APK (unsigned -> zipalign + debug-cert re-sign, sideload ke liye)
