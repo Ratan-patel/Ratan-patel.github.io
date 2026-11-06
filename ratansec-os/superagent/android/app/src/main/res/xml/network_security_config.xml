@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Self-hosted agents aksar LAN/VPS par http:// par chalte hain (jaise http://192.168.1.5:8000).
-     App khud se koi traffic nahi bhejta — sirf jo server user ne diya. Production me HTTPS use karo. -->
+<!-- v3 standalone: API key seedhi provider ko jaati hai, isliye public traffic HTTPS-only.
+     Cleartext sirf loopback/LAN ke liye allowed hai (local Ollama / LM Studio). -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
 </network-security-config>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>RatanSec Agent</title>
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><span class="logo">🛡️</span><div><b>RatanSec <em>Agent</em></b><small id="sub">on-device · no server</small></div></div>
+  <span class="pill" id="key-pill">key not set</span>
+</header>
+
+<div class="banner" id="setup-banner">
+  👋 Shuru karne ke liye <b>Settings</b> me apni API key daalo. Key sirf is phone me rehti hai.
+</div>
+
+<main>
+  <!-- CHAT -->
+  <section class="view active" id="view-chat">
+    <div class="scroll" id="messages">
+      <div class="hello">
+        <div class="hello-logo">🛡️</div>
+        <h1>RatanSec Agent</h1>
+        <p>Authorized security assessment assistant — poori tarah phone par. App me key daalo, agent chal jaata hai.</p>
+        <div class="chips">
+          <button class="chip" data-ask="Mere authorized target ka security posture check karo aur findings batao">Posture check</button>
+          <button class="chip" data-ask="TLS certificate aur protocol review karo mere scope wale host ka">TLS review</button>
+          <button class="chip" data-ask="Missing security headers explain karo aur fix batao">Headers help</button>
+        </div>
+        <p class="tiny">Pehle <b>Scope</b> tab me target add karo (likhit permission ke saath), phir yahan poocho.</p>
+      </div>
+    </div>
+    <div class="composer">
+      <textarea id="input" rows="1" placeholder="Poocho… (jaise: example.com ka TLS check karo)"></textarea>
+      <button id="send" class="send">➤</button>
+      <button id="stop" class="send stop hidden">■</button>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="view" id="view-scope">
+    <div class="scroll pad">
+      <div class="card">
+        <h2>Authorized targets</h2>
+        <p class="muted small">Sirf un hosts ko add karo jinki tumhare paas <b>likhit permission</b> hai. Agent inhi par checks chalayega.</p>
+        <label class="field"><span>Host / domain</span><input id="t-host" placeholder="example.com" autocapitalize="off" autocomplete="off"></label>
+        <label class="field"><span>Authorization note</span><input id="t-note" placeholder="Client ne email par pentest approve kiya — ticket #123" autocomplete="off"></label>
+        <label class="field"><span>Kitne din valid</span>
+          <select id="t-days"><option value="7">7 din</option><option value="30" selected>30 din</option><option value="90">90 din</option></select>
+        </label>
+        <label class="check"><input type="checkbox" id="t-confirm"><span>Main confirm karta hoon ki is target ko test karne ki likhit permission mere paas hai.</span></label>
+        <button class="btn primary wide" id="add-target">Add to scope</button>
+        <p class="hint" id="scope-status"></p>
+      </div>
+      <div class="card">
+        <h2>Scope list</h2>
+        <div id="target-list" class="stack"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" id="view-settings">
+    <div class="scroll pad">
+      <div class="card">
+        <h2>AI provider</h2>
+        <p class="muted small">App seedha tumhare provider se baat karta hai — beech me koi server nahi.</p>
+        <label class="field"><span>Provider</span>
+          <select id="s-provider">
+            <option value="openrouter">OpenRouter (sab models)</option>
+            <option value="openai">OpenAI</option>
+            <option value="groq">Groq (fast)</option>
+            <option value="deepseek">DeepSeek</option>
+            <option value="ollama">Ollama / local (LAN)</option>
+            <option value="custom">Custom (OpenAI-compatible)</option>
+          </select>
+        </label>
+        <label class="field"><span>Base URL</span><input id="s-base" autocapitalize="off" autocomplete="off"></label>
+        <label class="field"><span>Model</span><input id="s-model" autocapitalize="off" autocomplete="off" placeholder="openai/gpt-4o-mini"></label>
+        <label class="field"><span>API key</span><input id="s-key" type="password" autocapitalize="off" autocomplete="off" placeholder="sk-…"></label>
+        <p class="hint">Key Android Keystore se encrypt hokar sirf is phone me store hoti hai. Chat/history me nahi jaati, kisi server par nahi bheji jaati.</p>
+        <div class="row">
+          <button class="btn primary" id="save-settings">Save</button>
+          <button class="btn" id="test-conn">Test connection</button>
+          <button class="btn danger" id="clear-key">Key hatao</button>
+        </div>
+        <p class="hint" id="settings-status"></p>
+      </div>
+
+      <div class="card">
+        <h2>Agent</h2>
+        <label class="field"><span>Max steps per reply (tool loops)</span>
+          <select id="s-steps"><option>3</option><option selected>6</option><option>9</option><option>12</option></select>
+        </label>
+        <label class="check"><input type="checkbox" id="s-private"><span>Private/LAN targets allow karo (192.168.x.x, 10.x.x.x) — sirf apne network ke liye</span></label>
+        <button class="btn wide" id="save-agent">Save agent settings</button>
+      </div>
+
+      <div class="card">
+        <h2>Kya kar sakta hai</h2>
+        <ul class="facts">
+          <li>✅ DNS resolve, HTTP security headers, TLS certificate review</li>
+          <li>✅ security.txt / robots.txt padhna</li>
+          <li>✅ Findings + fix suggestions, report share</li>
+          <li>❌ Port scan, exploit, brute force, shell commands</li>
+          <li>❌ Bina scope ke kisi host ko touch karna</li>
+        </ul>
+        <p class="hint" id="version-line"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button class="tab active" data-view="chat"><span>💬</span>Chat</button>
+  <button class="tab" data-view="scope"><span>🎯</span>Scope</button>
+  <button class="tab" data-view="settings"><span>⚙️</span>Settings</button>
+</nav>
+
+<div id="toast" class="toast hidden"></div>
+<script src="./app.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-name: Build Super Agent APK
+name: Build RatanSec Agent APK
 
 # Android APK build + auto-release.
 #   * har push (main / arena branches) par debug APK build hota hai -> artifact
@@ -9,9 +9,6 @@ on:
     branches: [main, "arena/**"]
     paths:
       - "ratansec-os/superagent/android/**"
-      - "ratansec-os/superagent/static/connect.html"
-      - "ratansec-os/superagent/static/connect.js"
-      - "ratansec-os/superagent/static/app.css"
       - ".github/workflows/build-superagent-apk.yml"
     tags: ["v*"]
   workflow_dispatch:
@@ -69,21 +66,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.7"
-
-      - name: Sync web console into APK assets
-        # single source of truth: superagent/static/*.html + connect.html
-        working-directory: .
-        run: |
-          set -euo pipefail
-          SRC="ratansec-os/superagent/static"
-          DST="ratansec-os/superagent/android/app/src/main/assets/web"
-          mkdir -p "$DST"
-          cp "$SRC/connect.html" "$DST/connect.html"
-          cp "$SRC/connect.js" "$DST/connect.js"
-          cp "$SRC/app.css" "$DST/app.css"
-          # Local asset origin par relative paths chahiye.
-          sed -i 's|/static/|./|g' "$DST/connect.html"
-          ls -l "$DST"
 
       - name: Build debug APK
         id: build_debug
@@ -149,42 +131,43 @@ jobs:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'apk-latest' }}
           make_latest: true
           body: |
-            **RatanSec Super Agent v2 — Android APK (authorised testing only)**
+            **RatanSec Agent v3 — standalone Android app (koi server nahi chahiye)**
+
+            App me apni API key daalo aur AI agent chal jaata hai. Sab kuch phone par.
 
             ### Download
-            | File | Kab use karein |
+            | File | Kab |
             |---|---|
-            | `RatanSec-SuperAgent-release.apk` | 👈 **Recommended** — chhota, phone par normal install |
-            | `RatanSec-SuperAgent-debug.apk` | Debug/testing build |
+            | `RatanSec-SuperAgent-release.apk` | 👈 **Recommended** (chhoti, ~2.5 MB) |
+            | `RatanSec-SuperAgent-debug.apk` | Debug build |
 
             Permanent link (hamesha latest):
             https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-release.apk
 
-            ### Install (sideload)
-            1. Phone ke browser me upar wali link kholo → APK download hogi
-            2. "Unknown sources / Install unknown apps" ki permission do (Chrome ya File Manager ke liye)
-            3. APK par tap → Install → Open
-            4. Play Protect warning aaye to "Details → Install anyway" (app Play Store par nahi hai, self-signed hai)
+            ### Install
+            1. Link phone me kholo → APK download
+            2. "Install unknown apps" allow karo (Chrome/File Manager)
+            3. APK → Install → Open (Play Protect warning aaye to "Install anyway")
 
-            > ⚠️ **Purana version already installed hai?** Pehle usko **uninstall** karo, phir ye APK install karo.
-            > Har CI build naye temporary certificate se sign hoti hai, isliye purane app ke upar update
-            > "App not installed / signature mismatch" dega. Server ka data laptop par hi rehta hai — app
-            > uninstall karne se kuch nahi jaata.
+            > ⚠️ Purana version installed hai to **pehle uninstall karo** — har CI build naye
+            > certificate se sign hoti hai, warna "App not installed" aayega.
 
-            ### App ko server se connect karo
-            APK sirf console hai — agent tumhare laptop/VPS par chalta hai.
-            ```bash
-            cd ratansec-os
-            cp superagent/.env.example .env      # apni API key yahan daalo (chat me nahi)
-            bash scripts/superagent.sh --host 0.0.0.0 --port 8000
-            ```
-            App me server URL: `http://<laptop-ka-LAN-IP>:8000` (phone + laptop same Wi-Fi par).
-            Login/password **server ke console par** hota hai — v2 me token URL me nahi bheja jata.
+            ### Chalana (30 second)
+            1. **Settings** tab → Provider chuno (OpenRouter/OpenAI/Groq/DeepSeek/Ollama)
+            2. **API key** paste karo → **Save** → **Test connection**
+            3. **Scope** tab → target host + authorization note → checkbox tick → Add
+            4. **Chat** tab → poocho: "example.com ka security posture check karo"
 
-            Sirf demo dekhna ho to: `bash scripts/superagent.sh --demo`
+            Key Android Keystore se encrypt hokar sirf phone me rehti hai — koi server nahi,
+            key kisi ko bheji nahi jaati (seedha tumhare provider ko).
 
-            ⚠️ Sirf un systems par chalao jinki likhit permission tumhare paas hai.
-            Release APK CI debug-certificate se signed hai (sideload ke liye) — Play Store build nahi.
+            ### Kya karta hai
+            DNS resolve · HTTP security headers · TLS certificate review · security.txt/robots.txt ·
+            findings + fix suggestions · report share
+
+            Kya NAHI karta: port scan, exploit, brute force, shell commands, bina scope ke kuch bhi.
+
+            ⚠️ Sirf un systems par use karo jinki likhit permission tumhare paas hai.
           files: |
             ratansec-os/superagent/android/out/*.apk
           draft: false

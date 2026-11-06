@@ -6,47 +6,41 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputType
-import android.view.Gravity
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebViewAssetLoader
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.concurrent.Executors
 
 /**
- * RatanSec Super Agent — Android shell.
+ * RatanSec Agent v3 — standalone. Koi server nahi chahiye.
  *
- * App ek secure WebView hai jo aapke self-hosted Super Agent server ko kholta hai.
- * APK ke andar bundle kiya gaya web console (assets/web/connect.html) turant khulta hai
- * aur wahi se server URL set hota hai. Login server ke console par hota hai.
- *
- * AndroidManifest ke network_security_config se http (LAN/VPS) allowed hai; HTTPS recommended.
+ * UI app ke andar bundled hai (assets/app/). API key Android Keystore me encrypt hokar
+ * rehti hai aur native code hi provider ko bhejta hai — JS ko key kabhi nahi milti.
+ * Tools (DNS/headers/TLS) phone par hi chalte hain, scope check ke baad.
  */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var loadingBar: ProgressBar
-    private val prefs by lazy { getSharedPreferences("superagent", MODE_PRIVATE) }
-    private val localOrigin = "https://appassets.androidplatform.net"
-    private val localConsole = "$localOrigin/assets/web/connect.html"
+    private lateinit var store: Store
+    private lateinit var secrets: Secrets
+    private lateinit var agent: Agent
 
-    /**
-     * Bundled connect screen ko https://appassets.androidplatform.net/assets/... par serve karta hai.
-     * Iske bina local URL resolve nahi hota (net::ERR_NAME_NOT_RESOLVED) aur app khali khulti hai.
-     */
+    private val worker = Executors.newSingleThreadExecutor()
+    private val localOrigin = "https://appassets.androidplatform.net"
+
     private val assetLoader by lazy {
         WebViewAssetLoader.Builder()
             .setDomain("appassets.androidplatform.net")
@@ -58,215 +52,230 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        store = Store(this)
+        secrets = Secrets(this)
+        agent = Agent(store, secrets)
+
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#05070D"))
+            setBackgroundColor(Color.parseColor("#070B12"))
             layoutParams = ViewGroup.LayoutParams(MATCH, MATCH)
         }
-
         loadingBar = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
             isIndeterminate = true
             visibility = android.view.View.GONE
         }
-
         webView = WebView(this).apply {
             layoutParams = LinearLayout.LayoutParams(MATCH, 0, 1f)
-            setBackgroundColor(Color.parseColor("#05070D"))
+            setBackgroundColor(Color.parseColor("#070B12"))
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
-                databaseEnabled = true
                 allowFileAccess = false
                 allowContentAccess = false
                 mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-                cacheMode = WebSettings.LOAD_DEFAULT
-                userAgentString = "$userAgentString RatanSecSuperAgent/2.0"
-                mediaPlaybackRequiresUserGesture = true
+                cacheMode = WebSettings.LOAD_NO_CACHE
+                userAgentString = "$userAgentString RatanSecAgent/${Store.VERSION}"
                 setSupportZoom(false)
             }
-            addJavascriptInterface(Bridge(), "AndroidAgent")
+            addJavascriptInterface(Bridge(), "Native")
             webViewClient = object : WebViewClient() {
-                override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
-                    // Local (bundled) console ke liye assets serve karo; baaki requests normal network se.
-                    return assetLoader.shouldInterceptRequest(request.url)
-                }
+                override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
+                    assetLoader.shouldInterceptRequest(request.url)
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                    val url = request.url.toString()
                     val host = request.url.host ?: ""
-                    // external links browser me kholo
-                    if (!host.endsWith("androidplatform.net") && !isAgentHost(url)) {
-                        startActivity(Intent(Intent.ACTION_VIEW, request.url))
-                        return true
-                    }
-                    return false
+                    if (host == "appassets.androidplatform.net") return false
+                    // Bahar ke links browser me — WebView me sirf bundled UI chalti hai.
+                    runCatching { startActivity(Intent(Intent.ACTION_VIEW, request.url)) }
+                    return true
                 }
 
                 override fun onPageFinished(view: WebView, url: String) {
-                    super.onPageFinished(view, url)
                     loadingBar.visibility = android.view.View.GONE
-                }
-
-                override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-                    super.onReceivedError(view, request, error)
-                    if (request.isForMainFrame) showConnectError()
                 }
             }
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, newProgress: Int) {
-                    loadingBar.progress = newProgress
-                    loadingBar.visibility = if (newProgress in 1..99) android.view.View.VISIBLE else android.view.View.GONE
+                    loadingBar.visibility =
+                        if (newProgress in 1..99) android.view.View.VISIBLE else android.view.View.GONE
                 }
             }
         }
-
         root.addView(loadingBar)
         root.addView(webView)
         setContentView(root)
 
-        handleDeepLink(intent)
-        val saved = prefs.getString("server", null)
-        loadConsole()
-        if (saved != null) {
-            webView.postDelayed({ openServer(saved) }, 350)
+        webView.loadUrl("$localOrigin/assets/app/index.html")
+    }
+
+    private fun send(event: JSONObject) {
+        val payload = JSONObject.quote(event.toString())
+        runOnUiThread {
+            webView.evaluateJavascript("window.onNativeEvent && window.onNativeEvent($payload)", null)
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleDeepLink(intent)
+    private fun toast(message: String) {
+        runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
     }
 
-    private fun handleDeepLink(intent: Intent?) {
-        val data: Uri = intent?.data ?: return
-        val server = data.getQueryParameter("server") ?: return
-        val origin = normalizeOrigin(server)
-        if (origin.isNotEmpty()) prefs.edit().putString("server", origin).apply()
-    }
+    /** JS bridge. Key sirf native side par rehti hai. */
+    inner class Bridge {
 
-    private fun loadConsole() {
-        webView.loadUrl(localConsole)
-    }
+        @JavascriptInterface
+        fun settings(): String = store.settingsJson(secrets.has()).toString()
 
-    /**
-     * Server URL se sirf origin nikalta hai (scheme + host + port).
-     * Path/query/fragment ignore — token ya credentials URL me kabhi nahi bheje jate.
-     */
-    private fun normalizeOrigin(raw: String): String {
-        var s = raw.trim()
-        if (s.isEmpty()) return ""
-        if (!s.startsWith("http://") && !s.startsWith("https://")) {
-            val local = Regex("^(localhost|127\\.|10\\.|192\\.168\\.|172\\.(1[6-9]|2\\d|3[01])\\.)")
-            s = if (local.containsMatchIn(s)) "http://$s" else "https://$s"
+        @JavascriptInterface
+        fun saveSettings(json: String): String = runCatching {
+            val value = JSONObject(json)
+            if (value.has("base_url")) {
+                val url = value.optString("base_url").trim().trimEnd('/')
+                require(url.startsWith("https://") || url.startsWith("http://")) {
+                    "Base URL http:// ya https:// se shuru hona chahiye."
+                }
+                store.baseUrl = url
+            }
+            if (value.has("model")) {
+                val model = value.optString("model").trim()
+                require(model.isNotEmpty()) { "Model khali nahi ho sakta." }
+                store.model = model
+            }
+            if (value.has("provider")) store.provider = value.optString("provider")
+            if (value.has("max_steps")) store.maxSteps = value.optInt("max_steps", 6)
+            if (value.has("allow_private")) store.allowPrivate = value.optBoolean("allow_private", false)
+            JSONObject().put("ok", true).put("settings", store.settingsJson(secrets.has())).toString()
+        }.getOrElse { JSONObject().put("ok", false).put("message", it.message ?: "Save fail").toString() }
+
+        /** Key native Keystore me jaati hai; JS ko wapas nahi milti. */
+        @JavascriptInterface
+        fun saveKey(key: String): String = runCatching {
+            secrets.put(key.trim())
+            JSONObject().put("ok", true).put("has_key", secrets.has()).toString()
+        }.getOrElse { JSONObject().put("ok", false).put("message", "Key save nahi hui: ${it.message}").toString() }
+
+        @JavascriptInterface
+        fun clearKey(): String {
+            secrets.clear()
+            return JSONObject().put("ok", true).put("has_key", false).toString()
         }
-        val uri = runCatching { Uri.parse(s) }.getOrNull() ?: return ""
-        val host = uri.host ?: return ""
-        val scheme = uri.scheme ?: return ""
-        if (scheme != "http" && scheme != "https") return ""
-        if (!uri.userInfo.isNullOrEmpty()) return ""
-        return if (uri.port != -1) "$scheme://$host:${uri.port}" else "$scheme://$host"
-    }
 
-    /** Origin save karke app ke andar hi console kholta hai. */
-    private fun openServer(raw: String) {
-        val origin = normalizeOrigin(raw)
-        if (origin.isEmpty()) {
-            Toast.makeText(this, "Invalid server URL", Toast.LENGTH_SHORT).show()
-            return
+        @JavascriptInterface
+        fun targets(): String = store.targetsJson().toString()
+
+        @JavascriptInterface
+        fun addTarget(host: String, note: String, days: Int): String = runCatching {
+            val target = store.addTarget(host, note, days)
+            JSONObject().put("ok", true).put("host", target.host).put("targets", store.targetsJson()).toString()
+        }.getOrElse { JSONObject().put("ok", false).put("message", it.message ?: "Add fail").toString() }
+
+        @JavascriptInterface
+        fun removeTarget(host: String): String {
+            store.removeTarget(host)
+            return JSONObject().put("ok", true).put("targets", store.targetsJson()).toString()
         }
-        prefs.edit().putString("server", origin).apply()
-        // v2: token URL/query mein nahi bheja jata; login server ke console par hota hai.
-        webView.loadUrl("$origin/mobile")
-    }
 
-    /** Sirf saved server origin ke links app ke andar khulte hain; baaki external browser me. */
-    private fun isAgentHost(url: String): Boolean {
-        val saved = prefs.getString("server", null) ?: return false
-        val origin = normalizeOrigin(saved)
-        if (origin.isEmpty()) return false
-        return normalizeOrigin(url) == origin
-    }
-
-    private fun showConnectError() {
-        AlertDialog.Builder(this)
-            .setTitle("Connect nahi ho paya")
-            .setMessage(
-                "Server address check karo.\n\n" +
-                    "· Laptop/VPS par: uvicorn superagent.webui:app --host 0.0.0.0 --port 8000\n" +
-                    "· Phone aur server same Wi-Fi par hone chahiye\n" +
-                    "· URL: http://192.168.x.x:8000"
-            )
-            .setPositiveButton("Retry") { _, _ -> loadConsole() }
-            .setNegativeButton("Settings") { _, _ -> showSetup() }
-            .setNeutralButton("Close") { _, _ -> finish() }
-            .show()
-    }
-
-    /** Server URL setup dialog (login server console par hota hai). */
-    private fun showSetup() {
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(48, 24, 48, 8)
+        @JavascriptInterface
+        fun testConnection() {
+            worker.execute {
+                val result = runCatching { agent.testConnection() }
+                    .getOrElse { JSONObject().put("ok", false).put("message", it.message ?: "Test fail") }
+                send(JSONObject().put("type", "test_result").put("result", result))
+            }
         }
-        val serverInput = EditText(this).apply {
-            hint = "http://192.168.1.5:8000"
-            inputType = InputType.TYPE_TEXT_VARIATION_URI
-            setText(prefs.getString("server", ""))
-            setTextColor(Color.WHITE)
-        }
-        layout.addView(TextView(this).apply {
-            text = "Server URL"
-            setTextColor(Color.parseColor("#8B9BB4"))
-            textSize = 12f
-        })
-        layout.addView(serverInput)
 
-        AlertDialog.Builder(this)
-            .setTitle("Super Agent connect karo")
-            .setView(layout)
-            .setPositiveButton("Connect") { _, _ ->
-                val server = serverInput.text.toString()
-                prefs.edit().putString("server", server).apply()
-                if (server.isBlank()) {
-                    Toast.makeText(this, "Server URL daalo", Toast.LENGTH_SHORT).show()
-                } else {
-                    openServer(server)
+        /** Agent turn background thread par; events JS ko jaate hain. */
+        @JavascriptInterface
+        fun chat(historyJson: String) {
+            worker.execute {
+                try {
+                    val history = JSONArray(historyJson)
+                    agent.run(history) { event -> send(event) }
+                    send(JSONObject().put("type", "done"))
+                } catch (exc: Exception) {
+                    send(JSONObject().put("type", "error").put("message", exc.message ?: "Agent fail"))
+                    send(JSONObject().put("type", "done"))
                 }
             }
-            .setNeutralButton("Connect screen") { _, _ -> loadConsole() }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+
+        @JavascriptInterface
+        fun stop() {
+            agent.cancelled = true
+        }
+
+        /** Direct probe (Scope tab ka "Run checks" button). */
+        @JavascriptInterface
+        fun runChecks(host: String) {
+            worker.execute {
+                val clean = Store.normalizeHost(host)
+                val probes = Probes(store)
+                val results = JSONArray()
+                if (store.authorized(clean) == null) {
+                    send(JSONObject().put("type", "error").put("message", "'$clean' scope me nahi hai."))
+                    send(JSONObject().put("type", "done"))
+                    return@execute
+                }
+                val target = "https://$clean"
+                listOf(
+                    { probes.dns(clean) },
+                    { probes.httpHeaders(target) },
+                    { probes.tls(clean) },
+                    { probes.textFile(target, "security_txt") }
+                ).forEach { probe ->
+                    val result = runCatching { probe() }.getOrElse {
+                        JSONObject().put("status", "blocked").put("error", it.message ?: "Blocked")
+                    }
+                    results.put(result)
+                    send(JSONObject().put("type", "tool_result").put("name", result.optString("id", "check")).put("result", result))
+                }
+                send(JSONObject().put("type", "checks_done").put("results", results))
+                send(JSONObject().put("type", "done"))
+            }
+        }
+
+        @JavascriptInterface
+        fun exportReport(text: String) {
+            runOnUiThread {
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, "RatanSec Agent — assessment notes")
+                    putExtra(Intent.EXTRA_TEXT, text)
+                }
+                runCatching { startActivity(Intent.createChooser(intent, "Report share karo")) }
+                    .onFailure { toast("Share app nahi mili.") }
+            }
+        }
+
+        @JavascriptInterface
+        fun toast(message: String) = this@MainActivity.toast(message)
+
+        @JavascriptInterface
+        fun openUrl(url: String) {
+            runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+        }
+
+        @JavascriptInterface
+        fun confirmExit(): Boolean {
+            runOnUiThread {
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle("App band karein?")
+                    .setPositiveButton("Haan") { _, _ -> finish() }
+                    .setNegativeButton("Nahi", null)
+                    .show()
+            }
+            return true
+        }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        when {
-            webView.canGoBack() -> webView.goBack()
-            else -> super.onBackPressed()
-        }
+        if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 
-    /** JS bridge: bundled connect screen se server open karna + native setup / exit. */
-    inner class Bridge {
-        /**
-         * connect.js isko call karta hai: origin native prefs me save hota hai aur console
-         * app ke andar hi khulta hai (external browser me nahi).
-         */
-        @JavascriptInterface
-        fun openServer(url: String) = runOnUiThread { this@MainActivity.openServer(url) }
-
-        @JavascriptInterface
-        fun setup() = runOnUiThread { showSetup() }
-
-        @JavascriptInterface
-        fun serverUrl(): String = prefs.getString("server", "") ?: ""
-
-        @JavascriptInterface
-        fun reload() = runOnUiThread { webView.reload() }
-
-        @JavascriptInterface
-        fun toast(message: String) = runOnUiThread {
-            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-        }
+    override fun onDestroy() {
+        worker.shutdownNow()
+        super.onDestroy()
     }
 
     companion object {
