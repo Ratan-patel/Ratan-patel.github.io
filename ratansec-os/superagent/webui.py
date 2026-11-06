@@ -12,7 +12,7 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -86,6 +86,12 @@ def mobile():
     return FileResponse(STATIC / "mobile.html")
 
 
+@app.get("/connect", include_in_schema=False)
+def connect_page():
+    """Android APK ka setup screen (server URL + token) — browser se bhi kaam karta hai."""
+    return FileResponse(STATIC / "connect.html")
+
+
 @app.get("/terminal", include_in_schema=False)
 def terminal():
     return FileResponse(STATIC / "index.html")
@@ -104,6 +110,17 @@ def service_worker():
 @app.get("/healthz", include_in_schema=False)
 def healthz():
     return {"ok": True, "app": APP_NAME, "version": VERSION}
+
+
+@app.get("/app-debug.apk", include_in_schema=False)
+def apk_download():
+    """Agar APK server ke paas rakhi hai (SUPERAGENT_APK_PATH) to seedha download."""
+    from .settings import apk_path
+
+    path = apk_path()
+    if path is None:
+        raise HTTPException(status_code=404, detail="APK yahan rakhi nahi hai — GitHub Actions artifacts/Releases se download karo.")
+    return FileResponse(path, filename=path.name, media_type="application/vnd.android.package-archive")
 
 
 if STATIC.is_dir():

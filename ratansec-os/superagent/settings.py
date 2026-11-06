@@ -137,6 +137,9 @@ class Settings:
     max_concurrent: int = field(default_factory=lambda: _env_int("SUPERAGENT_MAX_CONCURRENT", 2, 1, 8))
     default_timeout: int = field(default_factory=lambda: _env_int("SUPERAGENT_DEFAULT_TIMEOUT", 120, 5, 3600))
 
+    # --- APK hosting (optional) ---
+    apk_file: str = field(default_factory=lambda: _env("SUPERAGENT_APK_PATH", ""))
+
     # --- storage / misc ---
     data_dir: Path = field(default_factory=lambda: Path(_env("SUPERAGENT_DATA_DIR", "./data/superagent")).expanduser())
     host: str = field(default_factory=lambda: _env("HOST", "0.0.0.0"))
@@ -184,6 +187,17 @@ class Settings:
 
 settings = Settings()
 settings.ensure_dirs()
+
+
+def apk_path() -> Path | None:
+    """APK (agar server par rakhi hai) — /app-debug.apk se download ke liye."""
+    candidates = [settings.apk_file] if settings.apk_file else []
+    candidates += [str(HOME_DIR / "superagent" / "android" / "superagent.apk"), str(settings.data_dir / "superagent.apk")]
+    for candidate in candidates:
+        path = Path(candidate).expanduser()
+        if path.is_file():
+            return path
+    return None
 
 
 def effective_approval(session_approval: bool, intrusive: bool) -> bool:

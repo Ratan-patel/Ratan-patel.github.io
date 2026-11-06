@@ -11,6 +11,7 @@ Teen surface:
 | 🧠 **Dashboard** | `/` | AI chat, terminal, arsenal, runs, approvals, records, reports, evidence |
 | 📱 **Mobile console (PWA)** | `/mobile` | phone par install ho jata hai — chat, approvals, terminal, records |
 | ⌨️ **CLI** | `python -m superagent.cli` | asli Linux terminal feel — `agent` mode + `!` shell passthrough |
+| 📦 **Android APK** | [android/](android/README.md) · Releases | native shell (Kotlin) jo aapke server ka console kholta hai — CI se build hoti hai |
 
 Aap apni **private API key** lagate ho (OpenRouter / OpenAI / Groq / DeepSeek / koi bhi
 OpenAI-compatible endpoint) — key server par rehti hai, browser me kabhi nahi jaati.
@@ -172,6 +173,9 @@ CLI commands: `/mode`, `/ask`, `/tool`, `/scope`, `/records`, `/runs`, `/read`, 
 3. Login: `APP_PASSWORD` ya `SUPERAGENT_MOBILE_TOKEN`.
 4. Chrome/Safari → **Add to Home screen** → app ki tarah khulta hai (offline shell cached).
 5. Approvals tab se ek tap me approve/deny; Runs tab me live output.
+
+**APK chahiye?** [android/README.md](android/README.md) — GitHub Actions artifact ya Releases se
+`RatanSec-SuperAgent-*-debug.apk` download karke sideload karo (server URL + token app me daalo).
 
 Security tip: internet par khol rahe ho to HTTPS (Caddy/Cloudflare Tunnel) ke peeche rakho —
 `deploy/cloudflared-tunnel.sh` repo me already hai.

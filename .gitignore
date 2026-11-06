@@ -25,3 +25,13 @@ superagent/data/
 superagent/.venv/
 superagent/**/__pycache__/
 superagent/*.log
+
+# Android build outputs / local SDK
+superagent/android/**/build/
+superagent/android/.gradle/
+superagent/android/local.properties
+superagent/android/*.apk
+ratansec-os/superagent/android/**/build/
+ratansec-os/superagent/android/.gradle/
+ratansec-os/superagent/android/local.properties
+ratansec-os/superagent/android/out/

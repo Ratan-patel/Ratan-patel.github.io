@@ -32,6 +32,7 @@ Safety is enforced, not suggested: engagement **authorization records** (RoE) ar
 destructive commands and intrusive tools always need a human tap, shell mode is off by default,
 and every command lands in a hash-chained audit + evidence bundle.
 
+- Android APK: GitHub **Releases** / Actions artifact ([android/README.md](ratansec-os/superagent/android/README.md))
 - Docs: [ratansec-os/superagent/README.md](ratansec-os/superagent/README.md)
 - Legal + authorization templates: [ratansec-os/docs/](ratansec-os/docs/)
 - Quick start: `cd ratansec-os && pip install -r superagent/requirements.txt && uvicorn superagent.webui:app --host 0.0.0.0 --port 8000`

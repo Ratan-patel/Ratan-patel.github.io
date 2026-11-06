@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Self-hosted agents aksar LAN/VPS par http:// par chalte hain (jaise http://192.168.1.5:8000).
+     App khud se koi traffic nahi bhejta — sirf jo server user ne diya. Production me HTTPS use karo. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

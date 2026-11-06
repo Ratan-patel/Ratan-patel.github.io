@@ -1,0 +1,116 @@
+name: Build Super Agent APK
+
+# Android APK build + auto-release.
+#   * har push (main / arena branches) par debug APK build hota hai -> artifact
+#   * tag v* push karne par signed(debug-key) APK GitHub Release me attach hota hai
+#   * workflow_dispatch se manually bhi chala sakte ho
+on:
+  push:
+    branches: [main, "arena/**"]
+    paths:
+      - "ratansec-os/superagent/android/**"
+      - "ratansec-os/superagent/static/mobile.html"
+      - "ratansec-os/superagent/static/connect.html"
+      - ".github/workflows/build-superagent-apk.yml"
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Release banani hai? (tag ke bina bhi)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ratansec-os/superagent/android
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install SDK packages
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          yes | sdkmanager --licenses > /dev/null || true
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: "8.7"
+
+      - name: Sync web console into APK assets
+        # single source of truth: superagent/static/*.html
+        run: |
+          mkdir -p app/src/main/assets/web
+          cp ../../static/mobile.html app/src/main/assets/web/mobile.html
+
+      - name: Build debug APK
+        run: gradle --no-daemon :app:assembleDebug
+
+      - name: Build release APK (unsigned -> zipalign + debug-cert re-sign, sideload ke liye)
+        run: gradle --no-daemon :app:assembleRelease
+
+      - name: Prepare artifacts
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/debug/app-debug.apk out/RatanSec-SuperAgent-${{ github.run_number }}-debug.apk
+          if [ -f app/build/outputs/apk/release/app-release-unsigned.apk ]; then
+            BT="$ANDROID_HOME/build-tools/34.0.0"
+            "$BT/zipalign" -f 4 app/build/outputs/apk/release/app-release-unsigned.apk out/aligned.apk
+            keytool -genkeypair -keystore out/ci.jks -storepass cipassword -keypass cipassword \
+              -alias ci -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=RatanSec Super Agent, OU=Security, O=RatanSec, C=IN" > /dev/null 2>&1
+            "$BT/apksigner" sign --ks out/ci.jks --ks-pass pass:cipassword --key-pass pass:cipassword \
+              --out out/RatanSec-SuperAgent-${{ github.run_number }}-release.apk out/aligned.apk
+            rm -f out/aligned.apk out/ci.jks
+          fi
+          ls -lh out/
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratansec-superagent-apk
+          path: ratansec-os/superagent/android/out/*.apk
+          retention-days: 90
+
+      - name: Release (tag ya manual release)
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release == true
+        uses: softprops/action-gh-release@v2
+        with:
+          name: RatanSec Super Agent ${{ github.ref_name }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('apk-{0}', github.run_number) }}
+          body: |
+            **RatanSec Super Agent — Android APK**
+
+            Install (sideload):
+            1. Phone par `RatanSec-SuperAgent-*-debug.apk` download karo
+            2. Settings → "Install unknown apps" allow karo (browser/file manager ke liye)
+            3. APK kholo → install → app khulegi → server URL + mobile token daalo
+
+            Server chalu karna:
+            ```
+            cd ratansec-os
+            cp superagent/.env.example .env
+            bash scripts/superagent.sh          # http://<laptop-ip>:8000
+            ```
+            App me server: `http://<laptop-ip>:8000` · token: `SUPERAGENT_MOBILE_TOKEN`
+
+            ⚠️ Sirf authorised testing ke liye.
+          files: |
+            ratansec-os/superagent/android/out/*.apk
+          draft: false
+          prerelease: false

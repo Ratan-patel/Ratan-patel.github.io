@@ -70,6 +70,7 @@
       <a href="#sections">Arsenal</a>
       <a href="#safety">Safety</a>
       <a href="#start">Quick start</a>
+      <a href="#apk">APK</a>
       <a href="#legal">Authorization</a>
       <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/ratansec-os/superagent">GitHub ↗</a>
     </nav>
@@ -92,6 +93,7 @@
     <div class="cta">
       <a class="btn primary" href="#start">▶ 60-second start</a>
       <a class="btn" href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/ratansec-os/superagent">Read the docs</a>
+      <a class="btn" href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases">📱 Android APK</a>
       <a class="btn" href="#legal">Authorization template</a>
     </div>
   </div>
@@ -177,6 +179,35 @@ bash scripts/superagent.sh          <span class="c"># http://localhost:8000</spa
         <div class="note" style="margin-top:16px">
           Model badalna hai? <code>SUPERAGENT_BASE_URL</code> + <code>SUPERAGENT_MODEL</code> —
           OpenRouter, OpenAI, Groq, DeepSeek, Gemini-compat, ya apna local Ollama/vLLM endpoint.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apk">
+    <h2>📱 Phone par — APK</h2>
+    <p class="sub">Native Android shell (Kotlin + WebView). Server aapke laptop/VPS par chalta hai, phone console banta hai.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Download &amp; install</h3>
+        <p>
+          1. <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/releases">Releases page</a> se
+          <code>RatanSec-SuperAgent-*-debug.apk</code> download karo (ya Actions → Build Super Agent APK → artifact).<br />
+          2. Phone: "Install unknown apps" allow karo → APK kholo → Install.<br />
+          3. App me server daalo: <code>http://&lt;laptop-ip&gt;:8000</code> + <code>SUPERAGENT_MOBILE_TOKEN</code>.<br />
+          4. Bas — chat, terminal, approvals, records, reports sab phone par.
+        </p>
+      </div>
+      <div>
+<pre><span class="c"># laptop / VPS par agent chalao</span>
+cd ratansec-os
+cp superagent/.env.example .env
+<span class="c">#   APP_PASSWORD=…  SUPERAGENT_MOBILE_TOKEN=…  SUPERAGENT_API_KEY=sk-…</span>
+bash scripts/superagent.sh        <span class="c"># http://0.0.0.0:8000</span></pre>
+        <div class="note" style="margin-top:14px">
+          APK build CI me hoti hai (GitHub Actions). Chaho to khud bhi banao:
+          <code>cd ratansec-os/superagent/android &amp;&amp; gradle :app:assembleDebug</code>.
+          Server par APK rakhi ho to <code>/app-debug.apk</code> se bhi download ho jati hai.
         </div>
       </div>
     </div>
