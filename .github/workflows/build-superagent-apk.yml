@@ -139,9 +139,10 @@ jobs:
           path: ratansec-os/superagent/android/out/*.apk
           retention-days: 90
 
-      - name: Release (main / tag / manual)
-        # main par merge hote hi APK release ho jaati hai -> phone se seedha download
-        if: startsWith(github.ref, 'refs/tags/v') || inputs.release == true || github.ref == 'refs/heads/main'
+      - name: Release (main / tag / manual / [apk-release] commit)
+        # main, v* tag, manual dispatch, ya commit message me [apk-release] -> APK Release par
+        # attach hoti hai, taaki phone se seedha download link mile (artifact ZIP ke bina).
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release == true || github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[apk-release]')
         uses: softprops/action-gh-release@v2
         with:
           name: RatanSec Super Agent — Android APK
