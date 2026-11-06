@@ -1,10 +1,4 @@
-"""Super Agent — smoke tests (koi external dependency nahi, network nahi).
-
-Chalao:
-    python -m superagent.tests.test_smoke          # repo root se (ratansec-os/)
-    python superagent/tests/test_smoke.py
-"""
-
+"""Offline smoke tests — no external network. Run: python -m superagent.tests.test_smoke"""
 from __future__ import annotations
 
 import os
@@ -12,116 +6,81 @@ import sys
 import tempfile
 import time
 
-os.environ.setdefault("SUPERAGENT_DATA_DIR", tempfile.mkdtemp(prefix="sa-test-"))
-os.environ.setdefault("SUPERAGENT_REQUIRE_ROE", "1")
-os.environ.setdefault("SUPERAGENT_ALLOWED_TARGETS", "")
+os.environ.setdefault("SUPERAGENT_DATA_DIR", tempfile.mkdtemp(prefix="sa-smoke-"))
+os.environ.setdefault("APP_PASSWORD", "smoke-password")
+os.environ.setdefault("SUPERAGENT_API_TOKEN", "smoke-token")
+os.environ.setdefault("SUPERAGENT_DEMO_MODE", "0")
 
 FAILS: list[str] = []
 
 
 def check(condition: bool, label: str) -> None:
-    if condition:
-        print(f"  ✔ {label}")
-    else:
-        print(f"  ✖ {label}")
+    print(("  ✔ " if condition else "  ✖ ") + label)
+    if not condition:
         FAILS.append(label)
 
 
 def main() -> int:
     from superagent import approvals, catalog, records, runner, scope
-    from superagent.settings import settings
-
     print("\n[1] catalog")
-    check(catalog.TOTAL_TOOLS >= 100, f"tools catalog {catalog.TOTAL_TOOLS} entries (>=100)")
-    check(all(t.section in catalog.SECTIONS for t in catalog.TOOLS.values()), "har tool ka section valid hai")
-    check(catalog.INTRUSIVE_COUNT >= 10, f"{catalog.INTRUSIVE_COUNT} intrusive tools flagged")
-    sections = catalog.sections_payload()
-    check(len(sections) == len(catalog.SECTIONS), "sections payload complete")
-    check(all(s["count"] > 0 for s in sections), "har section me kam se kam 1 tool hai")
-
+    check(catalog.TOTAL_TOOLS >= 100, f"catalog {catalog.TOTAL_TOOLS} entries")
+    check(runner.SAFE_ADAPTERS == {"dig", "whois", "nmap"}, "only three executable adapters")
     print("\n[2] scope")
-    blocked = scope.check("169.254.169.254", "recon")
-    check(not blocked.allowed and blocked.code == "blocked", "cloud metadata hard-blocked")
-    unknown = scope.check("example.com", "recon")
-    check(not unknown.allowed, "no RoE -> denied (default deny)")
-    check(scope.check("not a target", "recon").code == "invalid", "invalid target rejected")
+    check(not scope.check("169.254.169.254", "recon").allowed, "metadata blocked")
+    check(not scope.check("example.com", "recon").allowed, "default deny")
+    check(not scope.check("https://user:pass@example.com", "web").allowed, "URL credentials rejected")
     check(scope.host_matches("api.acme.in", "*.acme.in"), "wildcard match")
+    check(not scope.host_matches("acme.in", "*.acme.in"), "wildcard does not include apex")
     check(scope.host_matches("10.0.0.7", "10.0.0.0/24"), "CIDR match")
-
-    print("\n[3] authorization records")
+    print("\n[3] RoE")
     now = time.time()
-    record = records.records.create(
-        client="Test Client", contact="soc@test.in", scope=["lab.local", "10.9.9.0/24"],
-        sections=["recon", "vuln"], start=now - 60, end=now + 86400,
-        signer="CISO", signature="TEST-REF-1",
-    )
-    check(record.is_active(), "record active hai")
-    ok = scope.check("lab.local", "recon")
-    check(ok.allowed and ok.roe_id == record.id, "RoE se allowed mila")
-    denied_section = scope.check("lab.local", "exploitation")
-    check(not denied_section.allowed, "section permitted nahi hai -> denied")
-    check(records.verify_chain()["ok"], "RoE ledger chain intact")
-    records.records.revoke(record.id, reason="test cleanup")
-    check(not scope.check("lab.local", "recon").allowed, "revoke ke baad denied")
-
-    print("\n[4] runner")
+    record = records.records.create(client="Test Client", contact="soc@test.in", scope=["lab.local"],
+                                    sections=["recon", "web", "reporting"], start=now - 60, end=now + 86400,
+                                    signer="CISO", signature="TEST-REF-1")
+    check(scope.check("lab.local", "web").allowed, "RoE allows web")
+    check(records.verify_chain()["ok"], "ledger intact")
+    records.records.revoke(record.id, reason="test")
+    check(not scope.check("lab.local", "web").allowed, "revoke denies")
+    print("\n[4] runner boundary")
+    for tool in ("nuclei", "sqlmap", "metasploit", "curl"):
+        try:
+            runner.build_tool_command(tool, target="lab.local")
+            check(False, f"{tool} rejected")
+        except runner.BuildError:
+            check(True, f"{tool} rejected")
     try:
-        runner.build_tool_command("nmap-vuln", target="lab.local", flags={"nope": "1"})
-        check(False, "unknown flag reject hota hai")
+        runner.build_shell_command("id")
+        check(False, "raw shell retired")
     except runner.BuildError:
-        check(True, "unknown flag reject hota hai")
-    try:
-        runner.build_tool_command("nuclei", target="lab.local", flags={"severity": "high; rm -rf /"})
-        check(False, "flag injection reject hota hai")
-    except runner.BuildError:
-        check(True, "flag injection reject hota hai")
-    cmd = runner.build_tool_command("dig", target="lab.local", flags={"record": "TXT"})
-    check(cmd.argv[0] == "dig" and "lab.local" in cmd.argv, f"command built: {cmd.display}")
-    try:
-        runner.build_shell_command("rm -rf /")
-        check(False, "destructive shell command blocked")
-    except runner.BuildError:
-        check(True, "destructive shell command blocked")
-
+        check(True, "raw shell retired")
     print("\n[5] approvals")
-    approval = approvals.create(kind="tool", summary="test", command="nmap lab.local", target="lab.local",
-                                section="recon", actor="test")
-    check(approvals.pending_count() == 1, "pending approval counted")
-    approvals.decide(approval.id, True, "test")
-    check(approval.status == "approved", "approval decide hui")
+    ap = approvals.create(kind="mission", summary="test", command="plan", target="lab.local",
+                          section="web", actor="test", validator=lambda: None)
+    approvals.decide(ap.id, True, "test")
+    check(ap.status == "approved", "approval decided")
     try:
-        approvals.decide(approval.id, True, "test")
-        check(False, "double decide reject")
+        approvals.decide(ap.id, True, "test")
+        check(False, "double decide rejected")
     except ValueError:
-        check(True, "double decide reject")
-
-    print("\n[6] audit chain")
+        check(True, "double decide rejected")
+    print("\n[6] audit")
     from superagent import audit
-
     audit.log("test_event", evidence=True, note="smoke")
     check(audit.verify()["ok"], "audit chain intact")
     check(audit.verify(audit.EVIDENCE_FILE)["ok"], "evidence chain intact")
-
-    print("\n[7] api app boot (no network)")
-    try:
-        from superagent.webui import app
-
-        paths: set[str] = set()
-
-        def collect(routes) -> None:
-            for route in routes:
-                if hasattr(route, "path"):
-                    paths.add(route.path)
-                inner = getattr(route, "original_router", None) or getattr(route, "router", None)
-                if inner is not None and hasattr(inner, "routes"):
-                    collect(inner.routes)
-
-        collect(app.routes)
-        for path in ("/", "/mobile", "/api/status", "/api/agent/chat", "/api/records", "/api/approvals"):
-            check(path in paths, f"route {path}")
-    except Exception as exc:  # pragma: no cover
-        check(False, f"app boot failed: {exc}")
-
+    print("\n[7] app boot")
+    from superagent.webui import app
+    paths: set[str] = set()
+    def collect(routes):
+        for route in routes:
+            if hasattr(route, "path"):
+                paths.add(route.path)
+            inner = getattr(route, "original_router", None) or getattr(route, "router", None)
+            if inner is not None and hasattr(inner, "routes"):
+                collect(inner.routes)
+    collect(app.routes)
+    for path in ("/", "/mobile", "/api/status", "/api/missions", "/api/demo/mission", "/api/provider/test"):
+        check(path in paths, f"route {path}")
     print()
     if FAILS:
         print(f"FAILED ({len(FAILS)}): " + ", ".join(FAILS))

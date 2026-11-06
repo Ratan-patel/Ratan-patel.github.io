@@ -12,7 +12,7 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 |---|---|---|
 | Home | [/](https://ratan-patel.github.io/) | Main landing page — background, skills, experience, gallery |
 | Red-Team Lab | [lab.html](https://ratan-patel.github.io/lab.html) | Browser-based hacking simulator (nmap, nikto, sqlmap, hydra, mimikatz, terminal) |
-| **Super Agent** | [ratansec-superagent.html](https://ratan-patel.github.io/ratansec-superagent.html) · [docs](ratansec-os/superagent/README.md) | AI security agent — 139 Kali tools, terminal, mobile PWA console, RoE records + hash-chained evidence |
+| **Super Agent v2** | [ratansec-superagent.html](https://ratan-patel.github.io/ratansec-superagent.html) · [docs](ratansec-os/superagent/README.md) | Private-key AI agent — bounded missions, exact-plan approvals, mobile PWA, RoE records + hash-chained evidence |
 | Ethical Hacking Foundation | [ethical-hacking-foundation.html](https://ratan-patel.github.io/ethical-hacking-foundation.html) | Course track |
 | Advanced Web & API Pentesting | [advanced-web-api-pentesting.html](https://ratan-patel.github.io/advanced-web-api-pentesting.html) | Course track |
 | Red Team Adversary Simulation | [red-team-adversary-simulation.html](https://ratan-patel.github.io/red-team-adversary-simulation.html) | Course track |
@@ -21,23 +21,22 @@ This repo hosts the source for my personal cybersecurity portfolio. The site doc
 | Resume | [ratan_patel_resume.html](https://ratan-patel.github.io/ratan_patel_resume.html) | Print-friendly CV |
 | Monetization launch kit | [ratan-monetization-launch-kit.html](https://ratan-patel.github.io/ratan-monetization-launch-kit.html) | Services, courses, AI plans |
 
-## RatanSec Super Agent (self-hosted, private API key)
+## RatanSec Super Agent v2 (self-hosted, private API key)
 
-An AI agent you run on your own machine/VPS with **your own** API key. It plans and executes
-authorised security testing with 139 tools across 12 sections (recon → info access → vuln →
-web/API → gaining access → exploitation → post-exploitation → priv-esc → cracking → wireless →
-reporting → utility), streaming output to a dashboard, a mobile PWA and a CLI terminal.
+An AI agent you run on your own machine/VPS with **your own** API key or a local model.
+It plans and executes **authorized, bounded posture missions** (DNS, HTTP headers, TLS certificate,
+security.txt/robots.txt), streams results to a dashboard/mobile PWA/CLI, and produces evidence-backed reports.
 
-Safety is enforced, not suggested: engagement **authorization records** (RoE) are mandatory,
-destructive commands and intrusive tools always need a human tap, shell mode is off by default,
-and every command lands in a hash-chained audit + evidence bundle.
+Safety is enforced: mandatory RoE records, exact-plan human approval, default-deny scope, no raw shell,
+no exploitation/brute-force, fail-closed hash-chained audit. The 139-tool catalog is a reference map;
+executable adapters are limited to dig/whois/nmap with fixed safe flags.
 
-- Android APK: GitHub **Releases** / Actions artifact ([android/README.md](ratansec-os/superagent/android/README.md))
-- Docs: [ratansec-os/superagent/README.md](ratansec-os/superagent/README.md)
+- Docs + quick start: [ratansec-os/superagent/README.md](ratansec-os/superagent/README.md)
+- Offline demo: `cd ratansec-os && bash scripts/superagent.sh --demo`
+- Live: copy `superagent/.env.example` to `.env`, set credentials/provider key locally, then `bash scripts/superagent.sh`
 - Legal + authorization templates: [ratansec-os/docs/](ratansec-os/docs/)
-- Quick start: `cd ratansec-os && pip install -r superagent/requirements.txt && uvicorn superagent.webui:app --host 0.0.0.0 --port 8000`
 
-> Intended only for systems you are **written-authorised** to test.
+> Intended only for systems you are **written-authorised** to test. Findings are posture observations, not exploit proof.
 
 ## Credentials
 

@@ -1,3 +1,7 @@
+> **v2 recommended path:** `bash scripts/superagent.sh --demo` (offline), ya `.env` set karke
+> `bash scripts/superagent.sh`. Full guide: [`superagent/README.md`](superagent/README.md).
+> Purana v1 shell/exploit workflow ab supported nahi hai.
+
 # 🚀 RatanSec OS — Aaunga kaise, chalaunga kaise (poora guide)
 
 > 🆕 **Bilkul shuru se (zero se) sikhana hai?** → **[SHURU_SE_GUIDE.md](SHURU_SE_GUIDE.md)** — har cheez ek-ek step me, "kya dikhega" checkpoints ke saath, aur ek rasta jisme kuch install bhi nahi karna padta (browser-only).

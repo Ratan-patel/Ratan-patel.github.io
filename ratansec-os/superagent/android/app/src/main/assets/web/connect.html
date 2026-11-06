@@ -1,170 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Super Agent — Connect</title>
-<style>
-  :root{--bg:#05070d;--panel:#0b1220;--line:#243348;--txt:#e6edf7;--muted:#8b9bb4;--accent:#37f2a1;--warn:#ffb84d;--mono:ui-monospace,Menlo,monospace}
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%}
-  body{background:radial-gradient(600px 320px at 12% -12%,#10305a66,transparent 60%),radial-gradient(520px 300px at 108% 4%,#0e6b4b40,transparent 60%),var(--bg);
-       color:var(--txt);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       display:flex;flex-direction:column;min-height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom))}
-  .brand{display:flex;gap:12px;align-items:center;margin-bottom:22px}
-  .logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#37f2a1,#1f9d6d);color:#04120c;font-size:24px;font-weight:800;box-shadow:0 8px 30px #37f2a155}
-  h1{font-size:21px;margin:0;letter-spacing:-.01em}
-  h1 em{font-style:normal;color:var(--accent)}
-  .sub{color:var(--muted);font-size:12.5px}
-  .card{background:#0a111b;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
-  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px;letter-spacing:.02em}
-  input{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:#060c15;color:var(--txt);font:inherit}
-  input:focus{outline:none;border-color:var(--accent)}
-  .hint{font-size:11.5px;color:#6d7f99;margin-top:6px;line-height:1.5}
-  button{font:inherit;font-weight:650;border-radius:12px;border:none;padding:13px 16px;width:100%;cursor:pointer}
-  .primary{background:linear-gradient(135deg,#37f2a1,#22c78b);color:#04120c;margin-top:16px}
-  .ghost{background:transparent;border:1px solid var(--line);color:var(--txt);margin-top:10px}
-  .row{display:flex;gap:10px}
-  .pill{font-size:11px;border:1px solid #37f2a144;color:var(--accent);background:#37f2a10f;border-radius:999px;padding:3px 10px;display:inline-block}
-  .status{margin-top:12px;font-size:12.5px;border-radius:10px;padding:10px 12px;display:none}
-  .status.ok{display:block;background:#37f2a114;border:1px solid #37f2a155;color:var(--accent)}
-  .status.bad{display:block;background:#ff5f6d14;border:1px solid #ff5f6d55;color:#ff9aa2}
-  .status.wait{display:block;background:#ffb84d14;border:1px solid #ffb84d55;color:var(--warn)}
-  code{font-family:var(--mono);font-size:12px;background:#0b1521;border:1px solid var(--line);border-radius:5px;padding:1px 5px}
-  ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:12.5px}
-  .steps{font-family:var(--mono);font-size:11.5px;color:#9fb6cf;background:#04070c;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;white-space:pre-wrap}
-  footer{margin-top:auto;padding-top:16px;color:#5f7590;font-size:11.5px;text-align:center}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Connect — RatanSec Super Agent</title>
+<link rel="stylesheet" href="./app.css">
+<style>body{display:grid;place-items:center;min-height:100vh;padding:20px}.connect-card{width:min(460px,100%)}</style>
 </head>
 <body>
-
-<div class="brand">
-  <div class="logo">🥷</div>
-  <div>
-    <h1>RatanSec <em>Super Agent</em></h1>
-    <div class="sub">authorised AI security agent · mobile console</div>
-  </div>
+<div class="card connect-card">
+  <div class="logo-big">🛡️</div>
+  <h1>RatanSec <span class="ok">Super Agent</span></h1>
+  <p class="muted">Apne self-hosted server ka URL daalo. Login agle screen par hoga — token URL mein nahi bheja jata.</p>
+  <label class="field"><span>Server URL</span><input id="server" placeholder="https://agent.example.com" inputmode="url" autocapitalize="off"></label>
+  <button class="btn primary wide" id="connect">Open console</button>
+  <p class="hint" id="status"></p>
 </div>
-
-<div class="card">
-  <span class="pill">Step 1 — apna agent server jodo</span>
-  <label for="server">Server URL</label>
-  <input id="server" placeholder="http://192.168.1.5:8000" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="url" />
-  <div class="hint">Laptop/VPS par agent chalu karo: <code>bash scripts/superagent.sh</code> — phir yahan wahi address daalo (same Wi-Fi, port 8000).</div>
-
-  <label for="token">Mobile token</label>
-  <input id="token" type="password" placeholder="SUPERAGENT_MOBILE_TOKEN" autocapitalize="off" spellcheck="false" />
-  <div class="hint">Server ke <code>.env</code> me <code>SUPERAGENT_MOBILE_TOKEN</code> (ya <code>SUPERAGENT_API_TOKEN</code>) — yahi token phone se login karta hai.</div>
-
-  <button class="primary" id="btn-connect">Connect</button>
-  <div class="status" id="status"></div>
-</div>
-
-<div class="card">
-  <span class="pill">Server abhi nahi hai?</span>
-  <div class="steps"># laptop / VPS par
-cd ratansec-os
-cp superagent/.env.example .env    # token + API key bharo
-bash scripts/superagent.sh         # http://0.0.0.0:8000</div>
-  <button class="ghost" id="btn-offline">🖥️ Demo console dekho (bina server)</button>
-</div>
-
-<footer>Sirf un systems par use karo jinke liye likhit authorization hai.</footer>
-
-<script>
-(function () {
-  "use strict";
-  var $ = function (s) { return document.querySelector(s); };
-  var NATIVE = !!(window.AndroidAgent && window.AndroidAgent.serverUrl);
-  var store = {
-    get: function (k) {
-      try { return localStorage.getItem("sa_" + k) || ""; } catch (e) { return ""; }
-    },
-    set: function (k, v) {
-      try { localStorage.setItem("sa_" + k, v); } catch (e) {}
-    }
-  };
-
-  // deep-link / saved values prefill
-  var params = new URLSearchParams(location.search);
-  var initial = params.get("server") || store.get("server") || (NATIVE ? window.AndroidAgent.serverUrl() : "");
-  var initialToken = params.get("token") || store.get("token") || params.get("t") || "";
-  if (initial) $("#server").value = initial;
-  if (initialToken) $("#token").value = initialToken;
-
-  function status(msg, kind) {
-    var el = $("#status");
-    el.className = "status " + (kind || "wait");
-    el.textContent = msg;
-  }
-
-  function normalize(raw) {
-    var s = (raw || "").trim();
-    if (!s) return "";
-    if (!/^https?:\/\//i.test(s)) {
-      s = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/i.test(s) || /:\d{2,5}$/.test(s)
-        ? "http://" + s : "https://" + s;
-    }
-    s = s.replace(/\/+$/, "").replace(/\/mobile(\.html)?$/i, "");
-    return s;
-  }
-
-  function target(server, token) {
-    var base = normalize(server) + "/mobile";
-    return token ? base + "?token=" + encodeURIComponent(token) : base;
-  }
-
-  function go(server, token) {
-    var url = target(server, token);
-    store.set("server", normalize(server));
-    if (token) store.set("token", token);
-    location.href = url;
-  }
-
-  $("#btn-connect").onclick = function () {
-    var server = $("#server").value.trim();
-    var token = $("#token").value.trim();
-    if (!server) { status("Pehle server URL daalo (jaise http://192.168.1.5:8000)", "bad"); return; }
-    var base = normalize(server);
-    status("Server check kar raha hoon…", "wait");
-
-    var done = false;
-    var timer = setTimeout(function () {
-      if (done) return;
-      done = true;
-      status("Server se connect nahi ho paya. Phone aur laptop same Wi-Fi par hain? Firewall/port 8000 khula hai? " +
-             "Phir bhi koshish karni hai to dobara Connect dabao.", "bad");
-    }, 7000);
-
-    // reachability probe (no-cors: opaque response bhi kaafi hai)
-    fetch(base + "/healthz", { mode: "no-cors", cache: "no-store" })
-      .then(function () {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        status("Mil gaya ✔ console khul raha hai…", "ok");
-        go(server, token);
-      })
-      .catch(function () {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        status("Reachable nahi lag raha — phir bhi khol raha hoon.", "wait");
-        go(server, token);
-      });
-  };
-
-  $("#btn-offline").onclick = function () {
-    store.set("server", "");
-    location.href = "mobile.html";
-  };
-
-  if (initial && initialToken) {
-    // saved configuration -> direct
-    status("Saved server mil gaya — connect kar raha hoon…", "wait");
-    go(initial, initialToken);
-  }
-})();
-</script>
+<script src="./connect.js"></script>
 </body>
 </html>

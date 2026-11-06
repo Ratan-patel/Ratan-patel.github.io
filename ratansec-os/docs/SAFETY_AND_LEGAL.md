@@ -1,5 +1,9 @@
 # Authorization & Legal Framework — RatanSec Super Agent
 
+> **v2 note:** Raw shell, remote package install, exploitation/brute-force frameworks aur auto-approve
+> retired hain. Live missions bounded posture probes hain aur har exact plan ko human approval chahiye.
+> Neeche ke legal principles phir bhi apply hote hain; tool capability se permission nahi milti.
+
 > **Yeh document legal advice nahi hai.** Deployment se pehle apne lawyer / client ke legal team
 > se confirm karo. Purpose: aapke paas records hon, system unhe enforce kare, aur evidence
 > court/audit ke liye chain-of-custody me rahe.

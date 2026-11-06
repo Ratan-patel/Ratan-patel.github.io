@@ -9,8 +9,9 @@ on:
     branches: [main, "arena/**"]
     paths:
       - "ratansec-os/superagent/android/**"
-      - "ratansec-os/superagent/static/mobile.html"
       - "ratansec-os/superagent/static/connect.html"
+      - "ratansec-os/superagent/static/connect.js"
+      - "ratansec-os/superagent/static/app.css"
       - ".github/workflows/build-superagent-apk.yml"
     tags: ["v*"]
   workflow_dispatch:
@@ -22,6 +23,11 @@ on:
 
 permissions:
   contents: write
+
+# Ek hi branch par ek build chale — purana run cancel ho jata hai.
+concurrency:
+  group: superagent-apk-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -72,8 +78,11 @@ jobs:
           SRC="ratansec-os/superagent/static"
           DST="ratansec-os/superagent/android/app/src/main/assets/web"
           mkdir -p "$DST"
-          cp "$SRC/mobile.html" "$DST/mobile.html"
           cp "$SRC/connect.html" "$DST/connect.html"
+          cp "$SRC/connect.js" "$DST/connect.js"
+          cp "$SRC/app.css" "$DST/app.css"
+          # Local asset origin par relative paths chahiye.
+          sed -i 's|/static/|./|g' "$DST/connect.html"
           ls -l "$DST"
 
       - name: Build debug APK
@@ -139,23 +148,37 @@ jobs:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'apk-latest' }}
           make_latest: true
           body: |
-            **RatanSec Super Agent — Android APK**
+            **RatanSec Super Agent v2 — Android APK (authorised testing only)**
 
-            Install (sideload):
-            1. Phone par `RatanSec-SuperAgent-debug.apk` download karo
-               (permanent link: https://github.com/Ratan-Patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-debug.apk)
-            2. Settings → "Install unknown apps" allow karo (browser/file manager ke liye)
-            3. APK kholo → install → app khulegi → server URL + mobile token daalo
+            ### Download
+            | File | Kab use karein |
+            |---|---|
+            | `RatanSec-SuperAgent-release.apk` | 👈 **Recommended** — chhota, phone par normal install |
+            | `RatanSec-SuperAgent-debug.apk` | Debug/testing build |
 
-            Server chalu karna:
-            ```
+            Permanent link (hamesha latest):
+            https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-release.apk
+
+            ### Install (sideload)
+            1. Phone ke browser me upar wali link kholo → APK download hogi
+            2. "Unknown sources / Install unknown apps" ki permission do (Chrome ya File Manager ke liye)
+            3. APK par tap → Install → Open
+            4. Play Protect warning aaye to "Details → Install anyway" (app Play Store par nahi hai, self-signed hai)
+
+            ### App ko server se connect karo
+            APK sirf console hai — agent tumhare laptop/VPS par chalta hai.
+            ```bash
             cd ratansec-os
-            cp superagent/.env.example .env
-            bash scripts/superagent.sh          # http://<laptop-ip>:8000
+            cp superagent/.env.example .env      # apni API key yahan daalo (chat me nahi)
+            bash scripts/superagent.sh --host 0.0.0.0 --port 8000
             ```
-            App me server: `http://<laptop-ip>:8000` · token: `SUPERAGENT_MOBILE_TOKEN`
+            App me server URL: `http://<laptop-ka-LAN-IP>:8000` (phone + laptop same Wi-Fi par).
+            Login/password **server ke console par** hota hai — v2 me token URL me nahi bheja jata.
 
-            ⚠️ Sirf authorised testing ke liye.
+            Sirf demo dekhna ho to: `bash scripts/superagent.sh --demo`
+
+            ⚠️ Sirf un systems par chalao jinki likhit permission tumhare paas hai.
+            Release APK CI debug-certificate se signed hai (sideload ke liye) — Play Store build nahi.
           files: |
             ratansec-os/superagent/android/out/*.apk
           draft: false

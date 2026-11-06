@@ -13,6 +13,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -23,13 +24,14 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.webkit.WebViewAssetLoader
 
 /**
  * RatanSec Super Agent — Android shell.
  *
  * App ek secure WebView hai jo aapke self-hosted Super Agent server ko kholta hai.
- * APK ke andar bundle kiya gaya web console (assets/web/mobile.html) turant khulta hai
- * aur wahi se server URL + token set hota hai.
+ * APK ke andar bundle kiya gaya web console (assets/web/connect.html) turant khulta hai
+ * aur wahi se server URL set hota hai. Login server ke console par hota hai.
  *
  * AndroidManifest ke network_security_config se http (LAN/VPS) allowed hai; HTTPS recommended.
  */
@@ -39,7 +41,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loadingBar: ProgressBar
     private val prefs by lazy { getSharedPreferences("superagent", MODE_PRIVATE) }
     private val localOrigin = "https://appassets.androidplatform.net"
-    private val localConsole = "$localOrigin/assets/web/mobile.html"
+    private val localConsole = "$localOrigin/assets/web/connect.html"
+
+    /**
+     * Bundled connect screen ko https://appassets.androidplatform.net/assets/... par serve karta hai.
+     * Iske bina local URL resolve nahi hota (net::ERR_NAME_NOT_RESOLVED) aur app khali khulti hai.
+     */
+    private val assetLoader by lazy {
+        WebViewAssetLoader.Builder()
+            .setDomain("appassets.androidplatform.net")
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
+            .build()
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,14 +78,19 @@ class MainActivity : AppCompatActivity() {
                 databaseEnabled = true
                 allowFileAccess = false
                 allowContentAccess = false
-                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                 cacheMode = WebSettings.LOAD_DEFAULT
-                userAgentString = "$userAgentString RatanSecSuperAgent/1.0"
+                userAgentString = "$userAgentString RatanSecSuperAgent/2.0"
                 mediaPlaybackRequiresUserGesture = true
                 setSupportZoom(false)
             }
             addJavascriptInterface(Bridge(), "AndroidAgent")
             webViewClient = object : WebViewClient() {
+                override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+                    // Local (bundled) console ke liye assets serve karo; baaki requests normal network se.
+                    return assetLoader.shouldInterceptRequest(request.url)
+                }
+
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                     val url = request.url.toString()
                     val host = request.url.host ?: ""
@@ -122,40 +140,51 @@ class MainActivity : AppCompatActivity() {
     private fun handleDeepLink(intent: Intent?) {
         val data: Uri = intent?.data ?: return
         val server = data.getQueryParameter("server") ?: return
-        val token = data.getQueryParameter("token")
-        prefs.edit().putString("server", server).apply()
-        if (!token.isNullOrBlank()) prefs.edit().putString("token", token).apply()
+        val origin = normalizeOrigin(server)
+        if (origin.isNotEmpty()) prefs.edit().putString("server", origin).apply()
     }
 
     private fun loadConsole() {
         webView.loadUrl(localConsole)
     }
 
-    /** Server URL normalize: trailing slash hata do, scheme add karo, /mobile lagao. */
-    private fun normalizeServer(raw: String): String {
+    /**
+     * Server URL se sirf origin nikalta hai (scheme + host + port).
+     * Path/query/fragment ignore — token ya credentials URL me kabhi nahi bheje jate.
+     */
+    private fun normalizeOrigin(raw: String): String {
         var s = raw.trim()
         if (s.isEmpty()) return ""
         if (!s.startsWith("http://") && !s.startsWith("https://")) {
-            s = if (s.startsWith("localhost") || s.startsWith("127.") || s.startsWith("10.") ||
-                s.startsWith("192.168.") || s.contains(":8") || s.contains(":3")) "http://$s" else "https://$s"
+            val local = Regex("^(localhost|127\\.|10\\.|192\\.168\\.|172\\.(1[6-9]|2\\d|3[01])\\.)")
+            s = if (local.containsMatchIn(s)) "http://$s" else "https://$s"
         }
-        s = s.trimEnd('/')
-        if (s.endsWith("/mobile")) s = s.removeSuffix("/mobile")
-        return if (s.endsWith("/mobile.html")) s else "$s/mobile"
+        val uri = runCatching { Uri.parse(s) }.getOrNull() ?: return ""
+        val host = uri.host ?: return ""
+        val scheme = uri.scheme ?: return ""
+        if (scheme != "http" && scheme != "https") return ""
+        if (!uri.userInfo.isNullOrEmpty()) return ""
+        return if (uri.port != -1) "$scheme://$host:${uri.port}" else "$scheme://$host"
     }
 
+    /** Origin save karke app ke andar hi console kholta hai. */
     private fun openServer(raw: String) {
-        val url = normalizeServer(raw)
-        if (url.isEmpty()) return
-        val token = prefs.getString("token", "") ?: ""
-        // token ek baar URL se console ko de do (phir localStorage me rehta hai)
-        val full = if (token.isNotBlank()) "$url?token=${Uri.encode(token)}" else url
-        webView.loadUrl(full)
+        val origin = normalizeOrigin(raw)
+        if (origin.isEmpty()) {
+            Toast.makeText(this, "Invalid server URL", Toast.LENGTH_SHORT).show()
+            return
+        }
+        prefs.edit().putString("server", origin).apply()
+        // v2: token URL/query mein nahi bheja jata; login server ke console par hota hai.
+        webView.loadUrl("$origin/mobile")
     }
 
+    /** Sirf saved server origin ke links app ke andar khulte hain; baaki external browser me. */
     private fun isAgentHost(url: String): Boolean {
         val saved = prefs.getString("server", null) ?: return false
-        return url.startsWith(saved.trimEnd('/')) || url.contains(saved.trimEnd('/'))
+        val origin = normalizeOrigin(saved)
+        if (origin.isEmpty()) return false
+        return normalizeOrigin(url) == origin
     }
 
     private fun showConnectError() {
@@ -173,7 +202,7 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    /** Server + token ka setup dialog (native, WebView ke bahar). */
+    /** Server URL setup dialog (login server console par hota hai). */
     private fun showSetup() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -185,39 +214,26 @@ class MainActivity : AppCompatActivity() {
             setText(prefs.getString("server", ""))
             setTextColor(Color.WHITE)
         }
-        val tokenInput = EditText(this).apply {
-            hint = "SUPERAGENT_MOBILE_TOKEN"
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            setText(prefs.getString("token", ""))
-            setTextColor(Color.WHITE)
-        }
         layout.addView(TextView(this).apply {
             text = "Server URL"
             setTextColor(Color.parseColor("#8B9BB4"))
             textSize = 12f
         })
         layout.addView(serverInput)
-        layout.addView(TextView(this).apply {
-            text = "\nMobile token (SUPERAGENT_MOBILE_TOKEN)"
-            setTextColor(Color.parseColor("#8B9BB4"))
-            textSize = 12f
-        })
-        layout.addView(tokenInput)
 
         AlertDialog.Builder(this)
             .setTitle("Super Agent connect karo")
             .setView(layout)
             .setPositiveButton("Connect") { _, _ ->
                 val server = serverInput.text.toString()
-                val token = tokenInput.text.toString()
-                prefs.edit().putString("server", server).putString("token", token).apply()
+                prefs.edit().putString("server", server).apply()
                 if (server.isBlank()) {
                     Toast.makeText(this, "Server URL daalo", Toast.LENGTH_SHORT).show()
                 } else {
                     openServer(server)
                 }
             }
-            .setNeutralButton("Demo console") { _, _ -> loadConsole() }
+            .setNeutralButton("Connect screen") { _, _ -> loadConsole() }
             .setNegativeButton("Cancel", null)
             .show()
     }
@@ -229,8 +245,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** JS bridge: console ke menu se native setup / exit. */
+    /** JS bridge: bundled connect screen se server open karna + native setup / exit. */
     inner class Bridge {
+        /**
+         * connect.js isko call karta hai: origin native prefs me save hota hai aur console
+         * app ke andar hi khulta hai (external browser me nahi).
+         */
+        @JavascriptInterface
+        fun openServer(url: String) = runOnUiThread { this@MainActivity.openServer(url) }
+
         @JavascriptInterface
         fun setup() = runOnUiThread { showSetup() }
 

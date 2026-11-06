@@ -1,173 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RatanSec Super Agent — AI Security Console</title>
-<meta name="description" content="Authorised AI security agent: 120+ Kali tools, terminal, approval gates, RoE records aur evidence chain." />
-<meta name="theme-color" content="#05070d" />
-<link rel="manifest" href="/manifest.webmanifest" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥷</text></svg>" />
-<link rel="stylesheet" href="/static/app.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RatanSec Super Agent v2 — Private AI Security Console</title>
+<meta name="description" content="Self-hosted, private-key AI security agent with bounded missions, exact-plan approvals and evidence-backed reports.">
+<meta name="theme-color" content="#070b12">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
 <div id="login" class="login hidden">
   <form class="login-card" id="login-form">
-    <div class="logo">🥷</div>
-    <h1>RatanSec <em>Super Agent</em></h1>
-    <p class="muted">Dashboard locked — password ya API token daalo.</p>
-    <input id="login-password" type="password" placeholder="APP_PASSWORD ya API token" autocomplete="current-password" />
-    <div class="row">
-      <button class="btn primary" type="submit">Unlock</button>
-      <a class="btn ghost" href="/api/docs" target="_blank" rel="noopener">API docs</a>
-    </div>
-    <p class="hint">Phone par kholna ho to <code>/mobile</code> use karo (PWA install ho jayega).</p>
+    <div class="logo-big">🛡️</div>
+    <h1>RatanSec <span>Super Agent</span></h1>
+    <p class="muted">Private console locked. Server password ya API token daalo.</p>
+    <label class="field"><span>Password / token</span><input id="login-password" type="password" autocomplete="current-password" required></label>
+    <button class="btn primary wide" type="submit">Unlock console</button>
+    <p class="hint">Key browser mein save nahi hoti. AI key sirf server environment mein rakho.</p>
   </form>
 </div>
 
-<header class="top">
-  <div class="brand"><span class="logo">🥷</span><div><b>RatanSec <em>Super Agent</em></b><small id="sub">authorised AI security agent</small></div></div>
-  <div class="chips">
-    <span class="chip" id="c-ai">AI —</span>
-    <span class="chip" id="c-tools">Tools —</span>
-    <span class="chip" id="c-roe">RoE —</span>
-    <span class="chip warn hidden" id="c-appr">Approvals 0</span>
-    <span class="chip" id="c-shell">Shell —</span>
-  </div>
-  <div class="actions">
-    <a class="btn ghost" href="/mobile">📱 Mobile</a>
-    <button class="btn ghost" id="btn-logout">Logout</button>
-  </div>
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Toggle navigation">☰</button>
+  <div class="brand"><span class="logo">🛡️</span><div><b>RatanSec <em>Super Agent</em></b><small>v2 · private-key security console</small></div></div>
+  <div class="top-status"><span class="pill" id="mode-pill">connecting</span><span class="pill" id="ai-pill">AI —</span><span class="pill" id="roe-pill">RoE —</span></div>
+  <div class="top-actions"><button class="btn ghost sm" id="provider-btn">Provider</button><button class="btn ghost sm" id="logout-btn">Lock</button></div>
 </header>
+<div id="demo-banner" class="demo-banner hidden">OFFLINE DEMO — fixture data only. No target traffic, no provider calls, no live records.</div>
 
-<div id="banners"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <button class="nav active" data-view="overview"><span>◈</span>Overview</button>
+  <button class="nav" data-view="missions"><span>➤</span>Missions</button>
+  <button class="nav" data-view="chat"><span>✦</span>AI Chat</button>
+  <button class="nav" data-view="approvals"><span>⚑</span>Approvals<i id="approval-badge" class="badge hidden">0</i></button>
+  <button class="nav" data-view="scope"><span>◎</span>Scope / RoE</button>
+  <button class="nav" data-view="arsenal"><span>⌘</span>Arsenal</button>
+  <button class="nav" data-view="reports"><span>▤</span>Reports</button>
+  <button class="nav" data-view="evidence"><span>⛓</span>Evidence</button>
+  <button class="nav" data-view="provider"><span>⚙</span>Provider</button>
+  <div class="sidebar-foot">Default deny · exact-plan approval · no raw shell</div>
+</nav>
 
-<main class="shell">
-  <nav class="rail">
-    <button class="rail-btn active" data-tab="chat">🧠 <span>Agent</span></button>
-    <button class="rail-btn" data-tab="term">⌨️ <span>Terminal</span></button>
-    <button class="rail-btn" data-tab="arsenal">🧰 <span>Arsenal</span></button>
-    <button class="rail-btn" data-tab="runs">📡 <span>Runs</span></button>
-    <button class="rail-btn" data-tab="approvals">⚑ <span>Approvals</span><i id="rail-appr" class="badge hidden">0</i></button>
-    <button class="rail-btn" data-tab="records">📜 <span>Records</span></button>
-    <button class="rail-btn" data-tab="reports">📄 <span>Reports</span></button>
-    <button class="rail-btn" data-tab="audit">🔒 <span>Evidence</span></button>
-  </nav>
+<main>
+<section class="view active" id="view-overview">
+  <div class="page-head"><div><p class="eyebrow">MISSION CONTROL</p><h1>Security work, <span>with receipts.</span></h1><p class="lead">Plan → approve → bounded checks → evidence → report. Tumhari key, tumhara server, tumhara scope.</p></div><button class="btn primary" id="new-mission-btn">+ New mission</button></div>
+  <div class="stats"><div class="stat"><small>Active missions</small><b id="stat-missions">0</b><span>bounded & cancellable</span></div><div class="stat"><small>Pending approvals</small><b id="stat-approvals">0</b><span>exact plan hash</span></div><div class="stat"><small>Active RoE</small><b id="stat-roe">0</b><span>default deny</span></div><div class="stat"><small>Catalog</small><b id="stat-tools">139</b><span>3 safe adapters · reference map</span></div></div>
+  <div class="grid-2">
+    <div class="card"><div class="card-head"><h2>Recent missions</h2><button class="btn ghost sm" data-goto="missions">View all</button></div><div id="overview-missions" class="stack"></div></div>
+    <div class="card"><div class="card-head"><h2>Safety pipeline</h2><span class="pill ok">enforced</span></div><ol class="pipeline"><li><b>Authorization record</b><span>client · scope · window · signer reference</span></li><li><b>Exact plan approval</b><span>human taps the hashed probe list</span></li><li><b>Bounded execution</b><span>no redirects · no credentials · timeouts</span></li><li><b>Evidence + report</b><span>SHA-256 artifacts · hash-chained audit</span></li></ol></div>
+  </div>
+</section>
 
-  <!-- ============ AGENT ============ -->
-  <section class="panel tab active" id="tab-chat">
-    <div class="panel-head">
-      <h2>AI Agent</h2>
-      <div class="head-tools">
-        <input id="model" class="input sm" placeholder="model (default)" />
-        <label class="switch" title="Non-intrusive tools bina approval (intrusive always approval)">
-          <input type="checkbox" id="auto-approve" /><span></span> auto
-        </label>
-        <button class="btn ghost sm" id="btn-clear">Clear</button>
-      </div>
-    </div>
-    <div class="chat" id="chat"></div>
-    <div class="chips-row" id="quick"></div>
-    <form class="composer" id="chat-form">
-      <textarea id="chat-input" rows="2" placeholder="Target + task likho… jaise: 'lab.local ka recon karo aur nuclei se critical CVE check karo'"></textarea>
-      <button class="btn primary" id="btn-send" type="submit">Send</button>
+<section class="view" id="view-missions">
+  <div class="page-head"><div><p class="eyebrow">BOUNDED AUTONOMY</p><h1>Missions</h1><p class="lead">Non-destructive posture checks. Live missions wait for human approval.</p></div></div>
+  <div class="card mission-form-card">
+    <form id="mission-form" class="mission-form">
+      <label class="field"><span>Target URL</span><input name="target" id="mission-target" placeholder="https://app.example.com" autocomplete="off"></label>
+      <label class="field"><span>Profile</span><select name="profile"><option value="quick">Quick posture · 3 checks</option><option value="web">Web hygiene · 5 checks</option><option value="tls">TLS review · 2 checks</option></select></label>
+      <label class="field wide"><span>Objective</span><input name="objective" required maxlength="1000" placeholder="Review external web posture and TLS expiry before the audit"></label>
+      <div class="form-actions wide"><button class="btn primary" type="submit">Create plan</button><button class="btn" type="button" id="demo-mission-btn">Run offline demo</button><span class="muted small" id="mission-form-hint">Live plan sends no traffic until approved.</span></div>
     </form>
-  </section>
+  </div>
+  <div class="mission-layout"><div id="mission-list" class="stack"></div><div id="mission-detail" class="card detail-empty">Select a mission to inspect plan, events, findings and evidence.</div></div>
+</section>
 
-  <!-- ============ TERMINAL ============ -->
-  <section class="panel tab" id="tab-term">
-    <div class="panel-head">
-      <h2>Terminal</h2>
-      <div class="head-tools">
-        <span class="muted small" id="term-mode-label">mode: catalog</span>
-        <button class="btn ghost sm" id="btn-term-mode">Switch to shell</button>
-        <button class="btn ghost sm" id="btn-term-clear">Clear</button>
-      </div>
-    </div>
-    <p class="muted small">Catalog mode: <code>tool target flag=value</code> &nbsp;·&nbsp; Shell mode: raw Linux command (guard + approval). <code>help</code> typing se commands dekho.</p>
-    <div class="term" id="term"></div>
-    <form class="term-input" id="term-form">
-      <span class="prompt" id="term-prompt">$</span>
-      <input id="term-cmd" autocomplete="off" spellcheck="false" placeholder="nmap-vuln lab.local ports=80,443   |   switch karke: id; uname -a" />
-    </form>
-  </section>
+<section class="view" id="view-chat">
+  <div class="page-head"><div><p class="eyebrow">PRIVATE PROVIDER</p><h1>AI Chat</h1><p class="lead">AI scope check aur mission plan propose kar sakta hai; approve tum karoge.</p></div><button class="btn ghost sm" id="chat-clear">Clear</button></div>
+  <div class="card chat-card"><div id="chat" class="chat"></div><form id="chat-form" class="composer"><textarea id="chat-input" rows="2" maxlength="8000" placeholder="e.g. app.example.com ke liye web hygiene mission plan karo"></textarea><button class="btn primary" id="chat-send" type="submit">Send</button></form></div>
+</section>
 
-  <!-- ============ ARSENAL ============ -->
-  <section class="panel tab" id="tab-arsenal">
-    <div class="panel-head">
-      <h2>Tool Arsenal</h2>
-      <div class="head-tools">
-        <input id="arsenal-search" class="input sm" placeholder="search tool…" />
-        <span class="muted small" id="arsenal-summary"></span>
-      </div>
-    </div>
-    <div class="arsenal" id="arsenal"></div>
-  </section>
+<section class="view" id="view-approvals"><div class="page-head"><div><p class="eyebrow">HUMAN IN THE LOOP</p><h1>Approvals</h1><p class="lead">Exact command/plan dekho, phir approve ya deny. Revoke ke baad approval fail ho jata hai.</p></div></div><div id="approvals" class="stack"></div></section>
 
-  <!-- ============ RUNS ============ -->
-  <section class="panel tab" id="tab-runs">
-    <div class="panel-head"><h2>Runs</h2><button class="btn ghost sm" id="btn-runs-refresh">Refresh</button></div>
-    <div class="split">
-      <div class="list" id="runs-list"></div>
-      <div class="detail" id="run-detail"><p class="muted">Run select karo…</p></div>
-    </div>
-  </section>
+<section class="view" id="view-scope">
+  <div class="page-head"><div><p class="eyebrow">DEFAULT DENY</p><h1>Scope & authorization</h1><p class="lead">Written permission ka reference record karo. Yeh cryptographic client signature nahi hai.</p></div></div>
+  <div class="card"><form id="record-form" class="form-grid">
+    <label class="field"><span>Client / project</span><input name="client" required placeholder="Acme — Q4 VAPT"></label>
+    <label class="field"><span>Signer</span><input name="signer" required placeholder="CISO name"></label>
+    <label class="field wide"><span>Scope (comma separated hosts/CIDR)</span><input name="scope" required placeholder="app.example.com,*.example.com,10.20.30.0/24"></label>
+    <label class="field"><span>Start</span><input name="start" type="date"></label><label class="field"><span>End</span><input name="end" type="date"></label>
+    <label class="field"><span>Authorization reference</span><input name="signature" required placeholder="SOW-2026-014 / signed PDF ref"></label>
+    <label class="field"><span>Emergency contact</span><input name="emergency" placeholder="on-call"></label>
+    <label class="field wide"><span>Notes</span><input name="notes" placeholder="window, exclusions, rate limits"></label>
+    <div class="wide"><button class="btn primary" type="submit">Save RoE record</button></div>
+  </form></div>
+  <div id="records" class="stack"></div>
+</section>
 
-  <!-- ============ APPROVALS ============ -->
-  <section class="panel tab" id="tab-approvals">
-    <div class="panel-head"><h2>Approvals</h2><button class="btn ghost sm" id="btn-appr-refresh">Refresh</button></div>
-    <p class="muted small">Intrusive tools aur shell commands yahan aate hain. Approve karne se pehle command padho — 20 min me expire ho jate hain.</p>
-    <div id="approvals" class="cards"></div>
-  </section>
+<section class="view" id="view-arsenal"><div class="page-head"><div><p class="eyebrow">CAPABILITY MAP</p><h1>Arsenal</h1><p class="lead">139-entry reference catalog. v2 execution sirf bounded probes + dig/whois/nmap adapters tak limited hai.</p></div><input id="arsenal-search" class="input" placeholder="Search tools…"></div><div id="arsenal" class="arsenal"></div></section>
 
-  <!-- ============ RECORDS ============ -->
-  <section class="panel tab" id="tab-records">
-    <div class="panel-head">
-      <h2>Authorization Records (RoE)</h2>
-      <div class="head-tools">
-        <button class="btn ghost sm" id="btn-chain">Verify chain</button>
-      </div>
-    </div>
-    <p class="muted small">Agent kuch bhi chalane se pehle yahan check karta hai: client, scope, sections, validity. Har record hash-chain me hai.</p>
-    <form class="form-grid" id="record-form">
-      <label>Client / Project<input name="client" required placeholder="Acme Pvt Ltd — Q4 VAPT" /></label>
-      <label>Contact (email/phone)<input name="contact" placeholder="security@acme.in" /></label>
-      <label class="wide">Scope (comma separated)<input name="scope" required placeholder="acme.in,*.acme.in,10.20.30.0/24" /></label>
-      <label>Start date<input name="start" type="date" /></label>
-      <label>End date<input name="end" type="date" /></label>
-      <label>Authorised by (signer)<input name="signer" placeholder="CTO / Security Head name" /></label>
-      <label>Signature / reference<input name="signature" required placeholder="SOW-2026-014 / email id / PDF ref" /></label>
-      <label class="wide">Emergency contact<input name="emergency" placeholder="+91…" /></label>
-      <fieldset class="wide sections-pick"><legend>Sections permitted</legend><div id="roe-sections"></div></fieldset>
-      <label class="wide">Notes<input name="notes" placeholder="Testing window, exclusions, constraints…" /></label>
-      <div class="wide row"><button class="btn primary" type="submit">Save record</button><button class="btn ghost" type="button" id="btn-seed">Add demo/lab record</button></div>
-    </form>
-    <div id="records" class="cards"></div>
-  </section>
+<section class="view" id="view-reports"><div class="page-head"><div><p class="eyebrow">CLIENT-READY OUTPUT</p><h1>Reports</h1></div><button class="btn ghost sm" id="reports-refresh">Refresh</button></div><div class="report-layout"><div id="reports-list" class="stack"></div><div id="report-detail" class="card detail-empty">Select a report.</div></div></section>
 
-  <!-- ============ REPORTS ============ -->
-  <section class="panel tab" id="tab-reports">
-    <div class="panel-head"><h2>Reports</h2><button class="btn ghost sm" id="btn-reports-refresh">Refresh</button></div>
-    <div class="split">
-      <div class="list" id="reports-list"></div>
-      <div class="detail" id="report-detail"><p class="muted">Report select karo…</p></div>
-    </div>
-  </section>
+<section class="view" id="view-evidence"><div class="page-head"><div><p class="eyebrow">CHAIN OF CUSTODY</p><h1>Evidence</h1></div><div class="row"><button class="btn ghost sm" id="verify-btn">Verify chains</button><button class="btn primary sm" id="bundle-btn">Export bundle</button></div></div><div id="verify-result" class="card"></div><div class="card table-wrap"><table><thead><tr><th>Time (UTC)</th><th>Event</th><th>Details</th></tr></thead><tbody id="audit-body"></tbody></table></div></section>
 
-  <!-- ============ AUDIT ============ -->
-  <section class="panel tab" id="tab-audit">
-    <div class="panel-head">
-      <h2>Audit &amp; Evidence</h2>
-      <div class="head-tools">
-        <button class="btn ghost sm" id="btn-verify">Verify chain</button>
-        <button class="btn primary sm" id="btn-bundle">Export evidence bundle</button>
-      </div>
-    </div>
-    <div id="audit-verify" class="verify-box"></div>
-    <div class="table-wrap"><table class="table" id="audit-table"><thead><tr><th>Time</th><th>Event</th><th>Details</th></tr></thead><tbody></tbody></table></div>
-  </section>
+<section class="view" id="view-provider"><div class="page-head"><div><p class="eyebrow">BRING YOUR OWN KEY</p><h1>AI provider</h1><p class="lead">Key sirf server environment / local .env mein. Browser se key accept nahi hoti.</p></div></div><div class="grid-2"><div class="card"><h2>Current configuration</h2><div id="provider-status" class="kv"></div><button class="btn primary" id="provider-test-btn">Test connection</button><p id="provider-test-result" class="muted small"></p></div><div class="card"><h2>Server-side setup</h2><pre class="code">SUPERAGENT_PROVIDER=openrouter
+SUPERAGENT_API_KEY=your-private-key
+SUPERAGENT_BASE_URL=https://openrouter.ai/api/v1
+SUPERAGENT_MODEL=your-model-id
+
+# Local Ollama example
+SUPERAGENT_PROVIDER=ollama
+SUPERAGENT_BASE_URL=http://127.0.0.1:11434/v1
+SUPERAGENT_MODEL=your-local-model</pre><p class="muted small">Edit .env on the server, restart, then test. Never paste keys into chat or target fields.</p></div></div></section>
 </main>
-
+</div>
 <div id="toast" class="toast hidden"></div>
 <script src="/static/app.js"></script>
 </body>

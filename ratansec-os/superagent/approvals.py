@@ -17,7 +17,9 @@ from typing import Any, Callable
 
 from . import audit
 
-TTL_SECONDS = 20 * 60
+from .settings import settings
+
+TTL_SECONDS = settings.approval_ttl
 _items: dict[str, "Approval"] = {}
 _lock = threading.Lock()
 
@@ -39,6 +41,7 @@ class Approval:
     note: str = ""
     payload: dict[str, Any] = field(default_factory=dict)
     continuation: Callable[[bool, "Approval"], None] | None = field(default=None, repr=False)
+    validator: Callable[[], None] | None = field(default=None, repr=False)
 
     def expired(self) -> bool:
         return self.status == "pending" and (time.time() - self.created) > TTL_SECONDS
@@ -68,12 +71,13 @@ def create(
     dangerous: bool = True,
     payload: dict[str, Any] | None = None,
     continuation: Callable[[bool, Approval], None] | None = None,
+    validator: Callable[[], None] | None = None,
 ) -> Approval:
     item = Approval(
         id=f"ap-{uuid.uuid4().hex[:8]}",
         kind=kind, summary=summary, command=command, target=target, section=section,
         actor=actor, created=time.time(), dangerous=dangerous,
-        payload=payload or {}, continuation=continuation,
+        payload=payload or {}, continuation=continuation, validator=validator,
     )
     with _lock:
         _items[item.id] = item
@@ -92,17 +96,28 @@ def decide(approval_id: str, approved: bool, actor: str, note: str = "") -> Appr
     if item is None:
         raise KeyError(approval_id)
     if item.effective_status() == "expired":
-        item.status = "expired"
-        raise ValueError("Approval expire ho gaya (20 min) — dobara maango.")
+        with _lock:
+            item.status = "expired"
+        raise ValueError("Approval expire ho gaya — naya mission plan banao.")
     if item.status != "pending":
         raise ValueError(f"Approval pehle hi '{item.status}' hai.")
-    item.status = "approved" if approved else "denied"
-    item.decided_at = time.time()
-    item.decided_by = actor
-    item.note = note
-    audit.log("approval_decided", evidence=True, approval=item.id, approved=approved,
-              actor=actor, note=note, command=item.command)
-    if item.continuation is not None:
+    # Validate outside the approval lock: validators may inspect mission state.
+    if approved and item.validator is not None:
+        item.validator()
+    with _lock:
+        if item.status != "pending":
+            raise ValueError(f"Approval pehle hi '{item.status}' hai.")
+        if item.effective_status() == "expired":
+            item.status = "expired"
+            raise ValueError("Approval expire ho gaya — naya mission plan banao.")
+        item.status = "approved" if approved else "denied"
+        item.decided_at = time.time()
+        item.decided_by = actor
+        item.note = note
+        audit.log("approval_decided", evidence=True, approval=item.id, approved=approved,
+                  actor=actor, note=note, command=item.command)
+        continuation = item.continuation
+    if continuation is not None:
         threading.Thread(target=_continue, args=(item, approved), daemon=True).start()
     return item
 

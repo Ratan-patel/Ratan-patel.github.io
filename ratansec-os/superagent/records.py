@@ -60,8 +60,8 @@ def _read_ledger() -> list[dict[str, Any]]:
             continue
         try:
             items.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Corrupt authorization ledger at line {len(items)+1}.") from exc
     return items
 
 
@@ -139,6 +139,9 @@ class AuthStore:
         self._load()
 
     def _load(self) -> None:
+        check = verify_chain()
+        if not check["ok"]:
+            raise RuntimeError(f"Authorization ledger failed integrity check: {check['message']}")
         for record in _read_ledger():
             try:
                 keys = {f for f in Authorization.__dataclass_fields__}
@@ -167,6 +170,19 @@ class AuthStore:
             raise ValueError("Scope khali hai — kam se kam ek target do (jaise example.com ya 10.0.0.0/24).")
         if end <= start:
             raise ValueError("End date, start date ke baad honi chahiye.")
+        if not client.strip() or not signer.strip():
+            raise ValueError("Client and authorised signer are required.")
+        from .scope import parse_target
+        from .catalog import SECTIONS
+        for pattern in clean_scope:
+            if pattern in {"*", "any"}:
+                raise ValueError("Wildcard-all scope is not allowed in an authorization record.")
+            try:
+                parse_target(pattern.removeprefix("*."))
+            except ValueError as exc:
+                raise ValueError(f"Invalid scope entry {pattern!r}: {exc}") from None
+        if any(section not in SECTIONS and section != "all" for section in clean_sections):
+            raise ValueError("Unknown section in authorization record.")
         if not signature.strip():
             raise ValueError("Signature zaroori hai — client ka authorization reference (email/PDF id) likho.")
         item = Authorization(
@@ -183,6 +199,9 @@ class AuthStore:
             notes=notes.strip(),
         )
         with _lock:
+            check = verify_chain()
+            if not check["ok"]:
+                raise ValueError("Authorization ledger integrity failure; refusing to append.")
             body = {k: v for k, v in asdict(item).items() if k != "hash"}
             item_hash = sign(body, _last_hash())
             record = {**body, "hash": item_hash}
@@ -199,6 +218,9 @@ class AuthStore:
         item.revoked_at = _now()
         item.notes = (item.notes + f" | REVOKED: {reason}").strip(" |")
         with _lock:
+            check = verify_chain()
+            if not check["ok"]:
+                raise ValueError("Authorization ledger integrity failure; refusing to append.")
             body = {k: v for k, v in asdict(item).items() if k != "hash"}
             record = {**body, "hash": sign(body, _last_hash())}
             with LEDGER.open("a", encoding="utf-8") as fh:
@@ -222,6 +244,8 @@ class AuthStore:
         """Is host + section ke liye koi active record hai?"""
         from .scope import host_matches  # circular import se bachne ke liye
 
+        if not verify_chain()["ok"]:
+            return None
         for item in sorted(self._items.values(), key=lambda a: a.end, reverse=True):
             if not item.is_active():
                 continue
@@ -247,18 +271,5 @@ def summary() -> dict[str, Any]:
 
 
 def seed_example() -> dict[str, Any]:
-    """Demo/lab record — sirf tab jab user khud chahe (`seed_demo` endpoint)."""
-    now = time.time()
-    item = records.create(
-        client="Internal Lab (demo)",
-        contact="patelratan460@gmail.com",
-        scope=["scanme.nmap.org", "127.0.0.1", "10.10.10.0/24"],
-        sections=["recon", "vuln", "web", "reporting", "utility"],
-        start=now - 3600,
-        end=now + 7 * 86400,
-        signer="Ratan Kumar Patel",
-        signature="DEMO-RECORD — lab/CTF only, real client kaam ke liye naya record banao",
-        emergency="Lab owner (self)",
-        notes="Public test targets (scanme.nmap.org Nmap ne explicitly allow kiya hai) + local lab.",
-    )
-    return item.view()
+    """v2 no longer seeds public targets. Use the offline demo instead."""
+    raise ValueError("Public demo targets removed. Use /api/demo/mission for the offline fixture, or create a real RoE record.")
