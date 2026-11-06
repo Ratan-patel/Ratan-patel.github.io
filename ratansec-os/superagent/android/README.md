@@ -39,6 +39,12 @@ Alternative: GitHub → **Actions** → *Build Super Agent APK* → latest run �
 Deep link (optional): `superagent://open?server=http://192.168.1.5:8000`
 v2 me **token URL me nahi bheja jata** — login server ke console par hota hai.
 
+## Server URL kahan se aayega?
+
+APK sirf console hai — usko ek chalta hua server chahiye. **Phone ko hi server bana sakte ho**
+(laptop ki zarurat nahi): Termux me ek command → URL `http://127.0.0.1:8000`.
+Poori guide: [`../PHONE_SETUP.md`](../PHONE_SETUP.md)
+
 ## Server chalu karna
 
 ```bash

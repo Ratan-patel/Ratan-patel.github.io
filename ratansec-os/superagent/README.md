@@ -132,3 +132,9 @@ key non-disclosure, demo isolation, report escaping.
   persistence, evasion ya destructive actions supported nahi.
 
 Legal/authorization templates: [`../docs/`](../docs/).
+
+
+## 📱 Sirf phone hai? Laptop nahi?
+
+Phone ko hi server bana do (Termux, no root) — URL `http://127.0.0.1:8000`.
+Guide: [`PHONE_SETUP.md`](PHONE_SETUP.md)
