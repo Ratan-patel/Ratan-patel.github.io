@@ -1,0 +1,32 @@
+# RatanSec Super Agent — docker compose
+#   cp .env.example .env   (values bharo)
+#   docker compose -f superagent/docker-compose.yml up -d --build
+services:
+  superagent:
+    build:
+      context: ..            # repo root (ratansec-os/) — superagent/ folder chahiye
+      dockerfile: superagent/Dockerfile
+    image: ratansec-superagent:latest
+    container_name: superagent
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../.env
+    environment:
+      SUPERAGENT_DATA_DIR: /data
+      HOST: 0.0.0.0
+      PORT: 8000
+    volumes:
+      - superagent-data:/data
+    cap_add:
+      - NET_RAW        # nmap SYN scan / masscan ke liye (chahe to hata do -> -sT connect scan)
+      - NET_ADMIN      # wireless/tunnel ke liye (optional)
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  superagent-data:

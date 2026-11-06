@@ -1,0 +1,36 @@
+# Render blueprint — superagent (single service)
+# 1) GitHub repo connect karo  2) Blueprint import  3) env vars bharo
+services:
+  - type: web
+    name: ratansec-superagent
+    runtime: docker
+    plan: starter              # free plan me shell/scan tools limited hote hain
+    dockerfilePath: ./superagent/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: APP_PASSWORD
+        sync: false
+      - key: SUPERAGENT_API_TOKEN
+        generateValue: true
+      - key: SUPERAGENT_API_KEY
+        sync: false
+      - key: SUPERAGENT_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: SUPERAGENT_MODEL
+        value: openai/gpt-4o-mini
+      - key: SUPERAGENT_ALLOWED_TARGETS
+        sync: false
+      - key: SUPERAGENT_REQUIRE_ROE
+        value: "1"
+      - key: SUPERAGENT_ALLOW_SHELL
+        value: "0"
+      - key: SUPERAGENT_APPROVAL_MODE
+        value: manual
+      - key: SUPERAGENT_DATA_DIR
+        value: /data
+    disk:
+      name: superagent-data
+      mountPath: /data
+      sizeGB: 1

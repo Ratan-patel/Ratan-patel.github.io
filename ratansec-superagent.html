@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RatanSec Super Agent — Authorised AI Security Agent (139 tools, mobile console)</title>
+<meta name="description" content="Self-hosted AI security agent: 139 Kali tools across 12 sections, natural-language execution, mobile PWA console, CLI terminal, RoE authorization records and hash-chained evidence. Bring your own private API key." />
+<meta name="author" content="Ratan Kumar Patel" />
+<meta property="og:title" content="RatanSec Super Agent — Authorised AI Security Agent" />
+<meta property="og:description" content="139 tools · 12 sections · mobile console · approval gates · authorization records · tamper-evident evidence chain." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥷</text></svg>" />
+<style>
+  :root{
+    --bg:#05070d;--panel:#0b1220;--line:#1b2637;--line2:#243348;--txt:#e6edf7;--muted:#8b9bb4;
+    --accent:#37f2a1;--accent2:#4aa8ff;--warn:#ffb84d;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(900px 520px at 12% -10%,#10305a66,transparent 60%),
+      radial-gradient(700px 420px at 108% 8%,#0e6b4b40,transparent 60%),var(--bg);
+      color:var(--txt);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header{padding:26px 0 6px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .logo{font-size:30px;filter:drop-shadow(0 0 12px #37f2a166)}
+  .brand b{font-size:17px}
+  .brand small{display:block;color:var(--muted);font-size:12px}
+  nav{margin-left:auto;display:flex;gap:16px;font-size:13.5px}
+  .hero{padding:54px 0 34px}
+  .kicker{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1px solid #37f2a144;background:#37f2a10f;padding:4px 12px;border-radius:999px}
+  h1{font-size:clamp(30px,5vw,50px);line-height:1.1;margin:18px 0 14px;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lead{font-size:17.5px;color:#c3cfe0;max-width:760px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:30px 0 8px}
+  .stat{border:1px solid var(--line2);border-radius:14px;padding:14px 16px;background:#0a111b}
+  .stat b{display:block;font-size:24px;color:var(--accent)}
+  .stat span{font-size:12px;color:var(--muted)}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .btn{display:inline-flex;gap:8px;align-items:center;padding:11px 18px;border-radius:11px;border:1px solid var(--line2);background:#0e1725;color:var(--txt);font-weight:600;font-size:14px}
+  .btn.primary{background:linear-gradient(135deg,#37f2a1,#22c78b);color:#04120c;border:none}
+  .btn:hover{text-decoration:none;border-color:var(--accent2)}
+  section{padding:38px 0;border-top:1px solid var(--line)}
+  h2{font-size:23px;margin:0 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 22px;font-size:14.5px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#080e17}
+  .card h3{margin:0 0 6px;font-size:15px}
+  .card p{margin:0;color:var(--muted);font-size:13.5px}
+  .card .tools{margin-top:10px;font-family:var(--mono);font-size:11.5px;color:#6d88a8;line-height:1.7}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  td code{font-family:var(--mono);font-size:12.5px;background:#0b1521;border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+  pre{background:#04070c;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto;font-family:var(--mono);font-size:12.8px;line-height:1.65;color:#cfe4f5}
+  pre .c{color:#5f7590}
+  .flow{font-family:var(--mono);font-size:12.5px;color:#a7bdd6;background:#04070c;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto;white-space:pre}
+  .note{border-left:3px solid var(--warn);background:#ffb84d0d;padding:12px 16px;border-radius:0 10px 10px 0;font-size:14px;color:#e7d7bb}
+  .two{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}
+  footer{padding:34px 0 60px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line)}
+  @media(max-width:820px){.two{grid-template-columns:1fr}nav{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">🥷</span>
+    <div class="brand"><b>RatanSec <span style="color:var(--accent)">Super Agent</span></b><small>authorised AI security agent · self-hosted</small></div>
+    <nav>
+      <a href="#sections">Arsenal</a>
+      <a href="#safety">Safety</a>
+      <a href="#start">Quick start</a>
+      <a href="#legal">Authorization</a>
+      <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/ratansec-os/superagent">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <span class="kicker">bring your own private API key</span>
+    <h1>Bol do kya karna hai.<br />Agent <em>tool chala dega</em> — authorised scope ke andar.</h1>
+    <p class="lead">
+      Super Agent ek self-hosted AI layer hai jo Kali/Linux tools ko natural language se chalata hai:
+      recon → enumeration → vulnerability analysis → web/API testing → (approval ke baad) gaining access
+      aur exploitation → evidence-backed report. Dashboard, phone console (PWA) aur asli terminal — teeno se.
+    </p>
+    <div class="stats">
+      <div class="stat"><b>139</b><span>tools catalogued</span></div>
+      <div class="stat"><b>12</b><span>sections</span></div>
+      <div class="stat"><b>49</b><span>approval-only tools</span></div>
+      <div class="stat"><b>0</b><span>commands without an authorization record</span></div>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="#start">▶ 60-second start</a>
+      <a class="btn" href="https://github.com/Ratan-patel/Ratan-patel.github.io/tree/main/ratansec-os/superagent">Read the docs</a>
+      <a class="btn" href="#legal">Authorization template</a>
+    </div>
+  </div>
+
+  <section id="sections">
+    <h2>Tool arsenal — har section me 2-3 se 27 tools</h2>
+    <p class="sub">Catalog-driven: har tool ke allowed flags fix hain, execution argv-only hai (no shell injection). Missing tool? Install hint seedha Arsenal tab me.</p>
+    <div class="grid">
+      <div class="card"><h3>🛰️ 1. Recon / OSINT</h3><p>Domain, DNS, cert, tech-stack, attack surface.</p><div class="tools">nmap · dig · whois · subfinder · amass · theHarvester · whatweb · wafw00f · sslscan · testssl · masscan · traceroute · sherlock · cloud_enum</div></div>
+      <div class="card"><h3>📂 2. Information Access</h3><p>SMB/NFS shares, SNMP, LDAP, crawling, hidden params.</p><div class="tools">enum4linux-ng · smbmap · rpcclient · snmpwalk · ldapsearch · showmount · httpx · katana · arjun · dalfox · netexec</div></div>
+      <div class="card"><h3>🔬 3. Vulnerability Analysis</h3><p>CVEs, misconfig, leaked secrets, SAST.</p><div class="tools">nuclei · nmap-vuln · nikto · wapiti · zap-baseline · searchsploit · trivy · gitleaks · trufflehog · semgrep</div></div>
+      <div class="card"><h3>🌐 4. Web / API</h3><p>Endpoints, JWT, GraphQL, injection checks.</p><div class="tools">ffuf · gobuster · feroxbuster · dirsearch · wpscan · sqlmap · commix · xsstrike · jwt_tool · graphql-cop</div></div>
+      <div class="card"><h3>🚪 5. Gaining Access</h3><p>Login services — rate-limited, approval-only.</p><div class="tools">hydra · medusa · ncrack · patator · responder · bettercap · aircrack-ng</div></div>
+      <div class="card"><h3>💥 6. Exploitation / PoC</h3><p>Minimal, non-destructive proof-of-concept.</p><div class="tools">metasploit · msfvenom · sqlmap-exploit · corsy · ssrfmap · impacket · routersploit</div></div>
+      <div class="card"><h3>🧭 7. Post-Exploitation</h3><p>Situational awareness, pivoting (approval).</p><div class="tools">linpeas · winpeas · bloodhound · secretsdump · chisel · proxychains</div></div>
+      <div class="card"><h3>🪜 8. Priv-Esc Checks</h3><p>Read-only misconfiguration detection.</p><div class="tools">sudo-check · suid-finder · getcap · pspy · linux-exploit-suggester</div></div>
+      <div class="card"><h3>🔑 9. Password / Hash</h3><p>Apne lab hashes par dictionary + rules audit.</p><div class="tools">hashcat · john · hashid · cewl · crunch · rsmangler</div></div>
+      <div class="card"><h3>📶 10. Wireless / RF</h3><p>Apne SSID/AP ki security posture.</p><div class="tools">airmon-ng · airodump-ng · aireplay-ng · wifite · bettercap-wifi</div></div>
+      <div class="card"><h3>📄 11. Reporting</h3><p>Evidence, hashes, chain-of-custody.</p><div class="tools">sha256sum · gpg-sign · evidence bundle · AI report draft</div></div>
+      <div class="card"><h3>🧰 12. Utility</h3><p>Terminal ke rozana ke helpers.</p><div class="tools">curl · nc · socat · jq · openssl · proxychains-wrap</div></div>
+    </div>
+  </section>
+
+  <section id="safety">
+    <h2>Safety jo enforce hoti hai, suggest nahi</h2>
+    <p class="sub">Aapke paas authorization hai — system uska record rakhta hai aur uske bahar kuch nahi hone deta.</p>
+    <div class="two">
+      <div class="flow">user / AI
+   │  tool call
+   ▼
+[1] catalog gate   → sirf defined tool + defined flags (argv-only)
+[2] scope check    → target authorised?  (default DENY)
+[3] hard blocks    → 169.254.x.x · metadata · multicast · 0.0.0.0
+[4] approval gate  → intrusive tools + shell = human tap (phone)
+[5] executor       → timeout · output cap · cancel · no shell
+[6] audit+evidence → hash-chained JSONL (tamper-evident)</div>
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <h3>Engagement records (RoE)</h3>
+          <p>Client, scope hosts, permitted sections, validity window, signer + SOW reference. Record ke bina agent ke paas koi command nahi — aur section record me nahi to us section ka tool bhi nahi.</p>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <h3>Human-in-the-loop</h3>
+          <p>Brute-force, exploitation, post-exploitation, hash cracking, wireless aur raw shell — sab par ek tap chahiye. Approve karne se pehle exact command dikhta hai. 20 min me expire.</p>
+        </div>
+        <div class="card">
+          <h3>Tamper-evident evidence</h3>
+          <p>Har event <code>prev_hash → hash</code> chain me. Verify endpoint batata hai kaunsa record toota. Ek click me evidence bundle (zip) — audit + ledger + manifest.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="start">
+    <h2>Quick start</h2>
+    <p class="sub">Python 3.10+, 3 dependencies. Tools Kali/Debian/Ubuntu ya Termux par.</p>
+    <div class="two">
+      <div>
+<pre><span class="c"># 1) backend + UI</span>
+cd ratansec-os
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -r superagent/requirements.txt
+
+<span class="c"># 2) config (apni private API key)</span>
+cp superagent/.env.example .env
+<span class="c">#   APP_PASSWORD=…  SUPERAGENT_API_TOKEN=…
+#   SUPERAGENT_API_KEY=sk-…  SUPERAGENT_ALLOW_SHELL=1</span>
+
+<span class="c"># 3) tools (jitne chahiye)</span>
+bash scripts/install-agent-tools.sh core
+
+<span class="c"># 4) chalao</span>
+bash scripts/superagent.sh          <span class="c"># http://localhost:8000</span></pre>
+      </div>
+      <div>
+        <table>
+          <tr><th>Surface</th><th>Use</th></tr>
+          <tr><td><code>/</code></td><td>Dashboard — chat, terminal, arsenal, runs, approvals, records, reports, evidence</td></tr>
+          <tr><td><code>/mobile</code></td><td>PWA — phone par install, live approvals, terminal</td></tr>
+          <tr><td><code>python -m superagent.cli</code></td><td>Terminal client — <code>agent</code> mode + <code>!</code> shell passthrough</td></tr>
+          <tr><td><code>/api/docs</code></td><td>OpenAPI — apna app/client banao (<code>X-Agent-Token</code>)</td></tr>
+        </table>
+        <div class="note" style="margin-top:16px">
+          Model badalna hai? <code>SUPERAGENT_BASE_URL</code> + <code>SUPERAGENT_MODEL</code> —
+          OpenRouter, OpenAI, Groq, DeepSeek, Gemini-compat, ya apna local Ollama/vLLM endpoint.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="legal">
+    <h2>Authorization — records aapke paas, enforcement system ke paas</h2>
+    <p class="sub">Har engagement ke liye ek record banao. Repo me ready-to-sign letter template aur legal checklist bhi hai.</p>
+    <div class="grid">
+      <div class="card"><h3>1. Authorization letter</h3><p>Client letterhead par: scope (Annexure A), window + rate limits (Annexure B), constraints, emergency contacts, liability. <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/blob/main/ratansec-os/docs/AUTHORIZATION_TEMPLATE.md">Template ↗</a></p></div>
+      <div class="card"><h3>2. Record banao</h3><p>Records tab me wahi details daalo — client, hosts, sections, dates, signer + SOW/email reference. Record hash-chain me jud jaata hai.</p></div>
+      <div class="card"><h3>3. Kaam karo — audited</h3><p>Har command, approval, report aur revoke evidence chain me. Engagement ke baad record revoke karo (permanent entry banti hai).</p></div>
+      <div class="card"><h3>4. Report + bundle</h3><p>AI se report draft, phir evidence bundle export (audit + RoE ledger + chain verification manifest) client ko de do.</p></div>
+      <div class="card"><h3>India context</h3><p>IT Act 2000/2008 (Sec 43, 66, 66B-F), DPDP Act 2023 — written scope ke bahar ek packet bhi criminal risk hai. <a href="https://github.com/Ratan-patel/Ratan-patel.github.io/blob/main/ratansec-os/docs/SAFETY_AND_LEGAL.md">Checklist ↗</a></p></div>
+      <div class="card"><h3>Contacts</h3><p>Engagement ke liye: <a href="mailto:patelratan460@gmail.com">patelratan460@gmail.com</a> · <a href="https://wa.me/918700913645">WhatsApp</a></p></div>
+    </div>
+  </section>
+
+  <footer>
+    <strong>RatanSec Super Agent</strong> — built by Ratan Kumar Patel (CEH v12 · Red Team · VAPT · AI Security).<br />
+    Sirf un systems par use karo jinke liye aapke paas <strong>likhit authorization</strong> hai. Bina permission testing illegal hai.
+  </footer>
+</div>
+</body>
+</html>

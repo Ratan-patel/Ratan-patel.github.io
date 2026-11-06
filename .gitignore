@@ -19,3 +19,9 @@ ratansec-os/data/
 ratansec-os/.venv/
 ratansec-os/**/__pycache__/
 ratansec-os/*.log
+
+# RatanSec Super Agent (superagent/)
+superagent/data/
+superagent/.venv/
+superagent/**/__pycache__/
+superagent/*.log
