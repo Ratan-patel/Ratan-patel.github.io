@@ -1,96 +1,97 @@
-# 📱 Super Agent v2 — Android APK
+# 📱 RatanSec Agent v3 — standalone Android app
 
-Native Android shell (Kotlin + WebView) jo aapke **self-hosted** Super Agent server ka mobile
-console kholta hai. APK GitHub Actions par build hoti hai — laptop par Android SDK ki zarurat nahi.
+**Koi server nahi chahiye.** App me apni API key daalo, AI agent phone par hi chal jaata hai.
+Pehle version (v2) ko self-hosted server chahiye tha — v3 me woh zarurat khatam.
 
-> APK **agent nahi hai**, sirf console hai. Agent + tools tumhare laptop/VPS par chalte hain,
-> aur API key wahin `.env` me rehti hai — phone par key nahi jaati.
+## Download
 
-## Download (sabse aasan)
-
-Latest release APK — seedha phone ke browser me kholo:
-
-* **Release (recommended):**
-  `https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-release.apk`
-* Debug build:
-  `https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-debug.apk`
-* Release page (dono files + notes):
-  `https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/apk-latest`
-
-Alternative: GitHub → **Actions** → *Build Super Agent APK* → latest run → artifact
-`ratansec-superagent-apk` (ZIP, GitHub login chahiye).
-
-## Install (sideload)
-
-1. Link phone me kholo → APK download.
-2. Settings → **Install unknown apps** → Chrome/File Manager ko allow karo.
-3. APK par tap → **Install** → **Open**.
-4. Play Protect warning aaye to **Details → Install anyway** (app self-signed hai, Play Store par nahi).
-
-> ⚠️ **Purana version installed hai to pehle uninstall karo.** Har CI build ek naye temporary
-> certificate se sign hoti hai, isliye purane app ke upar update karne par
-> "App not installed" / signature mismatch aayega. App sirf console hai — server ka data
-> laptop par rehta hai, uninstall se kuch nahi jaata.
-5. App khulte hi bundled **Connect** screen aayegi → server URL daalo:
-   * `http://192.168.1.5:8000` (laptop ka LAN IP, phone + laptop same Wi-Fi)
-   * ya `https://agent.example.com` (VPS + HTTPS)
-6. **Open console** → server ka login screen → wahan password daalo → dashboard.
-
-Deep link (optional): `superagent://open?server=http://192.168.1.5:8000`
-v2 me **token URL me nahi bheja jata** — login server ke console par hota hai.
-
-## Server URL kahan se aayega?
-
-APK sirf console hai — usko ek chalta hua server chahiye. **Phone ko hi server bana sakte ho**
-(laptop ki zarurat nahi): Termux me ek command → URL `http://127.0.0.1:8000`.
-Poori guide: [`../PHONE_SETUP.md`](../PHONE_SETUP.md)
-
-## Server chalu karna
-
-```bash
-cd ratansec-os
-cp superagent/.env.example .env        # apni private API key yahan
-bash scripts/superagent.sh --host 0.0.0.0 --port 8000
+```
+https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-release.apk
 ```
 
-Sirf demo dekhna ho (bina key, bina real scan):
+Release page: https://github.com/Ratan-patel/Ratan-patel.github.io/releases/tag/apk-latest
 
-```bash
-bash scripts/superagent.sh --demo --host 0.0.0.0 --port 8000
+## Install
+
+1. Link phone ke browser me kholo → APK download (~2.6 MB)
+2. Settings → **Install unknown apps** → Chrome/File Manager allow
+3. APK → **Install** → **Open**
+4. Play Protect warning → **Details → Install anyway** (self-signed app hai)
+
+> ⚠️ **Purana version (v1/v2) installed hai to pehle uninstall karo.** Har CI build naye
+> certificate se sign hoti hai — upar update karne par "App not installed" aayega.
+
+## Chalana (30 second)
+
+1. **Settings** tab → Provider chuno:
+   | Provider | Base URL | Model example |
+   |---|---|---|
+   | OpenRouter | `https://openrouter.ai/api/v1` | `openai/gpt-4o-mini` |
+   | OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` |
+   | Groq | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` |
+   | DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
+   | Ollama (LAN) | `http://127.0.0.1:11434/v1` | `qwen2.5:7b` |
+2. **API key** paste → **Save** → **Test connection** (green ✓ aana chahiye)
+3. **Scope** tab → host (`example.com`) + authorization note → checkbox tick → **Add to scope**
+4. **Chat** tab → poocho: *"example.com ka security posture check karo"*
+
+Bas. Agent tool calls chalayega, findings dikhayega, fix batayega.
+
+## Key ki privacy
+
+* Key **Android Keystore** se AES/GCM encrypt hokar app-private storage me rehti hai.
+* WebView/JavaScript ko key **kabhi nahi milti** — native code hi `Authorization` header lagata hai.
+* Key seedhi tumhare provider ko jaati hai. Beech me **koi server nahi**.
+* Chat history me key nahi jaati; `allowBackup=false` se cloud backup bhi band.
+* **Key hatao** button se turant delete.
+
+## Kya kar sakta hai
+
+| ✅ Allowed | ❌ Not possible |
+|---|---|
+| DNS resolve | Port scanning |
+| HTTP security headers review | Exploits / payloads |
+| TLS certificate + protocol review | Brute force |
+| security.txt / robots.txt padhna | Shell commands |
+| Findings + remediation | Bina scope ke koi request |
+| Report share (text) | Redirects follow karna |
+
+Har probe se pehle **scope check** hota hai. Loopback/link-local/metadata (169.254.x) hamesha
+blocked. Private ranges (192.168.x, 10.x) sirf Settings me explicitly on karne par.
+Response body read nahi hota (sirf 2 well-known public files, 16 KiB cap). Cookies/auth headers
+capture nahi hote.
+
+## Architecture
+
+```
+assets/app/{index.html,app.css,app.js}   bundled UI (chat / scope / settings)
+        ↕ Native bridge (async, JSON)
+MainActivity.kt   WebView + WebViewAssetLoader + bridge
+Secrets.kt        Android Keystore AES/GCM — API key
+Store.kt          provider settings + authorized targets (RoE)
+Agent.kt          OpenAI-compatible tool-calling loop (bounded steps)
+Probes.kt         on-device DNS / HTTP / TLS / text-file checks
 ```
 
-Laptop ka IP: `hostname -I` (Linux) / `ipconfig` (Windows).
+UI `https://appassets.androidplatform.net/assets/app/` se load hoti hai (offline, file:// band).
+Saara network native side par hota hai — isliye CORS ka issue nahi aur key JS me nahi aati.
 
-## APK khud build karna
+## Build
 
 ```bash
 cd ratansec-os/superagent/android
-# JDK 17 + Android SDK 34 + Gradle 8.7
-gradle :app:assembleDebug
-# output: app/build/outputs/apk/debug/app-debug.apk
+gradle :app:assembleDebug     # JDK 17 + SDK 34 + Gradle 8.7
 ```
 
-Local build se pehle web assets sync karo (CI ye automatically karta hai):
+Ya GitHub → **Actions → Build RatanSec Agent APK → Run workflow**.
+Commit message me `[apk-release]` likhne par APK automatically Release par publish hoti hai.
 
-```bash
-cd ratansec-os/superagent
-cp static/connect.html static/connect.js static/app.css android/app/src/main/assets/web/
-sed -i 's|/static/|./|g' android/app/src/main/assets/web/connect.html
-```
+## Limitations (imaandari se)
 
-Ya GitHub par manually build chalao: **Actions → Build Super Agent APK → Run workflow**
-(`release = true` karoge to APK Release me attach ho jayegi → direct download link).
+* TLS probe hostname se connect karta hai (DNS pinning nahi) — hardened server version jitna strict nahi.
+* Sirf 5 passive tools; nmap/exploit jaisa kuch nahi. Advanced testing ke liye server version
+  (`ratansec-os/superagent/`) use karo.
+* Provider tool-calling support karta ho tohi agent tools chala payega (OpenRouter/OpenAI/Groq/DeepSeek theek hain).
+* Findings **observations** hain, verified vulnerabilities nahi — manually confirm karo.
 
-## App kya karta hai (aur kya nahi)
-
-* Sirf **wo URL** kholta hai jo aap daalte ho — koi analytics, koi background traffic nahi.
-* Bundled connect screen `WebViewAssetLoader` se `https://appassets.androidplatform.net/assets/…`
-  par serve hoti hai (offline chalti hai, file:// access band hai).
-* Server origin native prefs me save hota hai; **sirf usi origin** ke links app ke andar khulte
-  hain, baaki external browser me.
-* Password/API key server par rehti hai; app me sirf server URL store hota hai.
-* `usesCleartextTraffic` sirf LAN/VPS ke `http://` ke liye — public deployment par HTTPS
-  (Caddy / Cloudflare Tunnel) use karo.
-* Release APK CI ke debug certificate se signed hai — sideload ke liye theek, Play Store build nahi.
-
-> Sirf un systems par use karo jinke liye likhit authorization hai.
+> Sirf un systems par use karo jinki likhit authorization tumhare paas hai.

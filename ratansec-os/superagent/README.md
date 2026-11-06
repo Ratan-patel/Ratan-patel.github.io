@@ -134,7 +134,12 @@ key non-disclosure, demo isolation, report escaping.
 Legal/authorization templates: [`../docs/`](../docs/).
 
 
-## 📱 Sirf phone hai? Laptop nahi?
+## 📱 Sirf phone hai? v3 standalone app lo (server nahi chahiye)
 
-Phone ko hi server bana do (Termux, no root) — URL `http://127.0.0.1:8000`.
-Guide: [`PHONE_SETUP.md`](PHONE_SETUP.md)
+Android app **v3** me agent poora phone par chalta hai — app me API key daalo aur chal gaya.
+Server/Termux/laptop kuch nahi chahiye.
+
+APK: https://github.com/Ratan-patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-release.apk
+Guide: [`android/README.md`](android/README.md)
+
+Ye server wala version (v2) advanced testing ke liye hai — zyada tools, CLI, Docker, evidence chain.
