@@ -77,7 +77,26 @@ jobs:
           ls -l "$DST"
 
       - name: Build debug APK
-        run: gradle --no-daemon :app:assembleDebug
+        id: build_debug
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          gradle --no-daemon --stacktrace :app:assembleDebug 2>&1 | tee debug-build.log
+
+      - name: Build log (upload for diagnosis)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-build-log
+          path: ratansec-os/superagent/android/debug-build.log
+          retention-days: 7
+
+      - name: Fail if debug build failed
+        if: steps.build_debug.outcome != 'success'
+        run: |
+          echo "::error::debug APK build failed"
+          tail -60 debug-build.log || true
+          exit 1
 
       - name: Build release APK (unsigned -> zipalign + debug-cert re-sign, sideload ke liye)
         run: gradle --no-daemon :app:assembleRelease
