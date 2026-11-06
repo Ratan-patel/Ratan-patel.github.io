@@ -7,8 +7,8 @@ console kholta hai. APK GitHub Actions se build hoti hai — sandbox/CI me Andro
 
 1. GitHub → **Actions** → *Build Super Agent APK* → latest run → artifact
    `ratansec-superagent-apk` (debug + release APK).
-2. Ya **Releases** page: tag `v1.0.0` push karne par APK automatically attach hoti hai:
-   `https://github.com/Ratan-patel/Ratan-patel.github.io/releases`
+2. Ya seedha **permanent link** (latest release):
+   `https://github.com/Ratan-Patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-debug.apk`
 
 ## Install (sideload)
 
