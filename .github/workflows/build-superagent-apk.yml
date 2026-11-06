@@ -65,10 +65,16 @@ jobs:
           gradle-version: "8.7"
 
       - name: Sync web console into APK assets
-        # single source of truth: superagent/static/*.html
+        # single source of truth: superagent/static/*.html + connect.html
+        working-directory: .
         run: |
-          mkdir -p app/src/main/assets/web
-          cp ../../static/mobile.html app/src/main/assets/web/mobile.html
+          set -euo pipefail
+          SRC="ratansec-os/superagent/static"
+          DST="ratansec-os/superagent/android/app/src/main/assets/web"
+          mkdir -p "$DST"
+          cp "$SRC/mobile.html" "$DST/mobile.html"
+          cp "$SRC/connect.html" "$DST/connect.html"
+          ls -l "$DST"
 
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
