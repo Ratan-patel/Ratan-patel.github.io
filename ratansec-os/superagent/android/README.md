@@ -26,6 +26,11 @@ Alternative: GitHub → **Actions** → *Build Super Agent APK* → latest run �
 2. Settings → **Install unknown apps** → Chrome/File Manager ko allow karo.
 3. APK par tap → **Install** → **Open**.
 4. Play Protect warning aaye to **Details → Install anyway** (app self-signed hai, Play Store par nahi).
+
+> ⚠️ **Purana version installed hai to pehle uninstall karo.** Har CI build ek naye temporary
+> certificate se sign hoti hai, isliye purane app ke upar update karne par
+> "App not installed" / signature mismatch aayega. App sirf console hai — server ka data
+> laptop par rehta hai, uninstall se kuch nahi jaata.
 5. App khulte hi bundled **Connect** screen aayegi → server URL daalo:
    * `http://192.168.1.5:8000` (laptop ka LAN IP, phone + laptop same Wi-Fi)
    * ya `https://agent.example.com` (VPS + HTTPS)

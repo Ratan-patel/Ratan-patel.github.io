@@ -166,6 +166,11 @@ jobs:
             3. APK par tap → Install → Open
             4. Play Protect warning aaye to "Details → Install anyway" (app Play Store par nahi hai, self-signed hai)
 
+            > ⚠️ **Purana version already installed hai?** Pehle usko **uninstall** karo, phir ye APK install karo.
+            > Har CI build naye temporary certificate se sign hoti hai, isliye purane app ke upar update
+            > "App not installed / signature mismatch" dega. Server ka data laptop par hi rehta hai — app
+            > uninstall karne se kuch nahi jaata.
+
             ### App ko server se connect karo
             APK sirf console hai — agent tumhare laptop/VPS par chalta hai.
             ```bash
