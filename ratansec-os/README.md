@@ -6,6 +6,12 @@
 
 ---
 
+> **Naya: [Super Agent](superagent/README.md)** — is se upar ek poora AI agent layer: 139 tools
+> (12 sections), mobile PWA console, CLI terminal, RoE authorization records + hash-chained evidence.
+> Start: `pip install -r superagent/requirements.txt && uvicorn superagent.webui:app --host 0.0.0.0 --port 8000`
+
+---
+
 ## 1. Yeh kya hai (60 second me)
 
 RatanSec OS ek **cloud-first** pentest environment hai:

@@ -1,0 +1,162 @@
+name: Build Super Agent APK
+
+# Android APK build + auto-release.
+#   * har push (main / arena branches) par debug APK build hota hai -> artifact
+#   * tag v* push karne par signed(debug-key) APK GitHub Release me attach hota hai
+#   * workflow_dispatch se manually bhi chala sakte ho
+on:
+  push:
+    branches: [main, "arena/**"]
+    paths:
+      - "ratansec-os/superagent/android/**"
+      - "ratansec-os/superagent/static/mobile.html"
+      - "ratansec-os/superagent/static/connect.html"
+      - ".github/workflows/build-superagent-apk.yml"
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Release banani hai? (tag ke bina bhi)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ratansec-os/superagent/android
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        # runner par SDK pehle se hota hai; chahiye to cmdline-tools se install karte hain
+        run: |
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            echo "cmdline-tools nahi mile — download kar raha hoon"
+            mkdir -p "$SDK/cmdline-tools"
+            curl -fsSL -o /tmp/tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+            unzip -q /tmp/tools.zip -d "$SDK/cmdline-tools"
+            mv "$SDK/cmdline-tools/cmdline-tools" "$SDK/cmdline-tools/latest"
+            SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          fi
+          yes | "$SM" --licenses > /dev/null 2>&1 || true
+          "$SM" --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          ls "$SDK/platforms" "$SDK/build-tools"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Sync web console into APK assets
+        # single source of truth: superagent/static/*.html + connect.html
+        working-directory: .
+        run: |
+          set -euo pipefail
+          SRC="ratansec-os/superagent/static"
+          DST="ratansec-os/superagent/android/app/src/main/assets/web"
+          mkdir -p "$DST"
+          cp "$SRC/mobile.html" "$DST/mobile.html"
+          cp "$SRC/connect.html" "$DST/connect.html"
+          ls -l "$DST"
+
+      - name: Build debug APK
+        id: build_debug
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          gradle --no-daemon --stacktrace :app:assembleDebug 2>&1 | tee debug-build.log
+
+      - name: Build log (upload for diagnosis)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-build-log
+          path: ratansec-os/superagent/android/debug-build.log
+          retention-days: 7
+
+      - name: Fail if debug build failed
+        if: steps.build_debug.outcome != 'success'
+        run: |
+          echo "::error title=gradle::debug APK build failed — error lines neeche"
+          grep -nE "^e: |error:|What went wrong|Caused by:|FAILURE:|Could not|Execution failed" -A2 debug-build.log \
+            | head -80 | while IFS= read -r line; do
+                safe=$(printf '%s' "$line" | tr '\n' ' ' | cut -c1-400)
+                echo "::error title=gradle::$safe"
+              done
+          exit 1
+
+      - name: Build release APK (unsigned -> zipalign + debug-cert re-sign, sideload ke liye)
+        run: gradle --no-daemon :app:assembleRelease
+
+      - name: Prepare artifacts
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/debug/app-debug.apk out/RatanSec-SuperAgent-debug.apk
+          cp app/build/outputs/apk/debug/app-debug.apk out/RatanSec-SuperAgent-${{ github.run_number }}-debug.apk
+          if [ -f app/build/outputs/apk/release/app-release-unsigned.apk ]; then
+            BT="$ANDROID_HOME/build-tools/34.0.0"
+            "$BT/zipalign" -f 4 app/build/outputs/apk/release/app-release-unsigned.apk out/aligned.apk
+            keytool -genkeypair -keystore out/ci.jks -storepass cipassword -keypass cipassword \
+              -alias ci -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=RatanSec Super Agent, OU=Security, O=RatanSec, C=IN" > /dev/null 2>&1
+            "$BT/apksigner" sign --ks out/ci.jks --ks-pass pass:cipassword --key-pass pass:cipassword \
+              --out out/RatanSec-SuperAgent-release.apk out/aligned.apk
+            cp out/RatanSec-SuperAgent-release.apk out/RatanSec-SuperAgent-${{ github.run_number }}-release.apk
+            rm -f out/aligned.apk out/ci.jks
+          fi
+          ls -lh out/
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratansec-superagent-apk
+          path: ratansec-os/superagent/android/out/*.apk
+          retention-days: 90
+
+      - name: Release (main / tag / manual)
+        # main par merge hote hi APK release ho jaati hai -> phone se seedha download
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release == true || github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: RatanSec Super Agent — Android APK
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'apk-latest' }}
+          make_latest: true
+          body: |
+            **RatanSec Super Agent — Android APK**
+
+            Install (sideload):
+            1. Phone par `RatanSec-SuperAgent-debug.apk` download karo
+               (permanent link: https://github.com/Ratan-Patel/Ratan-patel.github.io/releases/latest/download/RatanSec-SuperAgent-debug.apk)
+            2. Settings → "Install unknown apps" allow karo (browser/file manager ke liye)
+            3. APK kholo → install → app khulegi → server URL + mobile token daalo
+
+            Server chalu karna:
+            ```
+            cd ratansec-os
+            cp superagent/.env.example .env
+            bash scripts/superagent.sh          # http://<laptop-ip>:8000
+            ```
+            App me server: `http://<laptop-ip>:8000` · token: `SUPERAGENT_MOBILE_TOKEN`
+
+            ⚠️ Sirf authorised testing ke liye.
+          files: |
+            ratansec-os/superagent/android/out/*.apk
+          draft: false
+          prerelease: false

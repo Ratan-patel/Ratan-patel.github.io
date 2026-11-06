@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RatanSec Super Agent — AI Security Console</title>
+<meta name="description" content="Authorised AI security agent: 120+ Kali tools, terminal, approval gates, RoE records aur evidence chain." />
+<meta name="theme-color" content="#05070d" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥷</text></svg>" />
+<link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+<div id="login" class="login hidden">
+  <form class="login-card" id="login-form">
+    <div class="logo">🥷</div>
+    <h1>RatanSec <em>Super Agent</em></h1>
+    <p class="muted">Dashboard locked — password ya API token daalo.</p>
+    <input id="login-password" type="password" placeholder="APP_PASSWORD ya API token" autocomplete="current-password" />
+    <div class="row">
+      <button class="btn primary" type="submit">Unlock</button>
+      <a class="btn ghost" href="/api/docs" target="_blank" rel="noopener">API docs</a>
+    </div>
+    <p class="hint">Phone par kholna ho to <code>/mobile</code> use karo (PWA install ho jayega).</p>
+  </form>
+</div>
+
+<header class="top">
+  <div class="brand"><span class="logo">🥷</span><div><b>RatanSec <em>Super Agent</em></b><small id="sub">authorised AI security agent</small></div></div>
+  <div class="chips">
+    <span class="chip" id="c-ai">AI —</span>
+    <span class="chip" id="c-tools">Tools —</span>
+    <span class="chip" id="c-roe">RoE —</span>
+    <span class="chip warn hidden" id="c-appr">Approvals 0</span>
+    <span class="chip" id="c-shell">Shell —</span>
+  </div>
+  <div class="actions">
+    <a class="btn ghost" href="/mobile">📱 Mobile</a>
+    <button class="btn ghost" id="btn-logout">Logout</button>
+  </div>
+</header>
+
+<div id="banners"></div>
+
+<main class="shell">
+  <nav class="rail">
+    <button class="rail-btn active" data-tab="chat">🧠 <span>Agent</span></button>
+    <button class="rail-btn" data-tab="term">⌨️ <span>Terminal</span></button>
+    <button class="rail-btn" data-tab="arsenal">🧰 <span>Arsenal</span></button>
+    <button class="rail-btn" data-tab="runs">📡 <span>Runs</span></button>
+    <button class="rail-btn" data-tab="approvals">⚑ <span>Approvals</span><i id="rail-appr" class="badge hidden">0</i></button>
+    <button class="rail-btn" data-tab="records">📜 <span>Records</span></button>
+    <button class="rail-btn" data-tab="reports">📄 <span>Reports</span></button>
+    <button class="rail-btn" data-tab="audit">🔒 <span>Evidence</span></button>
+  </nav>
+
+  <!-- ============ AGENT ============ -->
+  <section class="panel tab active" id="tab-chat">
+    <div class="panel-head">
+      <h2>AI Agent</h2>
+      <div class="head-tools">
+        <input id="model" class="input sm" placeholder="model (default)" />
+        <label class="switch" title="Non-intrusive tools bina approval (intrusive always approval)">
+          <input type="checkbox" id="auto-approve" /><span></span> auto
+        </label>
+        <button class="btn ghost sm" id="btn-clear">Clear</button>
+      </div>
+    </div>
+    <div class="chat" id="chat"></div>
+    <div class="chips-row" id="quick"></div>
+    <form class="composer" id="chat-form">
+      <textarea id="chat-input" rows="2" placeholder="Target + task likho… jaise: 'lab.local ka recon karo aur nuclei se critical CVE check karo'"></textarea>
+      <button class="btn primary" id="btn-send" type="submit">Send</button>
+    </form>
+  </section>
+
+  <!-- ============ TERMINAL ============ -->
+  <section class="panel tab" id="tab-term">
+    <div class="panel-head">
+      <h2>Terminal</h2>
+      <div class="head-tools">
+        <span class="muted small" id="term-mode-label">mode: catalog</span>
+        <button class="btn ghost sm" id="btn-term-mode">Switch to shell</button>
+        <button class="btn ghost sm" id="btn-term-clear">Clear</button>
+      </div>
+    </div>
+    <p class="muted small">Catalog mode: <code>tool target flag=value</code> &nbsp;·&nbsp; Shell mode: raw Linux command (guard + approval). <code>help</code> typing se commands dekho.</p>
+    <div class="term" id="term"></div>
+    <form class="term-input" id="term-form">
+      <span class="prompt" id="term-prompt">$</span>
+      <input id="term-cmd" autocomplete="off" spellcheck="false" placeholder="nmap-vuln lab.local ports=80,443   |   switch karke: id; uname -a" />
+    </form>
+  </section>
+
+  <!-- ============ ARSENAL ============ -->
+  <section class="panel tab" id="tab-arsenal">
+    <div class="panel-head">
+      <h2>Tool Arsenal</h2>
+      <div class="head-tools">
+        <input id="arsenal-search" class="input sm" placeholder="search tool…" />
+        <span class="muted small" id="arsenal-summary"></span>
+      </div>
+    </div>
+    <div class="arsenal" id="arsenal"></div>
+  </section>
+
+  <!-- ============ RUNS ============ -->
+  <section class="panel tab" id="tab-runs">
+    <div class="panel-head"><h2>Runs</h2><button class="btn ghost sm" id="btn-runs-refresh">Refresh</button></div>
+    <div class="split">
+      <div class="list" id="runs-list"></div>
+      <div class="detail" id="run-detail"><p class="muted">Run select karo…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ APPROVALS ============ -->
+  <section class="panel tab" id="tab-approvals">
+    <div class="panel-head"><h2>Approvals</h2><button class="btn ghost sm" id="btn-appr-refresh">Refresh</button></div>
+    <p class="muted small">Intrusive tools aur shell commands yahan aate hain. Approve karne se pehle command padho — 20 min me expire ho jate hain.</p>
+    <div id="approvals" class="cards"></div>
+  </section>
+
+  <!-- ============ RECORDS ============ -->
+  <section class="panel tab" id="tab-records">
+    <div class="panel-head">
+      <h2>Authorization Records (RoE)</h2>
+      <div class="head-tools">
+        <button class="btn ghost sm" id="btn-chain">Verify chain</button>
+      </div>
+    </div>
+    <p class="muted small">Agent kuch bhi chalane se pehle yahan check karta hai: client, scope, sections, validity. Har record hash-chain me hai.</p>
+    <form class="form-grid" id="record-form">
+      <label>Client / Project<input name="client" required placeholder="Acme Pvt Ltd — Q4 VAPT" /></label>
+      <label>Contact (email/phone)<input name="contact" placeholder="security@acme.in" /></label>
+      <label class="wide">Scope (comma separated)<input name="scope" required placeholder="acme.in,*.acme.in,10.20.30.0/24" /></label>
+      <label>Start date<input name="start" type="date" /></label>
+      <label>End date<input name="end" type="date" /></label>
+      <label>Authorised by (signer)<input name="signer" placeholder="CTO / Security Head name" /></label>
+      <label>Signature / reference<input name="signature" required placeholder="SOW-2026-014 / email id / PDF ref" /></label>
+      <label class="wide">Emergency contact<input name="emergency" placeholder="+91…" /></label>
+      <fieldset class="wide sections-pick"><legend>Sections permitted</legend><div id="roe-sections"></div></fieldset>
+      <label class="wide">Notes<input name="notes" placeholder="Testing window, exclusions, constraints…" /></label>
+      <div class="wide row"><button class="btn primary" type="submit">Save record</button><button class="btn ghost" type="button" id="btn-seed">Add demo/lab record</button></div>
+    </form>
+    <div id="records" class="cards"></div>
+  </section>
+
+  <!-- ============ REPORTS ============ -->
+  <section class="panel tab" id="tab-reports">
+    <div class="panel-head"><h2>Reports</h2><button class="btn ghost sm" id="btn-reports-refresh">Refresh</button></div>
+    <div class="split">
+      <div class="list" id="reports-list"></div>
+      <div class="detail" id="report-detail"><p class="muted">Report select karo…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AUDIT ============ -->
+  <section class="panel tab" id="tab-audit">
+    <div class="panel-head">
+      <h2>Audit &amp; Evidence</h2>
+      <div class="head-tools">
+        <button class="btn ghost sm" id="btn-verify">Verify chain</button>
+        <button class="btn primary sm" id="btn-bundle">Export evidence bundle</button>
+      </div>
+    </div>
+    <div id="audit-verify" class="verify-box"></div>
+    <div class="table-wrap"><table class="table" id="audit-table"><thead><tr><th>Time</th><th>Event</th><th>Details</th></tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

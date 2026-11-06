@@ -1,0 +1,40 @@
+name: Deploy static site to Pages
+
+# Portfolio site (index.html, lab.html, ratansec-superagent.html ...) ko GitHub Pages par deploy karta hai.
+# Pages source = "GitHub Actions" set karna hoga (Settings → Pages).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site (backend folders exclude)
+        run: |
+          mkdir -p _site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='ratansec-os' \
+                --exclude='_site' --exclude='node_modules' ./ _site/
+          ls _site | head -20
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
